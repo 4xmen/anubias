@@ -24,9 +24,9 @@ export default {
   margin: 0;
 }
 body{
-  background: #20252b;
+  background: #272c34;
   color: #eeeeee;
-  font-family: "Vazir";
+  font-family: Vazir,tahoma ,serif;
   padding-bottom: 15%;
 }
 </style>

@@ -6,11 +6,6 @@
         </div>
       </div>
     </div>
-    <div id="pages">
-      <div class="container">
-
-      </div>
-    </div>
     <div id="side">
       <div id="elements">
         <h2>
@@ -25,12 +20,31 @@
         </h2>
       </div>
     </div>
+    <div id="pages">
+      <div class="container">
+        <page title="page title here">
+          hello 1
+        </page>
+        <page title="page title 2 here">
+          hello 2
+        </page>
+        <i class="fa fa-plus-circle" id="page-add"></i>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import page from '../elements/PageElement';
+
 export default {
-  name: "MainAppPage"
+  name: "MainAppPage",
+  components: {page,},
+  data: function () {
+    return {
+      pages: []
+    }
+  }
 }
 </script>
 
@@ -100,5 +114,16 @@ export default {
 
 #pages .container {
   padding: 5px;
+}
+#page-add{
+  font-size: 50px;
+  vertical-align: top;
+  margin-top: 5vh;
+  color: #666;
+  cursor: pointer;
+  margin-left: 50px;
+}
+#page-add:hover{
+  color: #eeeeee;
 }
 </style>
