@@ -24,7 +24,7 @@
       <tr>
         <th>
           <label for="p3">
-
+              Lock
           </label>
         </th>
         <td>
@@ -103,5 +103,9 @@ input[type='checkbox'] {
   outline: none !important;
   margin: 7px auto;
   width: 100%;
+}
+
+label{
+  display: block;
 }
 </style>
