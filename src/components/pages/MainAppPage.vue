@@ -18,6 +18,7 @@
           Properties
           <i class="fa fa-expand"></i>
         </h2>
+        <property></property>
       </div>
     </div>
     <div id="pages">
@@ -36,10 +37,11 @@
 
 <script>
 import page from '../elements/PageElement';
+import property from '../elements/PropertyElement';
 
 export default {
   name: "MainAppPage",
-  components: {page,},
+  components: {page, property,},
   data: function () {
     return {
       pages: []
@@ -115,15 +117,17 @@ export default {
 #pages .container {
   padding: 5px;
 }
-#page-add{
+
+#page-add {
   font-size: 50px;
   vertical-align: top;
   margin-top: 5vh;
   color: #666;
   cursor: pointer;
-  margin-left: 50px;
+  margin-left: 25px;
 }
-#page-add:hover{
+
+#page-add:hover {
   color: #eeeeee;
 }
 </style>

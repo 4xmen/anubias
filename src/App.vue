@@ -22,6 +22,7 @@ export default {
 *{
   padding: 0;
   margin: 0;
+  border-spacing: 0;
 }
 body{
   background: #272c34;
