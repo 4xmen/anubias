@@ -1,15 +1,65 @@
 {
   "name": "anubias-desktop",
   "version": "0.0.1",
+  "private": true,
   "description": "anubias desktop application",
-  "main": "index.js",
+  "author": {
+    "name": "A1Gard"
+  },
   "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "electron:build": "vue-cli-service electron:build",
+    "electron:serve": "vue-cli-service electron:serve",
+    "postinstall": "electron-builder install-app-deps",
+    "postuninstall": "electron-builder install-app-deps",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/4xmen/Anubias-Desktop.git"
+  "main": "background.js",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.3",
+    "core-js": "^3.6.5",
+    "electron": "^12.0.7",
+    "vazir-font": "^28.0.0",
+    "vue": "^2.6.11"
   },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "babel-eslint": "^10.1.0",
+    "electron": "^11.0.0",
+    "electron-devtools-installer": "^3.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "vue-cli-plugin-electron-builder": "~2.0.0-rc.6",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "_id": "anubias-desktop@0.0.1",
+  "bugs": {
+    "url": "https://github.com/4xmen/Anubias-Desktop/issues"
+  },
+  "homepage": "https://github.com/4xmen/Anubias-Desktop#readme",
   "keywords": [
     "anubias",
     "desktop",
@@ -17,14 +67,10 @@
     "mobile",
     "developing"
   ],
-  "author": "A1Gard",
   "license": "GPL-3.0-or-later",
-  "bugs": {
-    "url": "https://github.com/4xmen/Anubias-Desktop/issues"
-  },
-  "homepage": "https://github.com/4xmen/Anubias-Desktop#readme",
-  "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.3",
-    "vazir-font": "^28.0.0"
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/4xmen/Anubias-Desktop.git"
   }
 }
