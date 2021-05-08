@@ -12,6 +12,27 @@
           Elements
           <i class="fa fa-cubes"></i>
         </h2>
+        <compo title="Container" icon="far fa-square"></compo>
+        <compo title="Image" icon="far fa-image"></compo>
+        <compo title="Icon" icon="far fa-smile"></compo>
+        <compo title="Text" icon="fas fa-font"></compo>
+        <compo title="Column" icon="fas fa-bars"></compo>
+        <compo title="Row" icon="fas fa-bars fa-rotate-90"></compo>
+        <compo title="AppBar" icon="far fa-window-maximize"></compo>
+        <compo title="Scaffold" icon="fa fa-vector-square"></compo>
+        <compo title="List" icon="fa fa-list"></compo>
+        <compo title="Dropdown" icon="fa fa-prescription-bottle"></compo>
+        <compo title="Text" icon="fab fa-yoast"></compo>
+        <compo title="Button" icon="far fa-plus-square"></compo>
+        <compo title="Menu" icon="fa fa-list-alt"></compo>
+        <compo title="Grid" icon="fa fa-th"></compo>
+        <compo title="Preloader" icon="fa fa-spinner"></compo>
+        <compo title="Calendar" icon="fa fa-calendar-alt"></compo>
+        <compo title="DatePicker" icon="fa fa-calendar-check"></compo>
+        <compo title="Map" icon="fa fa-map"></compo>
+        <compo title="Location" icon="fa fa-map-marker-alt"></compo>
+        <compo title="Image Picker" icon="fa fa-file-image"></compo>
+        <compo title="File Picker" icon="fa fa-folder-open"></compo>
       </div>
       <div id="properties">
         <h2>
@@ -38,10 +59,11 @@
 <script>
 import page from '../elements/PageElement';
 import property from '../elements/PropertyElement';
+import compo from  '../elements/Component';
 
 export default {
   name: "MainAppPage",
-  components: {page, property,},
+  components: {page, property,compo},
   data: function () {
     return {
       pages: []
@@ -65,6 +87,7 @@ export default {
 
 #side #elements {
   height: 50vh;
+  overflow-y: scroll;
 }
 
 #side #properties {
