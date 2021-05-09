@@ -62,6 +62,8 @@
           hello 2
         </page>
         <i class="fa fa-plus-circle" id="page-add"></i>
+        <router-link to="/project">Go to Bar</router-link>
+        <a href="/project">sss</a>
       </div>
     </div>
   </div>
@@ -81,7 +83,19 @@ export default {
   components: {page, property, compo},
   data: function () {
     return {
-      pages: []
+      data:{
+        project:{
+          name:'',
+          version:'',
+          isDark:false,
+          color: '',
+          textColor: '',
+        },
+
+        pages:[
+
+        ]
+      }
     }
   }, mounted() {
     try {
