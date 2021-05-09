@@ -29,11 +29,11 @@
         <compo title="Menu" icon="fa fa-list-alt"></compo>
         <compo title="Grid" icon="fa fa-th"></compo>
         <compo title="Preloader" icon="fa fa-spinner"></compo>
+        <compo title="Rate" icon="fa fa-star"></compo>
         <compo title="Calendar" icon="fa fa-calendar-alt"></compo>
         <compo title="DatePicker" icon="fa fa-calendar-check"></compo>
         <compo title="Map" icon="fa fa-map"></compo>
         <compo title="Location" icon="fa fa-map-marker-alt"></compo>
-        <compo title="Rate" icon="fa fa-star"></compo>
         <compo title="Slider" icon="fa fa-ellipsis-h"></compo>
         <compo title="Timer" icon="fa fa-stopwatch"></compo>
         <compo title="Image Picker" icon="fa fa-file-image"></compo>
