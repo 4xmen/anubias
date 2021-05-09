@@ -13,17 +13,19 @@
           <i class="fa fa-cubes"></i>
         </h2>
         <compo title="Container" icon="far fa-square"></compo>
+        <compo title="AppBar" icon="far fa-window-maximize"></compo>
         <compo title="Image" icon="far fa-image"></compo>
         <compo title="Icon" icon="far fa-smile"></compo>
         <compo title="Text" icon="fas fa-font"></compo>
         <compo title="Column" icon="fas fa-bars"></compo>
         <compo title="Row" icon="fas fa-bars fa-rotate-90"></compo>
-        <compo title="AppBar" icon="far fa-window-maximize"></compo>
         <compo title="Scaffold" icon="fa fa-vector-square"></compo>
+        <compo title="Nav" icon="far fa-window-maximize fa-rotate-180"></compo>
         <compo title="List" icon="fa fa-list"></compo>
         <compo title="Dropdown" icon="fa fa-prescription-bottle"></compo>
         <compo title="Text" icon="fab fa-yoast"></compo>
         <compo title="Button" icon="far fa-plus-square"></compo>
+        <compo title="Toggle" icon="fa fa-toggle-on"></compo>
         <compo title="Menu" icon="fa fa-list-alt"></compo>
         <compo title="Grid" icon="fa fa-th"></compo>
         <compo title="Preloader" icon="fa fa-spinner"></compo>
@@ -31,6 +33,9 @@
         <compo title="DatePicker" icon="fa fa-calendar-check"></compo>
         <compo title="Map" icon="fa fa-map"></compo>
         <compo title="Location" icon="fa fa-map-marker-alt"></compo>
+        <compo title="Rate" icon="fa fa-star"></compo>
+        <compo title="Slider" icon="fa fa-ellipsis-h"></compo>
+        <compo title="Timer" icon="fa fa-stopwatch"></compo>
         <compo title="Image Picker" icon="fa fa-file-image"></compo>
         <compo title="File Picker" icon="fa fa-folder-open"></compo>
       </div>
@@ -44,10 +49,10 @@
     </div>
     <div id="pages">
       <div class="container">
-        <page title="page title here">
+        <page title="page title here" :active="true">
           hello 1
         </page>
-        <page title="page title 2 here">
+        <page title="page title 2 here" >
           hello 2
         </page>
         <i class="fa fa-plus-circle" id="page-add"></i>
@@ -59,7 +64,7 @@
 <script>
 import page from '../elements/PageElement';
 import property from '../elements/PropertyElement';
-import compo from '../elements/Component';
+import compo from '../elements/ComponentElement';
 import jQuery from 'jquery';
 
 require('jquery.nicescroll/dist/jquery.nicescroll.min');

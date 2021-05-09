@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: "Component",
+  name: "ComponentElement",
   props:[
       'icon',
       'title'
@@ -27,9 +27,13 @@ export default {
       height: 70px;
       vertical-align: top;
     }
+    .component:hover{
+      background: rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+    }
     .ico{
-      font-size: 35px;
-      width: 35px;
+      font-size:  30px;
+      width: 30px;
       display: block;
       margin:7px auto;
     }
