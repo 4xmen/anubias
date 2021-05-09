@@ -3,6 +3,12 @@
     <div id="main">
       <div class="container">
         <div id="mobile">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed, sequi voluptatum!
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed, sequi voluptatum!
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed, sequi voluptatum!
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed, sequi voluptatum!
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed, sequi voluptatum!
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed, sequi voluptatum!
         </div>
       </div>
     </div>
@@ -49,10 +55,10 @@
     </div>
     <div id="pages">
       <div class="container">
-        <page title="page title here" :active="true">
+        <page title="page1" :active="true">
           hello 1
         </page>
-        <page title="page title 2 here" >
+        <page title="page2" >
           hello 2
         </page>
         <i class="fa fa-plus-circle" id="page-add"></i>
@@ -81,6 +87,7 @@ export default {
     try {
       $("body").niceScroll();
       $("#properties").niceScroll();
+      $("#mobile").niceScroll();
       $("#elements").niceScroll();
       /*eslint-disable */
       // document.addEventListener('touchstart', function(){}, {passive: false})
@@ -141,7 +148,7 @@ export default {
 #mobile {
   background: white;
   width: 300px;
-  min-height: 600px;
+  height: 600px;
   margin: auto;
   border-radius: 15px;
   border: 10px solid black;

@@ -24,10 +24,11 @@ export default {
   display: inline-block;
   text-align: center;
   padding: 10px;
+  min-width: 85px;
 }
 
 #page-content {
-  width: 50px;
+  width: 65px;
   height: 80px;
   background: #ffffff;
   color: #000000;
