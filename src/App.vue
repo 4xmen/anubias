@@ -29,5 +29,6 @@ body{
   color: #eeeeee;
   font-family: Vazir,tahoma ,serif;
   padding-bottom: 15%;
+  overflow-x: hidden;
 }
 </style>

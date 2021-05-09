@@ -2,7 +2,7 @@
   <div>
     <div id="main">
       <div class="container">
-        <div id="app">
+        <div id="mobile">
         </div>
       </div>
     </div>
@@ -59,15 +59,32 @@
 <script>
 import page from '../elements/PageElement';
 import property from '../elements/PropertyElement';
-import compo from  '../elements/Component';
+import compo from '../elements/Component';
+import jQuery from 'jquery';
+
+require('jquery.nicescroll/dist/jquery.nicescroll.min');
+var $ = jQuery;
 
 export default {
   name: "MainAppPage",
-  components: {page, property,compo},
+  components: {page, property, compo},
   data: function () {
     return {
       pages: []
     }
+  }, mounted() {
+    try {
+      $("body").niceScroll();
+      $("#properties").niceScroll();
+      $("#elements").niceScroll();
+      /*eslint-disable */
+      // document.addEventListener('touchstart', function(){}, {passive: false})
+      /*eslint-enable */
+    } catch (e) {
+      //
+    }
+
+
   }
 }
 </script>
@@ -90,8 +107,10 @@ export default {
   overflow-y: scroll;
 }
 
-#side #properties {
+#properties {
   height: 50vh;
+  overflow: hidden;
+  overflow-y: scroll;
 }
 
 #side h2 {
@@ -100,6 +119,8 @@ export default {
   background: #272c34;
   border-bottom: 1px solid rgba(0, 0, 0, .1);
   font-size: 17px;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 #side h2 .fa {
@@ -112,13 +133,15 @@ export default {
   min-height: 80vh;
 }
 
-#main #app {
+#mobile {
   background: white;
   width: 300px;
   min-height: 600px;
   margin: auto;
   border-radius: 15px;
-  border: 13px solid black;
+  border: 10px solid black;
+  border-top-width: 30px;
+  border-bottom-width: 30px;
   color: #1e2329;
 }
 
