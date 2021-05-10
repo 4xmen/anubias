@@ -1,15 +1,19 @@
 <template>
-  <div>
-    <h1>
-      Project page
-    </h1>
-    <router-link to="/">back</router-link>
+  <div class="ui container">
+      <titlec>
+        Project info
+      </titlec>
   </div>
 </template>
 
 <script>
+import titlec from '../elements/TitleElement';
+
 export default {
-name: "ProjectPage"
+  name: "ProjectPage",
+  components:{
+    titlec
+  }
 }
 </script>
 

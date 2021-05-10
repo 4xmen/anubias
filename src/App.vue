@@ -10,7 +10,8 @@
 // import mainPage from './components/pages/MainAppPage';
 require('vazir-font/dist/font-face.css')
 require('@fortawesome/fontawesome-free/css/all.min.css')
-
+require('semantic-ui-css/semantic.min.css');
+require('./assets/css/style.css');
 export default {
   name: 'App',
   components: {
@@ -20,16 +21,5 @@ export default {
 </script>
 
 <style>
-*{
-  padding: 0;
-  margin: 0;
-  border-spacing: 0;
-}
-body{
-  background: #272c34;
-  color: #eeeeee;
-  font-family: Vazir,tahoma ,serif;
-  padding-bottom: 15%;
-  overflow-x: hidden;
-}
+
 </style>
