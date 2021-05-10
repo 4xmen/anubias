@@ -3,12 +3,24 @@
     <div id="main">
       <div class="container">
         <div id="mobile">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed, sequi voluptatum!
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed, sequi voluptatum!
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed, sequi voluptatum!
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed, sequi voluptatum!
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed, sequi voluptatum!
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed, sequi voluptatum!
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
+          commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
+          sequi voluptatum!
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
+          commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
+          sequi voluptatum!
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
+          commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
+          sequi voluptatum!
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
+          commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
+          sequi voluptatum!
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
+          commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
+          sequi voluptatum!
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
+          commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
+          sequi voluptatum!
         </div>
       </div>
     </div>
@@ -58,7 +70,7 @@
         <page title="page1" :active="true">
           hello 1
         </page>
-        <page title="page2" >
+        <page title="page2">
           hello 2
         </page>
         <i class="fa fa-plus-circle" id="page-add"></i>
@@ -73,41 +85,37 @@
 import page from '../elements/PageElement';
 import property from '../elements/PropertyElement';
 import compo from '../elements/ComponentElement';
-import jQuery from 'jquery';
 
-require('jquery.nicescroll/dist/jquery.nicescroll.min');
-var $ = jQuery;
 
 export default {
   name: "MainAppPage",
   components: {page, property, compo},
   data: function () {
     return {
-      data:{
-        project:{
-          name:'',
-          version:'',
-          isDark:false,
+      data: {
+        project: {
+          name: '',
+          version: '',
+          isDark: false,
           color: '',
           textColor: '',
         },
 
-        pages:[
-
-        ]
+        pages: []
       }
     }
   }, mounted() {
     try {
-      $("body").niceScroll();
+      var $ = window.jQuery;
+      $("html").niceScroll();
       $("#properties").niceScroll();
       $("#mobile").niceScroll();
       $("#elements").niceScroll();
       /*eslint-disable */
-      // document.addEventListener('touchstart', function(){}, {passive: false})
       /*eslint-enable */
     } catch (e) {
       //
+      console.log(e.message);
     }
 
 

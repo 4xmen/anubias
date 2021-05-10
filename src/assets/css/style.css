@@ -11,3 +11,14 @@ a{
 a:hover{
     color: deepskyblue;
 }
+
+input{
+    color: #1e2329;
+}
+input::placeholder{
+    color: #666666 !important;
+}
+label{
+    color: #eeeeee !important;
+    padding-top: 7px;
+}

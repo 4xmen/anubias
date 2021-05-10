@@ -1,8 +1,14 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from "./router";
+/*eslint-disable */
+import  "script-loader!jquery";
+import  "script-loader!jquery.nicescroll/dist/jquery.nicescroll.min";
+import  "script-loader!semantic-ui-css/semantic.min";
+/*eslint-enable */
+Vue.config.productionTip = false;
+require('@/assets/js/win_vars.js');
 
-Vue.config.productionTip = false
 
 new Vue({
   router,
