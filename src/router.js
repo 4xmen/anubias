@@ -1,7 +1,5 @@
 import Vue from "vue";
 import Router from "vue-router";
-import HomePage from "@/components/pages/MainAppPage.vue";
-import ProjectPage from "@/components/pages/ProjectPage";
 
 
 Vue.use(Router);
@@ -12,12 +10,24 @@ export default new Router({
         {
             path: "/",
             name: "home",
-            component: HomePage
+            component: view('MainAppPage')
         },
         {
             path: "/project",
             name: "project",
-            component: ProjectPage
+            component: view('ProjectPage')
         },
     ]
 });
+
+
+/**
+ * Asynchronously load view (Webpack Lazy loading compatible)
+ * @param  {string}   name     the filename (basename) of the view to load.
+ */
+function view(name) {
+    return function (resolve) {
+        require(['@/components/pages/' + name + '.vue'], resolve);
+    };
+}
+
