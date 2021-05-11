@@ -1,8 +1,9 @@
 <template>
   <div>
+    <app-menu></app-menu>
     <div id="main">
       <div class="container">
-        <div id="mobile">
+        <div id="mobile" :style="'width:'+display.width * display.scale+'px;height:'+display.height * display.scale+'px'">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
           commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
           sequi voluptatum!
@@ -74,8 +75,6 @@
           hello 2
         </page>
         <i class="fa fa-plus-circle" id="page-add"></i>
-        <router-link to="/project">Go to Bar</router-link>
-        <a href="/project">sss</a>
       </div>
     </div>
   </div>
@@ -85,23 +84,19 @@
 import page from '../elements/PageElement';
 import property from '../elements/PropertyElement';
 import compo from '../elements/ComponentElement';
+import appMenu from '../elements/AppMenuElement';
 
 
 export default {
   name: "MainAppPage",
-  components: {page, property, compo},
+  components: {page, property, compo, appMenu},
   data: function () {
     return {
-      data: {
-        project: {
-          name: '',
-          version: '',
-          isDark: false,
-          color: '',
-          textColor: '',
-        },
-
-        pages: []
+      data: window.appData,
+      display:{
+        width: 1080,
+        height: 1920,
+        scale: .35,
       }
     }
   }, mounted() {
@@ -169,8 +164,8 @@ export default {
 
 #mobile {
   background: white;
-  width: 300px;
-  height: 600px;
+  /*width: 300px;*/
+  /*height: 600px;*/
   margin: auto;
   border-radius: 15px;
   border: 10px solid black;

@@ -7,29 +7,29 @@
       <!--      <div class="two fields">-->
       <div class="field">
         <label for="name">Name</label>
-        <input type="text" id="name" name="name" placeholder="Name">
+        <input type="text" id="name" v-model="data.name" name="name" placeholder="Name">
       </div>
       <div class="field">
         <label for="version">Version</label>
-        <input type="text" id="version" name="name" placeholder="Version">
+        <input type="text" id="version" v-model="data.version" name="name" placeholder="Version">
       </div>
       <!--      </div>-->
       <div class="two fields">
         <div class="field">
           <label for="isDark">Is dark</label>
-          <input type="checkbox" id="isDark" name="dark" >
+          <input type="checkbox" id="isDark" :checked="data.isDark" name="dark">
         </div>
         <div class="field">
           <label for="isRTL">Is RTL (Right to left) </label>
-          <input type="checkbox" id="isRTL" name="rtl" >
+          <input type="checkbox" id="isRTL" :checked="data.isRTL" name="rtl">
         </div>
       </div>
       <div class="field">
         <label>Color</label>
         <div class="ui fluid selection dropdown">
-          <input type="hidden" name="user">
+          <input type="hidden" name="color" v-model="data.color">
           <i class="dropdown icon"></i>
-          <div class="default text">Select Friend</div>
+          <div class="default text">Select Color</div>
           <div class="menu">
             <div v-for="(cl,n) in colors" v-bind:key="n" class="item" :data-value="cl.value">
               <i class="fa fa-square"
@@ -51,7 +51,7 @@
       </div>
       <div class="ui divider"></div>
       <div class="field">
-        <div class="ui button primary fluid">
+        <div class="ui button primary fluid" @click="save">
           Save
         </div>
       </div>
@@ -67,6 +67,7 @@ export default {
   name: "ProjectPage",
   data: function () {
     return {
+      data: window.appData.project,
       colors: window.colors,
     }
   },
@@ -78,6 +79,11 @@ export default {
     $('.ui.dropdown')
         .dropdown()
     ;
+  }, methods: {
+    save: function () {
+      window.appData.project = this.data;
+      this.$router.back();
+    },
   }
 }
 </script>

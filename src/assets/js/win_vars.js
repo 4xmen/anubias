@@ -1,5 +1,16 @@
 window.appData = {
+    project: {
+        name: 'sample project',
+        version: '1.0.0',
+        isDark: false,
+        isRTL: false,
+        color: 'Colors.blue',
+        textColor: '',
+        bgColor: '',
+    },
+    pages: [
 
+    ]
 };
 
 window.colors = [
