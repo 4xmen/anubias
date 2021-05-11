@@ -1,15 +1,22 @@
 <template>
-  <div id="#appBar">
-
+  <div id="appBar">
+      {{title}}
   </div>
 </template>
 
 <script>
 export default {
-  name: "AppBar"
+  name: "AppBar",
+  props: [
+    'title',
+    'backgroundColor',
+    'textColor',
+  ],
 }
 </script>
 
 <style scoped>
+#appBar {
 
+}
 </style>

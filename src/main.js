@@ -7,7 +7,7 @@ import  "script-loader!jquery.nicescroll/dist/jquery.nicescroll.min";
 import  "script-loader!semantic-ui-css/semantic.min";
 /*eslint-enable */
 Vue.config.productionTip = false;
-require('@/assets/js/win_vars.js');
+require('@/assets/js/winVars.js');
 
 
 new Vue({
@@ -17,3 +17,4 @@ new Vue({
     // this.$router.push("/");
   }
 }).$mount("#app");
+
