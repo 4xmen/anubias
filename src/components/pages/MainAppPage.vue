@@ -4,6 +4,10 @@
     <div id="main">
       <div class="container">
         <div id="mobile" :style="'width:'+display.width * display.scale+'px;height:'+display.height * display.scale+'px'">
+          <span class="material-icons-outlined">360</span>
+          <span class="material-icons-round">home</span>
+          <span class="material-icons-sharp">home</span>
+          <span class="material-icons-two-tone">home</span>
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
           commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
           sequi voluptatum!
@@ -102,10 +106,12 @@ export default {
   }, mounted() {
     try {
       var $ = window.jQuery;
+      // $(".ui .dropdown").dropdown();
       $("html").niceScroll();
       $("#properties").niceScroll();
       $("#mobile").niceScroll();
       $("#elements").niceScroll();
+
       /*eslint-disable */
       /*eslint-enable */
     } catch (e) {
