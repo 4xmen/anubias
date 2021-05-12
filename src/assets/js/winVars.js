@@ -8,10 +8,14 @@ window.appData = {
         textColor: '',
         bgColor: '',
     },
-    pages: [
-
-    ]
+    pages: []
 };
+
+window.project = {
+    'folder': '',
+    'file': '',
+    isSave: false,
+}
 
 window.colors = [
     {

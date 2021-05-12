@@ -85,6 +85,8 @@ import page from '../elements/PageElement';
 import property from '../elements/PropertyElement';
 import compo from '../elements/ComponentElement';
 import appMenu from '../elements/AppMenuElement';
+// const {remote} = require("electron");
+
 
 export default {
   name: "MainAppPage",
@@ -111,12 +113,10 @@ export default {
       /*eslint-enable */
     } catch (e) {
       //
-      console.log(e.message);
+      // window.ipcRenderer.send('open-save-chart-dialog');
+
     }
   },methods:{
-    getcomponent (x) {
-      return () => import(`../flutter/${component}`);
-    }
   }
 }
 </script>

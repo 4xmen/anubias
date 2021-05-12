@@ -10,6 +10,7 @@ Vue.config.productionTip = false;
 require('@/assets/js/winVars.js');
 
 
+
 new Vue({
   router,
   render: h => h(App),
