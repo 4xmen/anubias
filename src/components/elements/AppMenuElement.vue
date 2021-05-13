@@ -11,15 +11,15 @@
           <a class="item"><i class="add icon"></i> New project</a>
           <router-link to="/project" class="item"><i class="setting icon"></i> Project info</router-link>
           <a class="item" @click="save"><i class="save icon"></i> Save project</a>
-          <a class="item" @click="saveAs"><i class="save icon outline"></i>  Save project as</a>
+          <a class="item" @click="saveAs"><i class="save icon outline"></i> Save project as</a>
         </div>
       </div>
-<!--      <a class="item"> -->
-<!--        Jobs-->
-<!--      </a>-->
-<!--      <a class="item">-->
-<!--        Locations-->
-<!--      </a>-->
+      <!--      <a class="item"> -->
+      <!--        Jobs-->
+      <!--      </a>-->
+      <!--      <a class="item">-->
+      <!--        Locations-->
+      <!--      </a>-->
     </div>
   </div>
 </template>
@@ -32,18 +32,27 @@ export default {
   mounted() {
     var $ = window.jQuery;
     $('.ui.dropdown').dropdown();
-  },methods:{
-    save:function () {
-      if (window.project.file == ''){
+  }, methods: {
+    save: function () {
+      if (window.project.file == '') {
         this.saveAs();
         return false;
       }
     },
-    saveAs:function () {
-      window.api.receive("selected-directory", (data) => {
-        console.log(`Received ${data} from main process`);
+    saveAs: function () {
+      window.api.receive("saved-file", (data) => {
+        console.log(data);
       });
-      window.api.send("open-file-dialog",'openFile');
+      var data = {
+        dialog: {
+          title: 'Save project as',
+          filters: [{name: 'Anubias project', extensions: ['anb']},
+          ],
+          // properties: {showOverwriteConfirmation: true,}
+        },
+        data: window.appData
+      };
+      window.api.send("save-file-dialog", data);
     }
   }
 }

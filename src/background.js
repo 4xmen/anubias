@@ -4,10 +4,11 @@ import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import path from 'path'
+import * as fs from "fs";
 const ipc = require('electron').ipcMain
 const dialog = require('electron').dialog
-
-const isDevelopment = process.env.NODE_ENV !== 'production'
+const isDevelopment = process.env.NODE_ENV !== 'production';
+var win ;
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -17,7 +18,7 @@ protocol.registerSchemesAsPrivileged([
 async function createWindow() {
 
   // Create the browser window.
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
@@ -27,12 +28,14 @@ async function createWindow() {
       // nodeIntegration: true,
       // enableRemoteModule: true,
       // contextIsolation: false ,
+      enableRemoteModule: false, // turn off remote
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       preload: path.join(__dirname, 'preload.js')
     }
   })
   win.removeMenu();
   win.maximize();
+
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -93,8 +96,18 @@ if (isDevelopment) {
 
 ipc.on('open-file-dialog', function (event) {
   dialog.showOpenDialog({
-    properties: ['openFile', 'openDirectory']
+    properties: ['openFile']
   }, function (files) {
-    if (files) event.sender.send('selected-directory', files)
+    if (files) event.sender.send('selected-file', files)
   })
+})
+ipc.on('save-file-dialog', function (event,arg) {
+  dialog.showSaveDialog( arg.dialog ).then(function (data) {
+    // if(fileName === undefined) return
+    // event.sender.send('saved-file', fileName)
+    fs.writeFile( data.filePath, arg.data,function (err) {
+      win.webContents.send('saved-file','saved '+ data.filePath);
+    });
+  });
+
 })
