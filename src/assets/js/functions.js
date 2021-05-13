@@ -1,3 +1,4 @@
+/*eslint-disable */
 var html2canvas = require('html2canvas');
 var getScreenshotOfElement = function (element, posX, posY, width, height, callback) {
     html2canvas(element, {
@@ -29,3 +30,5 @@ var takeScreenShot = function (id, w, h, x = 0, y = 0) {
         return "data:image/png;base64," + data;
     });
 };
+
+/*eslint-enable */

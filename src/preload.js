@@ -17,13 +17,13 @@ contextBridge.exposeInMainWorld(
     "api", {
         send: (channel, data) => {
             // whitelist channels
-            let validChannels = ["toMain",'open-file-dialog','save-file-dialog'];
+            let validChannels = ["toMain",'open-file-dialog','save-file-project'];
             if (validChannels.includes(channel)) {
                 ipcRenderer.send(channel, data);
             }
         },
         receive: (channel, func) => {
-            let validChannels = ["fromMain",'selected-file','saved-file'];
+            let validChannels = ["fromMain",'selected-file','saved-file','message'];
             if (validChannels.includes(channel)) {
                 // Deliberately strip event as it includes `sender`
                 ipcRenderer.on(channel, (event, ...args) => func(...args));

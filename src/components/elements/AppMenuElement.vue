@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="ui menu inverted">
-      <div class="header item" @click="saveAs">
+      <div class="header item">
         Anbuias
       </div>
       <div class="ui dropdown item">
@@ -34,15 +34,12 @@ export default {
     $('.ui.dropdown').dropdown();
   }, methods: {
     save: function () {
-      if (window.project.file == '') {
+      if (window.project.file === '') {
         this.saveAs();
         return false;
       }
     },
     saveAs: function () {
-      window.api.receive("saved-file", (data) => {
-        console.log(data);
-      });
       var data = {
         dialog: {
           title: 'Save project as',
@@ -52,7 +49,7 @@ export default {
         },
         data: window.appData
       };
-      window.api.send("save-file-dialog", data);
+      window.api.send("save-file-project", data);
     }
   }
 }

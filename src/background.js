@@ -101,25 +101,26 @@ ipc.on('open-file-dialog', function (event) {
     }, function (files) {
         if (files) event.sender.send('selected-file', files)
     })
-})
-ipc.on('save-file-dialog', function (event, arg) {
+});
+
+ipc.on('save-file-project', function (event, arg) {
     dialog.showSaveDialog(arg.dialog).then(function (data) {
         // if(fileName === undefined) return
-        // event.sender.send('saved-file', fileName)
-        win.webContents.send('saved-file', 'try to save ' + data.filePath);
+        // event.sender.send('message', fileName)
         try {
             let  filename = data.filePath.trim();
             if (filename.substr(filename.length - 4) !== '.anb'){
                 filename += '.anb';
             }
+            win.webContents.send('message', {type:'info','msg': 'try to save ' + path.basename(filename)});
             fs.writeFile(filename, JSON.stringify(arg.data), function (err) {
                 if (err) {
-                    win.webContents.send('saved-file', 'error ' + err.message);
+                    win.webContents.send('message', {type:'error','msg': 'error: ' + path.basename(filename)});
                 }
-                win.webContents.send('saved-file', 'saved : ' + data.filePath);
+                win.webContents.send('message', {type:'success','msg':  path.basename(filename)+ ' saved'});
             });
         } catch (e) {
-            win.webContents.send('saved-file', 'error ' + e.message);
+            win.webContents.send('message', 'error ' + e.message);
 
         }
 
