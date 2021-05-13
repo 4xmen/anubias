@@ -102,22 +102,46 @@ ipc.on('open-file-dialog', function (event) {
         if (files) event.sender.send('selected-file', files)
     })
 });
+ipc.on('open-file-dialog-project', function (event) {
+    dialog.showOpenDialog({
+        title: 'Open Anubias project',
+        filters: [
+            {name: 'Anubias project', extensions: ['anb']},
+            {name: 'All Files', extensions: ['*']}
+        ],
+        // properties: {showOverwriteConfirmation: true,}
+        properties: ['openFile']
+    }).then(function (files) {
+        if (!files.canceled) {
+            win.webContents.send('message', {type: 'info', 'msg': 'try to open ' + path.basename(files.filePaths[0])});
+            let filename = files.filePaths[0];
+            fs.readFile(filename, 'utf8', function (err, data) {
+                win.webContents.send('selected-file', {
+                    file: filename,
+                    basename: path.basename(filename),
+                    folder: path.dirname(filename),
+                    data: JSON.parse(data)
+                });
+            })
+        }
+    })
+});
 
 ipc.on('save-file-project', function (event, arg) {
     dialog.showSaveDialog(arg.dialog).then(function (data) {
         // if(fileName === undefined) return
         // event.sender.send('message', fileName)
         try {
-            let  filename = data.filePath.trim();
-            if (filename.substr(filename.length - 4) !== '.anb'){
+            let filename = data.filePath.trim();
+            if (filename.substr(filename.length - 4) !== '.anb') {
                 filename += '.anb';
             }
-            win.webContents.send('message', {type:'info','msg': 'try to save ' + path.basename(filename)});
+            win.webContents.send('message', {type: 'info', 'msg': 'try to save ' + path.basename(filename)});
             fs.writeFile(filename, JSON.stringify(arg.data), function (err) {
                 if (err) {
-                    win.webContents.send('message', {type:'error','msg': 'error: ' + path.basename(filename)});
+                    win.webContents.send('message', {type: 'error', 'msg': 'error: ' + path.basename(filename)});
                 }
-                win.webContents.send('message', {type:'success','msg':  path.basename(filename)+ ' saved'});
+                win.webContents.send('message', {type: 'success', 'msg': path.basename(filename) + ' saved'});
             });
         } catch (e) {
             win.webContents.send('message', 'error ' + e.message);

@@ -17,7 +17,7 @@ contextBridge.exposeInMainWorld(
     "api", {
         send: (channel, data) => {
             // whitelist channels
-            let validChannels = ["toMain",'open-file-dialog','save-file-project'];
+            let validChannels = ["toMain",'open-file-dialog','save-file-project','open-file-dialog-project'];
             if (validChannels.includes(channel)) {
                 ipcRenderer.send(channel, data);
             }
