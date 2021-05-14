@@ -132,6 +132,10 @@ ipc.on('save-file-project', function (event, arg) {
         // if(fileName === undefined) return
         // event.sender.send('message', fileName)
         try {
+            if (data.canceled){
+                win.webContents.send('message', {type: 'info', 'msg': 'Canceled'});
+                return false;
+            }
             let filename = data.filePath.trim();
             if (filename.substr(filename.length - 4) !== '.anb') {
                 filename += '.anb';
