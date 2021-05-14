@@ -8,7 +8,7 @@
         Project
         <i class="dropdown icon"></i>
         <div class="menu">
-          <a class="item"><i class="add icon"></i> New project</a>
+          <a class="item" @click="newProject"><i class="add icon"></i> New project</a>
           <a class="item" @click="openProject"><i class="file icon"></i> Open project</a>
           <a class="item" @click="save"><i class="save icon"></i> Save project</a>
           <a class="item" @click="saveAs"><i class="save icon outline"></i> Save project as</a>
@@ -50,6 +50,26 @@ export default {
     },
     openProject: function () {
       window.api.send("open-file-dialog-project", {});
+    },
+    newProject:function () {
+      window.project = {
+        'folder': '',
+        'file': '',
+        isSave: false,
+      };
+      window.appData = {
+        project: {
+          name: 'sample project',
+          version: '1.0.0',
+          isDark: false,
+          isRTL: false,
+          color: 'Colors.blue',
+          textColor: '',
+          bgColor: '',
+        },
+        pages: []
+      };
+      this.$router.push('/project');
     },
     saveAs: function () {
       var data = {
