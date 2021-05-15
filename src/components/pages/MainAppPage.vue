@@ -3,7 +3,19 @@
     <app-menu></app-menu>
     <div id="main">
       <div class="container">
-        <div id="mobile" :style="'width:'+display.width * display.scale+'px;height:'+display.height * display.scale+'px'">
+        <div id="device-selector">
+          <label>
+            Display:
+            <br>
+            <select @change="changeDisplay" v-model="currentDisplay">
+              <option :selected="dev.name === display.name" :value="dev" v-for="dev in devices"> {{ dev.name }} ({{ dev.width }}x{{ dev.height }})
+              </option>
+            </select>
+          </label>
+
+        </div>
+        <div id="mobile"
+             :style="'width:'+display.width * display.scale+'px;height:'+display.height * display.scale+'px'">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
           commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
           sequi voluptatum!
@@ -94,16 +106,19 @@ export default {
   data: function () {
     return {
       data: window.appData,
-      display:{
+      currentDisplay: null,
+      display: {
+        name: 'Nexus 5',
         width: 1080,
         height: 1920,
         scale: .35,
-      }
+      },
+      devices: window.devices
     }
   }, mounted() {
     try {
       var $ = window.jQuery;
-      // $(".ui .dropdown").dropdown();
+      $(".ui .dropdown").dropdown();
       $("html").niceScroll();
       $("#properties").niceScroll();
       $("#mobile").niceScroll();
@@ -116,7 +131,13 @@ export default {
       // window.ipcRenderer.send('open-save-chart-dialog');
 
     }
-  },methods:{
+  }, methods: {
+    changeDisplay: function () {
+      this.display.name = this.currentDisplay.name;
+      this.display.width = this.currentDisplay.width;
+      this.display.height = this.currentDisplay.height;
+
+    }
   }
 }
 </script>
@@ -207,5 +228,14 @@ export default {
 
 #page-add:hover {
   color: #eeeeee;
+}
+
+#device-selector {
+  margin: 10px;
+  float: left;
+}
+#device-selector select{
+  padding: 4px;
+  margin-top: 10px;
 }
 </style>

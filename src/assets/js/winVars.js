@@ -17,6 +17,45 @@ window.project = {
     isSave: false,
 }
 
+window.devices =[
+    {
+        name:'Nexus 5',
+        width: 1080,
+        height: 1920,
+    },
+    {
+        name: 'Pixel 2',
+        width: 1080,
+        height: 1920,
+    },
+    {
+        name: 'Samsung Galaxy S7',
+        width: 1440,
+        height: 2560,
+    },
+    {
+        name: 'Samsung Galaxy S10',
+        width: 1440,
+        height: 3040,
+    },
+    {
+        name: 'iPhone x',
+        width: 1125,
+        height: 2436,
+    },
+    {
+        name: 'iPhone 5/SE',
+        width: 750,
+        height: 1334,
+    },
+    {
+        name: 'iPad',
+        width: 1536,
+        height: 2048,
+    },
+
+];
+
 window.colors = [
     {
         name: 'Pink',
