@@ -171,11 +171,12 @@ export default {
     }
     try {
       var $ = window.jQuery;
-      $(".ui .dropdown").dropdown();
       $("html").niceScroll();
       $("#properties").niceScroll();
       $("#mobile").niceScroll({touchbehavior: true,});
       $("#elements").niceScroll();
+
+
 
       /*eslint-disable */
       /*eslint-enable */
@@ -184,6 +185,26 @@ export default {
       // window.ipcRenderer.send('open-save-chart-dialog');
 
     }
+
+    try {
+      var self = this;
+      window.api.receive('selected-file', (data) => {
+        window.project.file = data.file;
+        window.project.folder = data.project;
+        window.project.isSave = true;
+        window.appData = data.data;
+        self.data = data.data;
+        self.$forceUpdate();
+        window.alertify.success('Project loaded :' + data.basename);
+      });
+
+      setTimeout(function () {
+        console.log('x',self.data);
+      },5000);
+    } catch(e) {
+        console.log(e.message);
+    }
+
   }, methods: {
     changeDisplay: function () {
       this.display.name = this.currentDisplay.name;
@@ -196,6 +217,10 @@ export default {
     },
     changeRotate: function (e) {
       this.display.landscape = e;
+    },update: function (appData) {
+        this.appData = appData;
+      console.log('xxz');
+        this.$forceUpdate();
     }
   }
 }

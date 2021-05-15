@@ -4,9 +4,9 @@ window.appData = {
         version: '1.0.0',
         isDark: false,
         isRTL: false,
-        color: 'Colors.blue',
-        textColor: '',
-        bgColor: '',
+        xColor: 'Colors.green',
+        textColor: '#000000',
+        bgColor: '#ffffff',
     },
     pages: []
 };

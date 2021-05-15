@@ -11,10 +11,8 @@
 //
 require('vazir-font/dist/font-face.css')
 require('@fortawesome/fontawesome-free/css/all.min.css')
-require('semantic-ui-css/semantic.min.css');
 require('material-icons/iconfont/material-icons.css');
 require('alertifyjs/build/css/alertify.min.css');
-require('alertifyjs/build/css/themes/semantic.min.css');
 require('./assets/css/style.css');
 
 export default {

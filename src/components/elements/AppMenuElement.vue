@@ -38,14 +38,6 @@ export default {
   },
   mounted() {
     var $ = window.jQuery;
-    $('.ui.dropdown').dropdown();
-    window.api.receive('selected-file', (data) => {
-      window.project.file = data.file;
-      window.project.folder = data.project;
-      window.project.isSave = true;
-      window.appData = data.data;
-      window.alertify.success('Project loaded :' + data.basename);
-    });
   }, methods: {
     save: function () {
       if (window.project.file === '') {
@@ -68,9 +60,9 @@ export default {
           version: '1.0.0',
           isDark: false,
           isRTL: false,
-          color: 'Colors.blue',
-          textColor: '',
-          bgColor: '',
+          xColor: 'Colors.green',
+          textColor: '#000000',
+          bgColor: '#ffffff',
         },
         pages: []
       };
