@@ -5,14 +5,22 @@
       <div class="container">
         <div id="device-selector">
           <label>
-            Display:
-            <br>
+            <span>Display:</span>
             <select @change="changeDisplay" v-model="currentDisplay">
-              <option :selected="dev.name === display.name" :value="dev" v-for="dev in devices"> {{ dev.name }} ({{ dev.width }}x{{ dev.height }})
+              <option :value="dev" v-for="dev in devices"> {{ dev.name }} ({{ dev.width }}x{{ dev.height }})
               </option>
             </select>
           </label>
-
+          <span>
+            Scale: {{display.scale}}
+          </span>
+          <div class="ui buttons inverted small">
+            <button @click="changeScale" :class="'ui button inverted '+(display.scale === 1.25?'active':'')" data-value="1.25">125% </button>
+            <button @click="changeScale" :class="'ui button inverted '+(display.scale === 1?'active':'')" data-value="1">100%</button>
+            <button @click="changeScale" :class="'ui button inverted '+(display.scale === 0.5?'active':'')" data-value="0.5">50%</button>
+            <button @click="changeScale" :class="'ui button inverted '+(display.scale === 0.25?'active':'')" data-value="0.25">25%</button>
+            <button @click="changeScale" :class="'ui button inverted '+(display.scale === 0.35?'active':'')" data-value="0.35">auto</button>
+          </div>
         </div>
         <div id="mobile"
              :style="'width:'+display.width * display.scale+'px;height:'+display.height * display.scale+'px'">
@@ -137,6 +145,9 @@ export default {
       this.display.width = this.currentDisplay.width;
       this.display.height = this.currentDisplay.height;
 
+    },
+    changeScale:function (e) {
+      this.display.scale = parseFloat($(e.target).data('value'));
     }
   }
 }
@@ -236,6 +247,10 @@ export default {
 }
 #device-selector select{
   padding: 4px;
-  margin-top: 10px;
+}
+
+#device-selector span{
+  display: block;
+  padding: 10px 0;
 }
 </style>
