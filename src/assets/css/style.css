@@ -4,6 +4,10 @@ body{
     font-family: Vazir,tahoma ,serif;
     padding-bottom: 15%;
     overflow-x: hidden;
+    -webkit-user-select: none;  /* Chrome 49+ */
+    -moz-user-select: none;     /* Firefox 43+ */
+    -ms-user-select: none;      /* No support yet */
+    user-select: none;          /* Likely future */
 }
 a{
     color: #ffffff;

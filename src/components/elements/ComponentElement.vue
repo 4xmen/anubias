@@ -30,6 +30,7 @@ export default {
     .component:hover{
       background: rgba(0, 0, 0, 0.2);
       cursor: pointer;
+      color: lime;
     }
     .ico{
       font-size:  30px;

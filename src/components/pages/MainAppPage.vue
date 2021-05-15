@@ -15,15 +15,24 @@
             Scale: {{display.scale}}
           </span>
           <div class="ui buttons inverted small">
-            <button @click="changeScale" :class="'ui button inverted '+(display.scale === 1.25?'active':'')" data-value="1.25">125% </button>
-            <button @click="changeScale" :class="'ui button inverted '+(display.scale === 1?'active':'')" data-value="1">100%</button>
-            <button @click="changeScale" :class="'ui button inverted '+(display.scale === 0.5?'active':'')" data-value="0.5">50%</button>
-            <button @click="changeScale" :class="'ui button inverted '+(display.scale === 0.25?'active':'')" data-value="0.25">25%</button>
-            <button @click="changeScale" :class="'ui button inverted '+(display.scale === 0.35?'active':'')" data-value="0.35">auto</button>
+            <button @click="changeScale(1.25)" :class="'ui button  '+(display.scale === 1.25?'green basic':'inverted')" >125% </button>
+            <button @click="changeScale(1)" :class="'ui button  '+(display.scale === 1?'green basic':'inverted')" >100%</button>
+            <button @click="changeScale(0.25)" :class="'ui button  '+(display.scale === 0.25?'green basic':'inverted')" >25%</button>
+            <button @click="changeScale(0.5)" :class="'ui button  '+(display.scale === 0.5?'green basic':'inverted')" >50%</button>
+            <button @click="changeScale(0.35)" :class="'ui button  '+(display.scale === 0.35?'green basic':'inverted')" >auto</button>
           </div>
+          <span>
+            Rotate:
+          </span>
+          <button @click="changeRotate(false)" :class="'ui button small '+(!display.landscape?'green basic':'inverted')">
+            <i class="fa fa-mobile-alt"></i>
+          </button>
+          <button @click="changeRotate(true)" :class="'ui button small '+(display.landscape?'green basic':'inverted')">
+            <i class="fa fa-mobile-alt fa-rotate-90"></i>
+          </button>
         </div>
         <div id="mobile"
-             :style="'width:'+display.width * display.scale+'px;height:'+display.height * display.scale+'px'">
+             :style="'width:'+(display.landscape?display.height:display.width  )* display.scale+'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px'">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
           commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
           sequi voluptatum!
@@ -120,6 +129,7 @@ export default {
         width: 1080,
         height: 1920,
         scale: .35,
+        landscape: false,
       },
       devices: window.devices
     }
@@ -129,7 +139,7 @@ export default {
       $(".ui .dropdown").dropdown();
       $("html").niceScroll();
       $("#properties").niceScroll();
-      $("#mobile").niceScroll();
+      $("#mobile").niceScroll({touchbehavior:true,});
       $("#elements").niceScroll();
 
       /*eslint-disable */
@@ -147,7 +157,10 @@ export default {
 
     },
     changeScale:function (e) {
-      this.display.scale = parseFloat($(e.target).data('value'));
+      this.display.scale = e;
+    },
+    changeRotate:function (e) {
+      this.display.landscape = e;
     }
   }
 }
@@ -252,5 +265,8 @@ export default {
 #device-selector span{
   display: block;
   padding: 10px 0;
+}
+#device-selector .buttons{
+  padding-bottom: 5px;
 }
 </style>
