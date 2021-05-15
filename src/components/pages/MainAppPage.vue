@@ -8,7 +8,7 @@
             <label>
               <span>Display:</span>
               <select @change="changeDisplay" v-model="currentDisplay">
-                <option :value="dev" v-for="dev in devices"> {{ dev.name }} ({{ dev.width }}x{{ dev.height }})
+                <option :value="dev" v-for="(dev,i) in devices" :key="i"> {{ dev.name }} ({{ dev.width }}x{{ dev.height }})
                 </option>
               </select>
             </label>

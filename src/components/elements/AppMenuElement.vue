@@ -10,10 +10,10 @@
         <div class="menu">
           <a class="item" @click="newProject"><i class="add icon"></i> New project</a>
           <a class="item" @click="openProject"><i class="file icon"></i> Open project</a>
-          <a class="item" @click="save"><i class="save icon"></i> Save project</a>
-          <a class="item" @click="saveAs"><i class="save icon outline"></i> Save project as</a>
+          <a :class="'item'+(appData.project.name ===''?' disabled':'')" @click="save"><i class="save icon"></i> Save project</a>
+          <a :class="'item'+(appData.project.name ===''?' disabled':'')" @click="saveAs"><i class="save icon outline"></i> Save project as</a>
           <div class="divider"></div>
-          <router-link to="/project" class="item"><i class="setting icon"></i> Project info</router-link>
+          <router-link to="/project" :class="'item'+(appData.project.name ===''?' disabled':'')"><i class="setting icon"></i> Project info</router-link>
         </div>
       </div>
       <!--      <a class="item"> -->
@@ -31,6 +31,11 @@
 /*eslint-enable */
 export default {
   name: "AppMenuElement",
+  data:function () {
+    return{
+      appData: window.appData
+    }
+  },
   mounted() {
     var $ = window.jQuery;
     $('.ui.dropdown').dropdown();
