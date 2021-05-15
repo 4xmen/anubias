@@ -2,7 +2,7 @@
   <div>
     <div class="ui menu inverted">
       <div class="header item">
-        Anbuias
+        <img src="../../assets/img/logo.svg" alt="">
       </div>
       <div class="ui dropdown item">
         Project

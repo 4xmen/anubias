@@ -1,6 +1,6 @@
 window.appData = {
     project: {
-        name: 'sample project',
+        name: '',
         version: '1.0.0',
         isDark: false,
         isRTL: false,

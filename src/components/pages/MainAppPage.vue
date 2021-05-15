@@ -3,54 +3,73 @@
     <app-menu></app-menu>
     <div id="main">
       <div class="container">
-        <div id="device-selector">
-          <label>
-            <span>Display:</span>
-            <select @change="changeDisplay" v-model="currentDisplay">
-              <option :value="dev" v-for="dev in devices"> {{ dev.name }} ({{ dev.width }}x{{ dev.height }})
-              </option>
-            </select>
-          </label>
-          <span>
-            Scale: {{display.scale}}
+        <div v-if="isInitProject">
+          <div id="device-selector">
+            <label>
+              <span>Display:</span>
+              <select @change="changeDisplay" v-model="currentDisplay">
+                <option :value="dev" v-for="dev in devices"> {{ dev.name }} ({{ dev.width }}x{{ dev.height }})
+                </option>
+              </select>
+            </label>
+            <span>
+            Scale: {{ display.scale }}
           </span>
-          <div class="ui buttons inverted small">
-            <button @click="changeScale(1.25)" :class="'ui button  '+(display.scale === 1.25?'green basic':'inverted')" >125% </button>
-            <button @click="changeScale(1)" :class="'ui button  '+(display.scale === 1?'green basic':'inverted')" >100%</button>
-            <button @click="changeScale(0.25)" :class="'ui button  '+(display.scale === 0.25?'green basic':'inverted')" >25%</button>
-            <button @click="changeScale(0.5)" :class="'ui button  '+(display.scale === 0.5?'green basic':'inverted')" >50%</button>
-            <button @click="changeScale(0.35)" :class="'ui button  '+(display.scale === 0.35?'green basic':'inverted')" >auto</button>
-          </div>
-          <span>
+            <div class="ui buttons inverted small">
+              <button @click="changeScale(1.25)"
+                      :class="'ui button  '+(display.scale === 1.25?'green basic':'inverted')">
+                125%
+              </button>
+              <button @click="changeScale(1)" :class="'ui button  '+(display.scale === 1?'green basic':'inverted')">100%
+              </button>
+              <button @click="changeScale(0.25)"
+                      :class="'ui button  '+(display.scale === 0.25?'green basic':'inverted')">
+                25%
+              </button>
+              <button @click="changeScale(0.5)" :class="'ui button  '+(display.scale === 0.5?'green basic':'inverted')">
+                50%
+              </button>
+              <button @click="changeScale(0.35)"
+                      :class="'ui button  '+(display.scale === 0.35?'green basic':'inverted')">
+                auto
+              </button>
+            </div>
+            <span>
             Rotate:
           </span>
-          <button @click="changeRotate(false)" :class="'ui button small '+(!display.landscape?'green basic':'inverted')">
-            <i class="fa fa-mobile-alt"></i>
-          </button>
-          <button @click="changeRotate(true)" :class="'ui button small '+(display.landscape?'green basic':'inverted')">
-            <i class="fa fa-mobile-alt fa-rotate-90"></i>
-          </button>
+            <button @click="changeRotate(false)"
+                    :class="'ui button small '+(!display.landscape?'green basic':'inverted')">
+              <i class="fa fa-mobile-alt"></i>
+            </button>
+            <button @click="changeRotate(true)"
+                    :class="'ui button small '+(display.landscape?'green basic':'inverted')">
+              <i class="fa fa-mobile-alt fa-rotate-90"></i>
+            </button>
+          </div>
+          <div id="mobile"
+               :style="'width:'+(display.landscape?display.height:display.width  )* display.scale+'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px'">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
+            commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
+            sequi voluptatum!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
+            commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
+            sequi voluptatum!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
+            commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
+            sequi voluptatum!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
+            commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
+            sequi voluptatum!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
+            commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
+            sequi voluptatum!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
+            commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
+            sequi voluptatum!
+          </div>
         </div>
-        <div id="mobile"
-             :style="'width:'+(display.landscape?display.height:display.width  )* display.scale+'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px'">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
-          commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
-          sequi voluptatum!
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
-          commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
-          sequi voluptatum!
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
-          commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
-          sequi voluptatum!
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
-          commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
-          sequi voluptatum!
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
-          commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
-          sequi voluptatum!
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
-          commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
-          sequi voluptatum!
+        <div v-else class="text-center">
+          <img src="../../assets/img/logo.svg" class="logo" alt="">
         </div>
       </div>
     </div>
@@ -86,24 +105,35 @@
         <compo title="Timer" icon="fa fa-stopwatch"></compo>
         <compo title="Image Picker" icon="fa fa-file-image"></compo>
         <compo title="File Picker" icon="fa fa-folder-open"></compo>
+
       </div>
       <div id="properties">
         <h2>
           Properties
           <i class="fa fa-expand"></i>
         </h2>
-        <property></property>
+        <div v-if="isInitProject">
+          <property></property>
+        </div>
+        <div v-else class="text-center">
+          <img src="../../assets/img/logo.svg" class="logo-sm" alt="">
+        </div>
       </div>
     </div>
     <div id="pages">
       <div class="container">
-        <page title="page1" :active="true">
-          hello 1
-        </page>
-        <page title="page2">
-          hello 2
-        </page>
-        <i class="fa fa-plus-circle" id="page-add"></i>
+        <div v-if="isInitProject">
+          <page title="page1" :active="true">
+            hello 1
+          </page>
+          <page title="page2">
+            hello 2
+          </page>
+          <i class="fa fa-plus-circle" id="page-add"></i>
+        </div>
+        <div v-else class="text-center">
+          <img src="../../assets/img/logo.svg" class="logo-sm" alt="">
+        </div>
       </div>
     </div>
   </div>
@@ -124,6 +154,7 @@ export default {
     return {
       data: window.appData,
       currentDisplay: null,
+      isInitProject: true,
       display: {
         name: 'Nexus 5',
         width: 1080,
@@ -134,12 +165,16 @@ export default {
       devices: window.devices
     }
   }, mounted() {
+
+    if (window.appData.project.name === '') {
+      this.isInitProject = false;
+    }
     try {
       var $ = window.jQuery;
       $(".ui .dropdown").dropdown();
       $("html").niceScroll();
       $("#properties").niceScroll();
-      $("#mobile").niceScroll({touchbehavior:true,});
+      $("#mobile").niceScroll({touchbehavior: true,});
       $("#elements").niceScroll();
 
       /*eslint-disable */
@@ -156,10 +191,10 @@ export default {
       this.display.height = this.currentDisplay.height;
 
     },
-    changeScale:function (e) {
+    changeScale: function (e) {
       this.display.scale = e;
     },
-    changeRotate:function (e) {
+    changeRotate: function (e) {
       this.display.landscape = e;
     }
   }
@@ -258,15 +293,28 @@ export default {
   margin: 10px;
   float: left;
 }
-#device-selector select{
+
+#device-selector select {
   padding: 4px;
 }
 
-#device-selector span{
+#device-selector span {
   display: block;
   padding: 10px 0;
 }
-#device-selector .buttons{
+
+#device-selector .buttons {
   padding-bottom: 5px;
 }
+
+.logo {
+  width:55%;
+}
+
+.logo-sm {
+  width: 128px;
+  padding-top: 10px;
+  opacity: .3;
+}
+
 </style>
