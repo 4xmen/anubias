@@ -17,6 +17,11 @@ export default new Router({
             name: "project",
             component: view('ProjectPage')
         },
+        {
+            path: "/projectLoaded",
+            name: "projectLoaded",
+            component: view('ProjectLoadedPage')
+        },
     ]
 });
 

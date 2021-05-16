@@ -21,6 +21,15 @@ export default {
   components: {
     // mainPage
   },mounted() {
+    var self = this;
+    window.api.receive('selected-file', (data) => {
+      window.project.file = data.file;
+      window.project.folder = data.project;
+      window.project.isSave = true;
+      self.$router.push('/projectLoaded');
+      window.appData = data.data;
+      window.alertify.success('Project loaded :' + data.basename);
+    });
     window.api.receive("message", (data) => {
       switch (data.type) {
         case 'warning':

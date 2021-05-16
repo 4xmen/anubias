@@ -3,7 +3,7 @@
     <app-menu></app-menu>
     <div id="main">
       <div class="container">
-        <div v-if="isInitProject">
+        <div v-if="!isInitProject">
           <div id="device-selector">
             <div class="input-field ">
               <select @change="changeDisplay" id="dev" v-model="currentDisplay" class="white-text">
@@ -119,7 +119,7 @@
           Properties
           <i class="fa fa-expand"></i>
         </h2>
-        <div v-if="isInitProject">
+        <div v-if="!isInitProject">
           <property></property>
         </div>
         <div v-else class="text-center">
@@ -129,7 +129,7 @@
     </div>
     <div id="pages">
       <div class="container">
-        <div v-if="isInitProject">
+        <div v-if="!isInitProject">
           <page title="page1" :active="true">
             hello 1
           </page>
@@ -161,7 +161,7 @@ export default {
     return {
       data: window.appData,
       currentDisplay: null,
-      isInitProject: true,
+      isInitProject: false,
       display: {
         name: 'Nexus 5',
         width: 1080,
@@ -174,7 +174,7 @@ export default {
   }, mounted() {
 
     if (window.appData.project.name === '') {
-      this.isInitProject = false;
+      this.isInitProject = true;
     }
     try {
       var $ = window.jQuery;
@@ -191,22 +191,6 @@ export default {
       //
       // window.ipcRenderer.send('open-save-chart-dialog');
 
-    }
-
-    try {
-      var self = this;
-      window.api.receive('selected-file', (data) => {
-        window.project.file = data.file;
-        window.project.folder = data.project;
-        window.project.isSave = true;
-        window.appData = data.data;
-        self.data = data.data;
-        self.$forceUpdate();
-        window.alertify.success('Project loaded :' + data.basename);
-      });
-
-    } catch (e) {
-      console.log(e.message);
     }
 
   }, methods: {
