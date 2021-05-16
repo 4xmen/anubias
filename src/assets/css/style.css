@@ -56,4 +56,9 @@ label{
     color: #eee;
 }
 
-
+.nav-wrapper li.disabled{
+    opacity: 0.3;
+}
+.nav-wrapper li.disabled:hover{
+    background: transparent !important;
+}

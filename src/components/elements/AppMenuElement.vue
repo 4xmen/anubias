@@ -13,21 +13,21 @@
           Open project
         </a>
       </li>
-      <li>
-        <a :class="'item'+(appData.project.name ===''?' disabled':'')" @click="save">
+      <li :class="(cantEditPrj?' disabled':'')" >
+        <a  @click="save">
           <i class="fa fa-save"></i>
           Save project
         </a>
       </li>
-      <li>
-        <a :class="'item'+(appData.project.name ===''?' disabled':'')" @click="saveAs">
+      <li :class="(cantEditPrj?' disabled':'')">
+        <a  @click="saveAs">
           <i class="fa fa-save"></i>
           Save project as
         </a>
       </li>
       <li class="divider"></li>
-      <li>
-        <router-link to="/project" :class="'item'+(appData.project.name ===''?' disabled':'')">
+      <li :class="(cantEditPrj?' disabled':'')">
+        <router-link :to="cantEditPrj?'':'/project'">
           <i class="fa fa-cog"></i>
           Project info
         </router-link>
@@ -62,10 +62,18 @@ export default {
     $(".dropdown-trigger").dropdown();
   }, methods: {
     save: function () {
+      if (this.cantEditPrj){
+        return  false;
+      }
       if (window.project.file === '') {
         this.saveAs();
         return false;
       }
+      var data = {
+        project:window.project ,
+        data: window.appData
+      };
+      window.api.send("save-project", data);
     },
     openProject: function () {
       window.api.send("open-file-dialog-project", {});
@@ -91,6 +99,9 @@ export default {
       this.$router.push('/project');
     },
     saveAs: function () {
+      if (this.cantEditPrj){
+        return  false;
+      }
       var data = {
         dialog: {
           title: 'Save project as',
@@ -101,7 +112,11 @@ export default {
         },
         data: window.appData
       };
-      window.api.send("save-file-project", data);
+      window.api.send("save-as-file-project", data);
+    }
+  },computed:{
+    cantEditPrj:function () {
+      return this.appData.project.name ==='';
     }
   }
 }
@@ -139,4 +154,5 @@ nav .fa {
 .nav-wrapper li{
   border-right: 1px rgba(0,0,0,0.2) solid;
 }
+
 </style>

@@ -44,7 +44,7 @@
             <span>
             Rotate:
           </span>
-            <button @click="changeRotate(false)"
+            <button  @click="changeRotate(false)"
                     :class="'waves-effect waves-light btn-small '+(!display.landscape?'green':'grey darken-4')">
               <i class="fa fa-mobile-alt"></i>
             </button>
@@ -54,25 +54,39 @@
             </button>
           </div>
           <div id="mobile"
-               :style="'width:'+(display.landscape?display.height:display.width  )* display.scale+'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px'">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
-            commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
-            sequi voluptatum!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
-            commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
-            sequi voluptatum!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
-            commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
-            sequi voluptatum!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
-            commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
-            sequi voluptatum!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
-            commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
-            sequi voluptatum!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad alias
-            commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit, sed,
-            sequi voluptatum!
+               :style="'width:'+(display.landscape?display.height:display.width  )* display.scale+'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px'+';background-color:'+data.project.bgColor+';color:'+data.project.textColor+' !important' ">
+            <div id="dir" :style="'direction:'+(data.project.isRTL?'rtl':'ltr')">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
+                alias
+                commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
+                sed,
+                sequi voluptatum!
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
+                alias
+                commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
+                sed,
+                sequi voluptatum!
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
+                alias
+                commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
+                sed,
+                sequi voluptatum!
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
+                alias
+                commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
+                sed,
+                sequi voluptatum!
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
+                alias
+                commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
+                sed,
+                sequi voluptatum!
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
+                alias
+                commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
+                sed,
+                sequi voluptatum!
+            </div>
           </div>
         </div>
         <div v-else class="text-center">
@@ -267,7 +281,6 @@ export default {
   border: 10px solid black;
   border-top-width: 30px;
   border-bottom-width: 30px;
-  color: #1e2329;
 }
 
 #main .container {

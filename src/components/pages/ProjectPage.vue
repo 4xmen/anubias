@@ -39,7 +39,7 @@
       </div>
       <div class="input-field col s6">
         <div class="active">Text Color</div>
-        <input type="color" id="txt" name="textColor"  v-model="data.color">
+        <input type="color" id="txt" name="textColor"  v-model="data.textColor">
       </div>
       <div class="input-field col s6">
         <div class="active">Background Color</div>
@@ -82,16 +82,13 @@ export default {
     },
     color2base64svg:function (color) {
       var txt = `<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-\t width="200" height="100" viewBox="0 0 126 126" enable-background="new 0 0 126 126" xml:space="preserve">
+\t width="150" height="100" viewBox="0 0 126 126" enable-background="new 0 0 126 126" xml:space="preserve">
 <g>
-
-        <rect width="200" height="100" style="fill:${color};;stroke:rgb(0,0,0)" />
+        <rect width="150" height="100" style="fill:${color};stroke:rgb(0,0,0)" />
 </g>
 </svg>`;
-      console.log(txt);
       return btoa(txt);
     }
   }

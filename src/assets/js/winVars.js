@@ -12,8 +12,8 @@ window.appData = {
 };
 
 window.project = {
-    'folder': '',
-    'file': '',
+    folder: '',
+    file: '',
     isSave: false,
 }
 

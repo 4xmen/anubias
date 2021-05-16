@@ -127,7 +127,7 @@ ipc.on('open-file-dialog-project', function (event) {
     })
 });
 
-ipc.on('save-file-project', function (event, arg) {
+ipc.on('save-as-file-project', function (event, arg) {
     dialog.showSaveDialog(arg.dialog).then(function (data) {
         // if(fileName === undefined) return
         // event.sender.send('message', fileName)
@@ -154,4 +154,22 @@ ipc.on('save-file-project', function (event, arg) {
 
     });
 
-})
+});
+
+ipc.on('save-project', function (event, arg) {
+        // if(fileName === undefined) return
+        // event.sender.send('message', fileName)
+        try {
+            let filename = arg.project.file;
+            win.webContents.send('message', {type: 'info', 'msg': 'try to save ' + path.basename(filename)});
+            fs.writeFile(filename, JSON.stringify(arg.data), function (err) {
+                if (err) {
+                    win.webContents.send('message', {type: 'error', 'msg': 'error: ' + path.basename(filename)});
+                }
+                win.webContents.send('message', {type: 'success', 'msg': path.basename(filename) + ' saved'});
+            });
+        } catch (e) {
+            win.webContents.send('message', 'error ' + e.message);
+
+        }
+});
