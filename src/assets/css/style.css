@@ -9,6 +9,10 @@ body{
     -ms-user-select: none;      /* No support yet */
     user-select: none;          /* Likely future */
 }
+h2,h3,h4,h5,h6{
+    margin-top: 0;
+    margin-bottom: 0;
+}
 a{
     color: #ffffff;
 }
@@ -17,7 +21,7 @@ a:hover{
 }
 
 input{
-    color: #1e2329;
+    color: #eeeeee;
 }
 input::placeholder{
     color: #666666 !important;
@@ -27,9 +31,29 @@ label{
     padding-top: 7px;
 }
 
+#property  .dropdown {
+    background: transparent;
+    color: #ffffff;
+    border: 0;
+    padding: 4px !important;
+    font-weight: bold;
+    font-size: 15px;
+    display: block;
+    width: 100%;
+    line-height: 1.2em !important;
+    height: auto !important;
+    margin: 0 !important;
+}
+
 .text-center{
     text-align: center;
 }
 .v-select{
     color: #20252b;
 }
+
+.select-dropdown{
+    color: #eee;
+}
+
+

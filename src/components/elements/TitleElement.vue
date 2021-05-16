@@ -16,6 +16,7 @@ export default {
 <style scoped>
   h1{
     padding-top: 1em;
+    font-size: 25px;
   }
   .back{
     margin-right: 1em;

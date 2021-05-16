@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="property">
     <table>
       <tr>
         <th>
@@ -28,7 +28,12 @@
           </label>
         </th>
         <td>
-          <input type="checkbox" id="p3">
+          <div class="switch">
+            <label>
+              <input type="checkbox">
+              <span class="lever"></span>
+            </label>
+          </div>
         </td>
       </tr>
       <tr>
@@ -67,42 +72,48 @@ th {
   border-bottom: 0;
   font-weight: normal;
   font-size: 12px;
+  padding: 0 ;
+  margin: 0;
 }
 
 td {
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-bottom: 0;
+  padding: 0 ;
+  margin: 0;
 }
 
 tr:last-child td, tr:last-child th {
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-input, select {
+input, select, .dropdown {
   background: transparent;
   color: #ffffff;
   border: 0;
-  padding: 4px;
+  padding: 4px !important;
   font-weight: bold;
   font-size: 15px;
   display: block;
   width: 100%;
+  line-height: 1.2em !important;
+  height: auto !important;
+  margin: 0 !important;
 }
 
 select option {
   color: #20252b;
 }
 
-input:focus, input:hover, select:hover, select:focus {
-  outline-color: #666666;
-  outline-width: 1px;
-  outline-style: dashed;
-}
+/*input:focus, input:hover, select:hover, select:focus {*/
+/*  outline-color: #666666;*/
+/*  outline-width: 1px;*/
+/*  outline-style: dashed;*/
+/*}*/
 
 input[type='checkbox'] {
   outline: none !important;
-  margin: 7px auto;
-  width: 100%;
+  width: auto !important;
 }
 
 label{

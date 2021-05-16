@@ -5,44 +5,51 @@
       <div class="container">
         <div v-if="isInitProject">
           <div id="device-selector">
-            <label>
-              <span>Display:</span>
-              <select @change="changeDisplay" v-model="currentDisplay">
-                <option :value="dev" v-for="(dev,i) in devices" :key="i"> {{ dev.name }} ({{ dev.width }}x{{ dev.height }})
+            <div class="input-field ">
+              <select @change="changeDisplay" id="dev" v-model="currentDisplay" class="white-text">
+                <option :value="dev" v-for="(dev,i) in devices" :key="i"> {{ dev.name }} ({{
+                    dev.width
+                  }}x{{ dev.height }})
                 </option>
               </select>
-            </label>
-            <span>
-            Scale: {{ display.scale }}
-          </span>
-            <div class="ui buttons inverted small">
-              <button @click="changeScale(1.25)"
-                      :class="'ui button  '+(display.scale === 1.25?'green basic':'inverted')">
-                125%
-              </button>
-              <button @click="changeScale(1)" :class="'ui button  '+(display.scale === 1?'green basic':'inverted')">100%
-              </button>
-              <button @click="changeScale(0.25)"
-                      :class="'ui button  '+(display.scale === 0.25?'green basic':'inverted')">
-                25%
-              </button>
-              <button @click="changeScale(0.5)" :class="'ui button  '+(display.scale === 0.5?'green basic':'inverted')">
-                50%
-              </button>
-              <button @click="changeScale(0.35)"
-                      :class="'ui button  '+(display.scale === 0.35?'green basic':'inverted')">
-                auto
-              </button>
+              <label for="dev">
+                <span>Display</span>
+                <br>
+              </label>
             </div>
+            <span>
+            Scale:
+          </span>
+            <ul class="pagination">
+              <li @click="changeScale(1.25)"
+                  :class="'waves-effect waves-light btn btn-small '+(display.scale === 1.25?'green basic':'grey darken-4')">
+                125%
+              </li>
+              <li @click="changeScale(1)"
+                  :class="'waves-effect waves-light btn btn-small '+(display.scale === 1?'green':'grey darken-4')">100%
+              </li>
+              <li @click="changeScale(0.25)"
+                  :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.25?'green ':'grey darken-4')">
+                25%
+              </li>
+              <li @click="changeScale(0.5)"
+                  :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.5?'green ':'grey darken-4')">
+                50%
+              </li>
+              <li @click="changeScale(0.35)"
+                  :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.35?'green':'grey darken-4')">
+                auto
+              </li>
+            </ul>
             <span>
             Rotate:
           </span>
             <button @click="changeRotate(false)"
-                    :class="'ui button small '+(!display.landscape?'green basic':'inverted')">
+                    :class="'waves-effect waves-light btn-small '+(!display.landscape?'green':'grey darken-4')">
               <i class="fa fa-mobile-alt"></i>
             </button>
             <button @click="changeRotate(true)"
-                    :class="'ui button small '+(display.landscape?'green basic':'inverted')">
+                    :class="'waves-effect waves-light btn-small '+(display.landscape?'green':'grey darken-4')">
               <i class="fa fa-mobile-alt fa-rotate-90"></i>
             </button>
           </div>
@@ -175,7 +182,7 @@ export default {
       $("#properties").niceScroll();
       $("#mobile").niceScroll({touchbehavior: true,});
       $("#elements").niceScroll();
-
+      $('#main select').formSelect();
 
 
       /*eslint-disable */
@@ -198,11 +205,8 @@ export default {
         window.alertify.success('Project loaded :' + data.basename);
       });
 
-      setTimeout(function () {
-        console.log('x',self.data);
-      },5000);
-    } catch(e) {
-        console.log(e.message);
+    } catch (e) {
+      console.log(e.message);
     }
 
   }, methods: {
@@ -217,10 +221,10 @@ export default {
     },
     changeRotate: function (e) {
       this.display.landscape = e;
-    },update: function (appData) {
-        this.appData = appData;
+    }, update: function (appData) {
+      this.appData = appData;
       console.log('xxz');
-        this.$forceUpdate();
+      this.$forceUpdate();
     }
   }
 }
@@ -251,7 +255,7 @@ export default {
 }
 
 #side h2 {
-  padding: 3px;
+  padding: 7px;
   text-align: center;
   background: #272c34;
   border-bottom: 1px solid rgba(0, 0, 0, .1);
@@ -262,7 +266,7 @@ export default {
 
 #side h2 .fa {
   float: right;
-  padding: 5px;
+  padding: 2px;
 }
 
 #main {
@@ -284,6 +288,7 @@ export default {
 
 #main .container {
   padding: 15px;
+  width: 95%;
 }
 
 #pages {
@@ -299,6 +304,7 @@ export default {
 
 #pages .container {
   padding: 5px;
+  width: 95%;
 }
 
 #page-add {
@@ -333,7 +339,7 @@ export default {
 }
 
 .logo {
-  width:55%;
+  width: 55%;
 }
 
 .logo-sm {
@@ -341,5 +347,6 @@ export default {
   padding-top: 10px;
   opacity: .3;
 }
+
 
 </style>

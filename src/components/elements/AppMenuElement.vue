@@ -1,28 +1,49 @@
 <template>
   <div>
-    <div class="ui menu inverted">
-      <div class="header item">
-        <img src="../../assets/img/logo.svg" alt="">
+    <ul id="dropdown1" class="dropdown-content grey darken-3">
+      <li>
+        <a @click="newProject">
+          <i class="fa fa-plus"></i>
+          New project
+        </a>
+      </li>
+      <li>
+        <a @click="openProject">
+          <i class="fa fa-folder-open"></i>
+          Open project
+        </a>
+      </li>
+      <li>
+        <a :class="'item'+(appData.project.name ===''?' disabled':'')" @click="save">
+          <i class="fa fa-save"></i>
+          Save project
+        </a>
+      </li>
+      <li>
+        <a :class="'item'+(appData.project.name ===''?' disabled':'')" @click="saveAs">
+          <i class="fa fa-save"></i>
+          Save project as
+        </a>
+      </li>
+      <li class="divider"></li>
+      <li>
+        <router-link to="/project" :class="'item'+(appData.project.name ===''?' disabled':'')">
+          <i class="fa fa-cog"></i>
+          Project info
+        </router-link>
+      </li>
+    </ul>
+    <nav class="top-nav">
+      <div class="nav-wrapper grey darken-4">
+        <ul class="left hide-on-med-and-down">
+          <li class="logo active"><a><img src="../../assets/img/logo.svg" alt=""></a></li>
+          <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Project<i class="material-icons right">arrow_drop_down</i></a>
+          <li><a>About</a></li>
+          <!--          <li><a href="badges.html">Components</a></li>-->
+          <!--          <li><a href="collapsible.html">JavaScript</a></li>-->
+        </ul>
       </div>
-      <div class="ui dropdown item">
-        Project
-        <i class="dropdown icon"></i>
-        <div class="menu">
-          <a class="item" @click="newProject"><i class="add icon"></i> New project</a>
-          <a class="item" @click="openProject"><i class="file icon"></i> Open project</a>
-          <a :class="'item'+(appData.project.name ===''?' disabled':'')" @click="save"><i class="save icon"></i> Save project</a>
-          <a :class="'item'+(appData.project.name ===''?' disabled':'')" @click="saveAs"><i class="save icon outline"></i> Save project as</a>
-          <div class="divider"></div>
-          <router-link to="/project" :class="'item'+(appData.project.name ===''?' disabled':'')"><i class="setting icon"></i> Project info</router-link>
-        </div>
-      </div>
-      <!--      <a class="item"> -->
-      <!--        Jobs-->
-      <!--      </a>-->
-      <!--      <a class="item">-->
-      <!--        Locations-->
-      <!--      </a>-->
-    </div>
+    </nav>
   </div>
 </template>
 
@@ -31,13 +52,14 @@
 /*eslint-enable */
 export default {
   name: "AppMenuElement",
-  data:function () {
-    return{
+  data: function () {
+    return {
       appData: window.appData
     }
   },
   mounted() {
     var $ = window.jQuery;
+    $(".dropdown-trigger").dropdown();
   }, methods: {
     save: function () {
       if (window.project.file === '') {
@@ -48,7 +70,7 @@ export default {
     openProject: function () {
       window.api.send("open-file-dialog-project", {});
     },
-    newProject:function () {
+    newProject: function () {
       window.project = {
         'folder': '',
         'file': '',
@@ -86,5 +108,35 @@ export default {
 </script>
 
 <style scoped>
+/*-995px width*/
+@media ( max-width: 995px ) {
+  .top-nav {
+    display: none;
+  }
+}
 
+nav, nav .nav-wrapper i, nav > a.sidenav-trigger, nav > a.sidenav-trigger i {
+  height: 40px;
+  line-height: 40px;
+}
+
+#dropdown1 {
+  width: 200px !important;
+}
+
+.nav-wrapper img {
+  width: 45px;
+  margin-bottom: -15px;
+  margin-top: -5px;
+}
+
+nav .fa {
+  margin-top: -10px;
+  margin-bottom: 0;
+  margin-right: 5px;
+  font-size: 15px;
+}
+.nav-wrapper li{
+  border-right: 1px rgba(0,0,0,0.2) solid;
+}
 </style>
