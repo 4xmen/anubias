@@ -1,0 +1,8 @@
+{
+  "name": "page",
+  "scrollable": true,
+  "safeArea": false,
+  "bgColor": "transparent",
+  "padding": "15",
+  "align": "center"
+}
