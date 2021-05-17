@@ -56,7 +56,10 @@
 
 <script>
 export default {
-  name: "PropertyElement"
+  name: "PropertyElement",
+  props:[
+    'props'
+  ],
 }
 </script>
 

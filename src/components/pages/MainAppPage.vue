@@ -44,7 +44,7 @@
             <span>
             Rotate:
           </span>
-            <button  @click="changeRotate(false)"
+            <button @click="changeRotate(false)"
                     :class="'waves-effect waves-light btn-small '+(!display.landscape?'green':'grey darken-4')">
               <i class="fa fa-mobile-alt"></i>
             </button>
@@ -57,36 +57,36 @@
                :style="'width:'+(display.landscape?display.height:display.width  )* display.scale+'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px'+';background-color:'+data.project.bgColor+';color:'+data.project.textColor+' !important' ">
             <div id="dir" :style="'direction:'+(data.project.isRTL?'rtl':'ltr')">
               <preloader></preloader>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
-                alias
-                commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
-                sed,
-                sequi voluptatum!
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
-                alias
-                commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
-                sed,
-                sequi voluptatum!
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
-                alias
-                commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
-                sed,
-                sequi voluptatum!
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
-                alias
-                commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
-                sed,
-                sequi voluptatum!
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
-                alias
-                commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
-                sed,
-                sequi voluptatum!
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
-                alias
-                commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
-                sed,
-                sequi voluptatum!
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
+              alias
+              commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
+              sed,
+              sequi voluptatum!
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
+              alias
+              commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
+              sed,
+              sequi voluptatum!
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
+              alias
+              commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
+              sed,
+              sequi voluptatum!
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
+              alias
+              commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
+              sed,
+              sequi voluptatum!
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
+              alias
+              commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
+              sed,
+              sequi voluptatum!
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
+              alias
+              commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
+              sed,
+              sequi voluptatum!
             </div>
           </div>
         </div>
@@ -145,13 +145,10 @@
     <div id="pages">
       <div class="container">
         <div v-if="!isInitProject">
-          <page title="page1" :active="true">
-            hello 1
+          <page v-for="(page,i) in data.pages" @click.native="changePage(i)"   :title="page.name" :active="currentPage === i">
+            hello {{i}}
           </page>
-          <page title="page2">
-            hello 2
-          </page>
-          <i class="fa fa-plus-circle" id="page-add"></i>
+          <i class="fa fa-plus-circle" id="page-add" @click="newPage"></i>
         </div>
         <div v-else class="text-center">
           <img src="../../assets/img/logo.svg" class="logo-sm" alt="">
@@ -168,15 +165,16 @@ import compo from '../elements/ComponentElement';
 import appMenu from '../elements/AppMenuElement';
 import preloader from '../flutter/Preloader';
 // const {remote} = require("electron");
-
+import {fnc} from '@/assets/js/functions';
 
 export default {
   name: "MainAppPage",
-  components: {page, property, compo, appMenu,preloader},
+  components: {page, property, compo, appMenu, preloader},
   data: function () {
     return {
       data: window.appData,
-      currentDisplay: null,
+      currentDisplay: "Nexus 5",
+      currentPage: 0,
       isInitProject: false,
       display: {
         name: 'Nexus 5',
@@ -221,11 +219,14 @@ export default {
     },
     changeRotate: function (e) {
       this.display.landscape = e;
-    }, update: function (appData) {
-      this.appData = appData;
-      console.log('xxz');
-      this.$forceUpdate();
-    }
+    },
+    newPage: function () {
+      this.data.pages.push(fnc.clone(window.defaults.page));
+      this.data.pages[this.data.pages.length-1].name = 'page' + this.data.pages.length;
+    },
+    changePage:function (i) {
+        this.currentPage = i;
+    },
   }
 }
 </script>

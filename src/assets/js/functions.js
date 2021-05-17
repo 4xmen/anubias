@@ -1,4 +1,3 @@
-/*eslint-disable */
 var html2canvas = require('html2canvas');
 var getScreenshotOfElement = function (element, posX, posY, width, height, callback) {
     html2canvas(element, {
@@ -31,4 +30,14 @@ var takeScreenShot = function (id, w, h, x = 0, y = 0) {
     });
 };
 
-/*eslint-enable */
+var clone = function (obj) {
+    return JSON.parse(JSON.stringify(obj));
+}
+
+var fnc = {
+    clone,
+    takeScreenShot
+}
+export {
+    fnc
+}

@@ -27,6 +27,10 @@ export default {
   min-width: 85px;
 }
 
+#page:hover{
+  background: rgba(0, 0, 0, 0.2);
+}
+
 #page-content {
   width: 65px;
   height: 80px;
@@ -43,6 +47,6 @@ export default {
 }
 
 .active {
-  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid #1b9a59;
 }
 </style>

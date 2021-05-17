@@ -50,6 +50,7 @@
 <script>
 /*eslint-disable */
 /*eslint-enable */
+import {fnc} from '@/assets/js/functions';
 export default {
   name: "AppMenuElement",
   data: function () {
@@ -96,6 +97,8 @@ export default {
         },
         pages: []
       };
+      window.appData.pages.push(fnc.clone(window.defaults.page));
+      window.appData.pages[0].name += '1';
       this.$router.push('/project');
     },
     saveAs: function () {
