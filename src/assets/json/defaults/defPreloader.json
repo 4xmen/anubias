@@ -4,6 +4,6 @@
   "align": "center",
   "width": 50.0,
   "height": 50.0,
-  "color": "appColor",
+  "color": "default",
   "hide": false
 }

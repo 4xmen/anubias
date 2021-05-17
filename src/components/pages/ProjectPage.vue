@@ -34,7 +34,7 @@
         <label for="clr" class="active">Color</label>
         <select id="clr" @change="changeColor" v-model="data.xColor">
           <option  :data-icon="'data:image/svg+xml;base64,'+color2base64svg(cl.color)" :value="cl.value" v-for="(cl,n) in colors" class="circle left" v-bind:key="n"
-                  :style="'background:'+cl.color + (cl.name === 'Black'?';color:white;':'')"> {{cl.name}} </option>
+                  :style="'background:'+cl.color + (cl.name === 'Black'?';color:white;':'')" :disabled="(['transparent','default'].indexOf(cl.name) > -1)" > {{cl.name}} </option>
         </select>
       </div>
       <div class="input-field col s6">

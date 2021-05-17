@@ -2,7 +2,7 @@
   "name": "page",
   "scrollable": true,
   "safeArea": false,
-  "bgColor": "transparent",
+  "bgColor": "Colors.transparent",
   "padding": "15",
   "align": "center"
 }

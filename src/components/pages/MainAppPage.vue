@@ -135,7 +135,7 @@
           <i class="fa fa-expand"></i>
         </h2>
         <div v-if="!isInitProject">
-          <property></property>
+          <property :properties="currentProperties"></property>
         </div>
         <div v-else class="text-center">
           <img src="../../assets/img/logo.svg" class="logo-sm" alt="">
@@ -145,7 +145,7 @@
     <div id="pages">
       <div class="container">
         <div v-if="!isInitProject">
-          <page v-for="(page,i) in data.pages" @click.native="changePage(i)"   :title="page.name" :active="currentPage === i">
+          <page v-for="(page,i) in data.pages" @click.native="changePage(i)" :key="i"   :title="page.name" :active="currentPage === i">
             hello {{i}}
           </page>
           <i class="fa fa-plus-circle" id="page-add" @click="newPage"></i>
@@ -175,6 +175,7 @@ export default {
       data: window.appData,
       currentDisplay: "Nexus 5",
       currentPage: 0,
+      currentProperties:{},
       isInitProject: false,
       display: {
         name: 'Nexus 5',
@@ -193,9 +194,8 @@ export default {
     try {
       var $ = window.jQuery;
       $("html").niceScroll();
-      $("#properties").niceScroll();
-      $("#mobile").niceScroll({touchbehavior: true,});
-      $("#elements").niceScroll();
+      $("#mobile").niceScroll({touchbehavior: true});
+      // $("#elements").niceScroll();
       $('#main select').formSelect();
 
 
@@ -226,6 +226,7 @@ export default {
     },
     changePage:function (i) {
         this.currentPage = i;
+        this.currentProperties = this.data.pages[i];
     },
   }
 }
