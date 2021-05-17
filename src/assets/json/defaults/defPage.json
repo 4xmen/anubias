@@ -1,8 +1,10 @@
 {
+  "type": "preloader",
   "name": "page",
   "scrollable": true,
   "safeArea": false,
   "bgColor": "Colors.transparent",
   "padding": "15",
-  "align": "center"
+  "align": "center",
+  "children": []
 }

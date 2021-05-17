@@ -25,6 +25,7 @@ export default {
   text-align: center;
   padding: 10px;
   min-width: 85px;
+  position: relative;
 }
 
 #page:hover{

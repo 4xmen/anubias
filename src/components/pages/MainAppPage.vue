@@ -56,7 +56,7 @@
           <div id="mobile"
                :style="'width:'+(display.landscape?display.height:display.width  )* display.scale+'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px'+';background-color:'+data.project.bgColor+';color:'+data.project.textColor+' !important' ">
             <div id="dir" :style="'direction:'+(data.project.isRTL?'rtl':'ltr')">
-              <preloader></preloader>
+              <simulator></simulator>
               Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
               alias
               commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
@@ -145,8 +145,11 @@
     <div id="pages">
       <div class="container">
         <div v-if="!isInitProject">
-          <page v-for="(page,i) in data.pages" @click.native="changePage(i)" :key="i"   :title="page.name" :active="currentPage === i">
-            hello {{i}}
+          <page v-for="(page,i) in data.pages" @click.native="changePage(i)" :key="i" :title="page.name"
+                :active="currentPage === i">
+            <i class="fa fa-times" @click="removePage(i)"></i>
+            hello {{ i }}
+            {{page.name}}
           </page>
           <i class="fa fa-plus-circle" id="page-add" @click="newPage"></i>
         </div>
@@ -163,19 +166,19 @@ import page from '../elements/PageElement';
 import property from '../elements/PropertyElement';
 import compo from '../elements/ComponentElement';
 import appMenu from '../elements/AppMenuElement';
-import preloader from '../flutter/Preloader';
+import simulator from '../elements/Simulator'
 // const {remote} = require("electron");
 import {fnc} from '@/assets/js/functions';
 
 export default {
   name: "MainAppPage",
-  components: {page, property, compo, appMenu, preloader},
+  components: {page, property, compo, appMenu, simulator},
   data: function () {
     return {
       data: window.appData,
       currentDisplay: "Nexus 5",
       currentPage: 0,
-      currentProperties:{},
+      currentProperties: {},
       isInitProject: false,
       display: {
         name: 'Nexus 5',
@@ -222,11 +225,41 @@ export default {
     },
     newPage: function () {
       this.data.pages.push(fnc.clone(window.defaults.page));
-      this.data.pages[this.data.pages.length-1].name = 'page' + this.data.pages.length;
+      let j = 0;
+      let nextName = false;
+      do{
+        var currrentName = 'page' + (this.data.pages.length+j).toString();
+        nextName = false;
+        for( const page of this.data.pages) {
+          if (page.name === currrentName){
+            j++;
+            nextName= true;
+          }
+        }
+      }while (nextName)
+      this.data.pages[this.data.pages.length - 1].name = currrentName ;
     },
-    changePage:function (i) {
-        this.currentPage = i;
-        this.currentProperties = this.data.pages[i];
+    changePage: function (i) {
+      this.currentPage = i;
+      this.currentProperties = this.data.pages[i];
+    },
+    removePage: function (i) {
+      var self = this;
+      alertify.confirm('Are you sure to remove page?', 'Remove confirm', function () {
+            let pages = [];
+            for( const j in self.data.pages) {
+              let page = self.data.pages[j] ;
+              if (i != j){
+                pages.push(page);
+              }
+            }
+            self.data.pages = pages;
+            self.changePage(0);
+            alertify.success('Page removed');
+          }
+          , function () {
+            alertify.error('Cancel')
+          });
     },
   }
 }
@@ -306,6 +339,14 @@ export default {
 #pages .container {
   padding: 5px;
   width: 95%;
+}
+
+#pages .fa-times {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: red;
+  font-size: 18px;
 }
 
 #page-add {

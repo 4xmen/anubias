@@ -62,3 +62,7 @@ label{
 .nav-wrapper li.disabled:hover{
     background: transparent !important;
 }
+
+.ajs-dialog{
+    color: black;
+}
