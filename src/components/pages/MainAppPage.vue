@@ -56,6 +56,7 @@
           <div id="mobile"
                :style="'width:'+(display.landscape?display.height:display.width  )* display.scale+'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px'+';background-color:'+data.project.bgColor+';color:'+data.project.textColor+' !important' ">
             <div id="dir" :style="'direction:'+(data.project.isRTL?'rtl':'ltr')">
+              <preloader></preloader>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
                 alias
                 commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
@@ -165,12 +166,13 @@ import page from '../elements/PageElement';
 import property from '../elements/PropertyElement';
 import compo from '../elements/ComponentElement';
 import appMenu from '../elements/AppMenuElement';
+import preloader from '../flutter/Preloader';
 // const {remote} = require("electron");
 
 
 export default {
   name: "MainAppPage",
-  components: {page, property, compo, appMenu},
+  components: {page, property, compo, appMenu,preloader},
   data: function () {
     return {
       data: window.appData,
