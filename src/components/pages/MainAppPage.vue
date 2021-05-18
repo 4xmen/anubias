@@ -5,15 +5,15 @@
       <div class="container">
         <div v-if="!isInitProject">
           <div id="device-selector">
-            <div class="input-field ">
+            <div class="input-field">
               <select @change="changeDisplay" id="dev" v-model="currentDisplay" class="white-text">
-                <option :value="dev" v-for="(dev,i) in devices" :key="i"> {{ dev.name }} ({{
-                    dev.width
-                  }}x{{ dev.height }})
+                <option :value="dev" v-for="(dev,i) in devices" :key="i">
+                  {{ dev.name }}
+                  ({{dev.width }}x{{ dev.height }})
                 </option>
               </select>
               <label for="dev">
-                <span>Display</span>
+                <span>Display devices</span>
                 <br>
               </label>
             </div>
@@ -56,7 +56,7 @@
           <div id="mobile"
                :style="'width:'+(display.landscape?display.height:display.width  )* display.scale+'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px'+';background-color:'+data.project.bgColor+';color:'+data.project.textColor+' !important' ">
             <div id="dir" :style="'direction:'+(data.project.isRTL?'rtl':'ltr')">
-              <simulator></simulator>
+              <simulator type="preloader" :scale="display.scale" :properties='{"name":"preloader","padding":"90","align":"center","width":150,"height":150,"color":"default","hide":false}'></simulator>
               Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
               alias
               commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
@@ -245,7 +245,7 @@ export default {
     },
     removePage: function (i) {
       var self = this;
-      alertify.confirm('Are you sure to remove page?', 'Remove confirm', function () {
+      window.alertify.confirm('Are you sure to remove page?', 'Remove confirm', function () {
             let pages = [];
             for( const j in self.data.pages) {
               let page = self.data.pages[j] ;
@@ -255,10 +255,10 @@ export default {
             }
             self.data.pages = pages;
             self.changePage(0);
-            alertify.success('Page removed');
+            window.alertify.success('Page removed');
           }
           , function () {
-            alertify.error('Cancel')
+            window.alertify.error('Cancel')
           });
     },
   }

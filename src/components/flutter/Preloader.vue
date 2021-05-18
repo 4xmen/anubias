@@ -1,14 +1,29 @@
 <template>
-    <div style="text-align: center">
-      <svg class="spinner" width="65px" color="#ff0000" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-        <circle class="path" fill="none" stroke-width="6" stroke="#4285f4"  stroke-linecap="round" cx="33" cy="33" r="30"  ></circle>
-      </svg>
-    </div>
+  <div :style="getStyle" >
+    <svg class="spinner" :width="(properties.width * scale)+'px'" color="#ff0000" :height="(properties.height * scale)+'px'"  viewBox="0 0 66 66"
+         xmlns="http://www.w3.org/2000/svg">
+      <circle class="path" fill="none" stroke-width="6" :stroke="color2web(properties.color)" stroke-linecap="round" cx="33" cy="33"
+              r="30"></circle>
+    </svg>
+  </div>
 </template>
 
 <script>
+import {fnc} from "@/assets/js/functions";
 export default {
-name: "Preloader"
+  name: "Preloader",
+  props: ['properties','scale'],
+  methods:{
+    color2web:function (clr) {
+      return fnc.color2web(clr);
+    }
+  },computed:{
+    getStyle:function () {
+      return 'text-align:' + this.properties.align+';'+
+          'padding:'+(this.properties.padding * this.scale)+'px;'+
+          (this.properties.hide?'opacity:0.35':'');
+    }
+  }
 }
 </script>
 
@@ -37,6 +52,7 @@ name: "Preloader"
     transform: rotate(270deg);
   }
 }
+
 .path {
   stroke-dasharray: 187;
   stroke-dashoffset: 0;
@@ -80,6 +96,7 @@ name: "Preloader"
     stroke: #4285f4;
   }
 }
+
 @-webkit-keyframes dash {
   0% {
     stroke-dashoffset: 187;
@@ -93,6 +110,7 @@ name: "Preloader"
     transform: rotate(450deg);
   }
 }
+
 @keyframes dash {
   0% {
     stroke-dashoffset: 187;

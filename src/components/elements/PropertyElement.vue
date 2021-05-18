@@ -52,7 +52,7 @@
       <!--      </tr>-->
       <template v-for="(p,k) in properties" >
 
-        <tr v-if="k !== 'type' || k !== 'children'" :key="k">
+        <tr v-if="k !== 'type' && k !== 'children'" :key="k">
           <th>
             <label :for="k">
               {{ k }}

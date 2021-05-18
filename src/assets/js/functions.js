@@ -33,10 +33,26 @@ var takeScreenShot = function (id, w, h, x = 0, y = 0) {
 var clone = function (obj) {
     return JSON.parse(JSON.stringify(obj));
 }
+var getColor = function (color) {
+    for( const clr of window.colors) {
+      if (clr.value === color){
+          return clr.color;
+      }
+    }
+    return '#000000';
 
+};
+var color2web = function (color) {
+  if( color === 'default' ){
+      return getColor(window.appData.project.xColor);
+  }else{
+      return getColor(color);
+  }
+};
 var fnc = {
     clone,
-    takeScreenShot
+    takeScreenShot,
+    color2web
 }
 export {
     fnc
