@@ -13,14 +13,14 @@
           Open project
         </a>
       </li>
-      <li :class="(cantEditPrj?' disabled':'')" >
-        <a  @click="save">
+      <li :class="(cantEditPrj?' disabled':'')">
+        <a @click="save">
           <i class="fa fa-save"></i>
           Save project
         </a>
       </li>
       <li :class="(cantEditPrj?' disabled':'')">
-        <a  @click="saveAs">
+        <a @click="saveAs">
           <i class="fa fa-save"></i>
           Save project as
         </a>
@@ -35,12 +35,20 @@
     </ul>
     <nav class="top-nav">
       <div class="nav-wrapper grey darken-4">
-        <ul class="left hide-on-med-and-down">
-          <li class="logo active"><a><img src="../../assets/img/logo.svg" alt=""></a></li>
-          <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Project<i class="material-icons right">arrow_drop_down</i></a>
-          <li><a>About</a></li>
+        <ul class="left">
+          <li class="logo active">
+            <a><img src="../../assets/img/logo.svg" alt=""></a>
+          </li>
+          <li>
+            <a class="dropdown-trigger" href="#!" data-target="dropdown1">
+              Project<i class="material-icons right">arrow_drop_down</i>
+            </a>
+          </li>
           <!--          <li><a href="badges.html">Components</a></li>-->
           <!--          <li><a href="collapsible.html">JavaScript</a></li>-->
+        </ul>
+        <ul id="nav-mobile" class="right">
+          <li><a>About</a></li>
         </ul>
       </div>
     </nav>
@@ -51,6 +59,7 @@
 /*eslint-disable */
 /*eslint-enable */
 import {fnc} from '@/assets/js/functions';
+
 export default {
   name: "AppMenuElement",
   data: function () {
@@ -63,15 +72,15 @@ export default {
     $(".dropdown-trigger").dropdown();
   }, methods: {
     save: function () {
-      if (this.cantEditPrj){
-        return  false;
+      if (this.cantEditPrj) {
+        return false;
       }
       if (window.project.file === '') {
         this.saveAs();
         return false;
       }
       var data = {
-        project:window.project ,
+        project: window.project,
         data: window.appData
       };
       window.api.send("save-project", data);
@@ -102,8 +111,8 @@ export default {
       this.$router.push('/project');
     },
     saveAs: function () {
-      if (this.cantEditPrj){
-        return  false;
+      if (this.cantEditPrj) {
+        return false;
       }
       var data = {
         dialog: {
@@ -117,9 +126,9 @@ export default {
       };
       window.api.send("save-as-file-project", data);
     }
-  },computed:{
-    cantEditPrj:function () {
-      return this.appData.project.name ==='';
+  }, computed: {
+    cantEditPrj: function () {
+      return this.appData.project.name === '';
     }
   }
 }
@@ -127,11 +136,11 @@ export default {
 
 <style scoped>
 /*-995px width*/
-@media ( max-width: 995px ) {
-  .top-nav {
-    display: none;
-  }
-}
+/*@media ( max-width: 995px ) {*/
+/*  .top-nav {*/
+/*    display: none;*/
+/*  }*/
+/*}*/
 
 nav, nav .nav-wrapper i, nav > a.sidenav-trigger, nav > a.sidenav-trigger i {
   height: 40px;
@@ -154,8 +163,9 @@ nav .fa {
   margin-right: 5px;
   font-size: 15px;
 }
-.nav-wrapper li{
-  border-right: 1px rgba(0,0,0,0.2) solid;
+
+.nav-wrapper li {
+  border-right: 1px rgba(0, 0, 0, 0.2) solid;
 }
 
 </style>

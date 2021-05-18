@@ -1,15 +1,15 @@
 <template>
   <div>
-    <app-menu></app-menu>
     <div id="main">
+      <app-menu></app-menu>
       <div class="container">
-        <div v-if="!isInitProject">
-          <div id="device-selector">
+        <div v-if="isInitProject">
+          <div id="device-selector" :class="(data.pages.length < 1?'inactive':'')">
             <div class="input-field">
               <select @change="changeDisplay" id="dev" v-model="currentDisplay" class="white-text">
                 <option :value="dev" v-for="(dev,i) in devices" :key="i">
                   {{ dev.name }}
-                  ({{dev.width }}x{{ dev.height }})
+                  ({{ dev.width }}x{{ dev.height }})
                 </option>
               </select>
               <label for="dev">
@@ -19,7 +19,7 @@
             </div>
             <span>
             Scale:
-          </span>
+            </span>
             <ul class="pagination">
               <li @click="changeScale(1.25)"
                   :class="'waves-effect waves-light btn btn-small '+(display.scale === 1.25?'green basic':'grey darken-4')">
@@ -43,7 +43,7 @@
             </ul>
             <span>
             Rotate:
-          </span>
+            </span>
             <button @click="changeRotate(false)"
                     :class="'waves-effect waves-light btn-small '+(!display.landscape?'green':'grey darken-4')">
               <i class="fa fa-mobile-alt"></i>
@@ -52,41 +52,26 @@
                     :class="'waves-effect waves-light btn-small '+(display.landscape?'green':'grey darken-4')">
               <i class="fa fa-mobile-alt fa-rotate-90"></i>
             </button>
+            <div id="non-visual">
+              <drop class="drop non-visual" @drop="onNonVisualDrop" :accepts-data="(n) => !isVisual(n)">
+<!--                <span v-for="(n, index) in oddDropped" :key="index">Dropped : {{ n }},&nbsp;</span>-->
+              </drop>
+            </div>
           </div>
-          <div id="mobile"
+          <div id="mobile" :class="(data.pages.length < 1?'inactive':'')"
                :style="'width:'+(display.landscape?display.height:display.width  )* display.scale+'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px'+';background-color:'+data.project.bgColor+';color:'+data.project.textColor+' !important' ">
             <div id="dir" :style="'direction:'+(data.project.isRTL?'rtl':'ltr')">
-              <simulator type="preloader" :scale="display.scale" :properties='{"name":"preloader","padding":"90","align":"center","width":150,"height":150,"color":"default","hide":false}'></simulator>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
-              alias
-              commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
-              sed,
-              sequi voluptatum!
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
-              alias
-              commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
-              sed,
-              sequi voluptatum!
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
-              alias
-              commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
-              sed,
-              sequi voluptatum!
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
-              alias
-              commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
-              sed,
-              sequi voluptatum!
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
-              alias
-              commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
-              sed,
-              sequi voluptatum!
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur error ipsum placeat quam? Ad
-              alias
-              commodi debitis distinctio doloribus illo necessitatibus neque nesciunt nobis optio quo reprehenderit,
-              sed,
-              sequi voluptatum!
+              <div v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.visual !== undefined">
+                <span v-for="(comp,i) in data.pages[currentPage].children.visual"
+                      :key="i" >
+                  <simulator :type="comp.type" :properties="comp" :scale="display.scale"></simulator>
+                </span>
+              </div>
+
+              <drop class="drop visual" @drop="onVisualDrop" :accepts-data="(n) => isVisual(n)"></drop>
+              <!--              <drop class="drop any" @drop="onAnyDrop" mode="cut">-->
+              <!--                <span v-for="(n, index) in anyDropped" :key="index">Dropped : {{n}},&nbsp;</span>-->
+              <!--              </drop>-->
             </div>
           </div>
         </div>
@@ -101,32 +86,13 @@
           Elements
           <i class="fa fa-cubes"></i>
         </h2>
-        <compo title="Container" icon="far fa-square"></compo>
-        <compo title="AppBar" icon="far fa-window-maximize"></compo>
-        <compo title="Image" icon="far fa-image"></compo>
-        <compo title="Icon" icon="far fa-smile"></compo>
-        <compo title="Text" icon="fas fa-font"></compo>
-        <compo title="Column" icon="fas fa-bars"></compo>
-        <compo title="Row" icon="fas fa-bars fa-rotate-90"></compo>
-        <compo title="Scaffold" icon="fa fa-vector-square"></compo>
-        <compo title="Nav" icon="far fa-window-maximize fa-rotate-180"></compo>
-        <compo title="List" icon="fa fa-list"></compo>
-        <compo title="Dropdown" icon="fa fa-prescription-bottle"></compo>
-        <compo title="Text" icon="fab fa-yoast"></compo>
-        <compo title="Button" icon="far fa-plus-square"></compo>
-        <compo title="Toggle" icon="fa fa-toggle-on"></compo>
-        <compo title="Menu" icon="fa fa-list-alt"></compo>
-        <compo title="Grid" icon="fa fa-th"></compo>
-        <compo title="Preloader" icon="fa fa-spinner"></compo>
-        <compo title="Rate" icon="fa fa-star"></compo>
-        <compo title="Calendar" icon="fa fa-calendar-alt"></compo>
-        <compo title="DatePicker" icon="fa fa-calendar-check"></compo>
-        <compo title="Map" icon="fa fa-map"></compo>
-        <compo title="Location" icon="fa fa-map-marker-alt"></compo>
-        <compo title="Slider" icon="fa fa-ellipsis-h"></compo>
-        <compo title="Timer" icon="fa fa-stopwatch"></compo>
-        <compo title="Image Picker" icon="fa fa-file-image"></compo>
-        <compo title="File Picker" icon="fa fa-folder-open"></compo>
+        <transition-group name="list" tag="div">
+          <drag v-for="(comp,n) in components" :key="n" class="drag" :data="n">
+            <compo :title="comp.title" :icon="comp.icon"></compo>
+          </drag>
+        </transition-group>
+
+        <!--        <compo title="Scaffold" icon="fa fa-vector-square"></compo>-->
 
       </div>
       <div id="properties">
@@ -134,7 +100,7 @@
           Properties
           <i class="fa fa-expand"></i>
         </h2>
-        <div v-if="!isInitProject">
+        <div v-if="isInitProject">
           <property :properties="currentProperties"></property>
         </div>
         <div v-else class="text-center">
@@ -144,12 +110,12 @@
     </div>
     <div id="pages">
       <div class="container">
-        <div v-if="!isInitProject">
+        <div v-if="isInitProject">
           <page v-for="(page,i) in data.pages" @click.native="changePage(i)" :key="i" :title="page.name"
                 :active="currentPage === i">
             <i class="fa fa-times" @click="removePage(i)"></i>
             hello {{ i }}
-            {{page.name}}
+            {{ page.name }}
           </page>
           <i class="fa fa-plus-circle" id="page-add" @click="newPage"></i>
         </div>
@@ -166,20 +132,31 @@ import page from '../elements/PageElement';
 import property from '../elements/PropertyElement';
 import compo from '../elements/ComponentElement';
 import appMenu from '../elements/AppMenuElement';
-import simulator from '../elements/Simulator'
+import simulator from '../elements/Simulator';
+import {Drag, Drop} from "vue-easy-dnd";
 // const {remote} = require("electron");
 import {fnc} from '@/assets/js/functions';
 
 export default {
   name: "MainAppPage",
-  components: {page, property, compo, appMenu, simulator},
+  components: {
+    page,
+    property,
+    compo,
+    appMenu,
+    simulator,
+    Drag,
+    Drop
+  },
   data: function () {
     return {
+      numbers: [1, 2, 3, 4, 5, 6],
       data: window.appData,
+      components: window.components,
       currentDisplay: "Nexus 5",
       currentPage: 0,
       currentProperties: {},
-      isInitProject: false,
+      // isInitProject: false,
       display: {
         name: 'Nexus 5',
         width: 1080,
@@ -191,17 +168,17 @@ export default {
     }
   }, mounted() {
 
-    if (window.appData.project.name === '') {
-      this.isInitProject = true;
-    }
     try {
       var $ = window.jQuery;
-      $("html").niceScroll();
-      $("#mobile").niceScroll({touchbehavior: true});
+      // $("#main").niceScroll();
+      // $("#mobile").niceScroll({touchbehavior: true});
       // $("#elements").niceScroll();
       $('#main select').formSelect();
 
 
+      if(this.isInitProject &&  this.data.pages.length > 0){
+        this.changePage(0);
+      }
       /*eslint-disable */
       /*eslint-enable */
     } catch (e) {
@@ -227,17 +204,18 @@ export default {
       this.data.pages.push(fnc.clone(window.defaults.page));
       let j = 0;
       let nextName = false;
-      do{
-        var currrentName = 'page' + (this.data.pages.length+j).toString();
+      do {
+        var currrentName = 'page' + (this.data.pages.length + j).toString();
         nextName = false;
-        for( const page of this.data.pages) {
-          if (page.name === currrentName){
+        for (const page of this.data.pages) {
+          if (page.name === currrentName) {
             j++;
-            nextName= true;
+            nextName = true;
           }
         }
-      }while (nextName)
-      this.data.pages[this.data.pages.length - 1].name = currrentName ;
+      } while (nextName)
+      this.data.pages[this.data.pages.length - 1].name = currrentName;
+      this.changePage(this.data.pages.length - 1);
     },
     changePage: function (i) {
       this.currentPage = i;
@@ -247,9 +225,9 @@ export default {
       var self = this;
       window.alertify.confirm('Are you sure to remove page?', 'Remove confirm', function () {
             let pages = [];
-            for( const j in self.data.pages) {
-              let page = self.data.pages[j] ;
-              if (i != j){
+            for (const j in self.data.pages) {
+              let page = self.data.pages[j];
+              if (i != j) {
                 pages.push(page);
               }
             }
@@ -261,6 +239,37 @@ export default {
             window.alertify.error('Cancel')
           });
     },
+    onVisualDrop(event) {
+      // this.evenDropped.push(event.data);
+      try {
+        var component = window.components[event.data];
+        var properties = eval(component.data);
+        if (properties === undefined){
+          window.alertify.warning('Invalid component',15);
+        }else{
+
+          this.data.pages[this.currentPage].children.visual.push(properties);
+        }
+      } catch(e) {
+        console.log(e.message);
+        window.alertify.warning('unknown error on load component');
+      }
+
+    },
+    onNonVisualDrop(event) {
+      // this.oddDropped.push(event.data);
+    },
+    remove(n) {
+      let index = this.numbers.indexOf(n);
+      this.numbers.splice(index, 1);
+    },
+    isVisual:function (n) {
+      return window.components[n].visual;
+    },
+  },computed:{
+    isInitProject:function () {
+     return  window.appData.project.name !== '';
+    }
   }
 }
 </script>
@@ -313,11 +322,12 @@ export default {
   background: white;
   /*width: 300px;*/
   /*height: 600px;*/
-  margin: auto;
+  margin: 10px auto 10px auto;
   border-radius: 15px;
   border: 10px solid black;
   border-top-width: 30px;
   border-bottom-width: 30px;
+  overflow-y: scroll;
 }
 
 #main .container {
@@ -380,8 +390,17 @@ export default {
   padding-bottom: 5px;
 }
 
+#non-visual {
+  border: 1px solid #20252b;
+  background: #1e2329;
+  margin-top: 15px;
+  min-height: 20vh;
+  overflow: hidden;
+  max-width: 315px;
+}
+
 .logo {
-  width: 55%;
+  width: 45%;
 }
 
 .logo-sm {

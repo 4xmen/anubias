@@ -1,5 +1,5 @@
 <template>
-  <div class="component">
+  <div class="component" title="Double click to remove">
     <i :class="'ico '+icon"></i>
     <span class="title">{{title}}</span>
     <slot></slot>
@@ -18,19 +18,16 @@ export default {
 
 <style scoped>
     .component{
-      padding: 15px;
-      padding-top: 0;
       text-align: center;
-      display: inline-block;
-      width: 30%;
       box-sizing: border-box;
-      height: 70px;
+      width: 100%;
+      display: block;
       vertical-align: top;
     }
     .component:hover{
       background: rgba(0, 0, 0, 0.2);
       cursor: pointer;
-      color: lime;
+      color: #1b9a59;
     }
     .ico{
       font-size:  30px;

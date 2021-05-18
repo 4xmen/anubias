@@ -6,5 +6,8 @@
   "bgColor": "Colors.transparent",
   "padding": "15",
   "align": "center",
-  "children": []
+  "children": {
+    "visual": [],
+    "nonvisual": []
+  }
 }

@@ -80,3 +80,78 @@ label{
     color: black;
 }
 
+.inactive{
+    opacity: 0.025;
+}
+
+/*dnd fix*/
+
+.drag {
+    /*border: 1px solid rgba(220, 220, 255,.2);*/
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 33%;
+    text-align: center;
+    transition: all 0.5s;
+}
+
+.drop {
+    margin: 20px 10px;
+    height: 80px;
+    border: 2px dashed rgba(0,0,0,0.2);
+    position: relative;
+}
+
+.drop::before {
+    font-size: 15px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    opacity: 0.2;
+    white-space: nowrap;
+}
+
+.drop.visual::before {
+    content: "viual component";
+}
+
+.drop.non-visual::before {
+    content: "non-visual component";
+}
+
+.drop.any::before {
+    content: "CUT ANY NUMBERS";
+}
+
+.drop-allowed {
+    background-color: rgba(0, 255, 0, 0.2);
+}
+
+.drop-forbidden {
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
+.drop-in {
+    box-shadow: 0 0 5px rgba(0, 0, 255, 0.4);
+}
+
+
+.list-enter,
+.list-leave-to {
+    opacity: 0;
+}
+
+.list-leave-active {
+    position: absolute;
+}
+
+.ajs-message{
+    background: #4285f4;
+    color: black;
+}
+.ajs-warning{
+    color: red;
+}

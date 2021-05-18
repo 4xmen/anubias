@@ -33,16 +33,16 @@ export default {
     window.api.receive("message", (data) => {
       switch (data.type) {
         case 'warning':
-          window.alertify.warning(data.msg);
+          window.alertify.warning(data.msg,10);
           break;
         case 'error':
-          window.alertify.error(data.msg);
+          window.alertify.error(data.msg,10);
           break;
         case 'success':
-          window.alertify.success(data.msg);
+          window.alertify.success(data.msg,10);
           break;
         default:
-          window.alertify.message(data.msg);
+          window.alertify.message(data.msg,10);
       }
     });
   }
@@ -50,5 +50,6 @@ export default {
 </script>
 
 <style>
-
+  #app{
+  }
 </style>

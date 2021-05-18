@@ -1,0 +1,193 @@
+{
+  "data": [
+    {
+      "title": "Preloader",
+      "icon": "fa fa-spinner",
+      "active": true,
+      "visual": true,
+      "data": "window.defaults.preloader"
+    },
+    {
+      "title": "Container",
+      "icon": "far fa-square",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.container"
+    },
+    {
+      "title": "AppBar",
+      "icon": "far fa-window-maximize",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.appbar"
+    },
+    {
+      "title": "AppBar",
+      "icon": "far fa-window-maximize",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.appbar"
+    },
+    {
+      "title": "Image",
+      "icon": "far fa-image",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.image"
+    },
+    {
+      "title": "Icon",
+      "icon": "far fa-smile",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.icon"
+    },
+    {
+      "title": "Text",
+      "icon": "fas fa-font",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.text"
+    },
+    {
+      "title": "Column",
+      "icon": "fas fa-bars",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.column"
+    },
+    {
+      "title": "Row",
+      "icon": "fas fa-bars fa-rotate-90",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.row"
+    },
+    {
+      "title": "Nav",
+      "icon": "far fa-window-maximize fa-rotate-180",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.nav"
+    },
+    {
+      "title": "List",
+      "icon": "fa fa-list",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.list"
+    },
+    {
+      "title": "Dropdown",
+      "icon": "fa fa-prescription-bottle",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.dropdown"
+    },
+    {
+      "title": "Input",
+      "icon": "fab fa-yoast",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.input"
+    },
+    {
+      "title": "Button",
+      "icon": "far fa-plus-square",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.button"
+    },
+    {
+      "title": "Toggle",
+      "icon": "fa fa-toggle-on",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.toggle"
+    },
+    {
+      "title": "Menu",
+      "icon": "fa fa-list-alt",
+      "active": false,
+      "visual": false,
+      "data": "window.defaults.menu"
+    },
+    {
+      "title": "Grid",
+      "icon": "fa fa-th",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.grid"
+    },
+    {
+      "title": "Rate",
+      "icon": "fa fa-star",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.rate"
+    },
+    {
+      "title": "Rate",
+      "icon": "fa fa-star",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.rate"
+    },
+    {
+      "title": "Calendar",
+      "icon": "fa fa-calendar-alt",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.calendar"
+    },
+    {
+      "title": "DatePicker",
+      "icon": "fa fa-calendar-check",
+      "active": false,
+      "visual": false,
+      "data": "window.defaults.datepicker"
+    },
+    {
+      "title": "Image Picker",
+      "icon": "fa fa-file-image",
+      "active": false,
+      "visual": false,
+      "data": "window.defaults.imagepicker"
+    },
+    {
+      "title": "File Picker",
+      "icon": "fa fa-folder-open",
+      "active": false,
+      "visual": false,
+      "data": "window.defaults.filepicker"
+    },
+    {
+      "title": "Map",
+      "icon": "fa fa-map",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.map"
+    },
+    {
+      "title": "Location",
+      "icon": "fa fa-map-marker-alt",
+      "active": false,
+      "visual": false,
+      "data": "window.defaults.location"
+    },
+    {
+      "title": "Slider",
+      "icon": "fa fa-ellipsis-h",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.slider"
+    },
+    {
+      "title": "Timer",
+      "icon": "fa fa-stopwatch",
+      "active": false,
+      "visual": false,
+      "data": "window.defaults.timer"
+    }
+  ]
+}
