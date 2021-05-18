@@ -1,10 +1,15 @@
 <template>
   <div>
     <div id="main">
+      <!-- add app menu to main-->
       <app-menu></app-menu>
       <div class="container">
+        <!-- if project init can show left side -->
+        <!-- right sidebar start -->
         <div v-if="isInitProject">
+          <!-- inactive when has not page -->
           <div id="device-selector" :class="(data.pages.length < 1?'inactive':'')">
+            <!-- select device -->
             <div class="input-field">
               <select @change="changeDisplay" id="dev" v-model="currentDisplay" class="white-text">
                 <option :value="dev" v-for="(dev,i) in devices" :key="i">
@@ -17,6 +22,7 @@
                 <br>
               </label>
             </div>
+            <!-- select scale size -->
             <span>
             Scale:
             </span>
@@ -41,6 +47,7 @@
                 auto
               </li>
             </ul>
+            <!-- device rotation -->
             <span>
             Rotate:
             </span>
@@ -52,19 +59,28 @@
                     :class="'waves-effect waves-light btn-small '+(display.landscape?'green':'grey darken-4')">
               <i class="fa fa-mobile-alt fa-rotate-90"></i>
             </button>
+            <!-- non visual components of page -->
             <div id="non-visual">
               <drop class="drop non-visual" @drop="onNonVisualDrop" :accepts-data="(n) => !isVisual(n)">
-<!--                <span v-for="(n, index) in oddDropped" :key="index">Dropped : {{ n }},&nbsp;</span>-->
+                <!--                <span v-for="(n, index) in oddDropped" :key="index">Dropped : {{ n }},&nbsp;</span>-->
               </drop>
             </div>
           </div>
+          <!-- mobile drawing by project detail and user device selected -->
+          <!-- inactive when has not page -->
+          <!-- make device size and scale -->
+          <!-- bgcolor and text color apply -->
           <div id="mobile" :class="(data.pages.length < 1?'inactive':'')"
                :style="'width:'+(display.landscape?display.height:display.width  )* display.scale+'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px'+';background-color:'+data.project.bgColor+';color:'+data.project.textColor+' !important' ">
-            <div id="dir" :style="'direction:'+(data.project.isRTL?'rtl':'ltr')">
-              <div v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.visual !== undefined">
+            <!-- direction of project and page padding -->
+            <div id="dir" :style="'direction:'+(data.project.isRTL?'rtl':'ltr')+';padding:'+calcPadding(data.pages[currentPage].padding)">
+              <!-- visual components of page -->
+              <div
+                  v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.visual !== undefined">
                 <span v-for="(comp,i) in data.pages[currentPage].children.visual"
-                      :key="i" >
-                  <simulator :type="comp.type" :properties="comp" :scale="display.scale"></simulator>
+                      :key="i">
+                  <simulator @dblclick.native="removeVisual(i)" @click.native="currentProperties = comp;"
+                             :type="comp.type" :properties="comp" :scale="display.scale"></simulator>
                 </span>
               </div>
 
@@ -75,17 +91,19 @@
             </div>
           </div>
         </div>
+        <!-- right sidebar end -->
         <div v-else class="text-center">
           <img src="../../assets/img/logo.svg" class="logo" alt="">
         </div>
       </div>
     </div>
     <div id="side">
-      <div id="elements">
+      <div id="components">
         <h2>
-          Elements
+          Components
           <i class="fa fa-cubes"></i>
         </h2>
+        <!-- show dragable component to add to page -->
         <transition-group name="list" tag="div">
           <drag v-for="(comp,n) in components" :key="n" class="drag" :data="n">
             <compo :title="comp.title" :icon="comp.icon"></compo>
@@ -100,6 +118,7 @@
           Properties
           <i class="fa fa-expand"></i>
         </h2>
+        <!-- if project init sho properties-->
         <div v-if="isInitProject">
           <property :properties="currentProperties"></property>
         </div>
@@ -110,12 +129,15 @@
     </div>
     <div id="pages">
       <div class="container">
+        <!-- if project init can pages -->
         <div v-if="isInitProject">
+          <!-- list of pages -->
           <page v-for="(page,i) in data.pages" @click.native="changePage(i)" :key="i" :title="page.name"
                 :active="currentPage === i">
             <i class="fa fa-times" @click="removePage(i)"></i>
             hello {{ i }}
             {{ page.name }}
+            <!--  ***!*** need screenshot-->
           </page>
           <i class="fa fa-plus-circle" id="page-add" @click="newPage"></i>
         </div>
@@ -150,7 +172,6 @@ export default {
   },
   data: function () {
     return {
-      numbers: [1, 2, 3, 4, 5, 6],
       data: window.appData,
       components: window.components,
       currentDisplay: "Nexus 5",
@@ -176,7 +197,7 @@ export default {
       $('#main select').formSelect();
 
 
-      if(this.isInitProject &&  this.data.pages.length > 0){
+      if (this.isInitProject && this.data.pages.length > 0) {
         this.changePage(0);
       }
       /*eslint-disable */
@@ -188,22 +209,23 @@ export default {
     }
 
   }, methods: {
-    changeDisplay: function () {
+    changeDisplay: function () { // change device display size
       this.display.name = this.currentDisplay.name;
       this.display.width = this.currentDisplay.width;
       this.display.height = this.currentDisplay.height;
 
     },
-    changeScale: function (e) {
+    changeScale: function (e) { // change device display scale
       this.display.scale = e;
     },
-    changeRotate: function (e) {
+    changeRotate: function (e) { // rotate device
       this.display.landscape = e;
     },
-    newPage: function () {
+    newPage: function () { // create new page to page
       this.data.pages.push(fnc.clone(window.defaults.page));
       let j = 0;
       let nextName = false;
+      // check name of page to bypass duplicate page name
       do {
         var currrentName = 'page' + (this.data.pages.length + j).toString();
         nextName = false;
@@ -213,25 +235,21 @@ export default {
             nextName = true;
           }
         }
-      } while (nextName)
+      } while (nextName);
+      // change page name after choose non-duplicated name
       this.data.pages[this.data.pages.length - 1].name = currrentName;
+      // show new page
       this.changePage(this.data.pages.length - 1);
     },
-    changePage: function (i) {
+    changePage: function (i) { // view clicked page
       this.currentPage = i;
       this.currentProperties = this.data.pages[i];
     },
-    removePage: function (i) {
+    removePage: function (i) { // remove page form project
       var self = this;
+      // confirm before remove
       window.alertify.confirm('Are you sure to remove page?', 'Remove confirm', function () {
-            let pages = [];
-            for (const j in self.data.pages) {
-              let page = self.data.pages[j];
-              if (i != j) {
-                pages.push(page);
-              }
-            }
-            self.data.pages = pages;
+            self.data.pages.splice(i, 1);
             self.changePage(0);
             window.alertify.success('Page removed');
           }
@@ -239,18 +257,22 @@ export default {
             window.alertify.error('Cancel')
           });
     },
-    onVisualDrop(event) {
+    onVisualDrop(event) { // on add a viusal component to page
       // this.evenDropped.push(event.data);
       try {
+        // find component
         var component = window.components[event.data];
+        // load default value
         var properties = eval(component.data);
-        if (properties === undefined){
-          window.alertify.warning('Invalid component',15);
-        }else{
-
+        // if can't loaded
+        if (properties === undefined) {
+          window.alertify.warning('Invalid component', 15);
+        } else {
+          // when loaded add to page
           this.data.pages[this.currentPage].children.visual.push(properties);
+          // ***!*** need sort and rename here
         }
-      } catch(e) {
+      } catch (e) {
         console.log(e.message);
         window.alertify.warning('unknown error on load component');
       }
@@ -258,17 +280,19 @@ export default {
     },
     onNonVisualDrop(event) {
       // this.oddDropped.push(event.data);
+      console.log(event);
     },
-    remove(n) {
-      let index = this.numbers.indexOf(n);
-      this.numbers.splice(index, 1);
+    removeVisual(n) { // remove visual component from page
+      this.data.pages[this.currentPage].children.visual.splice(n, 1);
     },
-    isVisual:function (n) {
+    isVisual: function (n) { // check is visual component or not
       return window.components[n].visual;
     },
-  },computed:{
-    isInitProject:function () {
-     return  window.appData.project.name !== '';
+    calcPadding: fnc.calcPadding,
+  }, computed: {
+    // check is init project or not
+    isInitProject: function () {
+      return window.appData.project.name !== '';
     }
   }
 }
@@ -287,7 +311,7 @@ export default {
   border-left: 1px solid rgba(0, 0, 0, .1);
 }
 
-#side #elements {
+#side #components {
   height: 50vh;
   overflow-y: scroll;
 }

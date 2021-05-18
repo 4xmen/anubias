@@ -1,5 +1,5 @@
-var html2canvas = require('html2canvas');
-var getScreenshotOfElement = function (element, posX, posY, width, height, callback) {
+let html2canvas = require('html2canvas');
+let getScreenshotOfElement = function (element, posX, posY, width, height, callback) {
     html2canvas(element, {
         onrendered: function (canvas) {
             var context = canvas.getContext('2d');
@@ -22,7 +22,7 @@ var getScreenshotOfElement = function (element, posX, posY, width, height, callb
     });
 }
 
-var takeScreenShot = function (id, w, h, x = 0, y = 0) {
+let takeScreenShot = function (id, w, h, x = 0, y = 0) {
     getScreenshotOfElement(document.querySelector(id), x, y, w, h, function (data) {
         // in the data variable there is the base64 image
         // exmaple for displaying the image in an <img>
@@ -30,10 +30,20 @@ var takeScreenShot = function (id, w, h, x = 0, y = 0) {
     });
 };
 
-var clone = function (obj) {
+/**
+ * clone new object for reuse variable
+ * @param obj
+ * @returns {any}
+ */
+let clone = function (obj) {
     return JSON.parse(JSON.stringify(obj));
 }
-var getColor = function (color) {
+/**
+ * get color from color list array
+ * @param color
+ * @returns {string|*}
+ */
+let getColor = function (color) {
     for( const clr of window.colors) {
       if (clr.value === color){
           return clr.color;
@@ -42,17 +52,36 @@ var getColor = function (color) {
     return '#000000';
 
 };
-var color2web = function (color) {
+/**
+ * convert flutter color to web color
+ * @param color
+ * @returns {string|*}
+ */
+let color2web = function (color) {
   if( color === 'default' ){
       return getColor(window.appData.project.xColor);
   }else{
       return getColor(color);
   }
 };
-var fnc = {
+
+let calcPadding = function (paddingValue,scale = 1) {
+  let calced = paddingValue.split(',');
+  let result ='';
+  for( const c of calced) {
+    result += (parseFloat(c)*scale).toString()+'px ';
+  }
+  return result;
+}
+
+/**
+ * for export
+ */
+let fnc = {
     clone,
     takeScreenShot,
-    color2web
+    color2web,
+    calcPadding
 }
 export {
     fnc

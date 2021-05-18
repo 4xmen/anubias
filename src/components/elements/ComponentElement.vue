@@ -1,3 +1,4 @@
+<!--component of component for choose in ide and drag and drop-->
 <template>
   <div class="component" title="Double click to remove">
     <i :class="'ico '+icon"></i>

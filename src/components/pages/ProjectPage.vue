@@ -1,3 +1,4 @@
+<!--edit project information-->
 <template>
   <div class="ui container">
     <titlec>
@@ -74,12 +75,12 @@ export default {
   }, methods: {
     save: function () {
       window.appData.project = this.data;
-      console.log(window.appData.project);
       this.$router.back();
     },
     changeColor: function () {
       console.log(this.xColor);
     },
+    // make svg form file
     color2base64svg:function (color) {
       var txt = `<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">

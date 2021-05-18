@@ -1,3 +1,4 @@
+<!--the main menu of ide-->
 <template>
   <div>
     <ul id="dropdown1" class="dropdown-content grey darken-3">
@@ -72,13 +73,16 @@ export default {
     $(".dropdown-trigger").dropdown();
   }, methods: {
     save: function () {
+      // check can edit project
       if (this.cantEditPrj) {
         return false;
       }
+      // if not saved yet run save as auto
       if (window.project.file === '') {
         this.saveAs();
         return false;
       }
+      // otherwise try to save
       var data = {
         project: window.project,
         data: window.appData
@@ -89,6 +93,8 @@ export default {
       window.api.send("open-file-dialog-project", {});
     },
     newProject: function () {
+
+      // prepare new empty project
       window.project = {
         'folder': '',
         'file': '',
@@ -111,9 +117,12 @@ export default {
       this.$router.push('/project');
     },
     saveAs: function () {
+      // check can edit project
       if (this.cantEditPrj) {
         return false;
       }
+
+      // prepare save dialog and appDate to save as
       var data = {
         dialog: {
           title: 'Save project as',

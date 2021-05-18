@@ -1,3 +1,4 @@
+<!--page symbol for element of list of pages-->
 <template>
   <div id="page" :class="active?'active':''">
     <div id="page-content">

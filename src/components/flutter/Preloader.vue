@@ -1,10 +1,12 @@
+<!--preloader component read to add to app-->
 <template>
-  <div :style="getStyle" >
+  <div>
     <svg class="spinner" :width="(properties.width * scale)+'px'" color="#ff0000" :height="(properties.height * scale)+'px'"  viewBox="0 0 66 66"
          xmlns="http://www.w3.org/2000/svg">
       <circle class="path" fill="none" stroke-width="6" :stroke="color2web(properties.color)" stroke-linecap="round" cx="33" cy="33"
               r="30"></circle>
     </svg>
+    <!-- ***!*** padding need review-->
   </div>
 </template>
 
@@ -16,12 +18,6 @@ export default {
   methods:{
     color2web:function (clr) {
       return fnc.color2web(clr);
-    }
-  },computed:{
-    getStyle:function () {
-      return 'text-align:' + this.properties.align+';'+
-          'padding:'+(this.properties.padding * this.scale)+'px;'+
-          (this.properties.hide?'opacity:0.35':'');
     }
   }
 }

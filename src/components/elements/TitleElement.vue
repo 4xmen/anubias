@@ -1,3 +1,4 @@
+<!--title element for pages-->
 <template>
   <div>
     <h1>

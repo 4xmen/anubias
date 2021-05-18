@@ -1,3 +1,4 @@
+<!--load project and verify project page-->
 <template>
   <div class="container text-center">
     <div class="progress">

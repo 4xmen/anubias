@@ -94,7 +94,9 @@ if (isDevelopment) {
         })
     }
 }
-
+/**
+ * sample of open file
+ */
 ipc.on('open-file-dialog', function (event) {
     dialog.showOpenDialog({
         properties: ['openFile']
@@ -102,7 +104,12 @@ ipc.on('open-file-dialog', function (event) {
         if (files) event.sender.send('selected-file', files)
     })
 });
+
+/**
+ * open project progress
+ */
 ipc.on('open-file-dialog-project', function (event) {
+    // show open dialog
     dialog.showOpenDialog({
         title: 'Open Anubias project',
         filters: [
@@ -112,39 +119,57 @@ ipc.on('open-file-dialog-project', function (event) {
         // properties: {showOverwriteConfirmation: true,}
         properties: ['openFile']
     }).then(function (files) {
+        // when done check is canceled or not
         if (!files.canceled) {
+            // or not send msg try to read and open file
             win.webContents.send('message', {type: 'info', 'msg': 'try to open ' + path.basename(files.filePaths[0])});
+            // store project file name
             let filename = files.filePaths[0];
-            fs.readFile(filename, 'utf8', function (err, data) {
-                win.webContents.send('selected-file', {
-                    file: filename,
-                    basename: path.basename(filename),
-                    folder: path.dirname(filename),
-                    data: JSON.parse(data)
-                });
-            })
+            // read project file
+            try {
+                fs.readFile(filename, 'utf8', function (err, data) {
+                    // then when loaded send data to ide
+                    win.webContents.send('selected-file', {
+                        file: filename,
+                        basename: path.basename(filename),
+                        folder: path.dirname(filename),
+                        data: JSON.parse(data)
+                    });
+                })
+            } catch(e) {
+                win.webContents.send('message', 'error ' + e.message);
+            }
         }
     })
 });
 
+/**
+ * save project as progress
+ */
 ipc.on('save-as-file-project', function (event, arg) {
+    // show save dialog
     dialog.showSaveDialog(arg.dialog).then(function (data) {
-        // if(fileName === undefined) return
-        // event.sender.send('message', fileName)
         try {
+            // then check is canceled?
             if (data.canceled){
                 win.webContents.send('message', {type: 'info', 'msg': 'Canceled'});
                 return false;
             }
+            // prepare file name to save
             let filename = data.filePath.trim();
+            // check user added extention ".anb" or not
             if (filename.substr(filename.length - 4) !== '.anb') {
+                // or not we add ext to prepared file name
                 filename += '.anb';
             }
+            // send msg try to read and open file
             win.webContents.send('message', {type: 'info', 'msg': 'try to save ' + path.basename(filename)});
+            // try to write into selected file
             fs.writeFile(filename, JSON.stringify(arg.data), function (err) {
-                if (err) {
+                if (err) { // send failed msg if can't :(
                     win.webContents.send('message', {type: 'error', 'msg': 'error: ' + path.basename(filename)});
                 }
+                // otherwise we saved send msg to ide saved :)
                 win.webContents.send('message', {type: 'success', 'msg': path.basename(filename) + ' saved'});
             });
         } catch (e) {
@@ -155,17 +180,23 @@ ipc.on('save-as-file-project', function (event, arg) {
     });
 
 });
-
+/**
+ * save project
+ */
 ipc.on('save-project', function (event, arg) {
         // if(fileName === undefined) return
         // event.sender.send('message', fileName)
         try {
+            // prepare file name to save
             let filename = arg.project.file;
+            // send msg to ide try to save
             win.webContents.send('message', {type: 'info', 'msg': 'try to save ' + path.basename(filename)});
+            // save appData to project
             fs.writeFile(filename, JSON.stringify(arg.data), function (err) {
-                if (err) {
+                if (err) { // send failed msg if can't :(
                     win.webContents.send('message', {type: 'error', 'msg': 'error: ' + path.basename(filename)});
                 }
+                // otherwise we saved send msg to ide saved :)
                 win.webContents.send('message', {type: 'success', 'msg': path.basename(filename) + ' saved'});
             });
         } catch (e) {

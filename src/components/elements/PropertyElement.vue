@@ -1,55 +1,7 @@
+<!--ide properties controller element-->
 <template>
   <div id="property">
     <table>
-      <!--      <tr>-->
-      <!--        <th>-->
-      <!--          <label for="p1">-->
-      <!--            Color-->
-      <!--          </label>-->
-      <!--        </th>-->
-      <!--        <td>-->
-      <!--          <input type="text" id="p1" value="red">-->
-      <!--        </td>-->
-      <!--      </tr>-->
-      <!--      <tr>-->
-      <!--        <th>-->
-      <!--          <label for="p2">-->
-      <!--            Text-->
-      <!--          </label>-->
-      <!--        </th>-->
-      <!--        <td>-->
-      <!--          <input type="text" value="title text here" id="p2">-->
-      <!--        </td>-->
-      <!--      </tr>-->
-      <!--      <tr>-->
-      <!--        <th>-->
-      <!--          <label for="p3">-->
-      <!--              Lock-->
-      <!--          </label>-->
-      <!--        </th>-->
-      <!--        <td>-->
-      <!--          <div class="switch">-->
-      <!--            <label>-->
-      <!--              <input type="checkbox">-->
-      <!--              <span class="lever"></span>-->
-      <!--            </label>-->
-      <!--          </div>-->
-      <!--        </td>-->
-      <!--      </tr>-->
-      <!--      <tr>-->
-      <!--        <th>-->
-      <!--          <label for="p4">-->
-      <!--            Align-->
-      <!--          </label>-->
-      <!--        </th>-->
-      <!--        <td>-->
-      <!--          <select id="p4">-->
-      <!--            <option value=""> left</option>-->
-      <!--            <option value=""> center</option>-->
-      <!--            <option value=""> right</option>-->
-      <!--          </select>-->
-      <!--        </td>-->
-      <!--      </tr>-->
       <template v-for="(p,k) in properties" >
 
         <tr v-if="k !== 'type' && k !== 'children'" :key="k">
@@ -71,8 +23,13 @@
               <input type="text" @blur="nameCheck($event,true)" @keyup="nameCheck($event,false)" :id="k"
                      v-model="properties[k]">
             </div>
+            <div v-else-if="k === 'padding'">
+              <input type="text" @blur="paddingCheck($event,true)" @keyup="paddingCheck($event,false)" :id="k"
+                     v-model="properties[k]">
+            </div>
             <div v-else-if="k === 'align'">
               <select v-model="properties[k]" :id="k">
+                <option value="default"> left</option>
                 <option value="left"> left</option>
                 <option value="center"> center</option>
                 <option value="right"> right</option>
@@ -86,6 +43,7 @@
                 </option>
               </select>
             </div>
+            <!-- ***!*** padding need review-->
             <div v-else>
               <input type="text" :id="k" v-model="properties[k]">
             </div>
@@ -118,6 +76,18 @@ export default {
     nameCheck: function (e, isBlur) {
       let name = e.target.value;
       if (!/^[a-zA-Z_$][a-zA-Z_$0-9]*$/.test(name)) {
+        e.target.classList.add('invalid');
+      } else {
+        e.target.classList.remove('invalid');
+      }
+      if (isBlur) {
+        e.target.focus();
+      }
+    },
+    paddingCheck: function (e, isBlur) {
+      const regex = /^([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]{1,3}$)|([0-9]{1,3},[0-9]{1,3}$)|([0-9]{1,3}$)/gm;
+      let name = e.target.value;
+      if (!regex.test(name)) {
         e.target.classList.add('invalid');
       } else {
         e.target.classList.remove('invalid');

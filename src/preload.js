@@ -1,12 +1,11 @@
-// const { remote } = require('electron');
-// console.log(remote);
-// let currWindow = remote.BrowserWindow.getFocusedWindow();
-//
-// console.log(remote);
-// window.closeCurrentWindow = function(){
-//     currWindow.close();
-// }
+/**
+ * preload help us to connect ide to electron app
+ * This is like server/client relation
+ */
 
+/**
+ * require electron js ipc and context bridge
+ */
 const {
     contextBridge,
     ipcRenderer

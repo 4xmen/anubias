@@ -1,3 +1,4 @@
+<!--material icon selector element-->
 <template>
   <div>
     <div class="field">
@@ -5,7 +6,7 @@
       <div class="ui fluid selection dropdown search">
         <input type="hidden" name="color" v-model="icon">
         <i class="dropdown icon"></i>
-        <div class="default text">Select Color</div>
+        <div class="default text">Select Icon</div>
         <div class="menu">
           <div v-for="(ic,n) in icons" v-bind:key="n" class="item" :data-value="ic.value">
             <span class="icon material-icons-round">{{ ic.value }}</span>
