@@ -126,6 +126,8 @@ td {
   border-bottom: 0;
   padding: 0;
   margin: 0;
+  overflow: hidden;
+  height: 30px;
 }
 
 tr:last-child td, tr:last-child th {
@@ -144,6 +146,7 @@ input, select, .dropdown {
   line-height: 1.2em !important;
   height: auto !important;
   margin: 0 !important;
+  box-sizing: border-box;
 }
 
 select option {

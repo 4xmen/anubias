@@ -5,7 +5,7 @@
     </titlec>
     <div>
       <h1>
-        Abubias v0.2.0
+        Abubias v0.2.1
       </h1>
       <img src="@/assets/img/logo.svg" alt="logo" class="logo">
       <h2>

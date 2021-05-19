@@ -73,14 +73,16 @@
           <div id="mobile" :class="(data.pages.length < 1?'inactive':'')"
                :style="'width:'+(display.landscape?display.height:display.width  )* display.scale+'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px'+';background-color:'+data.project.bgColor+';color:'+data.project.textColor+' !important' ">
             <!-- direction of project and page padding -->
-            <div id="dir" :style="'direction:'+(data.project.isRTL?'rtl':'ltr')+';padding:'+calcPadding(data.pages[currentPage].padding,this.display.scale)">
+            <div id="dir"
+                 :style="'direction:'+(data.project.isRTL?'rtl':'ltr')+';padding:'+calcPadding(data.pages[currentPage].padding,this.display.scale)">
               <!-- visual components of page -->
               <div
                   v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.visual !== undefined">
                 <span v-for="(comp,i) in data.pages[currentPage].children.visual"
                       :key="i">
                   <simulator @dblclick.native="removeVisual(i)" @click.native="currentProperties = comp;"
-                             :type="comp.type" :properties="comp" :scale="display.scale" :page="data.pages[currentPage]"></simulator>
+                             :type="comp.type" :properties="comp" :scale="display.scale"
+                             :page="data.pages[currentPage]"></simulator>
                 </span>
               </div>
 
@@ -257,19 +259,52 @@ export default {
             window.alertify.error('Cancel')
           });
     },
+    visualValidator: function (component, visuals) {
+      if (component.type === 'appbar') {
+        // check non duplicate app bar
+        for (const comp of visuals) {
+          if (comp.type === 'appbar') {
+            window.alertify.warning("You can't drop two AppBar in page");
+            return false;
+          }
+        }
+        // add appbar
+        visuals.unshift(component);
+        return true;
+      }
+      // add component
+      visuals.push(component);
+      // choose name
+      // check not duplicate name add number to name
+      let names = [];
+      for (const comp of visuals) {
+        names.push(comp.name);
+      }
+      let i = 0;
+      let nextName = false;
+      do {
+        nextName = false;
+        i++;
+        if (names.indexOf(component.type +i.toString()) > -1) {
+          nextName = true;
+        }
+      } while (nextName);
+      visuals[visuals.length -1 ].name = component.type +i.toString();
+      return true;
+    },
     onVisualDrop(event) { // on add a viusal component to page
       // this.evenDropped.push(event.data);
       try {
         // find component
-        var component = window.components[event.data];
+        let component = window.components[event.data];
         // load default value
-        var properties = eval(component.data);
+        let properties = eval(component.data);
         // if can't loaded
         if (properties === undefined) {
           window.alertify.warning('Invalid component', 15);
         } else {
-          // when loaded add to page
-          this.data.pages[this.currentPage].children.visual.push(properties);
+          // when loaded add to page with validate
+          this.visualValidator(properties, this.data.pages[this.currentPage].children.visual);
           // ***!*** need sort and rename here
         }
       } catch (e) {
@@ -283,7 +318,15 @@ export default {
       console.log(event);
     },
     removeVisual(n) { // remove visual component from page
-      this.data.pages[this.currentPage].children.visual.splice(n, 1);
+      var self = this;
+      window.alertify.confirm(`Are you sure to remove this component
+      "${this.data.pages[this.currentPage].children.visual[n].name}" ?`,
+          'Remove confirm', function () {
+            self.data.pages[self.currentPage].children.visual.splice(n, 1)
+          }
+          , function () {
+            // window.alertify.error('Cancel')
+          });
     },
     isVisual: function (n) { // check is visual component or not
       return window.components[n].visual;

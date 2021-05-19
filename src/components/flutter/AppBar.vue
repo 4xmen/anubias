@@ -35,8 +35,7 @@ export default {
 
 <style scoped>
 #appBar {
-  font-size: 24px;
-  padding: 10px;
+  margin-bottom: 5px !important;
 }
 .fa{
   margin-right: .3em;
