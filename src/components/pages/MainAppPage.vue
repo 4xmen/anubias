@@ -269,11 +269,11 @@ export default {
           }
         }
         // add appbar
-        visuals.unshift(component);
+        visuals.unshift(fnc.clone(component));
         return true;
       }
       // add component
-      visuals.push(component);
+      visuals.push(fnc.clone(component));
       // choose name
       // check not duplicate name add number to name
       let names = [];

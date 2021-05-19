@@ -29,7 +29,7 @@
             </div>
             <div v-else-if="k === 'align'">
               <select v-model="properties[k]" :id="k">
-                <option value="default"> left</option>
+                <option value="default"> default</option>
                 <option value="left"> left</option>
                 <option value="center"> center</option>
                 <option value="right"> right</option>
