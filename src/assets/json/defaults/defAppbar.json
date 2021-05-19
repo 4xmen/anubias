@@ -1,0 +1,11 @@
+{
+  "type": "appbar",
+  "name": "appbar",
+  "title": "app bar title",
+  "color": "default",
+  "textColor": "default",
+  "back": false,
+  "actions": [],
+  "hide": false,
+  "menu": null
+}

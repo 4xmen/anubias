@@ -17,7 +17,7 @@
     {
       "title": "AppBar",
       "icon": "far fa-window-maximize",
-      "active": false,
+      "active": true,
       "visual": true,
       "data": "window.defaults.appbar"
     },

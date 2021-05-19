@@ -65,11 +65,11 @@ let color2web = function (color) {
   }
 };
 
-let calcPadding = function (paddingValue,scale = 1) {
+let calcPadding = function (paddingValue,scale = 1,invert = false) {
   let calced = paddingValue.split(',');
   let result ='';
   for( const c of calced) {
-    result += (parseFloat(c)*scale).toString()+'px ';
+    result += (parseFloat(c)*scale*(invert?-1:1)).toString()+'px ';
   }
   return result;
 }

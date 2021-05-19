@@ -73,14 +73,14 @@
           <div id="mobile" :class="(data.pages.length < 1?'inactive':'')"
                :style="'width:'+(display.landscape?display.height:display.width  )* display.scale+'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px'+';background-color:'+data.project.bgColor+';color:'+data.project.textColor+' !important' ">
             <!-- direction of project and page padding -->
-            <div id="dir" :style="'direction:'+(data.project.isRTL?'rtl':'ltr')+';padding:'+calcPadding(data.pages[currentPage].padding)">
+            <div id="dir" :style="'direction:'+(data.project.isRTL?'rtl':'ltr')+';padding:'+calcPadding(data.pages[currentPage].padding,this.display.scale)">
               <!-- visual components of page -->
               <div
                   v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.visual !== undefined">
                 <span v-for="(comp,i) in data.pages[currentPage].children.visual"
                       :key="i">
                   <simulator @dblclick.native="removeVisual(i)" @click.native="currentProperties = comp;"
-                             :type="comp.type" :properties="comp" :scale="display.scale"></simulator>
+                             :type="comp.type" :properties="comp" :scale="display.scale" :page="data.pages[currentPage]"></simulator>
                 </span>
               </div>
 

@@ -36,3 +36,4 @@ window.components = require('../json/components.json').data;
 window.defaults = {};
 window.defaults.page = require('../json/defaults/defPage.json');
 window.defaults.preloader = require('../json/defaults/defPreloader.json');
+window.defaults.appbar = require('../json/defaults/defAppbar.json');

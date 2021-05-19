@@ -11,7 +11,7 @@
             </label>
           </th>
           <td>
-            <div v-if="k === 'hide' || k === 'safeArea' || k === 'scrollable'">
+            <div v-if="typeof properties[k] === 'boolean'">
               <div class="switch">
                 <label>
                   <input type="checkbox" v-model="properties[k]">

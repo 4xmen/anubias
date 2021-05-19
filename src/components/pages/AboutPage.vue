@@ -76,7 +76,7 @@
       <div class="team">
         <img src='@/assets/img/developers/xstack.png' alt="">
         <h4>
-          xstack
+          xStack
         </h4>
       </div>
       <h2>

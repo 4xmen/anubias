@@ -1,22 +1,44 @@
 <template>
-  <div id="appBar">
-      {{title}}
+  <div id="appBar" :style="getStyle()">
+    <span class="fa fa-arrow-left" v-if="properties.back"></span>
+    {{ properties.title }}
   </div>
 </template>
 
 <script>
+import {fnc} from "@/assets/js/functions";
+
 export default {
   name: "AppBar",
-  props: [
-    'title',
-    'backgroundColor',
-    'textColor',
-  ],
+  props: ['properties', 'scale', 'page'],
+  methods: {
+    getStyle: function () {
+      let style = '';
+      style += 'background-color:' + this.color2web(this.properties.color) + ';';
+      if (this.properties.textColor === 'default'){
+        style += 'color: white;';
+      }else{
+        style += 'color:' + this.color2web(this.properties.textColor) + ';';
+      }
+      style += 'margin:' + fnc.calcPadding(this.page.padding, this.scale, true) + ';';
+      style += 'font-size:' + 60 * this.scale+'px;';
+      style += 'padding:' + 30 * this.scale+'px;';
+
+      return style;
+    },
+    color2web: function (clr) {
+      return fnc.color2web(clr);
+    }
+  }
 }
 </script>
 
 <style scoped>
 #appBar {
-
+  font-size: 24px;
+  padding: 10px;
+}
+.fa{
+  margin-right: .3em;
 }
 </style>
