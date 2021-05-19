@@ -49,7 +49,7 @@
           <!--          <li><a href="collapsible.html">JavaScript</a></li>-->
         </ul>
         <ul id="nav-mobile" class="right">
-          <li><a>About</a></li>
+          <li><router-link to="/about">About</router-link></li>
         </ul>
       </div>
     </nav>

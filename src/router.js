@@ -25,6 +25,11 @@ export default new Router({
             name: "projectLoaded",
             component: view('ProjectLoadedPage')
         },
+        {
+            path: "/about",
+            name: "About",
+            component: view('AboutPage')
+        },
     ]
 });
 

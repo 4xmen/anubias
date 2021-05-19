@@ -13,6 +13,7 @@ require('@fortawesome/fontawesome-free/css/all.min.css')
 require('material-icons/iconfont/material-icons.css');
 require('materialize-css/dist/css/materialize.min.css');
 require('alertifyjs/build/css/alertify.min.css');
+require('flickity/dist/flickity.min.css');
 require('./assets/css/style.css');
 
 export default {
