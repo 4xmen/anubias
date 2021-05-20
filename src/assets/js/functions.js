@@ -55,11 +55,16 @@ let getColor = function (color) {
 /**
  * convert flutter color to web color
  * @param color
+ * @param isActiveWidget
  * @returns {string|*}
  */
-let color2web = function (color) {
+let color2web = function (color,isActiveWidget = true) {
   if( color === 'default' ){
-      return getColor(window.appData.project.xColor);
+      if (isActiveWidget){
+          return getColor(window.appData.project.xColor);
+      } else {
+          return "#222222";
+      }
   }else{
       return getColor(color);
   }

@@ -14,7 +14,7 @@ export default {
   methods: {
     getStyle: function () {
       let style = '';
-      style += 'background-color:' + this.color2web(this.properties.color) + ';';
+      style += 'background-color:' + this.color2web(this.properties.color,false) + ';';
       if (this.properties.textColor === 'default'){
         style += 'color: white;';
       }else{
@@ -23,12 +23,9 @@ export default {
       style += 'margin:' + fnc.calcPadding(this.page.padding, this.scale, true) + ';';
       style += 'font-size:' + 60 * this.scale+'px;';
       style += 'padding:' + 30 * this.scale+'px;';
-
       return style;
     },
-    color2web: function (clr) {
-      return fnc.color2web(clr);
-    }
+    color2web: fnc.color2web
   }
 }
 </script>

@@ -71,7 +71,10 @@
           <!-- make device size and scale -->
           <!-- bgcolor and text color apply -->
           <div id="mobile" :class="(data.pages.length < 1?'inactive':'')"
-               :style="'width:'+(display.landscape?display.height:display.width  )* display.scale+'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px'+';background-color:'+data.project.bgColor+';color:'+data.project.textColor+' !important' ">
+               :style="'width:'+(display.landscape?display.height:display.width  )* display.scale
+               +'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px'+
+               ';background-color:'+(data.project.isDark?'#2e2e2e':data.project.bgColor)
+               +';color:'+(data.project.isDark?'white':data.project.textColor)+' !important' ">
             <!-- direction of project and page padding -->
             <div id="dir"
                  :style="'direction:'+(data.project.isRTL?'rtl':'ltr')+';padding:'+calcPadding(data.pages[currentPage].padding,this.display.scale)">
