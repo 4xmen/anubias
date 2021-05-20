@@ -1,7 +1,9 @@
 <template>
   <div id="appBar" :style="getStyle()">
-    <span class="fa fa-arrow-left" v-if="properties.back"></span>
-    {{ properties.title }}
+    <i :class="'fa '+(isRTL?'fa-arrow-right':'fa-arrow-left')" v-if="properties.back"></i>
+    <b>
+      {{ properties.title }}
+    </b>
   </div>
 </template>
 
@@ -10,6 +12,11 @@ import {fnc} from "@/assets/js/functions";
 
 export default {
   name: "AppBar",
+  data:function () {
+    return{
+      isRTL: window.appData.project.isRTL,
+    }
+  },
   props: ['properties', 'scale', 'page'],
   methods: {
     getStyle: function () {
@@ -33,8 +40,5 @@ export default {
 <style scoped>
 #appBar {
   margin-bottom: 5px !important;
-}
-.fa{
-  margin-right: .3em;
 }
 </style>

@@ -155,3 +155,11 @@ label{
 .ajs-warning{
     color: red;
 }
+
+/*flutter fix*/
+#appBar i.fa-arrow-left{
+    margin-right: 1.5em;
+}
+#appBar i.fa-arrow-right{
+    margin-left: 1.5em;
+}

@@ -60,11 +60,14 @@ let getColor = function (color) {
  */
 let color2web = function (color,isActiveWidget = true) {
   if( color === 'default' ){
-      if (isActiveWidget){
+      if ( isActiveWidget){
           return getColor(window.appData.project.xColor);
       } else {
-          return "#222222";
+          if (window.appData.project.isDark){
+              return "#222222";
+          }
       }
+      return getColor(window.appData.project.xColor);
   }else{
       return getColor(color);
   }
