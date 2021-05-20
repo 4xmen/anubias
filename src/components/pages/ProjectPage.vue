@@ -38,6 +38,12 @@
                   :style="'background:'+cl.color + (cl.name === 'Black'?';color:white;':'')" :disabled="(['transparent','default'].indexOf(cl.name) > -1)" > {{cl.name}} </option>
         </select>
       </div>
+      <div class="input-field col s12">
+        <label for="mainPage" class="active">Color</label>
+        <select id="mainPage" v-model="data.mainPage">
+          <option v-for="(page,k) in app.pages" :value="k" :key="k" > {{page.name}} </option>
+        </select>
+      </div>
       <div class="input-field col s6">
         <div class="active">Text Color</div>
         <input type="color" id="txt" name="textColor"  v-model="data.textColor">
@@ -64,6 +70,7 @@ export default {
     return {
       data: window.appData.project,
       colors: window.colors,
+      app: window.appData,
     }
   },
   components: {

@@ -5,7 +5,9 @@
       <slot></slot>
     </div>
     <h3 id="page-title">
-      {{ title }}
+      <span :class="{main:isMain}">
+        {{ title }}
+      </span>
     </h3>
   </div>
 </template>
@@ -15,12 +17,18 @@ export default {
   name: "PageElement",
   props: [
     'title',
-    'active'
+    'active',
+    'isMain'
   ]
 }
 </script>
 
 <style scoped>
+
+.main {
+  font-weight: 900;
+}
+
 #page {
   display: inline-block;
   text-align: center;
@@ -29,7 +37,7 @@ export default {
   position: relative;
 }
 
-#page:hover{
+#page:hover {
   background: rgba(0, 0, 0, 0.2);
 }
 
@@ -50,5 +58,9 @@ export default {
 
 .active {
   border-bottom: 1px solid #1b9a59;
+}
+
+.active #page-title {
+  color: #1b9a59;
 }
 </style>

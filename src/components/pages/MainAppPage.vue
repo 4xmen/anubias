@@ -137,7 +137,7 @@
         <!-- if project init can pages -->
         <div v-if="isInitProject">
           <!-- list of pages -->
-          <page v-for="(page,i) in data.pages" @click.native="changePage(i)" :key="i" :title="page.name"
+          <page v-for="(page,i) in data.pages" :isMain="data.project.mainPage === i"   @click.native="changePage(i)" :key="i" :title="page.name"
                 :active="currentPage === i">
             <i class="fa fa-times" @click="removePage(i)"></i>
             hello {{ i }}
@@ -218,7 +218,6 @@ export default {
       this.display.name = this.currentDisplay.name;
       this.display.width = this.currentDisplay.width;
       this.display.height = this.currentDisplay.height;
-
     },
     changeScale: function (e) { // change device display scale
       this.display.scale = e;

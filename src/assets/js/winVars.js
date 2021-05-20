@@ -1,8 +1,7 @@
 /**
- * main application data
- * @type {{pages: [], project: {isDark: boolean, xColor: string, bgColor: string, name: string, version: string, isRTL: boolean, textColor: string}}}
+ * sample application date
  */
-window.appData = {
+window.sample = {
     project: {
         name: '',
         version: '1.0.0',
@@ -11,9 +10,15 @@ window.appData = {
         xColor: 'Colors.green',
         textColor: '#000000',
         bgColor: '#ffffff',
+        mainPage: 0
     },
     pages: []
 };
+/**
+ * main application data
+ * @type {{pages: [], project: {isDark: boolean, xColor: string, bgColor: string, name: string, version: string, isRTL: boolean, textColor: string}}}
+ */
+window.appData = JSON.parse(JSON.stringify(window.sample));
 /**
  * App loaded project dir
  * @type {{folder: string, file: string, isSave: boolean}}

@@ -100,18 +100,7 @@ export default {
         'file': '',
         isSave: false,
       };
-      window.appData = {
-        project: {
-          name: 'sample project',
-          version: '1.0.0',
-          isDark: false,
-          isRTL: false,
-          xColor: 'Colors.green',
-          textColor: '#000000',
-          bgColor: '#ffffff',
-        },
-        pages: []
-      };
+      window.appData = fnc.clone(window.sample);
       window.appData.pages.push(fnc.clone(window.defaults.page));
       window.appData.pages[0].name += '1';
       this.$router.push('/project');
