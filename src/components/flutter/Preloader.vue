@@ -1,7 +1,7 @@
 <!--preloader component read to add to app-->
 <template>
   <div>
-    <svg class="spinner" :width="(properties.width * scale)+'px'" color="#ff0000" :height="(properties.height * scale)+'px'"  viewBox="0 0 66 66"
+    <svg class="spinner" :width="(properties.width * scale * 2.75)+'px'" color="#ff0000" :height="(properties.height * scale *  2.75)+'px'"  viewBox="0 0 66 66"
          xmlns="http://www.w3.org/2000/svg">
       <circle class="path" fill="none" stroke-width="6" :stroke="color2web(properties.color)" stroke-linecap="round" cx="33" cy="33"
               r="30"></circle>

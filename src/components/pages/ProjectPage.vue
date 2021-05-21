@@ -39,7 +39,7 @@
         </select>
       </div>
       <div class="input-field col s12">
-        <label for="mainPage" class="active">Color</label>
+        <label for="mainPage" class="active">Main page (entry point)</label>
         <select id="mainPage" v-model="data.mainPage">
           <option v-for="(page,k) in app.pages" :value="k" :key="k" > {{page.name}} </option>
         </select>
