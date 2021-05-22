@@ -1,0 +1,15 @@
+{
+  "type": "text",
+  "name": "text",
+  "text": "Anubias example text : )",
+  "align": "center",
+  "size": 50.0,
+  "height": 50.0,
+  "maxLine": 0,
+  "overflow": "ellipsis",
+  "color": "default",
+  "hide": false,
+  "weight": "normal",
+  "font": "default",
+  "softWrap": false
+}
