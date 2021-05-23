@@ -45,7 +45,7 @@
     {
       "title": "Text",
       "icon": "fas fa-font",
-      "active": false,
+      "active": true,
       "visual": true,
       "data": "window.defaults.text"
     },

@@ -35,6 +35,35 @@
                 <option value="right"> right</option>
               </select>
             </div>
+            <div v-else-if="k === 'overflow'">
+              <select v-model="properties[k]" :id="k">
+                <option value="default"> default</option>
+                <option value="ellipsis"> ellipsis </option>
+                <option value="fade"> fade </option>
+                <option value="visible"> visible </option>
+                <option value="clip"> clip </option>
+              </select>
+            </div>
+            <div v-else-if="k === 'font'">
+              <select v-model="properties[k]" :id="k">
+                <option value="default"> default </option>
+              </select>
+            </div>
+            <div v-else-if="k === 'weight'">
+              <select v-model="properties[k]" :id="k">
+                <option value="normal"> normal </option>
+                <option value="bold"> bold </option>
+                <option value="w100"> 100 </option>
+                <option value="w200"> 200 </option>
+                <option value="w300"> 300 </option>
+                <option value="w400"> 400 </option>
+                <option value="w500"> 500 </option>
+                <option value="w600"> 600 </option>
+                <option value="w700"> 700 </option>
+                <option value="w800"> 800 </option>
+                <option value="w900"> 900 </option>
+              </select>
+            </div>
             <div v-else-if="k.toLowerCase().indexOf('color') !== -1">
               <select v-model="properties[k]" :id="k">
                 <option :value="cl.value" v-for="(cl,n) in colors" class="ui dropdown" v-bind:key="n"
@@ -43,7 +72,9 @@
                 </option>
               </select>
             </div>
-            <!-- ***!*** padding need review-->
+<!--            <div v-else-if="k === 'text' || k === 'title'">-->
+<!--              <input type="text" :id="k" v-model="properties[k]" @blur="blurTitle" @focus="focusTitle">-->
+<!--            </div>-->
             <div v-else>
               <input type="text" :id="k" v-model="properties[k]">
             </div>
@@ -59,6 +90,7 @@
 export default {
   name: "PropertyElement",
   mounted() {
+    // var $ = window.jQuery;
   },
   data: function () {
     return {
@@ -95,7 +127,18 @@ export default {
       if (isBlur) {
         e.target.focus();
       }
-    }
+    },
+    // blurTitle:function (e) {
+    //
+    //   if(e.target.value === ''){
+    //     this.properties[e.target.id]  = '[NO TEXT]';
+    //   }
+    // },
+    // focusTitle: function (e) {
+    //     if(e.target.value === '[NO TEXT]'){
+    //       this.properties[e.target.id]  = '';
+    //     }
+    // },
   }
 }
 </script>

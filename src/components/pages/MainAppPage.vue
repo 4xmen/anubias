@@ -195,18 +195,20 @@ export default {
   }, mounted() {
 
     try {
+
       var $ = window.jQuery;
       // $("#main").niceScroll();
       // $("#mobile").niceScroll({touchbehavior: true});
       // $("#elements").niceScroll();
       $('#main select').formSelect();
 
-
       if (this.isInitProject && this.data.pages.length > 0) {
-        this.changePage(0);
+        this.changePage(this.data.project.mainPage);
+
       }
       /*eslint-disable */
       /*eslint-enable */
+
     } catch (e) {
       //
       // window.ipcRenderer.send('open-save-chart-dialog');

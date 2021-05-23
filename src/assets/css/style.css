@@ -76,6 +76,20 @@ label{
     background: transparent !important;
 }
 
+.txt.ellipsis:after{
+    content: '...';
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+}
+.txt.fade:after{
+    content: '...';
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    opacity: .5;
+}
+
 .ajs-dialog{
     color: black;
 }

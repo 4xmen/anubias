@@ -8,19 +8,24 @@
     <div v-if="type === 'appbar'">
       <appbar :properties="properties" :scale="scale" :page="page"></appbar>
     </div>
+    <div v-if="type === 'text'">
+      <txt :properties="properties" :scale="scale" :page="page"></txt>
+    </div>
   </div>
 </template>
 
 <script>
 import preloader from '../flutter/Preloader';
 import appbar from '../flutter/AppBar';
+import txt from '../flutter/Text';
 import {fnc} from '@/assets/js/functions';
 
 export default {
   name: "Simulator",
   components: {
     preloader,
-    appbar
+    appbar,
+    txt
   },
   props: {
     properties: {
@@ -46,9 +51,6 @@ export default {
   },computed:{
     getStyle:function () {
       let style = '';
-      if (this.properties.hide !== undefined){
-        style += (this.properties.hide?'opacity:0.35;':'');
-      }
       if (this.properties.align !== undefined && this.properties.align !== 'default'){
           style += 'text-align:' + this.properties.align+';';
       }

@@ -36,6 +36,7 @@ async function createWindow() {
     })
     win.removeMenu();
     win.maximize();
+    // win.webContents.openDevTools();
 
 
     if (process.env.WEBPACK_DEV_SERVER_URL) {
