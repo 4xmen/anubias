@@ -91,11 +91,14 @@ import {fnc} from '@/assets/js/functions';
 export default {
   name: "PropertyElement",
   mounted() {
+    var setme ;
     var $ = window.jQuery;
     let updatePreview=function () {
-      setTimeout(function () {
+      clearTimeout(setme);
+      setme = setTimeout(function () {
+        console.log('exet');
         fnc.takeScreenShot("#preview",function (e) {
-          self.page.image = e;
+          window.appData.pages[self.page].image = e;
         });
       },300);
     };
@@ -118,10 +121,8 @@ export default {
       type: Object
     },
     page: {
-      default: function () {
-        return {}
-      },
-      type: Object
+      default:0,
+      type: Number
     }
   }, methods: {
     nameCheck: function (e, isBlur) {

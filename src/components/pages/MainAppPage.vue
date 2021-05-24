@@ -71,22 +71,26 @@
           <!-- make device size and scale -->
           <!-- bgcolor and text color apply -->
           <div id="mobile" :style="'width:'+(display.landscape?display.height:display.width  )* display.scale
-               +'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px'" :class="(data.pages.length < 1?'inactive':'')">
-            <div id="preview" :style="';background-color:'+(data.project.isDark?'#2e2e2e':data.project.bgColor)
-               +';color:'+(data.project.isDark?'white':data.project.textColor)+' !important' ">
+               +'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px;'+'background-color:'+(data.project.isDark?'#2e2e2e':data.project.bgColor)
+               +';color:'+(data.project.isDark?'white':data.project.textColor)+' !important' "
+               :class="(data.pages.length < 1?'inactive':'')">
 
-              <!-- direction of project and page padding -->
-              <div id="dir"
-                   :style="'direction:'+(data.project.isRTL?'rtl':'ltr')+';padding:'+calcPadding(data.pages[currentPage].padding,this.display.scale)">
-                <!-- visual components of page -->
-                <div
-                    v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.visual !== undefined">
+            <div id="preview">
+              <div :style="'background-color:'+(data.project.isDark?'#2e2e2e':data.project.bgColor)
+               +';color:'+(data.project.isDark?'white':data.project.textColor)+' !important' ">
+                <!-- direction of project and page padding -->
+                <div id="dir"
+                     :style="'direction:'+(data.project.isRTL?'rtl':'ltr')+';padding:'+calcPadding(data.pages[currentPage].padding,this.display.scale)">
+                  <!-- visual components of page -->
+                  <div
+                      v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.visual !== undefined">
                 <span v-for="(comp,i) in data.pages[currentPage].children.visual"
                       :key="i">
                   <simulator @dblclick.native="removeVisual(i)" @click.native="currentProperties = comp;"
                              :type="comp.type" :properties="comp" :scale="display.scale"
                              :page="data.pages[currentPage]"></simulator>
                 </span>
+                  </div>
                 </div>
 
                 <drop class="drop visual" @drop="onVisualDrop" :accepts-data="(n) => isVisual(n)"></drop>
@@ -126,7 +130,7 @@
         </h2>
         <!-- if project init sho properties-->
         <div v-if="isInitProject">
-          <property :properties="currentProperties" :page="data.pages[currentPage]"></property>
+          <property :properties="currentProperties" :page="currentPage"></property>
         </div>
         <div v-else class="text-center">
           <img src="../../assets/img/logo.svg" class="logo-sm" alt="">
@@ -140,7 +144,7 @@
           <!-- list of pages -->
           <page v-for="(page,i) in data.pages" :image="page.image!= undefined? page.image: null"
                 :isMain="data.project.mainPage === i" @click.native="changePage(i)" :key="i" :title="page.name"
-                :active="currentPage === i">
+                :active="currentPage === i" :bg="(data.project.isDark?'#2e2e2e':data.project.bgColor)">
             <i class="fa fa-times" @click="removePage(i)"></i>
           </page>
           <i class="fa fa-plus-circle" id="page-add" @click="newPage"></i>
@@ -300,9 +304,10 @@ export default {
         }
       } while (nextName);
       visuals[visuals.length - 1].name = component.type + i.toString();
-
+      // update page preview
       setTimeout(function () {
         fnc.takeScreenShot("#preview", function (e) {
+          console.log(self.data.pages[self.currentPage].name);
           self.data.pages[self.currentPage].image = e;
         });
       }, 1000);
@@ -443,6 +448,7 @@ export default {
   top: 0;
   color: red;
   font-size: 18px;
+  z-index: 999;
 }
 
 #page-add {

@@ -1,8 +1,9 @@
 <!--page symbol for element of list of pages-->
 <template>
   <div id="page" :class="active?'active':''">
-    <div id="page-content">
+    <div id="page-content" :style="'background:'+bg">
       <img :src="image !== undefined ? image:''" alt="no preview">
+      <slot></slot>
     </div>
     <h3 id="page-title">
       <span :class="{main:isMain}">
@@ -19,7 +20,8 @@ export default {
     'title',
     'active',
     'isMain',
-    'image'
+    'image',
+    'bg'
   ]
 }
 </script>
@@ -54,7 +56,8 @@ export default {
   overflow: hidden;
   overflow-y: scroll;
 }
-#page-content img{
+
+#page-content img {
   max-width: 100%;
 }
 
