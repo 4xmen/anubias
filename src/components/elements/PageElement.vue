@@ -2,7 +2,7 @@
 <template>
   <div id="page" :class="active?'active':''">
     <div id="page-content">
-      <slot></slot>
+      <img :src="image !== undefined ? image:''" alt="no preview">
     </div>
     <h3 id="page-title">
       <span :class="{main:isMain}">
@@ -18,7 +18,8 @@ export default {
   props: [
     'title',
     'active',
-    'isMain'
+    'isMain',
+    'image'
   ]
 }
 </script>
@@ -50,6 +51,11 @@ export default {
   margin: auto;
   margin-bottom: 5px;
   cursor: pointer;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+#page-content img{
+  max-width: 100%;
 }
 
 #page-title {

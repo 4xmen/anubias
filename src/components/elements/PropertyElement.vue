@@ -87,10 +87,23 @@
 </template>
 
 <script>
+import {fnc} from '@/assets/js/functions';
 export default {
   name: "PropertyElement",
   mounted() {
-    // var $ = window.jQuery;
+    var $ = window.jQuery;
+    let updatePreview=function () {
+      setTimeout(function () {
+        fnc.takeScreenShot("#preview",function (e) {
+          self.page.image = e;
+        });
+      },300);
+    };
+    var self = this;
+    $(document).on('change',"#property select",updatePreview)
+    $(document).on('keyup',"#property input",updatePreview)
+    $(document).on('keyup',"#property change",updatePreview)
+
   },
   data: function () {
     return {
@@ -99,6 +112,12 @@ export default {
   },
   props: {
     properties: {
+      default: function () {
+        return {}
+      },
+      type: Object
+    },
+    page: {
       default: function () {
         return {}
       },

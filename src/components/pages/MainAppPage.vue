@@ -70,29 +70,30 @@
           <!-- inactive when has not page -->
           <!-- make device size and scale -->
           <!-- bgcolor and text color apply -->
-          <div id="mobile" :class="(data.pages.length < 1?'inactive':'')"
-               :style="'width:'+(display.landscape?display.height:display.width  )* display.scale
-               +'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px'+
-               ';background-color:'+(data.project.isDark?'#2e2e2e':data.project.bgColor)
+          <div id="mobile" :style="'width:'+(display.landscape?display.height:display.width  )* display.scale
+               +'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px'" :class="(data.pages.length < 1?'inactive':'')">
+            <div id="preview" :style="';background-color:'+(data.project.isDark?'#2e2e2e':data.project.bgColor)
                +';color:'+(data.project.isDark?'white':data.project.textColor)+' !important' ">
-            <!-- direction of project and page padding -->
-            <div id="dir"
-                 :style="'direction:'+(data.project.isRTL?'rtl':'ltr')+';padding:'+calcPadding(data.pages[currentPage].padding,this.display.scale)">
-              <!-- visual components of page -->
-              <div
-                  v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.visual !== undefined">
+
+              <!-- direction of project and page padding -->
+              <div id="dir"
+                   :style="'direction:'+(data.project.isRTL?'rtl':'ltr')+';padding:'+calcPadding(data.pages[currentPage].padding,this.display.scale)">
+                <!-- visual components of page -->
+                <div
+                    v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.visual !== undefined">
                 <span v-for="(comp,i) in data.pages[currentPage].children.visual"
                       :key="i">
                   <simulator @dblclick.native="removeVisual(i)" @click.native="currentProperties = comp;"
                              :type="comp.type" :properties="comp" :scale="display.scale"
                              :page="data.pages[currentPage]"></simulator>
                 </span>
-              </div>
+                </div>
 
-              <drop class="drop visual" @drop="onVisualDrop" :accepts-data="(n) => isVisual(n)"></drop>
-              <!--              <drop class="drop any" @drop="onAnyDrop" mode="cut">-->
-              <!--                <span v-for="(n, index) in anyDropped" :key="index">Dropped : {{n}},&nbsp;</span>-->
-              <!--              </drop>-->
+                <drop class="drop visual" @drop="onVisualDrop" :accepts-data="(n) => isVisual(n)"></drop>
+                <!--              <drop class="drop any" @drop="onAnyDrop" mode="cut">-->
+                <!--                <span v-for="(n, index) in anyDropped" :key="index">Dropped : {{n}},&nbsp;</span>-->
+                <!--              </drop>-->
+              </div>
             </div>
           </div>
         </div>
@@ -125,7 +126,7 @@
         </h2>
         <!-- if project init sho properties-->
         <div v-if="isInitProject">
-          <property :properties="currentProperties"></property>
+          <property :properties="currentProperties" :page="data.pages[currentPage]"></property>
         </div>
         <div v-else class="text-center">
           <img src="../../assets/img/logo.svg" class="logo-sm" alt="">
@@ -137,12 +138,10 @@
         <!-- if project init can pages -->
         <div v-if="isInitProject">
           <!-- list of pages -->
-          <page v-for="(page,i) in data.pages" :isMain="data.project.mainPage === i"   @click.native="changePage(i)" :key="i" :title="page.name"
+          <page v-for="(page,i) in data.pages" :image="page.image!= undefined? page.image: null"
+                :isMain="data.project.mainPage === i" @click.native="changePage(i)" :key="i" :title="page.name"
                 :active="currentPage === i">
             <i class="fa fa-times" @click="removePage(i)"></i>
-            hello {{ i }}
-            {{ page.name }}
-            <!--  ***!*** need screenshot-->
           </page>
           <i class="fa fa-plus-circle" id="page-add" @click="newPage"></i>
         </div>
@@ -254,16 +253,23 @@ export default {
     removePage: function (i) { // remove page form project
       var self = this;
       // confirm before remove
-      window.alertify.confirm('Are you sure to remove page?', 'Remove confirm', function () {
+      window.alertify.confirm('Are you sure to element page?', 'Remove confirm', function () {
             self.data.pages.splice(i, 1);
             self.changePage(0);
-            window.alertify.success('Page removed');
+            window.alertify.success('element removed');
+            setTimeout(function () {
+              fnc.takeScreenShot("#preview", function (e) {
+                self.data.pages[self.currentPage].image = e;
+                self.$forceUpdate();
+              });
+            }, 300);
           }
           , function () {
             window.alertify.error('Cancel')
           });
     },
     visualValidator: function (component, visuals) {
+      var self = this;
       if (component.type === 'appbar') {
         // check non duplicate app bar
         for (const comp of visuals) {
@@ -289,11 +295,17 @@ export default {
       do {
         nextName = false;
         i++;
-        if (names.indexOf(component.type +i.toString()) > -1) {
+        if (names.indexOf(component.type + i.toString()) > -1) {
           nextName = true;
         }
       } while (nextName);
-      visuals[visuals.length -1 ].name = component.type +i.toString();
+      visuals[visuals.length - 1].name = component.type + i.toString();
+
+      setTimeout(function () {
+        fnc.takeScreenShot("#preview", function (e) {
+          self.data.pages[self.currentPage].image = e;
+        });
+      }, 1000);
       return true;
     },
     onVisualDrop(event) { // on add a viusal component to page
@@ -415,6 +427,9 @@ export default {
   height: 20vh;
   border: 1px solid rgba(0, 0, 0, .1);
   border-right: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
+
 }
 
 #pages .container {

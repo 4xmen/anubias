@@ -1,32 +1,16 @@
 let html2canvas = require('html2canvas');
-let getScreenshotOfElement = function (element, posX, posY, width, height, callback) {
+let getScreenshotOfElement = function (element, callback) {
     html2canvas(element, {
-        onrendered: function (canvas) {
-            var context = canvas.getContext('2d');
-            var imageData = context.getImageData(posX, posY, width, height).data;
-            var outputCanvas = document.createElement('canvas');
-            var outputContext = outputCanvas.getContext('2d');
-            outputCanvas.width = width;
-            outputCanvas.height = height;
+    }).then(function (canvas) {
 
-            var idata = outputContext.createImageData(width, height);
-            idata.data.set(imageData);
-            outputContext.putImageData(idata, 0, 0);
-            callback(outputCanvas.toDataURL().replace("data:image/png;base64,", ""));
-        },
-        width: width,
-        height: height,
-        useCORS: true,
-        taintTest: false,
-        allowTaint: false
-    });
+        callback(canvas.toDataURL("image/png").split("data:image/png;base64,").join(''));
+    },);
 }
 
-let takeScreenShot = function (id, w, h, x = 0, y = 0) {
-    getScreenshotOfElement(document.querySelector(id), x, y, w, h, function (data) {
-        // in the data variable there is the base64 image
-        // exmaple for displaying the image in an <img>
-        return "data:image/png;base64," + data;
+let takeScreenShot = function (id, cl) {
+    getScreenshotOfElement(document.querySelector(id), function (data) {
+        let back = "data:image/png;base64," + data;
+        cl(back);
     });
 };
 
@@ -44,10 +28,10 @@ let clone = function (obj) {
  * @returns {string|*}
  */
 let getColor = function (color) {
-    for( const clr of window.colors) {
-      if (clr.value === color){
-          return clr.color;
-      }
+    for (const clr of window.colors) {
+        if (clr.value === color) {
+            return clr.color;
+        }
     }
     return '#000000';
 
@@ -58,28 +42,28 @@ let getColor = function (color) {
  * @param isActiveWidget
  * @returns {string|*}
  */
-let color2web = function (color,isActiveWidget = true) {
-  if( color === 'default' ){
-      if ( isActiveWidget){
-          return getColor(window.appData.project.xColor);
-      } else {
-          if (window.appData.project.isDark){
-              return "#222222";
-          }
-      }
-      return getColor(window.appData.project.xColor);
-  }else{
-      return getColor(color);
-  }
+let color2web = function (color, isActiveWidget = true) {
+    if (color === 'default') {
+        if (isActiveWidget) {
+            return getColor(window.appData.project.xColor);
+        } else {
+            if (window.appData.project.isDark) {
+                return "#222222";
+            }
+        }
+        return getColor(window.appData.project.xColor);
+    } else {
+        return getColor(color);
+    }
 };
 
-let calcPadding = function (paddingValue,scale = 1,invert = false) {
-  let calced = paddingValue.split(',');
-  let result ='';
-  for( const c of calced) {
-    result += (parseFloat(c)*scale*(invert?-1:1)).toString()+'px ';
-  }
-  return result;
+let calcPadding = function (paddingValue, scale = 1, invert = false) {
+    let calced = paddingValue.split(',');
+    let result = '';
+    for (const c of calced) {
+        result += (parseFloat(c) * scale * (invert ? -1 : 1)).toString() + 'px ';
+    }
+    return result;
 }
 
 /**
