@@ -159,8 +159,22 @@
       </div>
 
     </div>
-    <modal :active="false" ref="modal">
-      Hello world
+    <modal :active="true" ref="modal">
+      <editor v-model="content" @init="editorInit"
+              lang="javascript" theme="dracula"  width="100%" height="90vh"
+              :options="{
+        enableBasicAutocompletion: true,
+        enableLiveAutocompletion: true,
+        fontSize: 18,
+        highlightActiveLine: true,
+        enableSnippets: true,
+        showLineNumbers: true,
+        tabSize: 2,
+        showPrintMargin: false,
+        showGutter: true,
+        minLine: 10
+    }"
+      ></editor>
     </modal>
   </div>
 </template>
@@ -173,8 +187,10 @@ import appMenu from '../elements/AppMenuElement';
 import simulator from '../elements/Simulator';
 import modal from '../elements/modalElement';
 import {Drag, Drop} from "vue-easy-dnd";
+import editor  from 'vuejs-ace-editor';
 // const {remote} = require("electron");
 import {fnc} from '@/assets/js/functions';
+require('brace/theme/dracula');
 
 export default {
   name: "MainAppPage",
@@ -185,11 +201,13 @@ export default {
     appMenu,
     simulator,
     modal,
+    editor,
     Drag,
     Drop
   },
   data: function () {
     return {
+      content:'',
       data: window.appData,
       components: window.components,
       currentDisplay: "Nexus 5",
@@ -366,6 +384,14 @@ export default {
       return window.components[n].visual;
     },
     calcPadding: fnc.calcPadding,
+    editorInit: function () {
+      require('brace/ext/language_tools') //language extension prerequsite...
+      require('brace/mode/html')
+      require('brace/mode/javascript')    //language
+      require('brace/mode/less')
+      require('brace/theme/monokai')
+      require('brace/snippets/javascript') //snippet
+    }
   }, computed: {
     // check is init project or not
     isInitProject: function () {

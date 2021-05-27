@@ -1,6 +1,7 @@
 <template>
   <div id="modal" :style="'display:'+(active?'flex':'none')" >
     <div class="container no-blur" >
+      <i class="fa fa-times"></i>
       <slot></slot>
     </div>
   </div>
@@ -46,5 +47,17 @@ export default {
   align-items: center;
   z-index: 999;
   background: rgba(0, 0, 0, 0.5);
+}
+#modal .container{
+  padding: 25px;
+  background: #272c34;
+  position: relative;
+}
+.fa-times{
+  color: red;
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  font-size: 25px;
 }
 </style>

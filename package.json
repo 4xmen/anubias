@@ -20,6 +20,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.3",
     "alertifyjs": "^1.13.1",
+    "brace": "^0.11.1",
     "core-js": "^3.6.5",
     "electron": "^12.0.7",
     "flickity": "^2.2.2",
@@ -33,7 +34,8 @@
     "vazir-font": "^28.0.0",
     "vue": "^2.6.11",
     "vue-easy-dnd": "^1.10.2",
-    "vue-router": "^3.5.1"
+    "vue-router": "^3.5.1",
+    "vuejs-ace-editor": "^1.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
