@@ -58,6 +58,14 @@ label{
     margin: 0 !important;
 }
 
+.blur{
+    -webkit-filter: blur(8px) grayscale(90%);
+
+}
+.no-blur{
+    backdrop-filter: blur(2px) sepia(50%);
+}
+
 .text-center{
     text-align: center;
 }

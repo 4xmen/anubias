@@ -1,159 +1,167 @@
 <template>
   <div>
-    <div id="main">
-      <!-- add app menu to main-->
-      <app-menu></app-menu>
-      <div class="container">
-        <!-- if project init can show left side -->
-        <!-- right sidebar start -->
-        <div v-if="isInitProject">
-          <!-- inactive when has not page -->
-          <div id="device-selector" :class="(data.pages.length < 1?'inactive':'')">
-            <!-- select device -->
-            <div class="input-field">
-              <select @change="changeDisplay" id="dev" v-model="currentDisplay" class="white-text">
-                <option :value="dev" v-for="(dev,i) in devices" :key="i">
-                  {{ dev.name }}
-                  ({{ dev.width }}x{{ dev.height }})
-                </option>
-              </select>
-              <label for="dev">
-                <span>Display devices</span>
-                <br>
-              </label>
-            </div>
-            <!-- select scale size -->
-            <span>
+    <div id="wrapper">
+
+      <div id="main">
+        <!-- add app menu to main-->
+        <app-menu></app-menu>
+        <div class="container">
+          <!-- if project init can show left side -->
+          <!-- right sidebar start -->
+          <div v-if="isInitProject">
+            <!-- inactive when has not page -->
+            <div id="device-selector" :class="(data.pages.length < 1?'inactive':'')">
+              <!-- select device -->
+              <div class="input-field">
+                <select @change="changeDisplay" id="dev" v-model="currentDisplay" class="white-text">
+                  <option :value="dev" v-for="(dev,i) in devices" :key="i">
+                    {{ dev.name }}
+                    ({{ dev.width }}x{{ dev.height }})
+                  </option>
+                </select>
+                <label for="dev">
+                  <span>Display devices</span>
+                  <br>
+                </label>
+              </div>
+              <!-- select scale size -->
+              <span>
             Scale:
             </span>
-            <ul class="pagination">
-              <li @click="changeScale(1.25)"
-                  :class="'waves-effect waves-light btn btn-small '+(display.scale === 1.25?'green basic':'grey darken-4')">
-                125%
-              </li>
-              <li @click="changeScale(1)"
-                  :class="'waves-effect waves-light btn btn-small '+(display.scale === 1?'green':'grey darken-4')">100%
-              </li>
-              <li @click="changeScale(0.25)"
-                  :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.25?'green ':'grey darken-4')">
-                25%
-              </li>
-              <li @click="changeScale(0.5)"
-                  :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.5?'green ':'grey darken-4')">
-                50%
-              </li>
-              <li @click="changeScale(0.35)"
-                  :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.35?'green':'grey darken-4')">
-                auto
-              </li>
-            </ul>
-            <!-- device rotation -->
-            <span>
+              <ul class="pagination">
+                <li @click="changeScale(1.25)"
+                    :class="'waves-effect waves-light btn btn-small '+(display.scale === 1.25?'green basic':'grey darken-4')">
+                  125%
+                </li>
+                <li @click="changeScale(1)"
+                    :class="'waves-effect waves-light btn btn-small '+(display.scale === 1?'green':'grey darken-4')">
+                  100%
+                </li>
+                <li @click="changeScale(0.25)"
+                    :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.25?'green ':'grey darken-4')">
+                  25%
+                </li>
+                <li @click="changeScale(0.5)"
+                    :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.5?'green ':'grey darken-4')">
+                  50%
+                </li>
+                <li @click="changeScale(0.35)"
+                    :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.35?'green':'grey darken-4')">
+                  auto
+                </li>
+              </ul>
+              <!-- device rotation -->
+              <span>
             Rotate:
             </span>
-            <button @click="changeRotate(false)"
-                    :class="'waves-effect waves-light btn-small '+(!display.landscape?'green':'grey darken-4')">
-              <i class="fa fa-mobile-alt"></i>
-            </button>
-            <button @click="changeRotate(true)"
-                    :class="'waves-effect waves-light btn-small '+(display.landscape?'green':'grey darken-4')">
-              <i class="fa fa-mobile-alt fa-rotate-90"></i>
-            </button>
-            <!-- non visual components of page -->
-            <div id="non-visual">
-              <drop class="drop non-visual" @drop="onNonVisualDrop" :accepts-data="(n) => !isVisual(n)">
-                <!--                <span v-for="(n, index) in oddDropped" :key="index">Dropped : {{ n }},&nbsp;</span>-->
-              </drop>
+              <button @click="changeRotate(false)"
+                      :class="'waves-effect waves-light btn-small '+(!display.landscape?'green':'grey darken-4')">
+                <i class="fa fa-mobile-alt"></i>
+              </button>
+              <button @click="changeRotate(true)"
+                      :class="'waves-effect waves-light btn-small '+(display.landscape?'green':'grey darken-4')">
+                <i class="fa fa-mobile-alt fa-rotate-90"></i>
+              </button>
+              <!-- non visual components of page -->
+              <div id="non-visual">
+                <drop class="drop non-visual" @drop="onNonVisualDrop" :accepts-data="(n) => !isVisual(n)">
+                  <!--                <span v-for="(n, index) in oddDropped" :key="index">Dropped : {{ n }},&nbsp;</span>-->
+                </drop>
+              </div>
             </div>
-          </div>
-          <!-- mobile drawing by project detail and user device selected -->
-          <!-- inactive when has not page -->
-          <!-- make device size and scale -->
-          <!-- bgcolor and text color apply -->
-          <div id="mobile" :style="'width:'+(display.landscape?display.height:display.width  )* display.scale
+            <!-- mobile drawing by project detail and user device selected -->
+            <!-- inactive when has not page -->
+            <!-- make device size and scale -->
+            <!-- bgcolor and text color apply -->
+            <div id="mobile" :style="'width:'+(display.landscape?display.height:display.width  )* display.scale
                +'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px;'+'background-color:'+(data.project.isDark?'#2e2e2e':data.project.bgColor)
                +';color:'+(data.project.isDark?'white':data.project.textColor)+' !important' "
-               :class="(data.pages.length < 1?'inactive':'')">
+                 :class="(data.pages.length < 1?'inactive':'')">
 
-            <div id="preview">
-              <div :style="'background-color:'+(data.project.isDark?'#2e2e2e':data.project.bgColor)
+              <div id="preview">
+                <div :style="'background-color:'+(data.project.isDark?'#2e2e2e':data.project.bgColor)
                +';color:'+(data.project.isDark?'white':data.project.textColor)+' !important' ">
-                <!-- direction of project and page padding -->
-                <div id="dir"
-                     :style="'direction:'+(data.project.isRTL?'rtl':'ltr')+';padding:'+calcPadding(data.pages[currentPage].padding,this.display.scale)">
-                  <!-- visual components of page -->
-                  <div
-                      v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.visual !== undefined">
+                  <!-- direction of project and page padding -->
+                  <div id="dir"
+                       :style="'direction:'+(data.project.isRTL?'rtl':'ltr')+';padding:'+calcPadding(data.pages[currentPage].padding,this.display.scale)">
+                    <!-- visual components of page -->
+                    <div
+                        v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.visual !== undefined">
                 <span v-for="(comp,i) in data.pages[currentPage].children.visual"
                       :key="i">
                   <simulator @dblclick.native="removeVisual(i)" @click.native="currentProperties = comp;"
                              :type="comp.type" :properties="comp" :scale="display.scale"
                              :page="data.pages[currentPage]"></simulator>
                 </span>
+                    </div>
                   </div>
-                </div>
 
-                <drop class="drop visual" @drop="onVisualDrop" :accepts-data="(n) => isVisual(n)"></drop>
-                <!--              <drop class="drop any" @drop="onAnyDrop" mode="cut">-->
-                <!--                <span v-for="(n, index) in anyDropped" :key="index">Dropped : {{n}},&nbsp;</span>-->
-                <!--              </drop>-->
+                  <drop class="drop visual" @drop="onVisualDrop" :accepts-data="(n) => isVisual(n)"></drop>
+                  <!--              <drop class="drop any" @drop="onAnyDrop" mode="cut">-->
+                  <!--                <span v-for="(n, index) in anyDropped" :key="index">Dropped : {{n}},&nbsp;</span>-->
+                  <!--              </drop>-->
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <!-- right sidebar end -->
-        <div v-else class="text-center">
-          <img src="../../assets/img/logo.svg" class="logo" alt="">
+          <!-- right sidebar end -->
+          <div v-else class="text-center">
+            <img src="../../assets/img/logo.svg" class="logo" alt="">
+          </div>
         </div>
       </div>
-    </div>
-    <div id="side">
-      <div id="components">
-        <h2>
-          Components
-          <i class="fa fa-cubes"></i>
-        </h2>
-        <!-- show dragable component to add to page -->
-        <transition-group name="list" tag="div">
-          <drag v-for="(comp,n) in components" :key="n" class="drag" :data="n">
-            <compo :title="comp.title" :icon="comp.icon"></compo>
-          </drag>
-        </transition-group>
+      <div id="side">
+        <div id="components">
+          <h2>
+            Components
+            <i class="fa fa-cubes"></i>
+          </h2>
+          <!-- show dragable component to add to page -->
+          <transition-group name="list" tag="div">
+            <drag v-for="(comp,n) in components" :key="n" class="drag" :data="n">
+              <compo :title="comp.title" :icon="comp.icon"></compo>
+            </drag>
+          </transition-group>
 
-        <!--        <compo title="Scaffold" icon="fa fa-vector-square"></compo>-->
+          <!--        <compo title="Scaffold" icon="fa fa-vector-square"></compo>-->
 
-      </div>
-      <div id="properties">
-        <h2>
-          Properties
-          <i class="fa fa-expand"></i>
-        </h2>
-        <!-- if project init sho properties-->
-        <div v-if="isInitProject">
-          <property :properties="currentProperties" :page="currentPage"></property>
         </div>
-        <div v-else class="text-center">
-          <img src="../../assets/img/logo.svg" class="logo-sm" alt="">
+        <div id="properties">
+          <h2>
+            Properties
+            <i class="fa fa-expand"></i>
+          </h2>
+          <!-- if project init sho properties-->
+          <div v-if="isInitProject">
+            <property :properties="currentProperties" :page="currentPage"></property>
+          </div>
+          <div v-else class="text-center">
+            <img src="../../assets/img/logo.svg" class="logo-sm" alt="">
+          </div>
         </div>
       </div>
+      <div id="pages">
+        <div class="container">
+          <!-- if project init can pages -->
+          <div v-if="isInitProject">
+            <!-- list of pages -->
+            <page v-for="(page,i) in data.pages" :image="page.image!= undefined? page.image: null"
+                  :isMain="data.project.mainPage === i" @click.native="changePage(i)" :key="i" :title="page.name"
+                  :active="currentPage === i" :bg="(data.project.isDark?'#2e2e2e':data.project.bgColor)">
+              <i class="fa fa-times" @click="removePage(i)"></i>
+            </page>
+            <i class="fa fa-plus-circle" id="page-add" @click="newPage"></i>
+          </div>
+          <div v-else class="text-center">
+            <img src="../../assets/img/logo.svg" class="logo-sm" alt="">
+          </div>
+        </div>
+      </div>
+
     </div>
-    <div id="pages">
-      <div class="container">
-        <!-- if project init can pages -->
-        <div v-if="isInitProject">
-          <!-- list of pages -->
-          <page v-for="(page,i) in data.pages" :image="page.image!= undefined? page.image: null"
-                :isMain="data.project.mainPage === i" @click.native="changePage(i)" :key="i" :title="page.name"
-                :active="currentPage === i" :bg="(data.project.isDark?'#2e2e2e':data.project.bgColor)">
-            <i class="fa fa-times" @click="removePage(i)"></i>
-          </page>
-          <i class="fa fa-plus-circle" id="page-add" @click="newPage"></i>
-        </div>
-        <div v-else class="text-center">
-          <img src="../../assets/img/logo.svg" class="logo-sm" alt="">
-        </div>
-      </div>
-    </div>
+    <modal :active="false" ref="modal">
+      Hello world
+    </modal>
   </div>
 </template>
 
@@ -163,6 +171,7 @@ import property from '../elements/PropertyElement';
 import compo from '../elements/ComponentElement';
 import appMenu from '../elements/AppMenuElement';
 import simulator from '../elements/Simulator';
+import modal from '../elements/modalElement';
 import {Drag, Drop} from "vue-easy-dnd";
 // const {remote} = require("electron");
 import {fnc} from '@/assets/js/functions';
@@ -175,6 +184,7 @@ export default {
     compo,
     appMenu,
     simulator,
+    modal,
     Drag,
     Drop
   },
@@ -195,7 +205,8 @@ export default {
       },
       devices: window.devices
     }
-  }, mounted() {
+  },
+  mounted() {
 
     try {
 
@@ -218,7 +229,8 @@ export default {
 
     }
 
-  }, methods: {
+  },
+  methods: {
     changeDisplay: function () { // change device display size
       this.display.name = this.currentDisplay.name;
       this.display.width = this.currentDisplay.width;
@@ -313,7 +325,8 @@ export default {
       }, 1000);
       return true;
     },
-    onVisualDrop(event) { // on add a viusal component to page
+    onVisualDrop(event) {
+      // on add a viusal component to page
       // this.evenDropped.push(event.data);
       try {
         // find component
