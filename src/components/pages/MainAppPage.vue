@@ -159,7 +159,7 @@
       </div>
 
     </div>
-    <modal :active="true" ref="modal">
+    <modal :active="false" ref="modal">
       <code-editor></code-editor>
     </modal>
   </div>

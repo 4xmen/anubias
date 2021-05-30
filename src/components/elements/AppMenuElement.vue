@@ -83,6 +83,7 @@ export default {
         return false;
       }
       // otherwise try to save
+      window.appData.version =  window.ide.version();
       var data = {
         project: window.project,
         data: window.appData
@@ -96,8 +97,8 @@ export default {
 
       // prepare new empty project
       window.project = {
-        'folder': '',
-        'file': '',
+        folder: '',
+        file: '',
         isSave: false,
       };
       window.appData = fnc.clone(window.sample);
@@ -111,6 +112,7 @@ export default {
         return false;
       }
 
+      window.appData.version =  window.ide.version();
       // prepare save dialog and appDate to save as
       var data = {
         dialog: {

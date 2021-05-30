@@ -17,23 +17,6 @@ export default {
     require("@/assets/js/xscript");
     require("@/assets/js/xScriptSnipts");
     require('brace/theme/dracula');
-    // let snippetManager = ace.acequire('ace/snippets').snippetManager;
-        // editor.setValue([
-    //       '// JavaScript'
-    //       , 'var a = 3;'
-    //       , ''
-    //       , '// below line has an error which is annotated'
-    //       , 'var b ='
-    //     ].join('\n')
-    // );
-    // editor.clearSelection();
-
-
-    // console.log('hello');
-    // console.log(snippetManager);
-    // console.log('bye');
-    // let customSnippet = snippetManager.parseSnippetFile(xscript, 'xscript');
-    //
 
     let editor = ace.edit('codeEditor');
     editor.getSession().setMode('ace/mode/xscript');
@@ -45,12 +28,11 @@ export default {
       highlightActiveLine: false,
       enableSnippets: true,
       showLineNumbers: true,
-      tabSize: 2,
+      tabSize: 4,
       showPrintMargin: false,
       showGutter: true,
     });
-    // snippetManager.register(editor, editor.session, customSnippet, 'xscript');
-    // console.log(xscript);
+
   }
 }
 </script>

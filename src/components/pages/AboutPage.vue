@@ -5,7 +5,7 @@
     </titlec>
     <div>
       <h1>
-        Abubias v0.2.1
+        Abubias v{{version}}
       </h1>
       <img src="@/assets/img/logo.svg" alt="logo" class="logo">
       <h2>
@@ -773,6 +773,11 @@ import titlec from '../elements/TitleElement';
 
 export default {
   name: "AboutPage",
+  data:function () {
+    return{
+      version: window.ide.version()
+    };
+  },
   components: {
     titlec
   }, mounted() {
@@ -783,7 +788,7 @@ export default {
       draggable: true,
       wrapAround: true,
       autoPlay: 3500,
-      pauseAutoPlayOnHover: true,
+      pauseAutoPlayOnHover: true
     });
     var onScroll = function() {
       var scrollTop = $(this).scrollTop();

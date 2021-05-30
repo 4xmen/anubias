@@ -1,4 +1,16 @@
 /**
+ * ide version :)
+ * @type {{}}
+ */
+window.ide = {
+    majorVersion: 0,
+    minorVersion: 4,
+    patchVersion: 1,
+    version:function () {
+      return this.majorVersion + '.' + this.minorVersion + '.' + this.patchVersion;
+    }
+};
+/**
  * sample application date
  */
 window.sample = {
@@ -12,7 +24,8 @@ window.sample = {
         bgColor: '#ffffff',
         mainPage: 0
     },
-    pages: []
+    pages: [],
+    version: window.ide.version()
 };
 /**
  * main application data
