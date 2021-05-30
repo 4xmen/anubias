@@ -42,7 +42,7 @@ export default {
       enableBasicAutocompletion: true,
       enableLiveAutocompletion: true,
       fontSize: 16,
-      highlightActiveLine: true,
+      highlightActiveLine: false,
       enableSnippets: true,
       showLineNumbers: true,
       tabSize: 2,
