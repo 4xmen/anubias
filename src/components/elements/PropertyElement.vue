@@ -28,12 +28,23 @@
                      v-model="properties[k]">
             </div>
             <div v-else-if="k === 'align'">
-              <select v-model="properties[k]" :id="k">
-                <option value="null"> default</option>
-                <option value="left"> left</option>
-                <option value="center"> center</option>
-                <option value="right"> right</option>
-              </select>
+              <div v-if="properties.type === 'text'">
+                <select v-model="properties[k]" :id="k">
+                  <option value="null"> default</option>
+                  <option value="TextAlign.left"> left</option>
+                  <option value="TextAlign.center"> center</option>
+                  <option value="TextAlign.right"> right</option>
+                  <option value="TextAlign.justify"> justify</option>
+                </select>
+              </div>
+              <div v-else>
+                <select v-model="properties[k]" :id="k">
+                  <option value="null"> default</option>
+                  <option value="left"> left</option>
+                  <option value="center"> center</option>
+                  <option value="right"> right</option>
+                </select>
+              </div>
             </div>
             <div v-else-if="k === 'overflow'">
               <select v-model="properties[k]" :id="k">

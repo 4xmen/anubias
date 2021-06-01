@@ -52,7 +52,12 @@ export default {
     getStyle:function () {
       let style = '';
       if (this.properties.align !== undefined && this.properties.align !== 'default'){
-          style += 'text-align:' + this.properties.align+';';
+        let temp = this.properties.align.split('.');
+        if (temp.length === 2){
+          style += 'text-align:' + temp[1]+ ';';
+        }else {
+          style += 'text-align:' + this.properties.align + ';';
+        }
       }
       if (this.properties.padding !== undefined) {
         style += 'padding:' + fnc.calcPadding(this.properties.padding, this.scale) + ';';

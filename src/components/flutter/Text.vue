@@ -66,6 +66,11 @@ export default {
 
 .fa-font {
   opacity: 0;
+  -o-transition: .3s;
+  -ms-transition: .3s;
+  -moz-transition: .3s;
+  -webkit-transition: .3s;
+  transition: .3s;
 }
 
 .txt:hover .fa-font {
