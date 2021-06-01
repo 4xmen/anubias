@@ -43,7 +43,7 @@ let getColor = function (color) {
  * @returns {string|*}
  */
 let color2web = function (color, isActiveWidget = true) {
-    if (color === 'default') {
+    if (color === 'null') {
         if (isActiveWidget) {
             return getColor(window.appData.project.xColor);
         } else {

@@ -2,14 +2,14 @@
   "type": "text",
   "name": "text",
   "text": "Anubias example text : )",
-  "align": "default",
+  "align": "null",
   "size": 13.0,
   "height": 1.2,
   "maxLine": 0,
-  "overflow": "default",
-  "color": "default",
+  "overflow": "null",
+  "color": "null",
   "hide": false,
   "weight": "normal",
-  "font": "default",
+  "font": "null",
   "softWrap": false
 }

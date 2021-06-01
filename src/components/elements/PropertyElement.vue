@@ -29,7 +29,7 @@
             </div>
             <div v-else-if="k === 'align'">
               <select v-model="properties[k]" :id="k">
-                <option value="default"> default</option>
+                <option value="null"> default</option>
                 <option value="left"> left</option>
                 <option value="center"> center</option>
                 <option value="right"> right</option>
@@ -37,7 +37,7 @@
             </div>
             <div v-else-if="k === 'overflow'">
               <select v-model="properties[k]" :id="k">
-                <option value="default"> default</option>
+                <option value="null"> default</option>
                 <option value="ellipsis"> ellipsis</option>
                 <option value="fade"> fade</option>
                 <option value="visible"> visible</option>
@@ -46,7 +46,7 @@
             </div>
             <div v-else-if="k === 'font'">
               <select v-model="properties[k]" :id="k">
-                <option value="default"> default</option>
+                <option value="null"> default</option>
               </select>
             </div>
             <div v-else-if="k === 'weight'">

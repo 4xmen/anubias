@@ -23,7 +23,7 @@ export default {
     getStyle: function () {
       let style = '';
       // style += 'background-color:' + this.color2web(this.properties.color, false) + ';';
-      if (this.properties.color === 'default') {
+      if (this.properties.color === 'null') {
         if (window.appData.project.isDark) {
           style += 'color: white;';
         } else {
@@ -36,7 +36,7 @@ export default {
         style += 'max-height:' + this.properties.maxLine * parseFloat(this.properties.height) + 'em;';
       }
       style += 'line-height:' + this.properties.height+'em;';
-      if (this.properties.overflow != 'default'){
+      if (this.properties.overflow != 'null'){
         style += 'text-overflow:' + this.properties.overflow+';';
       }
       if (this.properties.softWrap){

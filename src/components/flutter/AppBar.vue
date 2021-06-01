@@ -22,7 +22,7 @@ export default {
     getStyle: function () {
       let style = '';
       style += 'background-color:' + this.color2web(this.properties.color,false) + ';';
-      if (this.properties.textColor === 'default'){
+      if (this.properties.textColor === 'null'){
         style += 'color: white;';
       }else{
         style += 'color:' + this.color2web(this.properties.textColor) + ';';
