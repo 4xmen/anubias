@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from "./router";
-
+import VueFinalModal from 'vue-final-modal'
 /*eslint-disable */
 // load global script
 import  "script-loader!jquery";
@@ -12,7 +12,11 @@ import  "script-loader!materialize-css/dist/js/materialize.min";
 Vue.config.productionTip = false;
 require('@/assets/js/winVars.js');
 
-
+Vue.use(VueFinalModal({
+  componentName: 'VueFinalModal',
+  key: '$vfm',
+  dynamicContainerName: 'ModalsContainer'
+}));
 new Vue({
   router,
   render: h => h(App),

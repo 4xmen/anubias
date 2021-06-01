@@ -34,6 +34,7 @@
     "vazir-font": "^28.0.0",
     "vue": "^2.6.11",
     "vue-easy-dnd": "^1.10.2",
+    "vue-final-modal": "^2.3.1",
     "vue-router": "^3.5.1"
   },
   "devDependencies": {

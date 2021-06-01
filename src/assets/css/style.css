@@ -57,7 +57,13 @@ label{
     height: auto !important;
     margin: 0 !important;
 }
-
+.wrapper{
+    -o-transition: 1s;
+    -ms-transition: 1s;
+    -moz-transition: 1s;
+    -webkit-transition: 1s;
+    transition: 1s;
+}
 .blur{
     -webkit-filter: blur(8px) grayscale(90%);
 
@@ -106,6 +112,9 @@ label{
     opacity: 0.025;
 }
 
+.ace_gutter-layer{
+    background: rgb(26,33,41);
+}
 /*dnd fix*/
 
 .drag {

@@ -133,7 +133,7 @@
           </h2>
           <!-- if project init sho properties-->
           <div v-if="isInitProject">
-            <property :properties="currentProperties" :page="currentPage"></property>
+            <property :properties="currentProperties" :page="currentPage" ref="properties"></property>
           </div>
           <div v-else class="text-center">
             <img src="../../assets/img/logo.svg" class="logo-sm" alt="">
@@ -159,9 +159,10 @@
       </div>
 
     </div>
-    <modal :active="false" ref="modal">
-      <code-editor></code-editor>
-    </modal>
+    <vue-final-modal v-model="showCodeModal" @before-open="modalOpen" @before-close="modalClose" name="code-modal">
+      <i class="fa fa-times modal-close" @click="showCodeModal = false"></i>
+      <code-editor :title="codeTitle" v-model="codeContent"></code-editor>
+    </vue-final-modal>
   </div>
 </template>
 
@@ -171,7 +172,6 @@ import property from '../elements/PropertyElement';
 import compo from '../elements/ComponentElement';
 import appMenu from '../elements/AppMenuElement';
 import simulator from '../elements/Simulator';
-import modal from '../elements/modalElement';
 import codeEditor from '../elements/CodeEditor'
 import {Drag, Drop} from "vue-easy-dnd";
 
@@ -188,14 +188,16 @@ export default {
     compo,
     appMenu,
     simulator,
-    modal,
     codeEditor,
     Drag,
     Drop
   },
   data: function () {
     return {
-      content:'',
+      codeTitle: '',
+      codeContent: '',
+      showCodeModal: false,
+      content: '',
       data: window.appData,
       components: window.components,
       currentDisplay: "Nexus 5",
@@ -236,7 +238,22 @@ export default {
     }
 
   },
+  watch: {
+    codeContent: function (newval) {
+      // console.log(newval,'edited');
+      this.$refs.properties.onEdit = newval;
+      // console.log(this.$refs.properties.onEdit);
+    },
+  },
   methods: {
+    modalOpen: function () {
+      let $ = window.jQuery;
+      $("#wrapper").addClass('blur');
+    },
+    modalClose: function () {
+      let $ = window.jQuery;
+      $("#wrapper").removeClass('blur');
+    },
     changeDisplay: function () { // change device display size
       this.display.name = this.currentDisplay.name;
       this.display.width = this.currentDisplay.width;
@@ -521,5 +538,10 @@ export default {
   opacity: .3;
 }
 
-
+.modal-close {
+  font-size: 30px;
+  color: red;
+  margin-left: 20px;
+  margin-top: 10px;
+}
 </style>

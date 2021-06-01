@@ -2,9 +2,9 @@
 <template>
   <div id="property">
     <table>
-      <template v-for="(p,k) in properties" >
+      <template v-for="(p,k) in properties">
 
-        <tr v-if="k !== 'type' && k !== 'children' && (k !== 'image' && properties.type !== 'page')" :key="k" >
+        <tr v-if="k !== 'type' && k !== 'children' && (k !== 'image' && properties.type !== 'page')" :key="k">
           <th>
             <label :for="k">
               {{ k }}
@@ -38,30 +38,30 @@
             <div v-else-if="k === 'overflow'">
               <select v-model="properties[k]" :id="k">
                 <option value="default"> default</option>
-                <option value="ellipsis"> ellipsis </option>
-                <option value="fade"> fade </option>
-                <option value="visible"> visible </option>
-                <option value="clip"> clip </option>
+                <option value="ellipsis"> ellipsis</option>
+                <option value="fade"> fade</option>
+                <option value="visible"> visible</option>
+                <option value="clip"> clip</option>
               </select>
             </div>
             <div v-else-if="k === 'font'">
               <select v-model="properties[k]" :id="k">
-                <option value="default"> default </option>
+                <option value="default"> default</option>
               </select>
             </div>
             <div v-else-if="k === 'weight'">
               <select v-model="properties[k]" :id="k">
-                <option value="normal"> normal </option>
-                <option value="bold"> bold </option>
-                <option value="w100"> 100 </option>
-                <option value="w200"> 200 </option>
-                <option value="w300"> 300 </option>
-                <option value="w400"> 400 </option>
-                <option value="w500"> 500 </option>
-                <option value="w600"> 600 </option>
-                <option value="w700"> 700 </option>
-                <option value="w800"> 800 </option>
-                <option value="w900"> 900 </option>
+                <option value="normal"> normal</option>
+                <option value="bold"> bold</option>
+                <option value="w100"> 100</option>
+                <option value="w200"> 200</option>
+                <option value="w300"> 300</option>
+                <option value="w400"> 400</option>
+                <option value="w500"> 500</option>
+                <option value="w600"> 600</option>
+                <option value="w700"> 700</option>
+                <option value="w800"> 800</option>
+                <option value="w900"> 900</option>
               </select>
             </div>
             <div v-else-if="k.toLowerCase().indexOf('color') !== -1">
@@ -72,9 +72,9 @@
                 </option>
               </select>
             </div>
-<!--            <div v-else-if="k === 'text' || k === 'title'">-->
-<!--              <input type="text" :id="k" v-model="properties[k]" @blur="blurTitle" @focus="focusTitle">-->
-<!--            </div>-->
+            <div v-else-if="k.substr(0,2) == 'on'" class="code" @click="codeEdit(k)">
+              {{ k }} <b> <i class="fa fa-code"></i> </b>
+            </div>
             <div v-else>
               <input type="text" :id="k" v-model="properties[k]">
             </div>
@@ -88,28 +88,31 @@
 
 <script>
 import {fnc} from '@/assets/js/functions';
+
 export default {
   name: "PropertyElement",
   mounted() {
-    var setme ;
+    var setme;
     var $ = window.jQuery;
-    let updatePreview=function () {
+    let updatePreview = function () {
       clearTimeout(setme);
       setme = setTimeout(function () {
         console.log('exet');
-        fnc.takeScreenShot("#preview",function (e) {
+        fnc.takeScreenShot("#preview", function (e) {
           window.appData.pages[self.page].image = e;
         });
-      },300);
+      }, 300);
     };
     var self = this;
-    $(document).on('change',"#property select",updatePreview)
-    $(document).on('keyup',"#property input",updatePreview)
-    $(document).on('keyup',"#property change",updatePreview)
+    $(document).on('change', "#property select", updatePreview)
+    $(document).on('keyup', "#property input", updatePreview)
+    $(document).on('keyup', "#property change", updatePreview)
 
   },
   data: function () {
     return {
+      onEditKey:'',
+      onEdit:'',
       colors: window.colors,
     }
   },
@@ -121,7 +124,7 @@ export default {
       type: Object
     },
     page: {
-      default:0,
+      default: 0,
       type: Number
     }
   }, methods: {
@@ -148,6 +151,13 @@ export default {
         e.target.focus();
       }
     },
+    codeEdit: function (k) {
+      this.$parent.codeContent = this.properties[k];
+      this.onEdit = this.properties[k];
+      this.onEditKey = k;
+      this.$parent.showCodeModal = true;
+      this.$parent.codeTitle = '[' + window.appData.pages[this.page].name + '] ' + this.properties.name + '.' + k;
+    },
     // blurTitle:function (e) {
     //
     //   if(e.target.value === ''){
@@ -159,6 +169,10 @@ export default {
     //       this.properties[e.target.id]  = '';
     //     }
     // },
+  },watch:{
+    onEdit:function (newval) {
+      this.properties[this.onEditKey] = newval;
+    },
   }
 }
 </script>
@@ -229,5 +243,21 @@ input[type='checkbox'] {
 
 label {
   display: block;
+}
+
+.code {
+  display: block;
+  text-align: center;
+  -o-transition: .3s;
+  -ms-transition: .3s;
+  -moz-transition: .3s;
+  -webkit-transition: .3s;
+  transition: .3s;
+  height: 20px;
+  padding: 2px;
+}
+
+.code:hover {
+  background: #1b9a59;
 }
 </style>
