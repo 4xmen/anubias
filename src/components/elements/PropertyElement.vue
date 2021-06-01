@@ -4,7 +4,7 @@
     <table>
       <template v-for="(p,k) in properties">
 
-        <tr v-if="k !== 'type' && k !== 'children' && (k !== 'image' && properties.type !== 'page')" :key="k">
+        <tr v-if="k !== 'type' && k !== 'children' && !(k === 'image' && properties.type === 'page')" :key="k">
           <th>
             <label :for="k">
               {{ k }}

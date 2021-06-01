@@ -288,6 +288,7 @@ export default {
     changePage: function (i) { // view clicked page
       this.currentPage = i;
       this.currentProperties = this.data.pages[i];
+      // console.log(this.currentProperties);
     },
     removePage: function (i) { // remove page form project
       var self = this;
