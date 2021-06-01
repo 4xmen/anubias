@@ -40,6 +40,8 @@ export default {
         style += 'text-overflow:' + this.properties.overflow+';';
       }
       if (this.properties.softWrap){
+        style += 'white-space: pre-line;';
+      }else {
         style += 'white-space: nowrap;';
       }
       if (this.properties.weight != 'normal'){
