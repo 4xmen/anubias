@@ -200,7 +200,7 @@ export default {
       content: '',
       data: window.appData,
       components: window.components,
-      currentDisplay: "Nexus 5",
+      currentDisplay: window.devices[23],
       currentPage: 0,
       currentProperties: {},
       // isInitProject: false,

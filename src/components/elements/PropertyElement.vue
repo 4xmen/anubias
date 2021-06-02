@@ -64,15 +64,15 @@
               <select v-model="properties[k]" :id="k">
                 <option value="normal"> normal</option>
                 <option value="bold"> bold</option>
-                <option value="w100"> 100</option>
-                <option value="w200"> 200</option>
-                <option value="w300"> 300</option>
-                <option value="w400"> 400</option>
-                <option value="w500"> 500</option>
-                <option value="w600"> 600</option>
-                <option value="w700"> 700</option>
-                <option value="w800"> 800</option>
-                <option value="w900"> 900</option>
+                <option value="w100"> w100</option>
+                <option value="w200"> w200</option>
+                <option value="w300"> w300</option>
+                <option value="w400"> w400</option>
+                <option value="w500"> w500</option>
+                <option value="w600"> w600</option>
+                <option value="w700"> w700</option>
+                <option value="w800"> w800</option>
+                <option value="w900"> w900</option>
               </select>
             </div>
             <div v-else-if="k.toLowerCase().indexOf('color') !== -1">
