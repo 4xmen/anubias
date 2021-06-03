@@ -157,7 +157,6 @@
           </div>
         </div>
       </div>
-
     </div>
     <vue-final-modal v-model="showCodeModal" @before-open="modalOpen" @before-close="modalClose" name="code-modal">
       <i class="fa fa-times modal-close" @click="showCodeModal = false"></i>
@@ -205,7 +204,7 @@ export default {
       currentProperties: {},
       // isInitProject: false,
       display: {
-        name: 'Nexus 5',
+        name: 'Nexus 5x',
         width: 1080,
         height: 1920,
         scale: .35,

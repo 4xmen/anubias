@@ -34,6 +34,20 @@
         </router-link>
       </li>
     </ul>
+    <ul id="dropdown2" class="dropdown-content grey darken-3">
+      <li>
+        <a>
+          <i class="fa fa-bug"></i>
+          Debug
+        </a>
+      </li>
+      <li>
+        <a>
+          <i class="fa fa-hammer"></i>
+          Build
+        </a>
+      </li>
+    </ul>
     <nav class="top-nav">
       <div class="nav-wrapper grey darken-4">
         <ul class="left">
@@ -43,6 +57,11 @@
           <li>
             <a class="dropdown-trigger" href="#!" data-target="dropdown1">
               Project<i class="material-icons right">arrow_drop_down</i>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-trigger" href="#!" data-target="dropdown2">
+              Application<i class="material-icons right">arrow_drop_down</i>
             </a>
           </li>
           <!--          <li><a href="badges.html">Components</a></li>-->
