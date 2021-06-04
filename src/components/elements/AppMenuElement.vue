@@ -90,6 +90,13 @@ export default {
   mounted() {
     var $ = window.jQuery;
     $(".dropdown-trigger").dropdown();
+    var self = this;
+    $(document).on('keyup', function (e) {
+      if (e.ctrlKey && e.key === 's'){
+        self.save();
+      }
+    });
+
   }, methods: {
     save: function () {
       // check can edit project
