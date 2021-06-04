@@ -155,7 +155,8 @@ export default {
         e.target.classList.remove('invalid');
       }
       if (isBlur) {
-        e.target.focus();
+        this.properties.name = this.properties.type + Math.floor(Math.random() * 10000);
+        e.target.classList.remove('invalid');
       }
     },
     paddingCheck: function (e, isBlur) {
@@ -167,7 +168,8 @@ export default {
         e.target.classList.remove('invalid');
       }
       if (isBlur) {
-        e.target.focus();
+        this.properties.padding =  '0';
+        e.target.classList.remove('invalid');
       }
     },
     codeEdit: function (k) {
