@@ -56,12 +56,12 @@
           </li>
           <li>
             <a class="dropdown-trigger" href="#!" data-target="dropdown1">
-              Project<i class="material-icons right">arrow_drop_down</i>
+              Project <i class="material-icons right">arrow_drop_down</i>
             </a>
           </li>
           <li>
             <a class="dropdown-trigger" href="#!" data-target="dropdown2">
-              Application<i class="material-icons right">arrow_drop_down</i>
+              Application <i class="material-icons right">arrow_drop_down</i>
             </a>
           </li>
           <!--          <li><a href="badges.html">Components</a></li>-->

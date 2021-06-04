@@ -75,6 +75,13 @@
                 <option value="w900"> w900</option>
               </select>
             </div>
+            <div v-else-if="k === 'icon'">
+              <select v-model="properties[k]" :id="k">
+                <option v-for="(ic,n) in icons" :key="n" class="material-icons">
+                  {{ic.value}}
+                </option>
+              </select>
+            </div>
             <div v-else-if="k.toLowerCase().indexOf('color') !== -1">
               <select v-model="properties[k]" :id="k">
                 <option :value="cl.value" v-for="(cl,n) in colors" class="ui dropdown" v-bind:key="n"
@@ -125,6 +132,7 @@ export default {
       onEditKey:'',
       onEdit:'',
       colors: window.colors,
+      icons: window.material_icons
     }
   },
   props: {

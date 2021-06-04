@@ -38,7 +38,7 @@
     {
       "title": "Icon",
       "icon": "far fa-smile",
-      "active": false,
+      "active": true,
       "visual": true,
       "data": "window.defaults.icon"
     },

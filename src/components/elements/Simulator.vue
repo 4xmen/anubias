@@ -11,6 +11,9 @@
     <div v-if="type === 'text'">
       <txt :properties="properties" :scale="scale" :page="page"></txt>
     </div>
+    <div v-if="type === 'icon'">
+      <icon :properties="properties" :scale="scale" :page="page"></icon>
+    </div>
   </div>
 </template>
 
@@ -18,6 +21,7 @@
 import preloader from '../flutter/Preloader';
 import appbar from '../flutter/AppBar';
 import txt from '../flutter/Text';
+import icon from '../flutter/Icon';
 import {fnc} from '@/assets/js/functions';
 
 export default {
@@ -25,7 +29,8 @@ export default {
   components: {
     preloader,
     appbar,
-    txt
+    txt,
+    icon
   },
   props: {
     properties: {
@@ -44,19 +49,26 @@ export default {
       type: String,
       default: 'text',
     },
-    scale:{
+    scale: {
       type: Number,
       default: 0
     }
-  },computed:{
-    getStyle:function () {
+  }, computed: {
+    getStyle: function () {
       let style = '';
-      if (this.properties.align !== undefined && this.properties.align !== 'default'){
+      if (this.properties.align !== undefined && this.properties.align !== 'default') {
         let temp = this.properties.align.split('.');
-        if (temp.length === 2){
-          style += 'text-align:' + temp[1]+ ';';
-        }else {
+        if (temp.length === 2) {
+          style += 'text-align:' + temp[1] + ';';
+        } else {
           style += 'text-align:' + this.properties.align + ';';
+        }
+      }
+      if (this.properties.hide) {
+        if (this.properties.type === "appbar") {
+           style += "display:none;"
+        } else {
+           style += "opacity: .25;";
         }
       }
       if (this.properties.padding !== undefined) {
