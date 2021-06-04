@@ -151,26 +151,28 @@ export default {
       let name = e.target.value;
       if (!/^[a-zA-Z_$][a-zA-Z_$0-9]*$/.test(name)) {
         e.target.classList.add('invalid');
+        if (isBlur) {
+          this.properties.name = this.properties.type + Math.floor(Math.random() * 10000);
+          e.target.classList.remove('invalid');
+        }
       } else {
         e.target.classList.remove('invalid');
       }
-      if (isBlur) {
-        this.properties.name = this.properties.type + Math.floor(Math.random() * 10000);
-        e.target.classList.remove('invalid');
-      }
+
     },
     paddingCheck: function (e, isBlur) {
       const regex = /^([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]{1,3}$)|([0-9]{1,3},[0-9]{1,3}$)|([0-9]{1,3}$)/gm;
       let name = e.target.value;
       if (!regex.test(name)) {
         e.target.classList.add('invalid');
+        if (isBlur) {
+          this.properties.padding =  '0';
+          e.target.classList.remove('invalid');
+        }
       } else {
         e.target.classList.remove('invalid');
       }
-      if (isBlur) {
-        this.properties.padding =  '0';
-        e.target.classList.remove('invalid');
-      }
+
     },
     codeEdit: function (k) {
       this.$parent.codeContent = this.properties[k];
