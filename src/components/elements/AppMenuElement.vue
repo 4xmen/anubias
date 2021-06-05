@@ -6,6 +6,9 @@
         <a @click="newProject">
           <i class="fa fa-plus"></i>
           New project
+          <span class="shortcut">
+            Ctrl+N
+          </span>
         </a>
       </li>
       <li>
@@ -21,16 +24,16 @@
         <a @click="save">
           <i class="fa fa-save"></i>
           Save project
+
+          <span class="shortcut">
+            Ctrl+S
+          </span>
         </a>
       </li>
       <li :class="(cantEditPrj?' disabled':'')">
         <a @click="saveAs">
           <i class="fa fa-save"></i>
           Save project as
-
-          <span class="shortcut">
-            Ctrl+S
-          </span>
         </a>
       </li>
       <li class="divider"></li>
@@ -102,6 +105,9 @@ export default {
     $(document).on('keyup', function (e) {
       if (e.ctrlKey && e.key === 's'){
         self.save();
+      }
+      if (e.ctrlKey && e.key === 'n'){
+        self.newProject();
       }
       if (e.ctrlKey && e.key === 'o'){
         self.openProject();
