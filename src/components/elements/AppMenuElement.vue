@@ -24,7 +24,6 @@
         <a @click="save">
           <i class="fa fa-save"></i>
           Save project
-
           <span class="shortcut">
             Ctrl+S
           </span>
@@ -43,20 +42,38 @@
           Project info
         </router-link>
       </li>
-    </ul>
-    <ul id="dropdown2" class="dropdown-content grey darken-3">
       <li>
         <a>
           <i class="fa fa-bug"></i>
           Debug
+          <span class="shortcut">
+            F9
+          </span>
         </a>
       </li>
       <li>
         <a>
           <i class="fa fa-hammer"></i>
           Build
+          <span class="shortcut">
+            Ctrl+F9
+          </span>
         </a>
       </li>
+    </ul>
+    <ul  id="dropdown2" class="dropdown-content grey darken-3">
+<!--      <li>-->
+<!--        <a>-->
+<!--          <i class="fa fa-bug"></i>-->
+<!--          Debug-->
+<!--        </a>-->
+<!--      </li>-->
+<!--      <li>-->
+<!--        <a>-->
+<!--          <i class="fa fa-hammer"></i>-->
+<!--          Build-->
+<!--        </a>-->
+<!--      </li>-->
     </ul>
     <nav class="top-nav">
       <div class="nav-wrapper grey darken-4">
@@ -215,8 +232,8 @@ nav .fa {
 .shortcut {
   float: right;
   color: darkgray;
-  font-size: 90%;
-  padding-top: 3px;
+  font-size: 85%;
+  padding-top: 2px;
 }
 
 </style>
