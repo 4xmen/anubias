@@ -12,6 +12,9 @@
         <a @click="openProject">
           <i class="fa fa-folder-open"></i>
           Open project
+          <span class="shortcut">
+            Ctrl+O
+          </span>
         </a>
       </li>
       <li :class="(cantEditPrj?' disabled':'')">
@@ -24,6 +27,10 @@
         <a @click="saveAs">
           <i class="fa fa-save"></i>
           Save project as
+
+          <span class="shortcut">
+            Ctrl+S
+          </span>
         </a>
       </li>
       <li class="divider"></li>
@@ -91,10 +98,15 @@ export default {
     var $ = window.jQuery;
     $(".dropdown-trigger").dropdown();
     var self = this;
+
     $(document).on('keyup', function (e) {
       if (e.ctrlKey && e.key === 's'){
         self.save();
       }
+      if (e.ctrlKey && e.key === 'o'){
+        self.openProject();
+      }
+
     });
 
   }, methods: {
@@ -173,8 +185,8 @@ nav, nav .nav-wrapper i, nav > a.sidenav-trigger, nav > a.sidenav-trigger i {
   line-height: 40px;
 }
 
-#dropdown1 {
-  width: 200px !important;
+.dropdown-content {
+  min-width: 230px !important;
 }
 
 .nav-wrapper img {
@@ -192,6 +204,13 @@ nav .fa {
 
 .nav-wrapper li {
   border-right: 1px rgba(0, 0, 0, 0.2) solid;
+}
+
+.shortcut {
+  float: right;
+  color: darkgray;
+  font-size: 90%;
+  padding-top: 3px;
 }
 
 </style>
