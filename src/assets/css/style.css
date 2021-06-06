@@ -64,6 +64,26 @@ label{
     -webkit-transition: 1s;
     transition: 1s;
 }
+
+
+.context-menu{
+    min-width: 220px;
+}
+.context-menu span{
+    float: right;
+    color: grey;
+    font-size: 12px;
+    margin-top: 3px;
+}
+.context-menu li{
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.context-menu li:last-child{
+    border-bottom-width: 0;
+}
+.just-paste .no-paste{
+    display: none;
+}
 .blur{
     -webkit-filter: blur(8px) grayscale(90%);
 

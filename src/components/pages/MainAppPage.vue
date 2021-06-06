@@ -89,14 +89,15 @@
                         v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.visual !== undefined">
                 <span v-for="(comp,i) in data.pages[currentPage].children.visual"
                       :key="i">
-                  <simulator @dblclick.native="removeVisual(i)" @click.native="currentProperties = comp;"
+                  <simulator @contextmenu.native.prevent="contextOpen(i,$event)" @dblclick.native="removeVisual(i)"
+                             @click.native="currentProperties = comp;"
                              :type="comp.type" :properties="comp" :scale="display.scale"
                              :page="data.pages[currentPage]"></simulator>
                 </span>
                     </div>
                   </div>
 
-                  <drop class="drop visual" @drop="onVisualDrop" :accepts-data="(n) => isVisual(n)"></drop>
+                  <drop @contextmenu.native.prevent="contextOpen(-1,$event)" class="drop visual" @drop="onVisualDrop" :accepts-data="(n) => isVisual(n)"></drop>
                   <!--              <drop class="drop any" @drop="onAnyDrop" mode="cut">-->
                   <!--                <span v-for="(n, index) in anyDropped" :key="index">Dropped : {{n}},&nbsp;</span>-->
                   <!--              </drop>-->
@@ -157,11 +158,23 @@
           </div>
         </div>
       </div>
+      <vue-context ref="menu" class="context-menu">
+        <li>
+          <a href="#" class="no-paste" @click.prevent="contextTrigger('delete')">Delete <span>Del</span></a>
+        </li>
+        <li>
+          <a href="#"  class="no-paste"  @click.prevent="contextTrigger('copy')">Copy <span>(Ctrl+c)</span></a>
+        </li>
+        <li>
+          <a href="#" @click.prevent="contextTrigger('paste')">Paste <span>Ctrl+v</span> </a>
+        </li>
+      </vue-context>
     </div>
     <vue-final-modal v-model="showCodeModal" @before-open="modalOpen" @before-close="modalClose" name="code-modal">
       <i class="fa fa-times modal-close" @click="showCodeModal = false"></i>
       <code-editor :title="codeTitle" v-model="codeContent"></code-editor>
     </vue-final-modal>
+
   </div>
 </template>
 
@@ -173,7 +186,7 @@ import appMenu from '../elements/AppMenuElement';
 import simulator from '../elements/Simulator';
 import codeEditor from '../elements/CodeEditor'
 import {Drag, Drop} from "vue-easy-dnd";
-
+import VueContext from 'vue-context';
 // import editor  from '../elements/TitleElement';
 // const {remote} = require("electron");
 import {fnc} from '@/assets/js/functions';
@@ -188,6 +201,7 @@ export default {
     appMenu,
     simulator,
     codeEditor,
+    VueContext,
     Drag,
     Drop
   },
@@ -202,6 +216,8 @@ export default {
       currentDisplay: window.devices[23],
       currentPage: 0,
       currentProperties: {},
+      contextIndex:-1,
+      contextClipBoard:'',
       // isInitProject: false,
       display: {
         name: 'Nexus 5x',
@@ -245,6 +261,23 @@ export default {
     },
   },
   methods: {
+    contextOpen:function (i,ev) {
+      this.$refs.menu.open(ev);
+      this.contextIndex = i;
+      if (i == -1){
+        this.$refs.menu.$el.classList.add('just-paste');
+      }else{
+        this.$refs.menu.$el.classList.remove('just-paste');
+      }
+
+    },
+    contextTrigger: function (e) {
+      switch (e) {
+        case 'delete':
+          this.removeVisual(this.contextIndex);
+          break;
+      }
+    },
     modalOpen: function () {
       let $ = window.jQuery;
       $("#wrapper").addClass('blur');

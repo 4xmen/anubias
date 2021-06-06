@@ -12,6 +12,7 @@ require('material-icons/iconfont/material-icons.css');
 require('materialize-css/dist/css/materialize.min.css');
 require('alertifyjs/build/css/alertify.min.css');
 require('flickity/dist/flickity.min.css');
+require('vue-context/dist/css/vue-context.css');
 require('./assets/css/style.css');
 
 export default {
