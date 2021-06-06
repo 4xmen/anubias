@@ -122,8 +122,8 @@
     },
 	{
       "name":"Google Pixel 4 XL",
-      "width": 1440,
-      "height": 869
+      "width": 869,
+      "height": 1440
     },
 	{
       "name":"Google Pixel 4",
@@ -271,8 +271,8 @@
     },
 	{
       "name":"Samsung Galaxy Tab 10",
-      "width": 800,
-      "height": 1280
+      "width": 1280,
+      "height": 800
     },
 	{
       "name":"Chromebook Pixel",
