@@ -31,7 +31,7 @@
     {
       "title": "Image",
       "icon": "far fa-image",
-      "active": false,
+      "active": true,
       "visual": true,
       "data": "window.defaults.image"
     },

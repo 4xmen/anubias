@@ -57,3 +57,4 @@ window.defaults.preloader = require('../json/defaults/defPreloader.json');
 window.defaults.appbar = require('../json/defaults/defAppbar.json');
 window.defaults.text = require('../json/defaults/defText.json');
 window.defaults.icon = require('../json/defaults/defIcon.json');
+window.defaults.image = require('../json/defaults/defImage.json');

@@ -1,6 +1,6 @@
 <!--component of component for choose in ide and drag and drop-->
 <template>
-  <div class="component" title="Double click to remove">
+  <div :class="'component'+(active?'active':'')" title="Double click to remove">
     <i :class="'ico '+icon"></i>
     <span class="title">{{title}}</span>
     <slot></slot>
@@ -12,7 +12,8 @@ export default {
   name: "ComponentElement",
   props:[
       'icon',
-      'title'
+      'title',
+      'active'
   ]
 }
 </script>
@@ -24,6 +25,10 @@ export default {
       width: 100%;
       display: block;
       vertical-align: top;
+      opacity: .2;
+    }
+    .component.active{
+      opacity: 1;
     }
     .component:hover{
       background: rgba(0, 0, 0, 0.2);

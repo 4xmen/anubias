@@ -75,10 +75,21 @@
                 <option value="w900"> w900</option>
               </select>
             </div>
+            <div v-else-if="k === 'fit'">
+              <select v-model="properties[k]" :id="k">
+                <option value="none"> none</option>
+                <option value="fill"> fill</option>
+                <option value="contain"> contain</option>
+                <option value="cover"> cover</option>
+                <option value="fitWidth"> fitWidth</option>
+                <option value="fitHeight"> fitHeight</option>
+<!--                <option value="scaleDown"> scaleDown</option>-->
+              </select>
+            </div>
             <div v-else-if="k === 'icon'">
               <select v-model="properties[k]" :id="k">
                 <option v-for="(ic,n) in icons" :key="n" class="material-icons">
-                  {{ic.value}}
+                  {{ ic.value }}
                 </option>
               </select>
             </div>
@@ -92,6 +103,9 @@
             </div>
             <div v-else-if="k.substr(0,2) == 'on'" class="code" @click="codeEdit(k)">
               {{ k }} <b> <i class="fa fa-code"></i> </b>
+            </div>
+            <div v-else-if="k === 'image' && properties.type === 'image'" class="code" @click="chooseImage">
+              Choose <b> <i class="fa fa-folder-open"></i> </b>
             </div>
             <div v-else>
               <input type="text" :id="k" v-model="properties[k]">
@@ -129,8 +143,8 @@ export default {
   },
   data: function () {
     return {
-      onEditKey:'',
-      onEdit:'',
+      onEditKey: '',
+      onEdit: '',
       colors: window.colors,
       icons: window.material_icons
     }
@@ -147,6 +161,14 @@ export default {
       type: Number
     }
   }, methods: {
+    chooseImage: function () {
+      var self = this;
+      window.api.send('open-file-image', {});
+      window.api.receive('image-selected', (data) => {
+        self.properties.image = data;
+      });
+
+    },
     nameCheck: function (e, isBlur) {
       let name = e.target.value;
       if (!/^[a-zA-Z_$][a-zA-Z_$0-9]*$/.test(name)) {
@@ -166,7 +188,7 @@ export default {
       if (!regex.test(name)) {
         e.target.classList.add('invalid');
         if (isBlur) {
-          this.properties.padding =  '0';
+          this.properties.padding = '0';
           e.target.classList.remove('invalid');
         }
       } else {
@@ -192,8 +214,8 @@ export default {
     //       this.properties[e.target.id]  = '';
     //     }
     // },
-  },watch:{
-    onEdit:function (newval) {
+  }, watch: {
+    onEdit: function (newval) {
       this.properties[this.onEditKey] = newval;
     },
   }
@@ -282,5 +304,9 @@ label {
 
 .code:hover {
   background: #1b9a59;
+}
+
+td b {
+  margin-left: 5px;
 }
 </style>

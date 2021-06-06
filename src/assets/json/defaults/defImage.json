@@ -1,0 +1,11 @@
+{
+  "type": "image",
+  "name": "image",
+  "image": "",
+  "padding": "0",
+  "width": 150,
+  "height": "null",
+  "fit": "none",
+  "align": "null",
+  "hide": false
+}

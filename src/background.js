@@ -105,6 +105,32 @@ ipc.on('open-file-dialog', function (event) {
         if (files) event.sender.send('selected-file', files)
     })
 });
+/**
+ * sample of open file
+ */
+ipc.on('open-file-image', function (event) {
+    dialog.showOpenDialog({
+        title: 'Open image',
+        filters: [
+            {name: 'image files', extensions: ['jpg', 'png', 'gif']},
+            {name: 'All Files', extensions: ['*']}
+        ],
+        // properties: {showOverwriteConfirmation: true,}
+        properties: ['openFile']
+    }).then(function (files) {
+        try {
+            // when done check is canceled or not
+            if (!files.canceled) {
+                let img = fs.readFileSync(files.filePaths[0]).toString('base64');
+                win.webContents.send('image-selected','data:image/'+path.extname(files.filePaths[0])+';base64,' +img);
+            }
+        } catch(e) {
+            win.webContents.send('message', {type: 'error', 'error':  files.toString()});
+        }
+
+
+    })
+});
 
 /**
  * open project progress
@@ -138,7 +164,7 @@ ipc.on('open-file-dialog-project', function (event) {
                     });
                 })
             } catch(e) {
-                win.webContents.send('message', 'error ' + e.message);
+                win.webContents.send('message', {type: 'error', 'error':  e.message});
             }
         }
     })
@@ -174,7 +200,7 @@ ipc.on('save-as-file-project', function (event, arg) {
                 win.webContents.send('message', {type: 'success', 'msg': path.basename(filename) + ' saved'});
             });
         } catch (e) {
-            win.webContents.send('message', 'error ' + e.message);
+            win.webContents.send('message', {type: 'error', 'error':  e.message});
 
         }
 
@@ -201,7 +227,7 @@ ipc.on('save-project', function (event, arg) {
                 win.webContents.send('message', {type: 'success', 'msg': path.basename(filename) + ' saved'});
             });
         } catch (e) {
-            win.webContents.send('message', 'error ' + e.message);
+            win.webContents.send('message', {type: 'error', 'error':  e.message});
 
         }
 });

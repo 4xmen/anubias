@@ -14,6 +14,9 @@
     <div v-if="type === 'icon'">
       <icon :properties="properties" :scale="scale" :page="page"></icon>
     </div>
+    <div v-if="type === 'image'">
+      <imag :properties="properties" :scale="scale" :page="page"></imag>
+    </div>
   </div>
 </template>
 
@@ -22,6 +25,7 @@ import preloader from '../flutter/Preloader';
 import appbar from '../flutter/AppBar';
 import txt from '../flutter/Text';
 import icon from '../flutter/Icon';
+import imag from '../flutter/Image';
 import {fnc} from '@/assets/js/functions';
 
 export default {
@@ -30,7 +34,8 @@ export default {
     preloader,
     appbar,
     txt,
-    icon
+    icon,
+    imag
   },
   props: {
     properties: {

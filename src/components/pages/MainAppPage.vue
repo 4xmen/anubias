@@ -119,7 +119,7 @@
           <!-- show dragable component to add to page -->
           <transition-group name="list" tag="div">
             <drag v-for="(comp,n) in components" :key="n" class="drag" :data="n">
-              <compo :title="comp.title" :icon="comp.icon"></compo>
+              <compo :title="comp.title" :icon="comp.icon" :active="comp.active"></compo>
             </drag>
           </transition-group>
 
