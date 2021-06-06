@@ -291,6 +291,16 @@ export default {
         case 'delete':
           this.removeVisual(this.contextIndex);
           break;
+        case 'copy':
+          this.contextClipBoard = JSON.stringify(this.data.pages[this.currentPage].children.visual[this.contextIndex]);
+          break;
+        case 'cut':
+          this.contextClipBoard = JSON.stringify(this.data.pages[this.currentPage].children.visual[this.contextIndex]);
+          this.data.pages[this.currentPage].children.visual.splice(this.contextIndex, 1);
+          break;
+        case 'paste':
+          this.data.pages[this.currentPage].children.visual.push(JSON.parse(this.contextClipBoard));
+          break;
       }
     },
     modalOpen: function () {
@@ -390,7 +400,6 @@ export default {
       // update page preview
       setTimeout(function () {
         fnc.takeScreenShot("#preview", function (e) {
-          console.log(self.data.pages[self.currentPage].name);
           self.data.pages[self.currentPage].image = e;
         });
       }, 1000);
@@ -427,7 +436,7 @@ export default {
       window.alertify.confirm(`Are you sure to remove this component
       "${this.data.pages[this.currentPage].children.visual[n].name}" ?`,
           'Remove confirm', function () {
-            self.data.pages[self.currentPage].children.visual.splice(n, 1)
+            self.data.pages[self.currentPage].children.visual.splice(n, 1);
           }
           , function () {
             // window.alertify.error('Cancel')
