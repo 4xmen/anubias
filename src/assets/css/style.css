@@ -81,6 +81,9 @@ label{
 .context-menu li:last-child{
     border-bottom-width: 0;
 }
+.context-menu .fa{
+    margin-right: 15px;
+}
 .just-paste .no-paste{
     display: none;
 }

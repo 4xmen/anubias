@@ -160,13 +160,28 @@
       </div>
       <vue-context ref="menu" class="context-menu">
         <li>
-          <a href="#" class="no-paste" @click.prevent="contextTrigger('delete')">Delete <span>Del</span></a>
+          <a href="#"  class="no-paste"  @click.prevent="contextTrigger('copy')">
+            <i class="fa fa-copy"></i>
+            Copy <span>Ctrl+C</span>
+          </a>
         </li>
         <li>
-          <a href="#"  class="no-paste"  @click.prevent="contextTrigger('copy')">Copy <span>(Ctrl+c)</span></a>
+          <a href="#" class="no-paste" @click.prevent="contextTrigger('cut')">
+            <i class="fa fa-cut"></i>
+            Cut <span>Ctrl+X</span>
+          </a>
         </li>
         <li>
-          <a href="#" @click.prevent="contextTrigger('paste')">Paste <span>Ctrl+v</span> </a>
+          <a href="#" @click.prevent="contextTrigger('paste')">
+            <i class="fa fa-paste"></i>
+            Paste <span>Ctrl+V</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="no-paste" @click.prevent="contextTrigger('delete')">
+            <i class="fa fa-times"></i>
+            Delete <span>Del</span>
+          </a>
         </li>
       </vue-context>
     </div>
