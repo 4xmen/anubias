@@ -90,14 +90,15 @@
                 <span v-for="(comp,i) in data.pages[currentPage].children.visual"
                       :key="i">
                   <simulator @contextmenu.native.prevent="contextOpen(i,$event)" @dblclick.native="removeVisual(i)"
-                             @click.native="currentProperties = comp;"
+                             @click.native="currentProperties = comp; contextIndex = i"
                              :type="comp.type" :properties="comp" :scale="display.scale"
                              :page="data.pages[currentPage]"></simulator>
                 </span>
                     </div>
                   </div>
 
-                  <drop @contextmenu.native.prevent="contextOpen(-1,$event)" class="drop visual" @drop="onVisualDrop" :accepts-data="(n) => isVisual(n)"></drop>
+                  <drop @contextmenu.native.prevent="contextOpen(-1,$event)" class="drop visual" @drop="onVisualDrop"
+                        :accepts-data="(n) => isVisual(n)"></drop>
                   <!--              <drop class="drop any" @drop="onAnyDrop" mode="cut">-->
                   <!--                <span v-for="(n, index) in anyDropped" :key="index">Dropped : {{n}},&nbsp;</span>-->
                   <!--              </drop>-->
@@ -160,7 +161,7 @@
       </div>
       <vue-context ref="menu" class="context-menu">
         <li>
-          <a href="#"  class="no-paste"  @click.prevent="contextTrigger('copy')">
+          <a href="#" class="no-paste" @click.prevent="contextTrigger('copy')">
             <i class="fa fa-copy"></i>
             Copy <span>Ctrl+C</span>
           </a>
@@ -180,7 +181,7 @@
         <li>
           <a href="#" class="no-paste" @click.prevent="contextTrigger('delete')">
             <i class="fa fa-times"></i>
-            Delete <span>Del</span>
+            Delete <span>Shift+Del</span>
           </a>
         </li>
       </vue-context>
@@ -231,8 +232,8 @@ export default {
       currentDisplay: window.devices[23],
       currentPage: 0,
       currentProperties: {},
-      contextIndex:-1,
-      contextClipBoard:'',
+      contextIndex: -1,
+      contextClipBoard: '',
       // isInitProject: false,
       display: {
         name: 'Nexus 5x',
@@ -253,6 +254,29 @@ export default {
       // $("#mobile").niceScroll({touchbehavior: true});
       // $("#elements").niceScroll();
       $('#main select').formSelect();
+
+      var self = this;
+
+      $(document).unbind('keyup.contextShortcut').bind('keyup.contextShortcut', function (e) {
+        if (e.ctrlKey && e.key === 'c') {
+          self.contextClipBoard = JSON.stringify(self.data.pages[self.currentPage].children.visual[self.contextIndex]);
+        }
+        if (e.ctrlKey && e.key === 'x') {
+          self.contextClipBoard = JSON.stringify(self.data.pages[self.currentPage].children.visual[self.contextIndex]);
+          self.data.pages[self.currentPage].children.visual.splice(self.contextIndex, 1);
+        }
+        if (e.ctrlKey && e.key === 'v') {
+          try {
+            self.data.pages[self.currentPage].children.visual.push(JSON.parse(self.contextClipBoard));
+          } catch (e) {
+            window.alertify.warning('Nothing to paste');
+          }
+        }
+        if (e.shiftKey && e.keyCode === 46){
+          self.removeVisual(self.contextIndex);
+        }
+
+      });
 
       if (this.isInitProject && this.data.pages.length > 0) {
         this.changePage(this.data.project.mainPage);
@@ -276,12 +300,13 @@ export default {
     },
   },
   methods: {
-    contextOpen:function (i,ev) {
+    contextOpen: function (i, ev) {
       this.$refs.menu.open(ev);
       this.contextIndex = i;
-      if (i == -1){
+      this.currentProperties = this.data.pages[this.currentPage].children.visual[this.contextIndex];
+      if (i == -1) {
         this.$refs.menu.$el.classList.add('just-paste');
-      }else{
+      } else {
         this.$refs.menu.$el.classList.remove('just-paste');
       }
 
@@ -345,6 +370,7 @@ export default {
     changePage: function (i) { // view clicked page
       this.currentPage = i;
       this.currentProperties = this.data.pages[i];
+      this.contextIndex = -1;
       // console.log(this.currentProperties);
     },
     removePage: function (i) { // remove page form project

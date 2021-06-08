@@ -119,7 +119,7 @@ export default {
     $(".dropdown-trigger").dropdown();
     var self = this;
 
-    $(document).on('keyup', function (e) {
+    $(document).unbind('keyup.mainMenuShortcut').bind('keyup.mainMenuShortcut', function (e) {
       if (e.ctrlKey && e.key === 's'){
         self.save();
       }

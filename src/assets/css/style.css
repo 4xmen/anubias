@@ -3,48 +3,54 @@
 }
 
 ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     border-radius: 0;
 }
 
 ::-webkit-scrollbar-thumb {
     border-radius: 0;
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
-body{
-    background: #272c34 ;
-    color: #eeeeee ;
-    font-family: Vazir,tahoma ,serif;
+
+body {
+    background: #272c34;
+    color: #eeeeee;
+    font-family: Vazir, tahoma, serif;
     padding-bottom: 15%;
     overflow-x: hidden;
-    -webkit-user-select: none;  /* Chrome 49+ */
-    -moz-user-select: none;     /* Firefox 43+ */
-    -ms-user-select: none;      /* No support yet */
-    user-select: none;          /* Likely future */
+    -webkit-user-select: none; /* Chrome 49+ */
+    -moz-user-select: none; /* Firefox 43+ */
+    -ms-user-select: none; /* No support yet */
+    user-select: none; /* Likely future */
 }
-h2,h3,h4,h5,h6{
+
+h2, h3, h4, h5, h6 {
     margin-top: 0;
     margin-bottom: 0;
 }
-a{
+
+a {
     color: #ffffff;
 }
-a:hover{
+
+a:hover {
     color: deepskyblue;
 }
 
-input{
+input {
     color: #eeeeee;
 }
-input::placeholder{
+
+input::placeholder {
     color: #666666 !important;
 }
-label{
+
+label {
     color: #eeeeee !important;
     padding-top: 7px;
 }
 
-#property  .dropdown {
+#property .dropdown {
     background: transparent;
     color: #ffffff;
     border: 0;
@@ -57,7 +63,8 @@ label{
     height: auto !important;
     margin: 0 !important;
 }
-.wrapper{
+
+.wrapper {
     -o-transition: 1s;
     -ms-transition: 1s;
     -moz-transition: 1s;
@@ -66,60 +73,81 @@ label{
 }
 
 
-.context-menu{
+.context-menu {
     min-width: 220px;
 }
-.context-menu span{
+
+.context-menu span {
     float: right;
     color: grey;
     font-size: 12px;
     margin-top: 3px;
 }
-.context-menu li{
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+
+.context-menu li {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
-.context-menu li:last-child{
+
+.context-menu li a{
+    -o-transition: .4s;
+    -ms-transition: .4s;
+    -moz-transition: .4s;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+.context-menu li:last-child {
     border-bottom-width: 0;
 }
-.context-menu .fa{
+
+.context-menu li:hover a {
+    background: #0f9d5877;
+}
+
+.context-menu .fa {
     margin-right: 15px;
 }
-.just-paste .no-paste{
+
+.just-paste .no-paste {
     display: none;
 }
-.blur{
+
+.blur {
     -webkit-filter: blur(8px) grayscale(90%);
 
 }
-.no-blur{
+
+.no-blur {
     backdrop-filter: blur(2px) sepia(50%);
 }
 
-.text-center{
+.text-center {
     text-align: center;
 }
-.v-select{
+
+.v-select {
     color: #20252b;
 }
 
-.select-dropdown{
+.select-dropdown {
     color: #eee;
 }
 
-.nav-wrapper li.disabled{
+.nav-wrapper li.disabled {
     opacity: 0.3;
 }
-.nav-wrapper li.disabled:hover{
+
+.nav-wrapper li.disabled:hover {
     background: transparent !important;
 }
 
-.txt.ellipsis:after{
+.txt.ellipsis:after {
     content: '...';
     position: absolute;
     bottom: 5px;
     left: 0;
 }
-.txt.fade:after{
+
+.txt.fade:after {
     content: '...';
     position: absolute;
     bottom: 5px;
@@ -127,17 +155,18 @@ label{
     opacity: .5;
 }
 
-.ajs-dialog{
+.ajs-dialog {
     color: black;
 }
 
-.inactive{
+.inactive {
     opacity: 0.025;
 }
 
-.ace_gutter-layer{
-    background: rgb(26,33,41);
+.ace_gutter-layer {
+    background: rgb(26, 33, 41);
 }
+
 /*dnd fix*/
 
 .drag {
@@ -153,7 +182,7 @@ label{
 .drop {
     margin: 20px 10px;
     height: 80px;
-    border: 2px dashed rgba(0,0,0,0.2);
+    border: 2px dashed rgba(0, 0, 0, 0.2);
     position: relative;
 }
 
@@ -202,18 +231,20 @@ label{
     position: absolute;
 }
 
-.ajs-message{
+.ajs-message {
     background: #4285f4;
     color: black;
 }
-.ajs-warning{
+
+.ajs-warning {
     color: red;
 }
 
 /*flutter fix*/
-#appBar i.fa-arrow-left{
+#appBar i.fa-arrow-left {
     margin-right: 1.5em;
 }
-#appBar i.fa-arrow-right{
+
+#appBar i.fa-arrow-right {
     margin-left: 1.5em;
 }
