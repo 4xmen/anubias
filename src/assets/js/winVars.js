@@ -5,7 +5,7 @@
 window.ide = {
     majorVersion: 0,
     minorVersion: 5,
-    patchVersion: 0,
+    patchVersion: 1,
     version:function () {
       return this.majorVersion + '.' + this.minorVersion + '.' + this.patchVersion;
     }
