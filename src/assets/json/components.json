@@ -22,13 +22,6 @@
       "data": "window.defaults.appbar"
     },
     {
-      "title": "AppBar",
-      "icon": "far fa-window-maximize",
-      "active": false,
-      "visual": true,
-      "data": "window.defaults.appbar"
-    },
-    {
       "title": "Image",
       "icon": "far fa-image",
       "active": true,
@@ -97,6 +90,13 @@
       "active": false,
       "visual": true,
       "data": "window.defaults.button"
+    },
+    {
+      "title": "CircleButton",
+      "icon": "fa fa-plus-circle",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.circleButton"
     },
     {
       "title": "Toggle",

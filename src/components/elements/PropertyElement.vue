@@ -104,8 +104,11 @@
             <div v-else-if="k.substr(0,2) == 'on'" class="code" @click="codeEdit(k)">
               {{ k }} <b> <i class="fa fa-code"></i> </b>
             </div>
-            <div v-else-if="k === 'image' && properties.type === 'image'" class="code" @click="chooseImage">
+            <div v-else-if="k === 'image' && properties.type === 'image' && !properties.isOnline" class="code" @click="chooseImage">
               Choose <b> <i class="fa fa-folder-open"></i> </b>
+            </div>
+            <div v-else-if="k === 'image' && properties.type === 'image' && properties.isOnline">
+              <input type="url" v-model="properties.image"/>
             </div>
             <div v-else>
               <input type="text" :id="k" v-model="properties[k]">
