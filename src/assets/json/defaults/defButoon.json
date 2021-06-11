@@ -1,0 +1,18 @@
+{
+  "type": "button",
+  "name": "button",
+  "padding": "0",
+  "width": "120",
+  "height": "null",
+  "icon": "home",
+  "text": "Click me",
+  "bgColor": "null",
+  "color": "null",
+  "borderRadius": "5",
+  "noText": false,
+  "noIcon": false,
+  "size": 15,
+  "onPressed": "// run when press on this button ",
+  "onLongPress": "// run when long press on this button  ",
+  "hide": false
+}

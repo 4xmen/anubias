@@ -43,6 +43,20 @@
       "data": "window.defaults.text"
     },
     {
+      "title": "Button",
+      "icon": "far fa-plus-square",
+      "active": true,
+      "visual": true,
+      "data": "window.defaults.button"
+    },
+    {
+      "title": "CircleButton",
+      "icon": "fa fa-plus-circle",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.circleButton"
+    },
+    {
       "title": "Column",
       "icon": "fas fa-bars",
       "active": false,
@@ -83,20 +97,6 @@
       "active": false,
       "visual": true,
       "data": "window.defaults.input"
-    },
-    {
-      "title": "Button",
-      "icon": "far fa-plus-square",
-      "active": false,
-      "visual": true,
-      "data": "window.defaults.button"
-    },
-    {
-      "title": "CircleButton",
-      "icon": "fa fa-plus-circle",
-      "active": false,
-      "visual": true,
-      "data": "window.defaults.circleButton"
     },
     {
       "title": "Toggle",

@@ -17,6 +17,9 @@
     <div v-if="type === 'image'">
       <imag :properties="properties" :scale="scale" :page="page"></imag>
     </div>
+    <div v-if="type === 'button'">
+      <btn :properties="properties" :scale="scale" :page="page"></btn>
+    </div>
   </div>
 </template>
 
@@ -26,6 +29,7 @@ import appbar from '../flutter/AppBar';
 import txt from '../flutter/Text';
 import icon from '../flutter/Icon';
 import imag from '../flutter/Image';
+import btn from '../flutter/Btn';
 import {fnc} from '@/assets/js/functions';
 
 export default {
@@ -35,7 +39,8 @@ export default {
     appbar,
     txt,
     icon,
-    imag
+    imag,
+    btn
   },
   props: {
     properties: {
@@ -76,7 +81,7 @@ export default {
            style += "opacity: .25;";
         }
       }
-      if (this.properties.padding !== undefined) {
+      if (this.properties.padding !== undefined && this.properties.type !== 'button') {
         style += 'padding:' + fnc.calcPadding(this.properties.padding, this.scale) + ';';
       }
       return style;
