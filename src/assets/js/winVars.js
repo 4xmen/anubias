@@ -58,4 +58,4 @@ window.defaults.appbar = require('../json/defaults/defAppbar.json');
 window.defaults.text = require('../json/defaults/defText.json');
 window.defaults.icon = require('../json/defaults/defIcon.json');
 window.defaults.image = require('../json/defaults/defImage.json');
-window.defaults.button = require('../json/defaults/defButoon.json');
+window.defaults.button = require('../json/defaults/defButton.json');
