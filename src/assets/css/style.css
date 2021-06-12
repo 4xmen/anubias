@@ -1,3 +1,4 @@
+@import url(vazircodex.css);
 ::-webkit-scrollbar {
     width: 3px;
 }
@@ -247,4 +248,8 @@ label {
 
 #appBar i.fa-arrow-right {
     margin-left: 1.5em;
+}
+
+.ace_content{
+    font-family: 'VazirCodeX';
 }

@@ -159,6 +159,9 @@
           </div>
         </div>
       </div>
+      <div id="terminal-btn" @click="showTerminalModal = true">
+        <i class="fa fa-terminal"></i>
+      </div>
       <vue-context ref="menu" class="context-menu">
         <li>
           <a href="#" class="no-paste" @click.prevent="contextTrigger('copy')">
@@ -190,6 +193,9 @@
       <i class="fa fa-times modal-close" @click="showCodeModal = false"></i>
       <code-editor :title="codeTitle" v-model="codeContent"></code-editor>
     </vue-final-modal>
+    <vue-final-modal v-model="showTerminalModal" @before-open="modalOpen" @before-close="modalClose"  name="teminal-modal">
+      <terminal></terminal>
+    </vue-final-modal>
 
   </div>
 </template>
@@ -201,8 +207,10 @@ import compo from '../elements/ComponentElement';
 import appMenu from '../elements/AppMenuElement';
 import simulator from '../elements/Simulator';
 import codeEditor from '../elements/CodeEditor'
+import terminal from '../elements/TerminalElement'
 import {Drag, Drop} from "vue-easy-dnd";
 import VueContext from 'vue-context';
+
 // import editor  from '../elements/TitleElement';
 // const {remote} = require("electron");
 import {fnc} from '@/assets/js/functions';
@@ -217,6 +225,7 @@ export default {
     appMenu,
     simulator,
     codeEditor,
+    terminal,
     VueContext,
     Drag,
     Drop
@@ -226,6 +235,7 @@ export default {
       codeTitle: '',
       codeContent: '',
       showCodeModal: false,
+      showTerminalModal: true,
       content: '',
       data: window.appData,
       components: window.components,
@@ -300,6 +310,10 @@ export default {
     },
   },
   methods: {
+    closeAllModal(){
+      this.showCodeModal = false;
+      this.showTerminalModal = false;
+    },
     contextOpen: function (i, ev) {
       this.$refs.menu.open(ev);
       this.contextIndex = i;
@@ -610,7 +624,24 @@ export default {
   overflow: hidden;
   max-width: 315px;
 }
-
+#terminal-btn{
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  padding: 5px;
+  background: #272c34;
+  border: 1px solid black;
+  opacity: .35;
+  cursor: pointer;
+  -o-transition: .3s;
+  -ms-transition: .3s;
+  -moz-transition: .3s;
+  -webkit-transition: .3s;
+  transition: .3s;
+}
+#terminal-btn:hover{
+  opacity: 1;
+}
 .logo {
   width: 45%;
 }
