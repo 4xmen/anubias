@@ -8,24 +8,8 @@
     </span>
 
 
-    <div class="content">
-      <ul>
-        <li>item text 1</li>
-        <li>item text 2</li>
-        <li>item text 3</li>
-        <li>item text 4</li>
-        <li>item text 5</li>
-        <li>item text 6</li>
-        <li>item text 7</li>
-        <li>item text 8</li>
-        <li>item text 9</li>
-        <li>item text 10</li>
-        <li>item text 11</li>
-        <li>item text 12</li>
-        <li>item text 13</li>
-        <li>item text 14</li>
-        <li>item text 15</li>
-      </ul>
+    <div class="content" id="container">
+      <slot></slot>
     </div>
   </div>
 </template>
@@ -36,6 +20,10 @@ export default {
   methods:{
     closeModal:function () {
       this.$parent.$parent.closeAllModal();
+    },
+    scroll:function () {
+      let container = this.$el.querySelector("#container");
+      container.scrollTop = container.scrollHeight;
     }
   }
 }
@@ -47,11 +35,11 @@ export default {
   width: 80%;
   margin: 50px auto 0 auto;
   max-width: 1000px;
-  height: 600px;
   border-radius: 7px;
   background: #272c34;
   padding: 15px;
-  line-height: 2em;
+  line-height: 1.2em;
+
 }
 .clear{
   margin-top: -10px;
@@ -68,7 +56,29 @@ export default {
   padding: 0 20px;
   color: #eee;
   font-family: VazirCodeX;
+  height: 600px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  -webkit-user-select: text; /* Chrome 49+ */
+  -moz-user-select: text; /* Firefox 43+ */
+  -ms-user-select: text; /* No support yet */
+  user-select: text; /* Likely future */
 }
+.content ul li{
+  white-space: pre;
+}
+.content ul li:last-child:after{
+  content: "_";
+  background: #eeeeee;
+  animation: infinite;
+  animation-name: cursor;
+  animation-duration: 1.5s;
+  animation-timing-function: linear;
+  position: relative;
+  top: 10px;
+}
+
 .fa-circle {
   margin-right: 10px;
 }

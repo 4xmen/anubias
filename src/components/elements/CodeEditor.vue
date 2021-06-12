@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <i class="fa fa-circle red-text" @click="closeModal"></i>
+    <i class="fa fa-circle yellow-text text-darken-2"></i>
+    <i class="fa fa-circle green-text text-lighten-2"></i>
     <h4>
       {{ title }}
     </h4>
@@ -67,6 +70,11 @@ export default {
     });
 
 
+  },
+  methods:{
+    closeModal:function () {
+      this.$parent.$parent.closeAllModal();
+    }
   }
 }
 </script>
@@ -79,12 +87,23 @@ h4 {
 }
 
 .container {
-  max-width: 900px;
-  margin: auto;
+  width: 80%;
+  margin: 50px auto 0 auto;
+  max-width: 1000px;
+  border-radius: 7px;
+  background: #1e2329;
+  padding: 15px;
+  line-height: 2em;
 }
-
+.fa-circle {
+  margin-right: 10px;
+}
+h4{
+  display: inline-block;
+  padding-left: 20px;
+}
 #codeEditor {
-  height: 85vh;
+  height: 80vh;
   font-size: 16px;
 }
 </style>

@@ -6,6 +6,7 @@ import installExtension, {VUEJS_DEVTOOLS} from 'electron-devtools-installer'
 import path from 'path'
 import fs from "fs";
 
+const cp = require('child_process');
 const ipc = require('electron').ipcMain
 const dialog = require('electron').dialog
 const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -106,7 +107,7 @@ ipc.on('open-file-dialog', function (event) {
     })
 });
 /**
- * sample of open file
+ * sample of open image file
  */
 ipc.on('open-file-image', function (event) {
     dialog.showOpenDialog({
@@ -122,10 +123,10 @@ ipc.on('open-file-image', function (event) {
             // when done check is canceled or not
             if (!files.canceled) {
                 let img = fs.readFileSync(files.filePaths[0]).toString('base64');
-                win.webContents.send('image-selected','data:image/'+path.extname(files.filePaths[0])+';base64,' +img);
+                win.webContents.send('image-selected', 'data:image/' + path.extname(files.filePaths[0]) + ';base64,' + img);
             }
-        } catch(e) {
-            win.webContents.send('message', {type: 'error', 'error':  files.toString()});
+        } catch (e) {
+            win.webContents.send('message', {type: 'error', 'error': files.toString()});
         }
 
 
@@ -163,8 +164,8 @@ ipc.on('open-file-dialog-project', function (event) {
                         data: JSON.parse(data)
                     });
                 })
-            } catch(e) {
-                win.webContents.send('message', {type: 'error', 'error':  e.message});
+            } catch (e) {
+                win.webContents.send('message', {type: 'error', 'error': e.message});
             }
         }
     })
@@ -178,7 +179,7 @@ ipc.on('save-as-file-project', function (event, arg) {
     dialog.showSaveDialog(arg.dialog).then(function (data) {
         try {
             // then check is canceled?
-            if (data.canceled){
+            if (data.canceled) {
                 win.webContents.send('message', {type: 'info', 'msg': 'Canceled'});
                 return false;
             }
@@ -200,7 +201,7 @@ ipc.on('save-as-file-project', function (event, arg) {
                 win.webContents.send('message', {type: 'success', 'msg': path.basename(filename) + ' saved'});
             });
         } catch (e) {
-            win.webContents.send('message', {type: 'error', 'error':  e.message});
+            win.webContents.send('message', {type: 'error', 'error': e.message});
 
         }
 
@@ -211,23 +212,40 @@ ipc.on('save-as-file-project', function (event, arg) {
  * save project
  */
 ipc.on('save-project', function (event, arg) {
-        // if(fileName === undefined) return
-        // event.sender.send('message', fileName)
-        try {
-            // prepare file name to save
-            let filename = arg.project.file;
-            // send msg to ide try to save
-            win.webContents.send('message', {type: 'info', 'msg': 'try to save ' + path.basename(filename)});
-            // save appData to project
-            fs.writeFile(filename, JSON.stringify(arg.data), function (err) {
-                if (err) { // send failed msg if can't :(
-                    win.webContents.send('message', {type: 'error', 'msg': 'error: ' + path.basename(filename)});
-                }
-                // otherwise we saved send msg to ide saved :)
-                win.webContents.send('message', {type: 'success', 'msg': path.basename(filename) + ' saved'});
-            });
-        } catch (e) {
-            win.webContents.send('message', {type: 'error', 'error':  e.message});
+    // if(fileName === undefined) return
+    // event.sender.send('message', fileName)
+    try {
+        // prepare file name to save
+        let filename = arg.project.file;
+        // send msg to ide try to save
+        win.webContents.send('message', {type: 'info', 'msg': 'try to save ' + path.basename(filename)});
+        // save appData to project
+        fs.writeFile(filename, JSON.stringify(arg.data), function (err) {
+            if (err) { // send failed msg if can't :(
+                win.webContents.send('message', {type: 'error', 'msg': 'error: ' + path.basename(filename)});
+            }
+            // otherwise we saved send msg to ide saved :)
+            win.webContents.send('message', {type: 'success', 'msg': path.basename(filename) + ' saved'});
+        });
+    } catch (e) {
+        win.webContents.send('message', {type: 'error', 'error': e.message});
 
-        }
+    }
+});
+
+
+ipc.on('command', function (eventevent, arg) {
+    //
+
+    cp.exec( arg, {
+            cwd: __dirname+'/..',
+        }, function (error, stdout, stderr) {
+            if (!error){
+                win.webContents.send('terminal', stdout);
+                // win.webContents.send('message', {type: 'info', 'msg': stderr});
+                console.log(stderr);
+            }else{
+                win.webContents.send('message', {type: 'error', 'msg': error.message});
+            }
+        });
 });

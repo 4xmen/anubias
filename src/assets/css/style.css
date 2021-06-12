@@ -1,4 +1,5 @@
 @import url(vazircodex.css);
+
 ::-webkit-scrollbar {
     width: 3px;
 }
@@ -11,6 +12,10 @@
 ::-webkit-scrollbar-thumb {
     border-radius: 0;
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
@@ -73,6 +78,21 @@ label {
     transition: 1s;
 }
 
+@keyframes cursor {
+    0% {
+        opacity: 1;
+    }
+    25% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    75% {
+        opacity: 0;
+    }
+}
+
 
 .context-menu {
     min-width: 220px;
@@ -89,13 +109,14 @@ label {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.context-menu li a{
+.context-menu li a {
     -o-transition: .4s;
     -ms-transition: .4s;
     -moz-transition: .4s;
     -webkit-transition: .4s;
     transition: .4s;
 }
+
 .context-menu li:last-child {
     border-bottom-width: 0;
 }
@@ -250,6 +271,6 @@ label {
     margin-left: 1.5em;
 }
 
-.ace_content{
+.ace_content {
     font-family: 'VazirCodeX';
 }

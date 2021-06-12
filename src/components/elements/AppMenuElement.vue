@@ -42,8 +42,8 @@
           Project info
         </router-link>
       </li>
-      <li>
-        <a>
+      <li :class="(cantEditPrj?' disabled':'')">
+        <a @click="debug">
           <i class="fa fa-bug"></i>
           Debug
           <span class="shortcut">
@@ -51,7 +51,7 @@
           </span>
         </a>
       </li>
-      <li>
+      <li :class="(cantEditPrj?' disabled':'')">
         <a>
           <i class="fa fa-hammer"></i>
           Build
@@ -62,18 +62,15 @@
       </li>
     </ul>
     <ul  id="dropdown2" class="dropdown-content grey darken-3">
-<!--      <li>-->
-<!--        <a>-->
-<!--          <i class="fa fa-bug"></i>-->
-<!--          Debug-->
-<!--        </a>-->
-<!--      </li>-->
-<!--      <li>-->
-<!--        <a>-->
-<!--          <i class="fa fa-hammer"></i>-->
-<!--          Build-->
-<!--        </a>-->
-<!--      </li>-->
+      <li @click="test">
+        <a >
+          <i class="fa fa-eye"></i>
+          EngineTest
+          <span class="shortcut">
+            Ctrl+Shift+F9
+          </span>
+        </a>
+      </li>
     </ul>
     <nav class="top-nav">
       <div class="nav-wrapper grey darken-4">
@@ -129,10 +126,23 @@ export default {
       if (e.ctrlKey && e.key === 'o'){
         self.openProject();
       }
+      if (e.ctrlKey && e.key === 'o'){
+        self.openProject();
+      }
+      if (e.ctrlKey && e.shiftKey && e.key === 'F9'){
+        self.test();
+      }
 
     });
 
   }, methods: {
+    test:function () {
+      this.$parent.TerminalShow();
+      window.api.send("command", './anubias-engine');
+    },
+    debug:function () {
+      // window.api.send("command", './anubias-engine');
+    },
     save: function () {
       // check can edit project
       if (this.cantEditPrj) {

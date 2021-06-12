@@ -190,11 +190,15 @@
       </vue-context>
     </div>
     <vue-final-modal v-model="showCodeModal" @before-open="modalOpen" @before-close="modalClose" name="code-modal">
-      <i class="fa fa-times modal-close" @click="showCodeModal = false"></i>
       <code-editor :title="codeTitle" v-model="codeContent"></code-editor>
     </vue-final-modal>
     <vue-final-modal v-model="showTerminalModal" @before-open="modalOpen" @before-close="modalClose"  name="teminal-modal">
-      <terminal></terminal>
+      <terminal ref="terminal">
+        <ul>
+          <li v-for="(txt,i) in terminalContent" :key="i">{{txt}}</li>
+          <li></li>
+        </ul>
+      </terminal>
     </vue-final-modal>
 
   </div>
@@ -235,7 +239,7 @@ export default {
       codeTitle: '',
       codeContent: '',
       showCodeModal: false,
-      showTerminalModal: true,
+      showTerminalModal: false,
       content: '',
       data: window.appData,
       components: window.components,
@@ -244,6 +248,7 @@ export default {
       currentProperties: {},
       contextIndex: -1,
       contextClipBoard: '',
+      terminalContent:['Welcome to Anbuias v'+window.ide.version()],
       // isInitProject: false,
       display: {
         name: 'Nexus 5x',
@@ -294,6 +299,9 @@ export default {
       }
       /*eslint-disable */
       /*eslint-enable */
+      window.api.receive("terminal", (data) => {
+        self.terminalContent.push(data);
+      })
 
     } catch (e) {
       //
@@ -308,8 +316,18 @@ export default {
       this.$refs.properties.onEdit = newval;
       // console.log(this.$refs.properties.onEdit);
     },
+    terminalContent: function () {
+      this.$refs.terminal.scroll();
+      var self = this;
+      setTimeout(function () {
+        self.$refs.terminal.scroll();
+      },500);
+    }
   },
   methods: {
+    TerminalShow:function () {
+      this.showTerminalModal = true;
+    },
     closeAllModal(){
       this.showCodeModal = false;
       this.showTerminalModal = false;
