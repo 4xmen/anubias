@@ -60,14 +60,32 @@
           </span>
         </a>
       </li>
+      <li @click="hotReload" :class="(!startDebug?' disabled':'')">
+        <a>
+          <i class="fa fa-fire"></i>
+          Hot reload
+          <span class="shortcut">
+            Ctrl+R
+          </span>
+        </a>
+      </li>
     </ul>
-    <ul  id="dropdown2" class="dropdown-content grey darken-3">
+    <ul id="dropdown2" class="dropdown-content grey darken-3">
       <li @click="test">
-        <a >
+        <a>
           <i class="fa fa-eye"></i>
           EngineTest
           <span class="shortcut">
             Ctrl+Shift+F9
+          </span>
+        </a>
+      </li>
+      <li>
+        <a>
+          <i class="fa fa-cogs"></i>
+          Setting
+          <span class="shortcut">
+            Ctrl+Alt+S
           </span>
         </a>
       </li>
@@ -92,7 +110,9 @@
           <!--          <li><a href="collapsible.html">JavaScript</a></li>-->
         </ul>
         <ul id="nav-mobile" class="right">
-          <li><router-link to="/about">About</router-link></li>
+          <li>
+            <router-link to="/about">About</router-link>
+          </li>
         </ul>
       </div>
     </nav>
@@ -108,7 +128,8 @@ export default {
   name: "AppMenuElement",
   data: function () {
     return {
-      appData: window.appData
+      appData: window.appData,
+      startDebug: false,
     }
   },
   mounted() {
@@ -117,31 +138,77 @@ export default {
     var self = this;
 
     $(document).unbind('keyup.mainMenuShortcut').bind('keyup.mainMenuShortcut', function (e) {
-      if (e.ctrlKey && e.key === 's'){
+      if (e.ctrlKey && e.altKey && e.key === 'S') {
+        console.log('go to Setting');
+        return;
+      }
+      if (e.ctrlKey && e.key === 's') {
         self.save();
+        return;
       }
-      if (e.ctrlKey && e.key === 'n'){
+      if (e.ctrlKey && e.key === 'n') {
         self.newProject();
+        return;
       }
-      if (e.ctrlKey && e.key === 'o'){
-        self.openProject();
-      }
-      if (e.ctrlKey && e.key === 'o'){
-        self.openProject();
-      }
-      if (e.ctrlKey && e.shiftKey && e.key === 'F9'){
+      if (e.ctrlKey && e.shiftKey && e.key === 'F9') {
         self.test();
+        return;
       }
+      if (e.ctrlKey && e.key === 'r') {
+        self.hotReload();
+        return;
+      }
+      if (e.key === 'F9') {
+        self.debug();
+        return;
+      }
+      if (e.ctrlKey && e.key === 'o') {
+        self.openProject();
+        return;
+      }
+
 
     });
 
+    window.api.receive('build-success', (data) => {
+        if(data && self.startDebug){
+          window.alertify.success('Hot reload! 🔥');
+          window.api.send("update-project", {});
+        }
+    });
+
   }, methods: {
-    test:function () {
-      this.$parent.TerminalShow();
-      window.api.send("command", './anubias-engine');
+    hotReload:function () {
+      if (!this.startDebug){
+        window.alertify.warning('Hot reload failed');
+      }else{
+        this.save();
+        let data = {
+          isUpdate: true,
+          command: './anubias-engine build ' + window.project.file ,
+        }
+        window.api.send("command", data);
+      }
+
     },
-    debug:function () {
-      // window.api.send("command", './anubias-engine');
+    test: function () {
+      this.$parent.TerminalShow();
+      let data = {
+        command: './anubias-engine',
+      }
+      window.api.send("command", data);
+    },
+    debug: function () {
+      if (this.cantEditPrj) {
+        return false;
+      }
+      this.$parent.TerminalShow();
+      this.startDebug= true;
+      let data = {
+        isDebug: true,
+        command: './anubias-engine build ' + window.project.file +' && cd build && flutter run' ,
+      }
+      window.api.send("command", data);
     },
     save: function () {
       // check can edit project
@@ -154,7 +221,7 @@ export default {
         return false;
       }
       // otherwise try to save
-      window.appData.version =  window.ide.version();
+      window.appData.version = window.ide.version();
       var data = {
         project: window.project,
         data: window.appData
@@ -183,7 +250,7 @@ export default {
         return false;
       }
 
-      window.appData.version =  window.ide.version();
+      window.appData.version = window.ide.version();
       // prepare save dialog and appDate to save as
       var data = {
         dialog: {

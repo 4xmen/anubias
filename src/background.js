@@ -5,12 +5,14 @@ import {createProtocol} from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, {VUEJS_DEVTOOLS} from 'electron-devtools-installer'
 import path from 'path'
 import fs from "fs";
+import {isArray} from "vue-context/src/js/utils";
 
 const cp = require('child_process');
 const ipc = require('electron').ipcMain
 const dialog = require('electron').dialog
 const isDevelopment = process.env.NODE_ENV !== 'production';
 var win;
+var underDebug ;
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -234,18 +236,43 @@ ipc.on('save-project', function (event, arg) {
 });
 
 
-ipc.on('command', function (eventevent, arg) {
+ipc.on('command', function (eventevent, data) {
     //
 
-    cp.exec( arg, {
-            cwd: __dirname+'/..',
-        }, function (error, stdout, stderr) {
-            if (!error){
-                win.webContents.send('terminal', stdout);
-                // win.webContents.send('message', {type: 'info', 'msg': stderr});
-                console.log(stderr);
-            }else{
-                win.webContents.send('message', {type: 'error', 'msg': error.message});
+    let cwd = __dirname + '/..';
+    if (data.cwd) {
+        cwd = cwd + '/' + data.cwd;
+    }
+    let child = cp.exec(data.command, {
+        cwd: cwd,
+    }, function (error, stdout, stderr) {
+        if (!error) {
+            // win.webContents.send('terminal', stdout);
+            if (data.isUpdate !== undefined){
+                win.webContents.send('build-success', true);
             }
-        });
+            // win.webContents.send('message', {type: 'info', 'msg': stderr});
+            console.log(stderr);
+        } else {
+            win.webContents.send('terminal', stdout);
+            win.webContents.send('message', {type: 'error', 'msg': error.message});
+        }
+    });
+    if (data.isDebug !== undefined){
+        underDebug = child;
+    }
+    child.stdout.on('data', function(data) {
+        win.webContents.send('terminal', data);
+    });
+});
+
+ipc.on('update-project', function (eventevent, data) {
+    try {
+        underDebug.stdin.write("R");
+        win.webContents.send('message', {type: 'success', 'msg': 'hot restart'});
+
+    } catch(e) {
+        win.webContents.send('message', {type: 'error', 'msg': error.message});
+    }
+
 });
