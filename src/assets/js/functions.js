@@ -1,6 +1,8 @@
 let html2canvas = require('html2canvas');
 let getScreenshotOfElement = function (element, callback) {
     html2canvas(element, {
+        scrollX: 0,
+        scrollY: -window.scrollY
     }).then(function (canvas) {
 
         callback(canvas.toDataURL("image/png").split("data:image/png;base64,").join(''));

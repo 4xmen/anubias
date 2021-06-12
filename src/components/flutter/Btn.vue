@@ -2,7 +2,7 @@
   <div :style="getStyle()" class="fbtn">
     <div class="content" :style="'padding:'+(15 * scale)+'px'">
       <span v-if="!properties.noIcon">
-        <i class="material-icons" :style="'font-size:'+(properties.size * scale * 4.2)+'px'" >{{ properties.icon }}</i>
+        <i class="material-icons" :style="'font-size:'+(properties.size * scale * 4.2)+'px'">{{ properties.icon }}</i>
       </span>
       <b v-if="!properties.noText" style="white-space: pre">{{ properties.text }}</b>
     </div>
@@ -14,7 +14,7 @@ import {fnc} from "@/assets/js/functions";
 
 export default {
   name: "Btn",
-  props: ['properties', 'scale'],
+  props: ['properties', 'scale', 'page'],
   methods: {
     getStyle: function () {
       let style = '';
@@ -32,11 +32,11 @@ export default {
       if (this.properties.size != null) {
         style += 'font-size:' + (this.properties.size * this.scale * 2.5) + 'px;';
       }
-      if(this.properties.padding != null && this.properties.padding != ''){
-        style += 'padding:'+  this.calcPadding(this.properties.padding  )+';'
+      if (this.properties.padding != null && this.properties.padding != '') {
+        style += 'padding:' + this.calcPadding(this.properties.padding) + ';'
       }
-      if(this.properties.borderRadius != null && this.properties.borderRadius != ''){
-        style += 'border-radius:'+  this.calcPadding(this.properties.borderRadius )+';'
+      if (this.properties.borderRadius != null && this.properties.borderRadius != '') {
+        style += 'border-radius:' + this.calcPadding(this.properties.borderRadius) + ';'
       }
 
       style += 'background-color:' + this.color2web(this.properties.bgColor, true) + ';';
@@ -45,7 +45,7 @@ export default {
     },
     color2web: function (clr, b = false) {
       return fnc.color2web(clr, b);
-    }, calcPadding:function (pad) {
+    }, calcPadding: function (pad) {
       return fnc.calcPadding(pad);
     }
   }
@@ -56,14 +56,16 @@ export default {
 .fbtn {
   display: inline-block;
 }
-.content{
+
+.content {
   display: flex;
   align-items: center;
   width: 100%;
   text-align: center;
   justify-content: center;
 }
-.material-icons{
+
+.material-icons {
   margin: 0;
 }
 </style>

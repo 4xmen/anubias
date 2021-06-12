@@ -17,7 +17,7 @@
     <div v-if="type === 'image'">
       <imag :properties="properties" :scale="scale" :page="page"></imag>
     </div>
-    <div v-if="type === 'button'">
+    <div v-if="type === 'button'" :style="'text-align:'+page.align">
       <btn :properties="properties" :scale="scale" :page="page"></btn>
     </div>
   </div>
