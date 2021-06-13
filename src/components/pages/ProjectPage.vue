@@ -63,7 +63,7 @@
 
 <script>
 import titlec from '../elements/TitleElement';
-
+// import {fnc} from '@/assets/js/functions';
 export default {
   name: "ProjectPage",
   data: function () {

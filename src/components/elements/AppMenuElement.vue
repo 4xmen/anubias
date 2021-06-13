@@ -129,7 +129,7 @@ export default {
   data: function () {
     return {
       appData: window.appData,
-      startDebug: false,
+      startDebug: window.ide.isDebuging,
     }
   },
   mounted() {
@@ -170,22 +170,15 @@ export default {
 
     });
 
-    window.api.receive('build-success', (data) => {
-        if(data && self.startDebug){
-          window.alertify.success('Hot reload! 🔥');
-          window.api.send("update-project", {});
-        }
-    });
-
   }, methods: {
-    hotReload:function () {
-      if (!this.startDebug){
+    hotReload: function () {
+      if (!this.startDebug) {
         window.alertify.warning('Hot reload failed');
-      }else{
+      } else {
         this.save();
         let data = {
           isUpdate: true,
-          command: './anubias-engine build ' + window.project.file ,
+          command: './anubias-engine build ' + window.project.file,
         }
         window.api.send("command", data);
       }
@@ -203,10 +196,11 @@ export default {
         return false;
       }
       this.$parent.TerminalShow();
-      this.startDebug= true;
+      this.startDebug = true;
+      window.ide.isDebuging = true;
       let data = {
         isDebug: true,
-        command: './anubias-engine build ' + window.project.file +' && cd build && flutter run' ,
+        command: './anubias-engine build ' + window.project.file + ' && cd build && flutter run',
       }
       window.api.send("command", data);
     },

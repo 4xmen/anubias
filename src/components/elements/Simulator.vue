@@ -8,7 +8,7 @@
     <div v-if="type === 'appbar'">
       <appbar :properties="properties" :scale="scale" :page="page"></appbar>
     </div>
-    <div v-if="type === 'text'">
+    <div v-if="type === 'text'" :style="properties.align == 'null'? 'text-align:'+page.align:''">
       <txt :properties="properties" :scale="scale" :page="page"></txt>
     </div>
     <div v-if="type === 'icon'">

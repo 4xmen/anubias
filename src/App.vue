@@ -32,6 +32,14 @@ export default {
       // go to verify
       self.$router.push('/projectLoaded');
     });
+
+    window.api.receive('build-success', (data) => {
+      if (data && window.ide.isDebuging) {
+        window.alertify.success('Hot reload! 🔥');
+        window.api.send("update-project", {});
+      }
+    });
+
     // get message receive command send by electron
     window.api.receive("message", (data) => {
       switch (data.type) {
