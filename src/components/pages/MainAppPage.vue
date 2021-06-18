@@ -586,7 +586,7 @@ export default {
   border-right: 0;
   overflow-y: scroll;
   overflow-x: hidden;
-
+  z-index: 999;
 }
 
 #pages .container {
