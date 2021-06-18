@@ -1,10 +1,9 @@
 <template>
-  <div :style="getStyle()" class="fbtn waves-effect wave">
-    <div class="content" :style="'padding:'+(15 * scale)+'px'">
-      <span v-if="!properties.noIcon">
-        <i class="material-icons" :style="'font-size:'+(properties.size * scale * 4.2)+'px'">{{ properties.icon }}</i>
-      </span>
-      <b v-if="!properties.noText" style="white-space: pre">{{ properties.text }}</b>
+  <div :style="getStyle()" class="fbtn waves-effect waves-light">
+    <div class="content">
+      <i class="material-icons" :style="'font-size:'+(properties.size * scale * 4.2)+
+      'px;width:'+(properties.size * scale * 4.2)+'px;height:'+
+      (properties.size * scale * 4.2)+'px;'">{{ properties.icon }}</i>
     </div>
   </div>
 </template>
@@ -13,7 +12,7 @@
 import {fnc} from "@/assets/js/functions";
 
 export default {
-  name: "Btn",
+  name: "CircleBtn",
   props: ['properties', 'scale', 'page'],
   methods: {
     getStyle: function () {
@@ -26,19 +25,10 @@ export default {
         style += 'color:' + this.color2web(this.properties.color) + ';';
       }
 
-      if (this.properties.width != 'null') {
-        style += 'width:' + (this.properties.width * this.scale * 3) + 'px;'
-      }
-      if (this.properties.size != null) {
-        style += 'font-size:' + (this.properties.size * this.scale * 2.5) + 'px;';
-      }
+
       if (this.properties.padding != null && this.properties.padding != '') {
         style += 'padding:' + this.calcPadding(this.properties.padding) + ';'
       }
-      if (this.properties.borderRadius != null && this.properties.borderRadius != '') {
-        style += 'border-radius:' + this.calcPadding(this.properties.borderRadius) + ';'
-      }
-
       style += 'background-color:' + this.color2web(this.properties.bgColor, true) + ';';
 
       return style;
@@ -53,8 +43,11 @@ export default {
 </script>
 
 <style scoped>
+
 .fbtn {
   display: inline-block;
+  border-radius: 50%;
+  padding: 10px;
 }
 
 .content {
@@ -64,7 +57,6 @@ export default {
   text-align: center;
   justify-content: center;
 }
-
 .material-icons {
   margin: 0;
 }

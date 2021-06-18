@@ -52,7 +52,7 @@
     {
       "title": "CircleButton",
       "icon": "fa fa-plus-circle",
-      "active": false,
+      "active": true,
       "visual": true,
       "data": "window.defaults.circleButton"
     },
@@ -118,13 +118,6 @@
       "active": false,
       "visual": true,
       "data": "window.defaults.grid"
-    },
-    {
-      "title": "Rate",
-      "icon": "fa fa-star",
-      "active": false,
-      "visual": true,
-      "data": "window.defaults.rate"
     },
     {
       "title": "Rate",

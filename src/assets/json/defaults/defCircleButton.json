@@ -1,0 +1,12 @@
+{
+  "type": "circle_button",
+  "name": "circleButton",
+  "padding": "0",
+  "icon": "home",
+  "bgColor": "null",
+  "color": "null",
+  "size": 15,
+  "onPressed": "// run when press on this button ",
+  "onLongPress": "// run when long press on this button  ",
+  "hide": false
+}
