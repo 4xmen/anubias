@@ -132,7 +132,6 @@ export default {
     let updatePreview = function () {
       clearTimeout(setme);
       setme = setTimeout(function () {
-        console.log('exet');
         fnc.takeScreenShot("#preview", function (e) {
           window.appData.pages[self.page].image = e;
         });

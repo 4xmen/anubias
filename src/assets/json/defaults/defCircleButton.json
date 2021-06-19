@@ -3,10 +3,10 @@
   "name": "circleButton",
   "padding": "10",
   "icon": "home",
-  "bgColor": "null",
+  "bgColor": "Colors.green",
   "color": "null",
   "size": 25,
-  "onPressed": "// run when press on this button ",
-  "onLongPress": "// run when long press on this button  ",
+  "onPressed": "// run when press on this button",
+  "onLongPress": "// run when long press on this button",
   "hide": false
 }

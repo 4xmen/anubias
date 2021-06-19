@@ -1,9 +1,9 @@
 <template>
   <div :style="getStyle()" class="fbtn waves-effect waves-light">
     <div class="content">
-      <i class="material-icons" :style="'font-size:'+(properties.size * scale * 4.2)+
-      'px;width:'+(properties.size * scale * 4.2)+'px;height:'+
-      (properties.size * scale * 4.2)+'px;'">{{ properties.icon }}</i>
+      <i class="material-icons" :style="'font-size:'+(properties.size * scale * 3)+
+      'px;width:'+(properties.size * scale * 3)+'px;height:'+
+      (properties.size * scale * 3)+'px;'">{{ properties.icon }}</i>
     </div>
   </div>
 </template>
@@ -26,10 +26,15 @@ export default {
       }
 
 
-      if (this.properties.padding != null && this.properties.padding != '') {
+      if (this.properties.padding != 'null' && this.properties.padding != '') {
         style += 'padding:' + this.calcPadding(this.properties.padding) + ';'
       }
-      style += 'background-color:' + this.color2web(this.properties.bgColor, true) + ';';
+
+      if (this.properties.bgColor == 'null'){
+        style += 'background-color: transparent !important;';
+      }else{
+        style += 'background-color:' + this.color2web(this.properties.bgColor, true) + ';';
+      }
 
       return style;
     },

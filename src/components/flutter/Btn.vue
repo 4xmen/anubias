@@ -29,13 +29,13 @@ export default {
       if (this.properties.width != 'null') {
         style += 'width:' + (this.properties.width * this.scale * 3) + 'px;'
       }
-      if (this.properties.size != null) {
+      if (this.properties.size != 'null') {
         style += 'font-size:' + (this.properties.size * this.scale * 2.5) + 'px;';
       }
-      if (this.properties.padding != null && this.properties.padding != '') {
+      if (this.properties.padding != 'null' && this.properties.padding != '') {
         style += 'padding:' + this.calcPadding(this.properties.padding) + ';'
       }
-      if (this.properties.borderRadius != null && this.properties.borderRadius != '') {
+      if (this.properties.borderRadius != 'null' && this.properties.borderRadius != '') {
         style += 'border-radius:' + this.calcPadding(this.properties.borderRadius) + ';'
       }
 
