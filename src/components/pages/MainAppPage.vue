@@ -274,15 +274,14 @@ export default {
 
       $(document).unbind('keyup.contextShortcut').bind('keyup.contextShortcut', function (e) {
         if (e.ctrlKey && e.key === 'c') {
-          self.contextClipBoard = JSON.stringify(self.data.pages[self.currentPage].children.visual[self.contextIndex]);
+          self.contextTrigger('copy');
         }
         if (e.ctrlKey && e.key === 'x') {
-          self.contextClipBoard = JSON.stringify(self.data.pages[self.currentPage].children.visual[self.contextIndex]);
-          self.data.pages[self.currentPage].children.visual.splice(self.contextIndex, 1);
+         self.contextTrigger('cut');
         }
         if (e.ctrlKey && e.key === 'v') {
           try {
-            self.data.pages[self.currentPage].children.visual.push(JSON.parse(self.contextClipBoard));
+            self.contextTrigger('paste');
           } catch (e) {
             window.alertify.warning('Nothing to paste');
           }
@@ -356,7 +355,9 @@ export default {
           this.data.pages[this.currentPage].children.visual.splice(this.contextIndex, 1);
           break;
         case 'paste':
-          this.data.pages[this.currentPage].children.visual.push(JSON.parse(this.contextClipBoard));
+          let json = JSON.parse(this.contextClipBoard);
+          json.name = json.type + Math.floor(Math.random() * 10000);
+          this.data.pages[this.currentPage].children.visual.push(json);
           break;
       }
     },
@@ -656,6 +657,7 @@ export default {
   -moz-transition: .3s;
   -webkit-transition: .3s;
   transition: .3s;
+  z-index: 9999;
 }
 #terminal-btn:hover{
   opacity: 1;
