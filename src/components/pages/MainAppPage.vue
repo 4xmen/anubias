@@ -371,6 +371,7 @@ export default {
             json.name = json.type + Math.floor(Math.random() * 10000);
             this.data.pages[this.currentPage].children.visual.push(json);
           } catch {
+            //
           }
           break;
       }
@@ -427,7 +428,7 @@ export default {
           arrayMove(array, e.oldIndex, e.newIndex);
           setTimeout(function () {
             that.data.pages[that.currentPage].children.visual = array;
-          }, 10);
+          }, 11);
         },
       });
       // console.log(this.currentProperties);

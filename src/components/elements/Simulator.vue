@@ -23,6 +23,9 @@
     <div v-if="type === 'circle_button'" :style="'text-align:'+page.align">
       <circle-btn :properties="properties" :scale="scale" :page="page"></circle-btn>
     </div>
+    <div v-if="type === 'container'">
+      <container :properties="properties" :scale="scale" :page="page"></container>
+    </div>
   </div>
 </template>
 
@@ -34,6 +37,7 @@ import icon from '../flutter/Icon';
 import imag from '../flutter/Image';
 import btn from '../flutter/Btn';
 import circleBtn from '../flutter/CircleBtn';
+import container from '../flutter/Container';
 import {fnc} from '@/assets/js/functions';
 
 export default {
@@ -45,7 +49,8 @@ export default {
     icon,
     imag,
     btn,
-    circleBtn
+    circleBtn,
+    container
   },
   props: {
     properties: {

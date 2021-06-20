@@ -1,0 +1,15 @@
+{
+  "type": "container",
+  "name": "container",
+  "padding": "0",
+  "width": "120",
+  "height": "120",
+  "child": "null",
+  "borderRadius": "5",
+  "border": "1",
+  "borderColor": "Colors.green",
+  "bgColor": "null",
+  "onPressed": "// run when press on this button ",
+  "onLongPress": "// run when long press on this button",
+  "hide": false
+}

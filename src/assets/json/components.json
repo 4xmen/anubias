@@ -10,7 +10,7 @@
     {
       "title": "Container",
       "icon": "far fa-square",
-      "active": false,
+      "active": true,
       "visual": true,
       "data": "window.defaults.container"
     },

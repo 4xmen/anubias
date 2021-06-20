@@ -101,6 +101,14 @@
                 </option>
               </select>
             </div>
+            <div v-else-if="k == 'child'" :class="properties.child == 'null'?'':'code'" @click="properties.child = 'null';">
+              <span v-if="properties.child == 'null'">
+                  No Child
+              </span>
+              <span v-else>
+                Remove <b> <i class="fa fa-times"></i> </b>
+              </span>
+            </div>
             <div v-else-if="k.substr(0,2) == 'on'" class="code" @click="codeEdit(k)">
               {{ k }} <b> <i class="fa fa-code"></i> </b>
             </div>

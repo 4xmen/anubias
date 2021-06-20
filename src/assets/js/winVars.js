@@ -62,3 +62,4 @@ window.defaults.icon = require('../json/defaults/defIcon.json');
 window.defaults.image = require('../json/defaults/defImage.json');
 window.defaults.button = require('../json/defaults/defButton.json');
 window.defaults.circleButton = require('../json/defaults/defCircleButton.json');
+window.defaults.container = require('../json/defaults/defContainer.json');
