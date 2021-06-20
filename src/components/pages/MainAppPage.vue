@@ -83,17 +83,21 @@
                +';color:'+(data.project.isDark?'white':data.project.textColor)+' !important' ">
                   <!-- direction of project and page padding -->
                   <div id="dir"
-                       :style="'direction:'+(data.project.isRTL?'rtl':'ltr')+';padding:'+calcPadding(data.pages[currentPage].padding,this.display.scale)">
+                       :style="'direction:'+(data.project.isRTL?'rtl':'ltr')+';padding:'+calcPadding(data.pages[currentPage].padding,this.display.scale)"
+                  >
                     <!-- visual components of page -->
+
                     <div
+                        id="sortable"
                         v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.visual !== undefined">
-                <span v-for="(comp,i) in data.pages[currentPage].children.visual"
-                      :key="i">
-                  <simulator @contextmenu.native.prevent="contextOpen(i,$event)" @dblclick.native="removeVisual(i)"
-                             @click.native="currentProperties = comp; contextIndex = i"
-                             :type="comp.type" :properties="comp" :scale="display.scale"
-                             :page="data.pages[currentPage]"></simulator>
-                </span>
+                      <div v-for="(comp,i) in data.pages[currentPage].children.visual"
+                           :key="i">
+                        <simulator @contextmenu.native.prevent="contextOpen(i,$event)"
+                                   @dblclick.native="removeVisual(i)"
+                                   @click.native="currentProperties = comp; contextIndex = i"
+                                   :type="comp.type" :properties="comp" :scale="display.scale"
+                                   :page="data.pages[currentPage]"></simulator>
+                      </div>
                     </div>
                   </div>
 
@@ -192,12 +196,9 @@
     <vue-final-modal v-model="showCodeModal" @before-open="modalOpen" @before-close="modalClose" name="code-modal">
       <code-editor :title="codeTitle" v-model="codeContent"></code-editor>
     </vue-final-modal>
-    <vue-final-modal v-model="showTerminalModal" @before-open="modalOpen" @before-close="modalClose"  name="teminal-modal">
+    <vue-final-modal v-model="showTerminalModal" @before-open="modalOpen" @before-close="modalClose"
+                     name="teminal-modal">
       <terminal ref="terminal">
-        <ul>
-          <li v-for="(txt,i) in terminalContent" :key="i">{{txt}}</li>
-          <li></li>
-        </ul>
       </terminal>
     </vue-final-modal>
 
@@ -211,13 +212,22 @@ import compo from '../elements/ComponentElement';
 import appMenu from '../elements/AppMenuElement';
 import simulator from '../elements/Simulator';
 import codeEditor from '../elements/CodeEditor'
-import terminal from '../elements/TerminalElement'
+import terminal from '../elements/TerminalElement';
 import {Drag, Drop} from "vue-easy-dnd";
 import VueContext from 'vue-context';
+import Sortable from '@/assets/js/Sortable.min';
+
 
 // import editor  from '../elements/TitleElement';
 // const {remote} = require("electron");
 import {fnc} from '@/assets/js/functions';
+
+
+function arrayMove(arr, fromIndex, toIndex) {
+  let element = arr[fromIndex];
+  arr.splice(fromIndex, 1);
+  arr.splice(toIndex, 0, element);
+}
 
 
 export default {
@@ -236,6 +246,7 @@ export default {
   },
   data: function () {
     return {
+      sample: [{n: 1}, {n: 2}, {n: 3}, {n: 4}],
       codeTitle: '',
       codeContent: '',
       showCodeModal: false,
@@ -248,7 +259,7 @@ export default {
       currentProperties: {},
       contextIndex: -1,
       contextClipBoard: '',
-      terminalContent:['Welcome to Anbuias v'+window.ide.version()],
+      terminalContent: ['Welcome to Anbuias v'  + window.ide.version()],
       // isInitProject: false,
       display: {
         name: 'Nexus 5x',
@@ -277,7 +288,7 @@ export default {
           self.contextTrigger('copy');
         }
         if (e.ctrlKey && e.key === 'x') {
-         self.contextTrigger('cut');
+          self.contextTrigger('cut');
         }
         if (e.ctrlKey && e.key === 'v') {
           try {
@@ -286,7 +297,7 @@ export default {
             window.alertify.warning('Nothing to paste');
           }
         }
-        if (e.shiftKey && e.keyCode === 46){
+        if (e.shiftKey && e.keyCode === 46) {
           self.removeVisual(self.contextIndex);
         }
 
@@ -320,14 +331,14 @@ export default {
       var self = this;
       setTimeout(function () {
         self.$refs.terminal.scroll();
-      },500);
+      }, 500);
     }
   },
   methods: {
-    TerminalShow:function () {
+    TerminalShow: function () {
       this.showTerminalModal = true;
     },
-    closeAllModal(){
+    closeAllModal() {
       this.showCodeModal = false;
       this.showTerminalModal = false;
     },
@@ -355,9 +366,12 @@ export default {
           this.data.pages[this.currentPage].children.visual.splice(this.contextIndex, 1);
           break;
         case 'paste':
-          let json = JSON.parse(this.contextClipBoard);
-          json.name = json.type + Math.floor(Math.random() * 10000);
-          this.data.pages[this.currentPage].children.visual.push(json);
+          try {
+            let json = JSON.parse(this.contextClipBoard);
+            json.name = json.type + Math.floor(Math.random() * 10000);
+            this.data.pages[this.currentPage].children.visual.push(json);
+          } catch {
+          }
           break;
       }
     },
@@ -404,6 +418,18 @@ export default {
       this.currentPage = i;
       this.currentProperties = this.data.pages[i];
       this.contextIndex = -1;
+      var that = this;
+      Sortable.create(document.querySelector('#sortable'), {
+        animation:200,
+        onUpdate: function (e) {
+          var array = JSON.parse(JSON.stringify(that.data.pages[that.currentPage].children.visual));
+          that.data.pages[that.currentPage].children.visual = [];
+          arrayMove(array, e.oldIndex, e.newIndex);
+          setTimeout(function () {
+            that.data.pages[that.currentPage].children.visual = array;
+          }, 10);
+        },
+      });
       // console.log(this.currentProperties);
     },
     removePage: function (i) { // remove page form project
@@ -643,7 +669,8 @@ export default {
   overflow: hidden;
   max-width: 315px;
 }
-#terminal-btn{
+
+#terminal-btn {
   position: fixed;
   left: 0;
   bottom: 0;
@@ -659,9 +686,11 @@ export default {
   transition: .3s;
   z-index: 9999;
 }
-#terminal-btn:hover{
+
+#terminal-btn:hover {
   opacity: 1;
 }
+
 .logo {
   width: 45%;
 }
