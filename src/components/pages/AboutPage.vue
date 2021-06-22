@@ -65,6 +65,18 @@
         <span class="fa fa-smile"></span>
       </p>
       <h2>
+        Security team
+      </h2>
+      <p>
+        Hamid Rezaei
+      </p>
+      <h2>
+        Other developer
+      </h2>
+      <p>
+        <span class="fa fa-smile"></span>
+      </p>
+      <h2>
         Developer team
       </h2>
       <div class="team">
