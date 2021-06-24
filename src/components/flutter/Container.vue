@@ -5,8 +5,8 @@
         <drop class="drop visual" @drop="onVisualDrop" :accepts-data="(n) => isVisual(n)"></drop>
       </div>
       <div v-else>
-        <simulator :type="properties.child.type" :properties="properties.child" :scale="scale"
-                   :page="page" @click.native="setProperty"></simulator>
+        <child-simulator :type="properties.child.type" :properties="properties.child" :scale="scale"
+                   :page="page" @click.native="setProperty"></child-simulator>
       </div>
     </div>
   </div>
@@ -15,13 +15,13 @@
 <script>
 import {fnc} from "@/assets/js/functions";
 import {Drop} from "vue-easy-dnd";
-import simulator from '../elements/Simulator';
 
 export default {
   name: "Container",
   props: ['properties', 'scale', 'page'],
   components: {
-    Drop, simulator
+    Drop,
+    'child-simulator': () => import('../elements/Simulator')
   },
   methods: {
     setProperty: function () {
