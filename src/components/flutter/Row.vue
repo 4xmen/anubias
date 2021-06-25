@@ -22,10 +22,14 @@ export default {
   },
   methods: {
     setProperty: function (prop) {
-      let self = this;
+      var self = this;
       setTimeout(function () {
-        console.log('tr2');
-        self.$parent.$parent.currentProperties = prop;
+        let  n = self;
+        do{
+          n = n.$parent;
+        } while (n.currentProperties === undefined );
+        console.log(n.currentProperties);
+        n.currentProperties = prop;
       }, 10);
     },
     capitalizeFirstLetter: function (string) {
