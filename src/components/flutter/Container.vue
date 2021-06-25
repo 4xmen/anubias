@@ -6,7 +6,7 @@
       </div>
       <div v-else>
         <child-simulator :type="properties.child.type" :properties="properties.child" :scale="scale"
-                   :page="page" @click.native="setProperty"></child-simulator>
+                   :page="page" @click.native="setProperty(properties.child)"></child-simulator>
       </div>
     </div>
   </div>
@@ -24,11 +24,17 @@ export default {
     'child-simulator': () => import('../elements/Simulator')
   },
   methods: {
-    setProperty: function () {
+    setProperty: function (prop) {
       var self = this;
+      var propcont = prop;
       setTimeout(function () {
-        self.$parent.$parent.currentProperties = self.properties.child;
-      }, 10);
+          let  n = self;
+          do{
+            n = n.$parent;
+          } while (n.currentProperties === undefined );
+          console.log(n.currentProperties);
+          n.currentProperties = propcont;
+      }, 20);
     },
     capitalizeFirstLetter: function (string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
@@ -99,7 +105,7 @@ export default {
         style += 'background:' + this.color2web(this.properties.bgColor) + ';';
       }
       style += 'border-style:solid;';
-      style += 'border-width:1px;';
+      style += 'border-width:'+fnc.calcPadding(this.properties.border)+';';
       if (this.properties.borderColor != 'null') {
         style += 'border-color:' + this.color2web(this.properties.borderColor) + ';';
       }

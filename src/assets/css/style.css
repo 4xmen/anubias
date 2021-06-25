@@ -189,6 +189,10 @@ label {
     background: rgb(26, 33, 41);
 }
 
+
+.row div{
+    display: inline-block;
+}
 /*dnd fix*/
 
 .drag {
@@ -223,12 +227,17 @@ label {
     content: "viual component";
 }
 
-.drop.non-visual::before {
-    content: "non-visual component";
+
+.row .visual{
+    float: left;
+    width: 70px;
 }
 
-.drop.any::before {
-    content: "CUT ANY NUMBERS";
+.row .visual::before{
+    content: "Drop";
+}
+.drop.non-visual::before {
+    content: "non-visual component";
 }
 
 .drop-allowed {
