@@ -26,6 +26,9 @@
     <div v-if="type === 'container'">
       <container :properties="properties" :scale="scale" :page="page"></container>
     </div>
+    <div v-if="type === 'row'">
+     <row :properties="properties" :scale="scale" :page="page"></row>
+    </div>
   </div>
 </template>
 
@@ -38,6 +41,7 @@ import imag from '../flutter/Image';
 import btn from '../flutter/Btn';
 import circleBtn from '../flutter/CircleBtn';
 import container from '../flutter/Container';
+import row from '../flutter/Row';
 import {fnc} from '@/assets/js/functions';
 
 export default {
@@ -50,7 +54,8 @@ export default {
     imag,
     btn,
     circleBtn,
-    container
+    container,
+    row
   },
   props: {
     properties: {

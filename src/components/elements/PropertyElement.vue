@@ -251,6 +251,7 @@ th {
   font-size: 12px;
   padding: 0;
   margin: 0;
+  text-align: center;
 }
 
 td {
@@ -260,6 +261,7 @@ td {
   margin: 0;
   overflow: hidden;
   height: 30px;
+  text-align: center;
 }
 
 tr:last-child td, tr:last-child th {
@@ -279,6 +281,7 @@ input, select, .dropdown {
   height: auto !important;
   margin: 0 !important;
   box-sizing: border-box;
+  text-align: center;
 }
 
 select option {
@@ -319,4 +322,6 @@ label {
 td b {
   margin-left: 5px;
 }
+
+
 </style>

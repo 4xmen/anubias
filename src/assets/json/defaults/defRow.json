@@ -1,7 +1,7 @@
 {
   "type": "row",
   "name": "row",
-  "Children": "null",
+  "children": [],
   "axis": "null",
   "scrollable": false,
   "hide": false
