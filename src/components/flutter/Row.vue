@@ -65,20 +65,21 @@ export default {
       var newComponent = fnc.clone(component);
       // // choose name
       // // check not duplicate name add number to name
-      // let names = [];
-      // for (const comp of visuals) {
-      //   names.push(comp.name);
-      // }
-      // let i = 0;
-      // let nextName = false;
-      // do {
-      //   nextName = false;
-      //   i++;
-      //   if (names.indexOf(component.type + i.toString()) > -1) {
-      //     nextName = true;
-      //   }
-      // } while (nextName);
+      let names = [];
       newComponent.name = this.properties.name + this.capitalizeFirstLetter(component.type);
+      for (const comp of visuals) {
+        names.push(comp.name);
+      }
+      let i = 0;
+      let nextName = false;
+      do {
+        nextName = false;
+        i++;
+        if (names.indexOf(this.properties.name + this.capitalizeFirstLetter(component.type) + i.toString()) > -1) {
+          nextName = true;
+        }
+      } while (nextName);
+      newComponent.name = this.properties.name + this.capitalizeFirstLetter(component.type)+i;
       visuals.push(newComponent);
 // update page preview
       setTimeout(function () {
