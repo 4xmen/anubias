@@ -134,13 +134,12 @@ label {
     display: none;
 }
 
-.blur {
+.blur .blurable{
     -webkit-filter: blur(8px) grayscale(90%);
-
 }
 
 .no-blur {
-    backdrop-filter: blur(2px) sepia(50%);
+    filter: blur(0) grayscale(0);
 }
 
 .text-center {
@@ -191,7 +190,7 @@ label {
 }
 
 
-.row div{
+.rowc div{
     display: inline-block;
 }
 /*dnd fix*/
@@ -229,12 +228,12 @@ label {
 }
 
 
-.row .visual{
+.rowc .visual{
     float: left;
     width: 70px;
 }
 
-.row .visual::before{
+.rowc .visual::before{
     content: "Drop";
 }
 .drop.non-visual::before {
@@ -283,4 +282,11 @@ label {
 
 .ace_content {
     font-family: 'VazirCodeX';
+}
+.collection {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.collection .collection-item {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }

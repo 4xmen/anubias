@@ -4,13 +4,13 @@
 
       <div id="main">
         <!-- add app menu to main-->
-        <app-menu></app-menu>
+        <app-menu class="blurable"></app-menu>
         <div class="container">
           <!-- if project init can show left side -->
           <!-- right sidebar start -->
           <div v-if="isInitProject">
             <!-- inactive when has not page -->
-            <div id="device-selector" :class="(data.pages.length < 1?'inactive':'')">
+            <div  id="device-selector" :class="(data.pages.length < 1?'inactive':'blurable')">
               <!-- select device -->
               <div class="input-field">
                 <select @change="changeDisplay" id="dev" v-model="currentDisplay" class="white-text">
@@ -76,7 +76,7 @@
             <div id="mobile" :style="'width:'+(display.landscape?display.height:display.width  )* display.scale
                +'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px;'+'background-color:'+(data.project.isDark?'#2e2e2e':data.project.bgColor)
                +';color:'+(data.project.isDark?'white':data.project.textColor)+' !important' "
-                 :class="(data.pages.length < 1?'inactive':'')">
+                 :class="(data.pages.length < 1?'inactive':'blurable')">
 
               <div id="preview">
                 <div :style="'background-color:'+(data.project.isDark?'#2e2e2e':data.project.bgColor)
@@ -93,7 +93,6 @@
                       <div v-for="(comp,i) in data.pages[currentPage].children.visual"
                            :key="i">
                         <simulator @contextmenu.native.prevent="contextOpen(i,$event)"
-                                   @dblclick.native="removeVisual(i)"
                                    @click.native="currentProperties = comp; contextIndex = i"
                                    :type="comp.type" :properties="comp" :scale="display.scale"
                                    :page="data.pages[currentPage]"></simulator>
@@ -116,7 +115,7 @@
           </div>
         </div>
       </div>
-      <div id="side">
+      <div id="side" class="blurable">
         <div id="components">
           <h2>
             Components
@@ -146,7 +145,7 @@
           </div>
         </div>
       </div>
-      <div id="pages">
+      <div id="pages" class="blurable">
         <div class="container">
           <!-- if project init can pages -->
           <div v-if="isInitProject">
@@ -163,7 +162,7 @@
           </div>
         </div>
       </div>
-      <div id="terminal-btn" @click="showTerminalModal = true">
+      <div id="terminal-btn" class="blurable" @click="showTerminalModal = true">
         <i class="fa fa-terminal"></i>
       </div>
       <vue-context ref="menu" class="context-menu">
@@ -201,6 +200,10 @@
       <terminal ref="terminal">
       </terminal>
     </vue-final-modal>
+    <vue-final-modal v-model="showRowModal" @before-open="modalOpen" @before-close="modalClose"
+                     name="row-modal">
+      <row-control :rwData="rowData" ></row-control>
+    </vue-final-modal>
 
   </div>
 </template>
@@ -213,6 +216,7 @@ import appMenu from '../elements/AppMenuElement';
 import simulator from '../elements/Simulator';
 import codeEditor from '../elements/CodeEditor'
 import terminal from '../elements/TerminalElement';
+import rowControl from '../elements/RowControlElement';
 import {Drag, Drop} from "vue-easy-dnd";
 import VueContext from 'vue-context';
 import Sortable from '@/assets/js/Sortable.min';
@@ -223,11 +227,6 @@ import Sortable from '@/assets/js/Sortable.min';
 import {fnc} from '@/assets/js/functions';
 
 
-function arrayMove(arr, fromIndex, toIndex) {
-  let element = arr[fromIndex];
-  arr.splice(fromIndex, 1);
-  arr.splice(toIndex, 0, element);
-}
 
 
 export default {
@@ -240,6 +239,7 @@ export default {
     simulator,
     codeEditor,
     terminal,
+    rowControl,
     VueContext,
     Drag,
     Drop
@@ -251,6 +251,8 @@ export default {
       codeContent: '',
       showCodeModal: false,
       showTerminalModal: false,
+      showRowModal: false,
+      rowData: [],
       content: '',
       data: window.appData,
       components: window.components,
@@ -341,6 +343,7 @@ export default {
     closeAllModal() {
       this.showCodeModal = false;
       this.showTerminalModal = false;
+      this.showRowModal = false;
     },
     contextOpen: function (i, ev) {
       this.$refs.menu.open(ev);
@@ -425,7 +428,7 @@ export default {
         onUpdate: function (e) {
           var array = JSON.parse(JSON.stringify(that.data.pages[that.currentPage].children.visual));
           that.data.pages[that.currentPage].children.visual = [];
-          arrayMove(array, e.oldIndex, e.newIndex);
+          fnc.arrayMove(array, e.oldIndex, e.newIndex);
           setTimeout(function () {
             that.data.pages[that.currentPage].children.visual = array;
           }, 11);
@@ -461,6 +464,7 @@ export default {
             return false;
           }
         }
+        // add appbar
         // add appbar
         visuals.unshift(fnc.clone(component));
         return true;

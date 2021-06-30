@@ -69,13 +69,27 @@ let calcPadding = function (paddingValue, scale = 1, invert = false) {
 }
 
 /**
+ * move index in array
+ * @param arr
+ * @param fromIndex
+ * @param toIndex
+ */
+let arrayMove = function(arr, fromIndex, toIndex) {
+    let element = arr[fromIndex];
+    arr.splice(fromIndex, 1);
+    arr.splice(toIndex, 0, element);
+}
+
+
+/**
  * for export
  */
 let fnc = {
     clone,
     takeScreenShot,
     color2web,
-    calcPadding
+    calcPadding,
+    arrayMove
 }
 export {
     fnc

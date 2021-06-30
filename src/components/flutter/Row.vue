@@ -1,33 +1,64 @@
 <template>
-  <div :style="getStyle()" class="row">
-    <div class="content" :style="'padding:'+(15 * scale)+'px'">
-      <drop class="drop visual" @drop="onVisualDrop" :accepts-data="(n) => isVisual(n)"></drop>
-      <child-simulator v-for="(child,k) in properties.children" :type="child.type" :properties="child" :scale="scale"
-                       :page="page" @click.native="setProperty(child)" :key="k"></child-simulator>
+  <div :style="getStyle()">
+    <div class="rowc">
+      <div class="content" :style="'padding:'+(15 * scale)+'px'">
+        <drop class="drop visual" @drop="onVisualDrop" :accepts-data="(n) => isVisual(n)"></drop>
+        <child-simulator v-for="(child,k) in properties.children" :type="child.type" :properties="child" :scale="scale"
+                         :page="page" @click.native="setProperty(child)" :key="k"></child-simulator>
 
+      </div>
+      <div class="control" title="Children control" @click="modalOpen">
+        <i class="fa fa-list"></i>
+      </div>
     </div>
+
+<!--    <vue-final-modal v-model="showChildrenModal" @before-open="modalOpen" @before-close="modalClose" name="code-modal">-->
+<!--      <div class="terminal" >-->
+<!--        <i class="fa fa-circle red-text" @click="showChildrenModal = false"></i>-->
+<!--        <i class="fa fa-circle yellow-text text-darken-2"></i>-->
+<!--        <i class="fa fa-circle green-text text-lighten-2"></i>-->
+<!--        <div class="content" id="container">-->
+<!--           hello-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </vue-final-modal>-->
   </div>
 </template>
 
 <script>
 import {fnc} from "@/assets/js/functions";
 import {Drop} from "vue-easy-dnd";
+// import Sortable from '@/assets/js/Sortable.min';
 
 export default {
   name: "Row",
+  data: function () {
+    return {
+      showChildrenModal: false,
+    }
+  },
   props: ['properties', 'scale', 'page'],
   components: {
     Drop,
     'child-simulator': () => import('../elements/Simulator')
   },
   methods: {
+    modalOpen: function () {
+      let n = this;
+      do {
+        n = n.$parent;
+      } while (n.showRowModal === undefined);
+      n.showRowModal = true;
+      n.rowData = this.properties.children;
+      // console.log(n.rowData);
+    },
     setProperty: function (prop) {
       var self = this;
       setTimeout(function () {
-        let  n = self;
-        do{
+        let n = self;
+        do {
           n = n.$parent;
-        } while (n.currentProperties === undefined );
+        } while (n.currentProperties === undefined);
         console.log(n.currentProperties);
         n.currentProperties = prop;
       }, 10);
@@ -79,7 +110,7 @@ export default {
           nextName = true;
         }
       } while (nextName);
-      newComponent.name = this.properties.name + this.capitalizeFirstLetter(component.type)+i;
+      newComponent.name = this.properties.name + this.capitalizeFirstLetter(component.type) + i;
       visuals.push(newComponent);
 // update page preview
       setTimeout(function () {
@@ -116,7 +147,7 @@ export default {
 </script>
 
 <style scoped>
-.row {
+.rowc {
   background: transparent;
   min-height: 50px;
   border: 1px dotted silver;
@@ -124,8 +155,76 @@ export default {
   white-space: nowrap;
 }
 
-.row:before {
+.control {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 5px;
+  color: white;
+  width: 35px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+  transition: .3s;
+}
+
+.control:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.modal {
+  color: white;
+}
+
+
+.terminal {
+  width: 80%;
+  margin: 50px auto 0 auto;
+  max-width: 1000px;
+  border-radius: 7px;
+  background: #272c34;
+  padding: 15px;
+  line-height: 1.2em;
 
 }
 
+
+.clear:hover {
+  background: rgba(0, 0, 0, .5);
+}
+
+.terminal .content {
+  padding: 0 20px;
+  color: #eee;
+  font-family: VazirCodeX;
+  height: 600px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  -webkit-user-select: text; /* Chrome 49+ */
+  -moz-user-select: text; /* Firefox 43+ */
+  -ms-user-select: text; /* No support yet */
+  user-select: text; /* Likely future */
+  /*display: none;*/
+}
+
+.terminal  .content ul li {
+  white-space: pre;
+}
+
+
+.fa-circle {
+  margin-right: 10px;
+}
+
+.row{
+  border: 0;
+}
+.row .col{
+  height: 580px;
+}
+.row .s3{
+  /*border-left: 1px solid silver;*/
+  text-align: center;
+}
 </style>
