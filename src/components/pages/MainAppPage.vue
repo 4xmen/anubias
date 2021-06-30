@@ -202,7 +202,7 @@
     </vue-final-modal>
     <vue-final-modal v-model="showRowModal" @before-open="modalOpen" @before-close="modalClose"
                      name="row-modal">
-      <row-control :rwData="rowData" ></row-control>
+      <row-control :clpbrd="contextClipBoard" :row-name="currentProperties.name" :rw-data="rowData" ></row-control>
     </vue-final-modal>
 
   </div>
