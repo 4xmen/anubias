@@ -229,13 +229,18 @@ label {
 
 
 .rowc .visual{
-    float: left;
-    width: 70px;
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    right: 15px;
+    margin: 0;
+    max-height: calc(100% - 30px);
+    box-sizing: border-box;
 }
 
-.rowc .visual::before{
-    content: "Drop";
-}
+/*.rowc .visual::before{*/
+/*    content: "Drop";*/
+/*}*/
 .drop.non-visual::before {
     content: "non-visual component";
 }

@@ -149,7 +149,7 @@ export default {
 <style scoped>
 .rowc {
   background: transparent;
-  min-height: 50px;
+  min-height: 75px;
   border: 1px dotted silver;
   position: relative;
   white-space: nowrap;
