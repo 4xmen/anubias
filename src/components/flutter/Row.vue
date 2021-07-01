@@ -61,7 +61,7 @@ export default {
         } while (n.currentProperties === undefined);
         console.log(n.currentProperties);
         n.currentProperties = prop;
-      }, 10);
+      }, 50);
     },
     capitalizeFirstLetter: function (string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
