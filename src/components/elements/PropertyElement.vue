@@ -112,6 +112,9 @@
             <div v-else-if="k.substr(0,2) == 'on'" class="code" @click="codeEdit(k)">
               {{ k }} <b> <i class="fa fa-code"></i> </b>
             </div>
+            <div v-else-if="k == 'actions'" class="code" @click="showActionControl(k)">
+              {{ k }} <b> <i class="fa fa-icons"></i> </b>
+            </div>
             <div v-else-if="k === 'image' && properties.type === 'image' && !properties.isOnline" class="code" @click="chooseImage">
               Choose <b> <i class="fa fa-folder-open"></i> </b>
             </div>
@@ -205,6 +208,9 @@ export default {
         e.target.classList.remove('invalid');
       }
 
+    },
+    showActionControl:function () {
+      this.$parent.showActionsModal = true;
     },
     codeEdit: function (k) {
       this.$parent.codeContent = this.properties[k];

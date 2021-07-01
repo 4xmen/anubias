@@ -4,6 +4,11 @@
     <b>
       {{ properties.title }}
     </b>
+    <span v-if="properties.actions.length > 0">
+    <div v-for="(act,i) in properties.actions" :key="i" class="waves-effect waves-light" :style="getIconStyle()">
+      <i class="material-icons" >{{act.icon}}</i>
+    </div>
+    </span>
   </div>
 </template>
 
@@ -19,6 +24,13 @@ export default {
   },
   props: ['properties', 'scale', 'page'],
   methods: {
+    getIconStyle:function () {
+      if (this.isRTL){
+        return 'float:left';
+      }else{
+        return 'float:right';
+      }
+    },
     getStyle: function () {
       let style = '';
       style += 'background-color:' + this.color2web(this.properties.color,false) + ';';
@@ -40,5 +52,8 @@ export default {
 <style scoped>
 #appBar {
   margin-bottom: 5px !important;
+}
+.waves-light .material-icons{
+  margin: 0 4px;
 }
 </style>

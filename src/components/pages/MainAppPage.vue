@@ -204,6 +204,10 @@
                      name="row-modal">
       <row-control :clpbrd="contextClipBoard" :row-name="currentProperties.name" :rw-data="rowData" ></row-control>
     </vue-final-modal>
+    <vue-final-modal v-model="showActionsModal" @before-open="modalOpen" @before-close="modalClose"
+                     name="row-modal">
+      <action-control :actions="currentProperties.actions == undefined?[]:currentProperties.actions "></action-control>
+    </vue-final-modal>
 
   </div>
 </template>
@@ -217,6 +221,7 @@ import simulator from '../elements/Simulator';
 import codeEditor from '../elements/CodeEditor'
 import terminal from '../elements/TerminalElement';
 import rowControl from '../elements/RowControlElement';
+import actionControl from '../elements/ActionControlElement';
 import {Drag, Drop} from "vue-easy-dnd";
 import VueContext from 'vue-context';
 import Sortable from '@/assets/js/Sortable.min';
@@ -241,6 +246,7 @@ export default {
     terminal,
     rowControl,
     VueContext,
+    actionControl,
     Drag,
     Drop
   },
@@ -252,6 +258,7 @@ export default {
       showCodeModal: false,
       showTerminalModal: false,
       showRowModal: false,
+      showActionsModal:false,
       rowData: [],
       content: '',
       data: window.appData,
@@ -344,6 +351,7 @@ export default {
       this.showCodeModal = false;
       this.showTerminalModal = false;
       this.showRowModal = false;
+      this.showActionsModal = false;
     },
     contextOpen: function (i, ev) {
       this.$refs.menu.open(ev);
@@ -536,7 +544,6 @@ export default {
       return window.components[n].visual;
     },
     calcPadding: fnc.calcPadding,
-
   }, computed: {
     // check is init project or not
     isInitProject: function () {
