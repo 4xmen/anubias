@@ -59,12 +59,6 @@
         </div>
       </div>
       <h2>
-        Other developer
-      </h2>
-      <p>
-        <span class="fa fa-smile"></span>
-      </p>
-      <h2>
         Security team
       </h2>
       <p>
