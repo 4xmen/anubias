@@ -2,6 +2,7 @@
   "type": "container",
   "name": "container",
   "padding": "0",
+  "margin": "0",
   "width": "120",
   "height": "120",
   "child": "null",
