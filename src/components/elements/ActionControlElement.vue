@@ -74,14 +74,18 @@ export default {
       showGutter: true,
     });
     // // editor.$blockScrolling = Infinity;
-    if (this.allActions != undefined && this.allActions[this.current] != undefined) {
+    if (this.allActions != undefined &&
+        this.allActions[this.current] != undefined &&
+        this.allActions[this.current].onPressed != undefined) {
       editor2.setValue(this.allActions[this.current].onPressed, 1);
       this.content = this.allActions[this.current].onPressed;
     }
     editor2.on('change', function () {
       var content = editor2.getValue();
       self.content = content;
-      self.allActions[self.current].onPressed = content;
+      if (self.allActions[self.current].onPressed !== undefined){
+        self.allActions[self.current].onPressed = content;
+      }
       // self.$emit('input', content);
     });
 
@@ -162,7 +166,9 @@ export default {
       if (this.allActions.length === 0){
         editor2.setValue('',1);
       }else{
-        editor2.setValue( this.allActions[0].onPressed,1);
+        if (this.allActions[0].onPressed !== undefined){
+          editor2.setValue( this.allActions[0].onPressed,1);
+        }
       }
     }
     ,

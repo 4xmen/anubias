@@ -10,7 +10,7 @@
           <!-- right sidebar start -->
           <div v-if="isInitProject">
             <!-- inactive when has not page -->
-            <div  id="device-selector" :class="(data.pages.length < 1?'inactive':'blurable')">
+            <div id="device-selector" :class="(data.pages.length < 1?'inactive':'blurable')">
               <!-- select device -->
               <div class="input-field">
                 <select @change="changeDisplay" id="dev" v-model="currentDisplay" class="white-text">
@@ -202,11 +202,13 @@
     </vue-final-modal>
     <vue-final-modal v-model="showRowModal" @before-open="modalOpen" @before-close="modalClose"
                      name="row-modal">
-      <row-control :clpbrd="contextClipBoard" :row-name="currentProperties.name" :rw-data="rowData" ></row-control>
+      <row-control :clpbrd="contextClipBoard" :row-name="currentProperties.name" :rw-data="rowData"></row-control>
     </vue-final-modal>
     <vue-final-modal v-model="showActionsModal" @before-open="modalOpen" @before-close="modalClose"
                      name="row-modal">
-      <action-control :actions="currentProperties.actions == undefined?[]:currentProperties.actions "></action-control>
+      <div v-if="currentProperties.actions !== undefined">
+        <action-control :actions="currentProperties.actions "></action-control>
+      </div>
     </vue-final-modal>
 
   </div>
@@ -230,8 +232,6 @@ import Sortable from '@/assets/js/Sortable.min';
 // import editor  from '../elements/TitleElement';
 // const {remote} = require("electron");
 import {fnc} from '@/assets/js/functions';
-
-
 
 
 export default {
@@ -258,7 +258,7 @@ export default {
       showCodeModal: false,
       showTerminalModal: false,
       showRowModal: false,
-      showActionsModal:false,
+      showActionsModal: false,
       rowData: [],
       content: '',
       data: window.appData,
@@ -268,7 +268,7 @@ export default {
       currentProperties: {},
       contextIndex: -1,
       contextClipBoard: '',
-      terminalContent: ['Welcome to Anbuias v'  + window.ide.version()],
+      terminalContent: ['Welcome to Anbuias v' + window.ide.version()],
       // isInitProject: false,
       display: {
         name: 'Nexus 5x',
@@ -432,7 +432,7 @@ export default {
       this.contextIndex = -1;
       var that = this;
       Sortable.create(document.querySelector('#sortable'), {
-        animation:200,
+        animation: 200,
         onUpdate: function (e) {
           var array = JSON.parse(JSON.stringify(that.data.pages[that.currentPage].children.visual));
           that.data.pages[that.currentPage].children.visual = [];
