@@ -1,9 +1,9 @@
 <template>
   <div :style="getStyle()">
     <div class="rowc">
-      <div class="content" :style="'padding:'+(15 * scale)+'px'">
-        <drop class="drop visual" @drop="onVisualDrop" :accepts-data="(n) => isVisual(n)"></drop>
-        <child-simulator v-for="(child,k) in properties.children" :type="child.type" :properties="child" :scale="scale"
+      <drop class="drop visual" @drop="onVisualDrop" :accepts-data="(n) => isVisual(n)"></drop>
+      <div :class="'content '+getClass()" :style="'padding:'+(15 * scale)+'px;'+getStyleMain()">
+        <child-simulator class="flex-child" v-for="(child,k) in properties.children" :type="child.type" :properties="child" :scale="scale"
                          :page="page" @click.native="setProperty(child)" :key="k"></child-simulator>
 
       </div>
@@ -43,6 +43,28 @@ export default {
     'child-simulator': () => import('../elements/Simulator')
   },
   methods: {
+    getClass:function () {
+      if (this.properties.axis === 'MainAxisAlignment.spaceAround' || this.properties.axis === 'MainAxisAlignment.spaceBetween'){
+        return 'axis-flex';
+      }
+      if (this.properties.axis === 'MainAxisAlignment.start' ){
+        return 'axis-start';
+      }
+      if (this.properties.axis === 'MainAxisAlignment.end' ){
+        if (window.appData.project.isRTL){
+          return 'axis-end rtl';
+        }else {
+          return 'axis-end';
+        }
+      }
+
+    },
+    getStyleMain:function () {
+      if (this.properties.axis === 'MainAxisAlignment.spaceAround' || this.properties.axis === 'MainAxisAlignment.spaceBetween'){
+        return 'display:flex;flex-flow: row wrap; flex-basis: 100%;';
+      }
+      return  '';
+    },
     modalOpen: function () {
       let n = this;
       do {
@@ -68,6 +90,7 @@ export default {
     },
     onVisualDrop(event) {
       try {
+
         // find component
         let component = window.components[event.data];
         // load default value
@@ -87,9 +110,9 @@ export default {
     },
     visualValidator: function (component, visuals) {
       var self = this;
-      if (component.type === 'appbar') {
-        // check non duplicate app bar
-        window.alertify.warning("You can't drop two AppBar in container");
+      if (component.type === 'appbar' || component.type === 'row') {
+        // check non appbar or row
+        window.alertify.error("You can't drop appbar or row into row");
         return false;
       }
       // add component
@@ -153,6 +176,7 @@ export default {
   border: 1px dotted silver;
   position: relative;
   white-space: nowrap;
+  display: flex;
 }
 
 .control {

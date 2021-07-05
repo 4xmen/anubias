@@ -190,9 +190,33 @@ label {
 }
 
 
-.rowc div{
+.axis-flex {
+   display: flex;
+}
+
+.axis-flex .flex-child{
+    flex: 1;
+}
+
+.axis-start{
+    display: block;
+}
+.axis-start .flex-child{
     display: inline-block;
 }
+.axis-end{
+    display: block;
+    text-align: right;
+    width: 100%;
+}
+.axis-end.rtl{
+    text-align: left;
+}
+.axis-end .flex-child{
+    display: inline-block;
+}
+
+
 /*dnd fix*/
 
 .drag {
@@ -237,6 +261,8 @@ label {
     max-height: calc(100% - 30px);
     box-sizing: border-box;
 }
+
+
 
 /*.rowc .visual::before{*/
 /*    content: "Drop";*/

@@ -93,6 +93,14 @@
                 </option>
               </select>
             </div>
+            <div v-else-if="k === 'axis'">
+              <select v-model="properties[k]" :id="k">
+                <option value="MainAxisAlignment.start"> start</option>
+                <option value="MainAxisAlignment.end"> end </option>
+                <option value="MainAxisAlignment.spaceAround"> spaceAround</option>
+                <option value="MainAxisAlignment.spaceBetween"> spaceBetween</option>
+              </select>
+            </div>
             <div v-else-if="k.toLowerCase().indexOf('color') !== -1">
               <select v-model="properties[k]" :id="k">
                 <option :value="cl.value" v-for="(cl,n) in colors" class="ui dropdown" v-bind:key="n"

@@ -2,7 +2,7 @@
   "type": "row",
   "name": "row",
   "children": [],
-  "axis": "null",
+  "axis": "MainAxisAlignment.start",
   "scrollable": false,
   "hide": false
 }
