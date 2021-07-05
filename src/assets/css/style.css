@@ -197,6 +197,14 @@ label {
 .axis-flex .flex-child{
     flex: 1;
 }
+.axis-start .flex-child{
+    display: inline-block;
+    text-align: center;
+}
+.axis-flex.scroll {
+    display: block;
+}
+
 
 .axis-start{
     display: block;

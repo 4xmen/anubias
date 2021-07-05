@@ -45,7 +45,11 @@ export default {
   methods: {
     getClass:function () {
       if (this.properties.axis === 'MainAxisAlignment.spaceAround' || this.properties.axis === 'MainAxisAlignment.spaceBetween'){
-        return 'axis-flex';
+        if (this.properties.scrollable){
+          return 'axis-flex.scroll';
+        }else {
+          return 'axis-flex';
+        }
       }
       if (this.properties.axis === 'MainAxisAlignment.start' ){
         return 'axis-start';
