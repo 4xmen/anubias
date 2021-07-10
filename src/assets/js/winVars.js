@@ -64,3 +64,4 @@ window.defaults.button = require('../json/defaults/defButton.json');
 window.defaults.circleButton = require('../json/defaults/defCircleButton.json');
 window.defaults.container = require('../json/defaults/defContainer.json');
 window.defaults.row = require('../json/defaults/defRow.json');
+window.defaults.input = require('../json/defaults/defInput.json');

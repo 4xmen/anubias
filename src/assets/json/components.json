@@ -64,6 +64,13 @@
       "data": "window.defaults.row"
     },
     {
+      "title": "Input",
+      "icon": "fab fa-yoast",
+      "active": true,
+      "visual": true,
+      "data": "window.defaults.input"
+    },
+    {
       "title": "Column",
       "icon": "fas fa-bars",
       "active": false,
@@ -90,13 +97,6 @@
       "active": false,
       "visual": true,
       "data": "window.defaults.dropdown"
-    },
-    {
-      "title": "Input",
-      "icon": "fab fa-yoast",
-      "active": false,
-      "visual": true,
-      "data": "window.defaults.input"
     },
     {
       "title": "Toggle",

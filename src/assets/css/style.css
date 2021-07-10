@@ -224,7 +224,33 @@ label {
     display: inline-block;
 }
 
+/*materialz outline*/
 
+.input-field.input-outlined > input {
+    border: 2px solid #eee;
+    border-radius: 4px;
+    transition: box-shadow, border-color 0.15s;
+}
+.input-field.input-outlined > input:focus:not([readonly]) {
+    border-color: #26A69B;
+    box-shadow: 0 1px 0 0px #26A69B;
+}
+.input-field.input-outlined > label {
+    left: 27px;
+    display: inline-flex;
+    width: auto !important;
+}
+.input-field.input-outlined > label.active {
+    background: inherit;
+    padding-right: 5px;
+    padding-left: 5px;
+    transform: translateY(-1.75rem);
+    top: 1rem;
+}
+
+.acv .abs{
+    display: block !important;
+}
 /*dnd fix*/
 
 .drag {

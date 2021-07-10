@@ -88,6 +88,7 @@
             </div>
             <div v-else-if="k === 'icon'">
               <select v-model="properties[k]" :id="k">
+                <option value="null"> No Icon </option>
                 <option v-for="(ic,n) in icons" :key="n" class="material-icons">
                   {{ ic.value }}
                 </option>

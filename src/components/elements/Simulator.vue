@@ -29,6 +29,9 @@
     <div v-if="type === 'row'">
      <row :properties="properties" :scale="scale" :page="page"></row>
     </div>
+    <div v-if="type === 'input'">
+      <input-text :properties="properties" :scale="scale" :page="page"></input-text>
+    </div>
   </div>
 </template>
 
@@ -42,6 +45,8 @@ import btn from '../flutter/Btn';
 import circleBtn from '../flutter/CircleBtn';
 import container from '../flutter/Container';
 import row from '../flutter/Row';
+import InputText from '../flutter/InputText';
+
 import {fnc} from '@/assets/js/functions';
 
 export default {
@@ -55,7 +60,8 @@ export default {
     btn,
     circleBtn,
     container,
-    row
+    row,
+    InputText
   },
   props: {
     properties: {
