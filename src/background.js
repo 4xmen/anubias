@@ -252,7 +252,6 @@ ipc.on('command', function (eventevent, data) {
                 win.webContents.send('build-success', true);
             }
             // win.webContents.send('message', {type: 'info', 'msg': stderr});
-            console.log(stderr);
         } else {
             win.webContents.send('terminal', stdout);
             win.webContents.send('message', {type: 'error', 'msg': error.message});
