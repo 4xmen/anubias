@@ -198,6 +198,7 @@
     <vue-final-modal v-model="showTerminalModal" @before-open="modalOpen" @before-close="modalClose"
                      name="teminal-modal">
       <terminal ref="terminal">
+        <div v-for="(c,i) in terminalContent" :key="i">{{c}}</div>
       </terminal>
     </vue-final-modal>
     <vue-final-modal v-model="showRowModal" @before-open="modalOpen" @before-close="modalClose"

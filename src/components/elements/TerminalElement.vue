@@ -56,6 +56,7 @@ export default {
   padding: 0 20px;
   color: #eee;
   font-family: VazirCodeX;
+  white-space: pre;
   height: 600px;
   overflow-x: hidden;
   overflow-y: scroll;
