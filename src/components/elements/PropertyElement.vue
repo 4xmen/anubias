@@ -102,6 +102,21 @@
                 <option value="MainAxisAlignment.spaceBetween"> spaceBetween</option>
               </select>
             </div>
+            <div v-else-if="k === 'keyboardType'">
+              <select v-model="properties[k]" :id="k">
+                <option value="null"> default</option>
+                <option value="TextInputType.multiline"> multiline </option>
+                <option value="TextInputType.phone"> phone </option>
+                <option value="TextInputType.number"> number </option>
+                <option value="TextInputType.text"> text </option>
+                <option value="TextInputType.name"> name </option>
+                <option value="TextInputType.emailAddress"> emailAddress </option>
+                <option value="TextInputType.url"> url </option>
+                <option value="TextInputType.visiblePassword"> visiblePassword </option>
+                <option value="TextInputType.datetime">datetime</option>
+                <option value="TextInputType.streetAddress">streetAddress</option>
+              </select>
+            </div>
             <div v-else-if="k.toLowerCase().indexOf('color') !== -1">
               <select v-model="properties[k]" :id="k">
                 <option :value="cl.value" v-for="(cl,n) in colors" class="ui dropdown" v-bind:key="n"

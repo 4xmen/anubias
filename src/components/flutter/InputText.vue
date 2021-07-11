@@ -13,6 +13,7 @@
              ref="inp"
              @focus="focusing" @blur="bluring"
              :maxlength="properties.maxLength"
+             :disabled="!properties.enabled"
              :style="getStyleInput()">
       <label :for="properties.name" ref="lbl" :class="properties.text != ''?'active':''"
              :style="getStyleLabel()">
@@ -123,13 +124,6 @@ export default {
       if (this.properties.align !== 'null') {
         style += 'text-align:' + this.properties.align + ';';
       }
-      if (this.properties.weight != 'normal') {
-        if (this.properties.weight == 'bold') {
-          style += 'font-weight: 400;';
-        } else {
-          style += 'font-weight:' + this.properties.weight.substr(1) + ';';
-        }
-      }
       // style += 'margin:' + fnc.calcPadding(this.page.padding, this.scale, true) + ';';
 
       return style;
@@ -146,6 +140,10 @@ export default {
           style+= 'left:';
         }
         style += this.properties.iconSize != 'null' ? this.properties.iconSize : 30+'px;';
+      }
+
+      if (this.properties.labelColor != 'null') {
+        style += 'color:' + this.color2web(this.properties.labelColor) + ' !important;';
       }
 
       return style;
@@ -172,6 +170,13 @@ export default {
       }
       if (this.properties.size != 'null') {
         style += 'font-size:' + (2.5 * this.scale * parseFloat(this.properties.size)) + 'px;';
+      }
+      if (this.properties.weight != 'normal'){
+        if (this.properties.weight =='bold'){
+          style +='font-weight: 400;';
+        }else{
+          style +='font-weight:'+this.properties.weight.substr(1)+';';
+        }
       }
       style += this.pad + ':' + pad + 'px;';
       return style;
@@ -218,8 +223,8 @@ export default {
 
 .input input{
   box-shadow: none !important;
+  box-sizing: border-box;
 }
-
 
 .abs {
   display: none;
