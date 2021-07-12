@@ -2,9 +2,15 @@
 <template>
   <div id="property">
     <table>
+      <tr>
+          <td colspan="2" class="searching">
+            <i class="fa fa-search"></i>
+            <input type="search" @click="searchNow" v-model="search" placeholder="Search in properties" @keyup="searchNow" />
+          </td>
+      </tr>
       <template v-for="(p,k) in properties">
 
-        <tr v-if="k !== 'type' && k !== 'children' && !(k === 'image' && properties.type === 'page')" :key="k">
+        <tr class="row-searchable" v-if="k !== 'type' && k !== 'children' && !(k === 'image' && properties.type === 'page')" :key="k">
           <th>
             <label :for="k">
               {{ k }}
@@ -183,7 +189,8 @@ export default {
       onEditKey: '',
       onEdit: '',
       colors: window.colors,
-      icons: window.material_icons
+      icons: window.material_icons,
+      search: '',
     }
   },
   props: {
@@ -236,6 +243,18 @@ export default {
     showActionControl:function () {
       this.$parent.showActionsModal = true;
     },
+    searchNow: function () {
+      let q = this.search;
+      document.querySelectorAll('.row-searchable th').forEach((value) => {
+        if (q.length == 0){
+          value.parentElement.classList.remove('row-hidden');
+        }else if (value.innerText.toLowerCase().indexOf(q.toLowerCase()) == -1){
+          value.parentElement.classList.add('row-hidden');
+        }else{
+          value.parentElement.classList.remove('row-hidden');
+        }
+      })
+    },
     codeEdit: function (k) {
       this.$parent.codeContent = this.properties[k];
       this.onEdit = this.properties[k];
@@ -255,6 +274,8 @@ export default {
     //     }
     // },
   }, watch: {
+    properties:function () {
+    },
     onEdit: function (newval) {
       this.properties[this.onEditKey] = newval;
     },
@@ -353,5 +374,23 @@ td b {
   margin-left: 5px;
 }
 
+.searching{
+  position: relative;
+}
+
+.searching input{
+  padding-left: 25px;
+}
+
+.searching .fa-search{
+  position: absolute;
+  left: 5px;
+  top: 5px;
+}
+
+.row-searchable{
+  overflow: hidden;
+  transition: .3s;
+}
 
 </style>

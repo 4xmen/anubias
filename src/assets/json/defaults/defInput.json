@@ -32,7 +32,7 @@
   "keyboardType": "null",
   "icon": "null",
   "maxLength": "null",
-  "maxLine": "null",
+  "maxLine": "1",
   "weight": "normal",
   "font": "null",
   "onTap": "// on tap input",

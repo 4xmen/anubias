@@ -5,7 +5,7 @@
   "safeArea": false,
   "bgColor": "Colors.transparent",
   "padding": "15",
-  "align": "center",
+  "align": "null",
   "onShow": "// run when show page \n",
   "image":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
   "children": {

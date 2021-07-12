@@ -20,7 +20,12 @@ export default {
       // style += 'background-color:' + this.color2web(this.properties.color, false) + ';';
 
       if (this.properties.color == 'null') {
-        style += 'color:white;';
+
+        if (window.appData.project.isDark){
+          style += 'color:white;';
+        }else{
+          style += 'color:black;';
+        }
       } else {
         style += 'color:' + this.color2web(this.properties.color) + ';';
       }
