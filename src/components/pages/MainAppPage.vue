@@ -73,18 +73,13 @@
             <!-- inactive when has not page -->
             <!-- make device size and scale -->
             <!-- bgcolor and text color apply -->
-            <div id="mobile" :style="'width:'+(display.landscape?display.height:display.width  )* display.scale
-               +'px;height:'+(display.landscape?display.width:display.height  ) * display.scale+'px;'+'background-color:'+(data.project.isDark?'#2e2e2e':data.project.bgColor)
-               +';color:'+(data.project.isDark?'white':data.project.textColor)+' !important' "
+            <div id="mobile" :style="getStyleMobile()"
                  :class="(data.pages.length < 1?'inactive':'blurable')">
-
               <div id="preview">
                 <div :style="'background-color:'+(data.project.isDark?'#2e2e2e':data.project.bgColor)
                +';color:'+(data.project.isDark?'white':data.project.textColor)+' !important' ">
                   <!-- direction of project and page padding -->
-                  <div id="dir"
-                       :style="'direction:'+(data.project.isRTL?'rtl':'ltr')+';padding:'+calcPadding(data.pages[currentPage].padding,this.display.scale)"
-                  >
+                  <div id="dir" :style="getStyleDir()" >
                     <!-- visual components of page -->
 
                     <div
@@ -345,6 +340,23 @@ export default {
     }
   },
   methods: {
+    getStyleMobile: function () {
+      let style = '';
+      style += 'width:'+(this.display.landscape?this.display.height:this.display.width  )* this.display.scale +'px;';
+      style +='height:'+(this.display.landscape?this.display.width:this.display.height  ) * this.display.scale+'px;';
+      style += 'background-color:'+(this.data.project.isDark?'#2e2e2e':this.data.project.bgColor)+';';
+      style += 'color:'+(this.data.project.isDark?'white':this.data.project.textColor)+' !important';
+      return style;
+    },
+    getStyleDir: function () {
+      let style = '';
+      style +=  'direction:'+(this.data.project.isRTL?'rtl':'ltr')+';';
+      style +=  'padding:'+this.calcPadding(this.data.pages[this.currentPage].padding,this.display.scale)+';';
+      if (this.data.pages[this.currentPage].align != 'null'){
+        style += 'text-align:'+this.data.pages[this.currentPage].align+';';
+      }
+      return style;
+    },
     TerminalShow: function () {
       this.showTerminalModal = true;
     },
