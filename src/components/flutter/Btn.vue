@@ -39,7 +39,11 @@ export default {
         style += 'border-radius:' + this.calcPadding(this.properties.borderRadius) + ';'
       }
 
-      style += 'background-color:' + this.color2web(this.properties.bgColor, true) + ';';
+      if (this.properties.bgColor == 'null' && window.appData.project.isDark){
+        style += 'background-color:' + this.color2web("Colors.blue", true) + ';';
+      }else{
+        style += 'background-color:' + this.color2web(this.properties.bgColor, true) + ';';
+      }
 
       return style;
     },
