@@ -1,395 +1,460 @@
 {
   "data": [
     {
-      "name":"iPhone 12",
-      "width": 1170,
-      "height": 2532
+      "name": "GLX Shahin II",
+      "width": 1080,
+      "height": 2340,
       "borderLess": true,
       "camera": "type1",
+      "cameraBorder": "cb1"
     },
-	{
+    {
+      "name": "iPhone 12",
+      "width": 1170,
+      "height": 2532,
+      "borderLess": true,
+      "camera": "type1",
+      "cameraBorder": ""
+    },
+    {
       "name": "iPhone 12 mini",
       "width": 1080,
-      "height": 2340
+      "height": 2340,
       "borderLess": true,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
+    {
       "name": "iPhone 12 Pro Max",
       "width": 1284,
-      "height": 2778
+      "height": 2778,
       "borderLess": true,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
+    {
       "name": "iPhone 12 Pro",
       "width": 1170,
-      "height": 2532
+      "height": 2532,
       "borderLess": true,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
+    {
       "name": "iPhone 11 Pro Max",
       "width": 1242,
-      "height": 2688
+      "height": 2688,
       "borderLess": true,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
+    {
       "name": "iPhone 11 Pro",
       "width": 1125,
-      "height": 2436
+      "height": 2436,
       "borderLess": true,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
+    {
       "name": "iPhone 11",
       "width": 828,
-      "height": 1792
+      "height": 1792,
       "borderLess": true,
       "camera": "type1",
+      "cameraBorder": ""
     },
     {
-      "name":"iPhone XR",
+      "name": "iPhone XR",
       "width": 828,
-      "height": 1792
+      "height": 1792,
       "borderLess": true,
       "camera": "type1",
+      "cameraBorder": ""
     },
     {
-      "name":"iPhone XS",
+      "name": "iPhone XS",
       "width": 1125,
-      "height": 2436
+      "height": 2436,
       "borderLess": true,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
-      "name":"iPhone XS Max",
+    {
+      "name": "iPhone XS Max",
       "width": 1242,
-      "height": 2688
+      "height": 2688,
       "borderLess": true,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
-      "name":"iPhone X",
+    {
+      "name": "iPhone X",
       "width": 1125,
-      "height": 2436
+      "height": 2436,
       "borderLess": true,
       "camera": "type1",
+      "cameraBorder": "cb2"
     },
-	{
-      "name":"iPhone 8 Plus",
+    {
+      "name": "iPhone 8 Plus",
       "width": 1080,
-      "height": 1920
+      "height": 1920,
       "borderLess": false,
       "camera": "type3",
+      "cameraBorder": ""
     },
-	{
-      "name":"iPhone 8",
+    {
+      "name": "iPhone 8",
       "width": 750,
-      "height": 1334
+      "height": 1334,
       "borderLess": false,
       "camera": "type3",
+      "cameraBorder": ""
     },
-	{
-      "name":"iPhone 7 Plus",
+    {
+      "name": "iPhone 7 Plus",
       "width": 1080,
-      "height": 1920
+      "height": 1920,
       "borderLess": false,
       "camera": "type3",
+      "cameraBorder": ""
     },
-	{
-      "name":"iPhone 7",
+    {
+      "name": "iPhone 7",
       "width": 750,
-      "height": 1334
+      "height": 1334,
       "borderLess": false,
       "camera": "type3",
+      "cameraBorder": ""
     },
-	{
-      "name":"iPhone 6 Plus/6S Plus",
+    {
+      "name": "iPhone 6 Plus/6S Plus",
       "width": 1080,
-      "height": 1920
+      "height": 1920,
       "borderLess": false,
       "camera": "type3",
+      "cameraBorder": ""
     },
-	{
-      "name":"iPhone 6/6S",
+    {
+      "name": "iPhone 6/6S",
       "width": 750,
-      "height": 1334
+      "height": 1334,
       "borderLess": false,
       "camera": "type3",
+      "cameraBorder": ""
     },
-	{
-      "name":"iPhone 5",
+    {
+      "name": "iPhone 5",
       "width": 640,
-      "height": 1136
+      "height": 1136,
       "borderLess": false,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
-      "name":"iPad Pro",
+    {
+      "name": "iPad Pro",
       "width": 2048,
-      "height": 2732
+      "height": 2732,
       "borderLess": true,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
-      "name":"iPad Air 1 & 2",
+    {
+      "name": "iPad Air 1 & 2",
       "width": 1536,
-      "height": 2048
+      "height": 2048,
       "borderLess": false,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
-      "name":"iPad Mini 2 & 3",
+    {
+      "name": "iPad Mini 2 & 3",
       "width": 1536,
-      "height": 2048
+      "height": 2048,
       "borderLess": false,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
-      "name":"iPad Mini",
+    {
+      "name": "iPad Mini",
       "width": 768,
-      "height": 1024
+      "height": 1024,
       "borderLess": false,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
-      "name":"Nexus 6P",
+    {
+      "name": "Nexus 6P",
       "width": 1440,
-      "height": 2560
+      "height": 2560,
       "borderLess": false,
       "camera": "type3",
+      "cameraBorder": ""
     },
-	{
-      "name":"Nexus 5X",
+    {
+      "name": "Nexus 5X",
       "width": 1080,
-      "height": 1920
+      "height": 1920,
       "borderLess": false,
       "camera": "type3",
+      "cameraBorder": ""
     },
-	{
-      "name":"Google Pixel 4 XL",
+    {
+      "name": "Google Pixel 4 XL",
       "width": 869,
-      "height": 1440
+      "height": 1440,
       "borderLess": true,
       "camera": "type3",
+      "cameraBorder": ""
     },
-	{
-      "name":"Google Pixel 4",
+    {
+      "name": "Google Pixel 4",
       "width": 1080,
-      "height": 2280
+      "height": 2280,
       "borderLess": true,
       "camera": "type3",
+      "cameraBorder": ""
     },
-	{
-      "name":"Google Pixel 3a XL",
+    {
+      "name": "Google Pixel 3a XL",
       "width": 1080,
-      "height": 2160
+      "height": 2160,
       "borderLess": false,
       "camera": "type3",
+      "cameraBorder": ""
     },
-	{
-      "name":"Google Pixel 3a",
+    {
+      "name": "Google Pixel 3a",
       "width": 1080,
-      "height": 2220
+      "height": 2220,
       "borderLess": false,
       "camera": "type3",
+      "cameraBorder": ""
     },
-	{
-      "name":"Google Pixel 3 XL",
+    {
+      "name": "Google Pixel 3 XL",
       "width": 1440,
-      "height": 2960
-      "borderLess": true,
-      "camera": "type1",
-    },
-	{
-      "name":"Google Pixel 3",
-      "width": 1080,
-      "height": 2160
-      "borderLess": false,
-      "camera": "type3",
-    },
-	{
-      "name":"Google Pixel 2 XL",
-      "width": 1440,
-      "height": 2560
-      "borderLess": false,
-      "camera": "type3",
-    },
-	{
-      "name":"Google Pixel XL",
-      "width": 1440,
-      "height": 2560
-      "borderLess": false,
-      "camera": "type3",
-    },
-	{
-      "name":"Google Pixel",
-      "width": 1080,
-      "height": 1920
-      "borderLess": false,
-      "camera": "type3",
-    },
-	{
-      "name":"Samsung Galaxy Note 10+",
-      "width": 1440,
-      "height": 3040
+      "height": 2960,
       "borderLess": true,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
-      "name":"Samsung Galaxy Note 10",
+    {
+      "name": "Google Pixel 3",
       "width": 1080,
-      "height": 2280
+      "height": 2160,
+      "borderLess": false,
+      "camera": "type3",
+      "cameraBorder": ""
+    },
+    {
+      "name": "Google Pixel 2 XL",
+      "width": 1440,
+      "height": 2560,
+      "borderLess": false,
+      "camera": "type3",
+      "cameraBorder": ""
+    },
+    {
+      "name": "Google Pixel XL",
+      "width": 1440,
+      "height": 2560,
+      "borderLess": false,
+      "camera": "type3",
+      "cameraBorder": ""
+    },
+    {
+      "name": "Google Pixel",
+      "width": 1080,
+      "height": 1920,
+      "borderLess": false,
+      "camera": "type3",
+      "cameraBorder": ""
+    },
+    {
+      "name": "Samsung Galaxy Note 10+",
+      "width": 1440,
+      "height": 3040,
       "borderLess": true,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
-      "name":"Samsung Galaxy Note 9",
+    {
+      "name": "Samsung Galaxy Note 10",
+      "width": 1080,
+      "height": 2280,
+      "borderLess": true,
+      "camera": "type1",
+      "cameraBorder": ""
+    },
+    {
+      "name": "Samsung Galaxy Note 9",
       "width": 1440,
-      "height": 2960
+      "height": 2960,
       "borderLess": false,
       "camera": "type2",
+      "cameraBorder": ""
     },
-	{
-      "name":"Samsung Galaxy Note 5",
+    {
+      "name": "Samsung Galaxy Note 5",
       "width": 1440,
-      "height": 2560
+      "height": 2560,
       "borderLess": true,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
-      "name":"LG G5",
+    {
+      "name": "LG G5",
       "width": 1440,
-      "height": 2560
+      "height": 2560,
       "borderLess": false,
       "camera": "type2",
+      "cameraBorder": ""
     },
-	{
-      "name":"One Plus 3",
+    {
+      "name": "One Plus 3",
       "width": 1080,
-      "height": 1920
+      "height": 1920,
       "borderLess": true,
       "camera": "type2",
+      "cameraBorder": ""
     },
-	{
-      "name":"Samsung Galaxy S21 Ultra",
+    {
+      "name": "Samsung Galaxy S21 Ultra",
       "width": 1440,
-      "height": 3200
+      "height": 3200,
       "borderLess": true,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
-      "name":"Samsung Galaxy S20+",
+    {
+      "name": "Samsung Galaxy S20+",
       "width": 1440,
-      "height": 3200
+      "height": 3200,
       "borderLess": true,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
-      "name":"Samsung Galaxy S20 Ultra",
+    {
+      "name": "Samsung Galaxy S20 Ultra",
       "width": 1440,
-      "height": 3200
+      "height": 3200,
       "borderLess": true,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
-      "name":"Samsung Galaxy S10e",
+    {
+      "name": "Samsung Galaxy S10e",
       "width": 1080,
-      "height": 2280
+      "height": 2280,
       "borderLess": true,
       "camera": "type2",
+      "cameraBorder": ""
     },
-	{
-      "name":"Samsung Galaxy S10+",
+    {
+      "name": "Samsung Galaxy S10+",
       "width": 1440,
-      "height": 3040
+      "height": 3040,
       "borderLess": true,
       "camera": "type2",
-    },{
-      "name":"Samsung Galaxy S10",
-      "width": 1440,
-      "height": 3040
-      "borderLess": true,
-      "camera": "type2",
+      "cameraBorder": ""
     },
-	{
-      "name":"Samsung Galaxy S9+",
+    {
+      "name": "Samsung Galaxy S10",
       "width": 1440,
-      "height": 2960
+      "height": 3040,
+      "borderLess": true,
+      "camera": "type2",
+      "cameraBorder": ""
+    },
+    {
+      "name": "Samsung Galaxy S9+",
+      "width": 1440,
+      "height": 2960,
       "borderLess": false,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
-      "name":"Samsung Galaxy S9",
+    {
+      "name": "Samsung Galaxy S9",
       "width": 1440,
-      "height": 2960
+      "height": 2960,
       "borderLess": false,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
-      "name":"Samsung Galaxy S8+",
+    {
+      "name": "Samsung Galaxy S8+",
       "width": 1440,
-      "height": 2960
+      "height": 2960,
       "borderLess": false,
       "camera": "type3",
+      "cameraBorder": ""
     },
-	{
-      "name":"Samsung Galaxy S8",
+    {
+      "name": "Samsung Galaxy S8",
       "width": 1440,
-      "height": 2960
+      "height": 2960,
       "borderLess": false,
       "camera": "type3",
+      "cameraBorder": ""
     },
-	{
-      "name":"Samsung Galaxy S7 Edge",
+    {
+      "name": "Samsung Galaxy S7 Edge",
       "width": 1440,
-      "height": 2560
+      "height": 2560,
       "borderLess": false,
       "camera": "type3",
+      "cameraBorder": ""
     },
-	{
-      "name":"Samsung Galaxy S7",
+    {
+      "name": "Samsung Galaxy S7",
       "width": 1440,
-      "height": 2560
+      "height": 2560,
       "borderLess": false,
       "camera": "type3",
+      "cameraBorder": ""
     },
-	{
-      "name":"Nexus 9",
+    {
+      "name": "Nexus 9",
       "width": 1536,
-      "height": 2048
+      "height": 2048,
       "borderLess": false,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
-      "name":"Nexus 7",
+    {
+      "name": "Nexus 7",
       "width": 1200,
-      "height": 1920
+      "height": 1920,
       "borderLess": false,
       "camera": "type1",
+      "cameraBorder": ""
     },
-	{
-      "name":"Pixel C",
+    {
+      "name": "Pixel C",
       "width": 1800,
-      "height": 2560
+      "height": 2560,
       "borderLess": false,
       "camera": "type2",
+      "cameraBorder": ""
     },
-	{
-      "name":"Samsung Galaxy Tab 10",
+    {
+      "name": "Samsung Galaxy Tab 10",
       "width": 1280,
-      "height": 800
+      "height": 800,
       "borderLess": false,
       "camera": "type2",
+      "cameraBorder": ""
     },
-	{
-      "name":"Chromebook Pixel",
+    {
+      "name": "Chromebook Pixel",
       "width": 2560,
-      "height": 1700
+      "height": 1700,
       "borderLess": false,
       "camera": "type1",
+      "cameraBorder": ""
     }
   ]
 }

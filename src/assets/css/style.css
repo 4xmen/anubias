@@ -359,3 +359,11 @@ label {
     background-color: rgba(255, 255, 255, 0.2);
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
+
+.borderless{
+    border-width: 5px !important;
+    border-radius: 25px !important;
+}
+
+
+
