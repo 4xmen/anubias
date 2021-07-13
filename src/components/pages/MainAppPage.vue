@@ -82,7 +82,7 @@
                   <!-- direction of project and page padding -->
                   <div id="dir" :style="getStyleDir()">
                     <!-- visual components of page -->
-
+                    <div id="safearea" v-if="data.pages[currentPage].safeArea" :style="getStyleSafeArea()"></div>
                     <div
                         id="sortable"
                         v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.visual !== undefined">
@@ -417,6 +417,26 @@ export default {
       }
       return style;
     },
+    getStyleSafeArea: function () {
+      let style = '';
+      style += 'height:' +(130 * this.display.scale)+ 'px;';
+      try {
+          let app = this.data.pages[this.currentPage].children.visual[0];
+          if ( app != undefined && app.type == 'appbar'){
+            if ( app.color != 'null'){
+             style += 'background-color: '+this.color2web(app.color)+';';
+            }else{
+
+             style += 'background-color: gray;';
+            }
+          }
+      } catch(e) {
+          console.log(e.message);
+      }
+      style += 'margin:' + fnc.calcPadding(this.data.pages[this.currentPage].padding, this.display.scale, true) + ';';
+
+      return style;
+    },
     TerminalShow: function () {
       this.showTerminalModal = true;
     },
@@ -617,6 +637,7 @@ export default {
       return window.components[n].visual;
     },
     calcPadding: fnc.calcPadding,
+    color2web: fnc.color2web,
   }, computed: {
     // check is init project or not
     isInitProject: function () {
@@ -627,6 +648,10 @@ export default {
 </script>
 
 <style scoped>
+
+#safearea{
+  opacity: 0.5;
+}
 #side {
   background: #20252b;
   width: 25%;
