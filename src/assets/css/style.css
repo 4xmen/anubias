@@ -360,10 +360,32 @@ label {
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/*mobile preview fix*/
+#mobile {
+    background: white;
+    /*width: 300px;*/
+    /*height: 600px;*/
+    margin: 10px auto 10px auto;
+    border-radius: 15px;
+    border: 10px solid black;
+    border-top-width: 40px;
+    border-bottom-width: 40px;
+    overflow-y: scroll;
+    position: relative;
+}
+
+
+
+#mobile.landscape{
+    border-left-width: 40px ;
+    border-right-width: 40px;
+    border-top-width: 10px;
+    border-bottom-width: 10px;
+}
+
 .borderless{
     border-width: 5px !important;
     border-radius: 25px !important;
 }
-
 
 

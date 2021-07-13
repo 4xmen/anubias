@@ -49,6 +49,7 @@ import ace from 'brace';
 var editor2;
 export default {
   mounted() {
+    this.allActions = this.actions;
     // this.rowData = this.rwData;
     this.sortInit();
     var self = this;
