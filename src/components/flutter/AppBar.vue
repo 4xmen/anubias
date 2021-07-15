@@ -33,6 +33,11 @@ export default {
     },
     getStyle: function () {
       let style = '';
+      if (this.isRTL){
+        style += 'text-align: right;';
+      }else {
+        style += 'text-align: left;';
+      }
       style += 'background-color:' + this.color2web(this.properties.color,false) + ';';
       if (this.properties.textColor === 'null'){
         style += 'color: white;';

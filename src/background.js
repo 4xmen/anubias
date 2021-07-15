@@ -105,7 +105,9 @@ ipc.on('open-file-dialog', function (event) {
     dialog.showOpenDialog({
         properties: ['openFile']
     }, function (files) {
-        if (files) event.sender.send('selected-file', files)
+        if (files){
+            event.sender.send('selected-file', files);
+        }
     })
 });
 /**

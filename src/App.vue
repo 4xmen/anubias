@@ -25,7 +25,7 @@ export default {
     window.api.receive('selected-file', (data) => {
       // load data
       window.project.file = data.file;
-      window.project.folder = data.project;
+      window.project.folder = data.folder;
       window.project.isSave = true;
       window.appData = data.data;
       window.alertify.success('Project loaded :' + data.basename);

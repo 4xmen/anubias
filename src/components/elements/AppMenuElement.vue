@@ -198,9 +198,10 @@ export default {
       this.$parent.TerminalShow();
       this.startDebug = true;
       window.ide.isDebuging = true;
+      console.log(window.project.folder);
       let data = {
         isDebug: true,
-        command: './anubias-engine build ' + window.project.file + ' && cd build && flutter run',
+        command: './anubias-engine build ' + window.project.file + ' && cd ' + window.project.folder + '/build && flutter run',
       }
       window.api.send("command", data);
     },

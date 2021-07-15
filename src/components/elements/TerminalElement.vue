@@ -3,7 +3,7 @@
     <i class="fa fa-circle red-text" @click="closeModal"></i>
     <i class="fa fa-circle yellow-text text-darken-2"></i>
     <i class="fa fa-circle green-text text-lighten-2"></i>
-    <span class="clear">
+    <span class="clear" @click="clear">
       <span class="material-icons">clear_all</span>
     </span>
 
@@ -20,6 +20,9 @@ export default {
   methods:{
     closeModal:function () {
       this.$parent.$parent.closeAllModal();
+    },
+    clear:function () {
+      this.$parent.$parent.terminalContent = [];
     },
     scroll:function () {
       let container = this.$el.querySelector("#container");

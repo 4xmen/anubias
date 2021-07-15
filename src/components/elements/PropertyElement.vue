@@ -164,24 +164,15 @@
 
 <script>
 import {fnc} from '@/assets/js/functions';
+var setme;
 
 export default {
   name: "PropertyElement",
   mounted() {
-    var setme;
     var $ = window.jQuery;
-    let updatePreview = function () {
-      clearTimeout(setme);
-      setme = setTimeout(function () {
-        fnc.takeScreenShot("#preview", function (e) {
-          window.appData.pages[self.page].image = e;
-        });
-      }, 300);
-    };
-    var self = this;
-    $(document).on('change', "#property select", updatePreview)
-    $(document).on('keyup', "#property input", updatePreview)
-    $(document).on('keyup', "#property change", updatePreview)
+    $(document).on('change', "#property select", this.updateScreen)
+    $(document).on('keyup', "#property input", this.updateScreen)
+    $(document).on('keyup', "#property change", this.updateScreen)
 
   },
   data: function () {
@@ -262,6 +253,15 @@ export default {
       this.$parent.showCodeModal = true;
       this.$parent.codeTitle = '[' + window.appData.pages[this.page].name + '] ' + this.properties.name + '.' + k;
     },
+    updateScreen:function () {
+      var self = this;
+      clearTimeout(setme);
+      setme = setTimeout(function () {
+        fnc.takeScreenShot("#preview", function (e) {
+          window.appData.pages[self.page].image = e;
+        });
+      }, 1000);
+    },
     // blurTitle:function (e) {
     //
     //   if(e.target.value === ''){
@@ -275,6 +275,7 @@ export default {
     // },
   }, watch: {
     properties:function () {
+      this.updateScreen();
     },
     onEdit: function (newval) {
       this.properties[this.onEditKey] = newval;
