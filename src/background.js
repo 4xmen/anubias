@@ -1,6 +1,6 @@
 'use strict'
 
-import {app, protocol, BrowserWindow} from 'electron'
+import {app, protocol, BrowserWindow, remote} from 'electron'
 import {createProtocol} from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, {VUEJS_DEVTOOLS} from 'electron-devtools-installer'
 import path from 'path'
@@ -23,8 +23,11 @@ async function createWindow() {
 
     // Create the browser window.
     win = new BrowserWindow({
-        width: 800,
+        width: 1000,
         height: 600,
+        minHeight:600,
+        minWidth:800,
+        frame:false,
         webPreferences: {
 
             // Use pluginOptions.nodeIntegration, leave this alone
@@ -202,7 +205,7 @@ ipc.on('save-as-file-project', function (event, arg) {
                     win.webContents.send('message', {type: 'error', 'msg': 'error: ' + path.basename(filename)});
                 }
                 // otherwise we saved send msg to ide saved :)
-                win.webContents.send('message', {type: 'success', 'msg': path.basename(filename) + ' saved'});
+                win.webContents.send('message', {type: 'success', 'msg': path.basename(filename) + ' saved', 'save':true});
             });
         } catch (e) {
             win.webContents.send('message', {type: 'error', 'error': e.message});
@@ -229,7 +232,7 @@ ipc.on('save-project', function (event, arg) {
                 win.webContents.send('message', {type: 'error', 'msg': 'error: ' + path.basename(filename)});
             }
             // otherwise we saved send msg to ide saved :)
-            win.webContents.send('message', {type: 'success', 'msg': path.basename(filename) + ' saved'});
+            win.webContents.send('message', {type: 'success', 'msg': path.basename(filename) + ' saved', 'save':true });
         });
     } catch (e) {
         win.webContents.send('message', {type: 'error', 'error': e.message});
@@ -287,4 +290,23 @@ ipc.on('update-project', function (eventevent, data) {
  */
 ipc.on('openWeb', function (eventevent, data) {
     require('electron').shell.openExternal(data);
+});
+
+/**
+ * Close app
+ */
+ipc.on('app-close', function (eventevent, data) {
+    app.quit();
+});
+/**
+ * maximize or unmaximize app
+ */
+ipc.on('app-max', function (eventevent, data) {
+    win.isMaximized() ? win.unmaximize() : win.maximize();
+});
+/**
+ * minimize app
+ */
+ipc.on('app-min', function (eventevent, data) {
+    win.minimize();
 });
