@@ -311,7 +311,10 @@ export default {
 
       if (this.isInitProject && this.data.pages.length > 0) {
         this.changePage(this.data.project.mainPage);
-
+        this.updateProject();
+      }else {
+        this.$parent.title = '';
+        this.$parent.isSaved = true;
       }
       /*eslint-disable */
       /*eslint-enable */
@@ -327,20 +330,34 @@ export default {
 
   },
   watch: {
-    codeContent: function (newval) {
-      // console.log(newval,'edited');
-      this.$refs.properties.onEdit = newval;
-      // console.log(this.$refs.properties.onEdit);
+    codeContent: {
+      handler:function (newval) {
+        // console.log(newval,'edited');
+        this.$refs.properties.onEdit = newval;
+        // console.log(this.$refs.properties.onEdit);
+      }
     },
-    terminalContent: function () {
-      this.$refs.terminal.scroll();
-      var self = this;
-      setTimeout(function () {
-        self.$refs.terminal.scroll();
-      }, 500);
+    data:{
+      handler:function (val) {
+        this.updateProject(val);
+      },
+      deep:true
+    },
+    terminalContent: {
+      handler:function () {
+        this.$refs.terminal.scroll();
+        var self = this;
+        setTimeout(function () {
+          self.$refs.terminal.scroll();
+        }, 500);
+      },
     }
   },
   methods: {
+    updateProject:function () {
+      this.$parent.isSaved = false;
+      this.$parent.title = this.data.project.name;
+    },
     getStyleCamera: function () {
       let style = '';
       if (this.currentDisplay.camera == 'type1') {
@@ -419,7 +436,7 @@ export default {
     },
     getStyleSafeArea: function () {
       let style = '';
-      style += 'height:' +(130 * this.display.scale)+ 'px;';
+      style += 'height:' +(150 * this.display.scale)+ 'px;';
       try {
           let app = this.data.pages[this.currentPage].children.visual[0];
           if ( app != undefined && app.type == 'appbar'){
@@ -427,7 +444,11 @@ export default {
              style += 'background-color: '+this.color2web(app.color)+';';
             }else{
 
-             style += 'background-color: gray;';
+             if (this.data.project.isDark == true){
+               style += 'background-color: gray;';
+             }else{
+               style += 'background-color: '+this.color2web(this.data.project.xColor)+';';
+             }
             }
           }
       } catch(e) {
@@ -657,16 +678,18 @@ export default {
   width: 25%;
   position: fixed;
   right: 0;
-  top: 0;
+  top: 31px;
   bottom: 0;
   min-height: 100vh;
   box-sizing: border-box;
   border-left: 1px solid rgba(0, 0, 0, .1);
+  border-top: 1px solid rgba(0, 0, 0, .1);
 }
 
 #side #components {
   height: 50vh;
   overflow-y: scroll;
+  font-weight: 100;
 }
 
 #properties {

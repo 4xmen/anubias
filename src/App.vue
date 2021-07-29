@@ -1,6 +1,18 @@
 <template>
   <div id="app">
-    <router-view />
+    <div class="title-bar">
+      <div class="controls">
+        <i class="fa fa-circle red-text" @click="closeApp"></i>
+        <i class="fa fa-circle yellow-text text-darken-2" @click="maxApp"></i>
+        <i class="fa fa-circle green-text text-lighten-2" @click="minApp"></i>
+      </div>
+
+      Anubias
+      <span v-if="title.length > 0"> -</span>
+      {{title}}
+      <span v-if="!isSaved">*</span>
+    </div>
+    <router-view/>
   </div>
 </template>
 
@@ -17,9 +29,27 @@ require('./assets/css/style.css');
 
 export default {
   name: 'App',
+  data: function () {
+    return {
+      title: '',
+      isSaved: false,
+    }
+  },
+  methods: {
+    closeApp: function () {
+      window.api.send('app-close', window.appData);
+    },
+    maxApp: function () {
+      window.api.send('app-max', window.appData);
+    },
+    minApp: function () {
+      window.api.send('app-min', window.appData);
+      // console.log(this.prj.name);
+    }
+  },
   components: {
     // mainPage
-  },mounted() {
+  }, mounted() {
     var self = this;
     // load opened file receive command
     window.api.receive('selected-file', (data) => {
@@ -44,16 +74,19 @@ export default {
     window.api.receive("message", (data) => {
       switch (data.type) {
         case 'warning':
-          window.alertify.warning(data.msg,10);
+          window.alertify.warning(data.msg);
           break;
         case 'error':
-          window.alertify.error(data.msg,10);
+          window.alertify.error(data.msg);
           break;
         case 'success':
-          window.alertify.success(data.msg,10);
+          window.alertify.success(data.msg);
+          if (data.save){
+            self.isSaved = true;
+          }
           break;
         default:
-          window.alertify.message(data.msg,10);
+          window.alertify.message(data.msg);
       }
     });
   }
@@ -61,6 +94,26 @@ export default {
 </script>
 
 <style>
-  #app{
-  }
+#app {
+  padding-top: 31px;
+}
+
+.fa-circle {
+  margin-right: 10px;
+}
+
+.title-bar {
+  padding: 5px;
+  text-align: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: #21252b;
+}
+
+.title-bar .controls {
+  float: left;
+}
 </style>
