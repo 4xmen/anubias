@@ -24,7 +24,9 @@ window.sample = {
         xColor: 'Colors.green',
         textColor: '#000000',
         bgColor: '#ffffff',
-        mainPage: 0
+        mainPage: 0,
+        lang: "en",
+        country: "US",
     },
     pages: [],
     version: window.ide.version()

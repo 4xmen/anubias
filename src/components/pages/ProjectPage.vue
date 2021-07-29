@@ -52,6 +52,14 @@
         <div class="active">Background Color</div>
         <input type="color" id="bg" name="textColor" v-model="data.bgColor">
       </div>
+      <div class="input-field col s6">
+        <div class="lang">Language</div>
+        <input type="text" maxlength="2" id="lang" name="lang"  v-lower v-model="data.lang">
+      </div>
+      <div class="input-field col s6">
+        <div class="country">Country</div>
+        <input type="text" id="country" maxlength="2"  name="country" v-upper v-model="data.country">
+      </div>
       <div class="input-field col s12">
         <div class="ui btn green primary btn-block" @click="save">
           Save
@@ -76,10 +84,32 @@ export default {
   components: {
     titlec
   },
+  directives:{
+    upper:{
+      update (el) {
+        el.value = el.value.toUpperCase();
+      },
+    },
+    lower:{
+      update (el) {
+        el.value = el.value.toLowerCase();
+      },
+    }
+  },
   mounted() {
     var $ = window.jQuery;
     $("select").formSelect();
   }, methods: {
+    forceUppercase(e, o, prop) {
+      const start = e.target.selectionStart;
+      e.target.value = e.target.value.toUpperCase();
+      this.$set(o, prop, e.target.value);
+      e.target.setSelectionRange(start, start);
+    },
+
+    lower(e) {
+      e.target.value = e.target.value.toLowerCase()
+    },
     save: function () {
       window.appData.project = this.data;
       this.$router.back();

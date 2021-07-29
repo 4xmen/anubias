@@ -7,6 +7,7 @@
                          :page="page" @click.native="setProperty(child)" :key="k"></child-simulator>
 
       </div>
+
       <div class="control" title="Children control" @click="modalOpen">
         <i class="fa fa-list"></i>
       </div>
@@ -51,6 +52,7 @@ export default {
           return 'axis-flex';
         }
       }
+
       if (this.properties.axis === 'MainAxisAlignment.start' ){
         return 'axis-start';
       }
