@@ -237,7 +237,9 @@ ipc.on('save-project', function (event, arg) {
     }
 });
 
-
+/**
+ * Run command line
+ */
 ipc.on('command', function (eventevent, data) {
     //
 
@@ -266,7 +268,9 @@ ipc.on('command', function (eventevent, data) {
         win.webContents.send('terminal', data);
     });
 });
-
+/**
+ * Update project and hot restart
+ */
 ipc.on('update-project', function (eventevent, data) {
     try {
         underDebug.stdin.write("R");
@@ -276,4 +280,11 @@ ipc.on('update-project', function (eventevent, data) {
         win.webContents.send('message', {type: 'error', 'msg': error.message});
     }
 
+});
+
+/**
+ * open link in browser
+ */
+ipc.on('openWeb', function (eventevent, data) {
+    require('electron').shell.openExternal(data);
 });

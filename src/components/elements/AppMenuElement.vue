@@ -93,8 +93,8 @@
     <nav class="top-nav">
       <div class="nav-wrapper grey darken-4">
         <ul class="left">
-          <li class="logo active">
-            <a><img src="../../assets/img/logo.svg" alt=""></a>
+          <li class="logo active" @click="openSite">
+            <a ><img src="../../assets/img/logo.svg" alt=""></a>
           </li>
           <li>
             <a class="dropdown-trigger" href="#!" data-target="dropdown1">
@@ -171,6 +171,9 @@ export default {
     });
 
   }, methods: {
+    openSite:function () {
+      window.api.send("openWeb", "https://anubias.app");
+    },
     hotReload: function () {
       if (!this.startDebug) {
         window.alertify.warning('Hot reload failed');
@@ -285,9 +288,9 @@ nav, nav .nav-wrapper i, nav > a.sidenav-trigger, nav > a.sidenav-trigger i {
 }
 
 .nav-wrapper img {
-  width: 45px;
-  margin-bottom: -15px;
-  margin-top: -5px;
+  width: 25px;
+  margin-top: 7px;
+  margin-bottom: -7px;
 }
 
 nav .fa {

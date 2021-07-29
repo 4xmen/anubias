@@ -6,8 +6,8 @@ window.ide = {
     majorVersion: 0,
     minorVersion: 9,
     patchVersion: 1,
-    version:function () {
-      return this.majorVersion + '.' + this.minorVersion + '.' + this.patchVersion;
+    version: function () {
+        return this.majorVersion + '.' + this.minorVersion + '.' + this.patchVersion;
     },
     isDebuging: false,
     isInitReload: false,
@@ -27,6 +27,7 @@ window.sample = {
         mainPage: 0,
         lang: "en",
         country: "US",
+        icons: null
     },
     pages: [],
     version: window.ide.version()
