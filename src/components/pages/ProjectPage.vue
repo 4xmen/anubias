@@ -26,7 +26,7 @@
         <div class="switch">
           <label>
             Is RTL
-            <input type="checkbox" id="isRTL" v-model="data.isRTL" name="rtl">
+            <input type="checkbox" @change="fixLang" id="isRTL" v-model="data.isRTL" name="rtl">
             <span class="lever"></span>
           </label>
         </div>
@@ -123,6 +123,16 @@ export default {
     var $ = window.jQuery;
     $("select").formSelect();
   }, methods: {
+    fixLang:function () {
+          if (this.data.isRTL && this.data.lang == 'en' && this.data.country == 'US' ){
+            this.data.lang = 'fa';
+            this.data.country = 'IR';
+          }
+          if (!this.data.isRTL && this.data.lang == 'fa' && this.data.country == 'IR' ){
+            this.data.lang = 'en';
+            this.data.country = 'US';
+          }
+    },
     chooseIcon: function (e) {
       if (e.target.files[0] != undefined) {
         // this.getBase64(e.target[0],function (e) {
@@ -159,7 +169,7 @@ export default {
 </svg>`;
       return btoa(txt);
     }
-  }
+  },
 }
 </script>
 
