@@ -94,7 +94,7 @@
       <div class="nav-wrapper grey darken-4">
         <ul class="left">
           <li class="logo active" @click="openSite">
-            <a ><img src="../../assets/img/logo.svg" alt=""></a>
+            <a ><img src="@/assets/img/logo.svg" alt=""></a>
           </li>
           <li>
             <a class="dropdown-trigger" href="#!" data-target="dropdown1">
