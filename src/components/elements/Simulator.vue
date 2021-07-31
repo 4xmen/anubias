@@ -35,6 +35,9 @@
     <div v-if="type === 'dropdown'">
       <dropdown :properties="properties" :scale="scale" :page="page"></dropdown>
     </div>
+    <div v-if="type === 'divider'">
+      <divider :properties="properties" :scale="scale" :page="page"></divider>
+    </div>
   </div>
 </template>
 
@@ -50,6 +53,7 @@ import container from '@/components/flutter/Container';
 import row from '@/components/flutter/Row';
 import InputText from '@/components/flutter/InputText';
 import dropdown from "@/components/flutter/Dropdown";
+import divider from '@/components/flutter/Divider';
 
 import {fnc} from '@/assets/js/functions';
 
@@ -66,6 +70,7 @@ export default {
     container,
     row,
     dropdown,
+    divider,
     InputText
   },
   props: {

@@ -69,3 +69,4 @@ window.defaults.container = require('../json/defaults/defContainer.json');
 window.defaults.row = require('../json/defaults/defRow.json');
 window.defaults.input = require('../json/defaults/defInput.json');
 window.defaults.dropdown = require('../json/defaults/defDropdown.json');
+window.defaults.divider = require('../json/defaults/defDivider.json');

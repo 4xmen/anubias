@@ -1,0 +1,10 @@
+{
+  "type": "divider",
+  "name": "divider",
+  "color": "null",
+  "height": 16,
+  "thickness": 1,
+  "endIndent": 0,
+  "indent": 0,
+  "hide": false
+}
