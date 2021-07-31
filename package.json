@@ -30,6 +30,7 @@
     "jquery.nicescroll": "github:tolc/jquery.nicescroll#master",
     "material-icons": "^0.6.3",
     "materialize-css": "^1.0.0-rc.2",
+    "particles.vue": "^2.16.1",
     "path": "^0.12.7",
     "vazir-font": "^28.0.0",
     "vue": "^2.6.11",

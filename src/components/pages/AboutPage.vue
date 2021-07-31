@@ -1,75 +1,100 @@
 <template>
-  <div class="container">
-    <titlec>
-      About
-    </titlec>
-    <div>
+  <div>
+    <Particles
+        id="tsparticles"
+        :options="{
+                    // background: {
+                    //     color: {
+                    //         value: '#0d47a1'
+                    //     }
+                    // },
+                    fpsLimit: 90,
+                    interactivity: {
+                        detectsOn: 'canvas',
+                        events: {
+                            onClick: {
+                                enable: true,
+                                mode: 'push'
+                            },
+                            onHover: {
+                                enable: true,
+                                // mode: 'repulse'
+                                mode: 'grab',
+                            },
+                            resize: true
+                        },
+                        modes: {
+                            bubble: {
+                                distance: 400,
+                                duration: 2,
+                                opacity: 0.8,
+                                size: 40
+                            },
+                            push: {
+                                quantity: 4
+                            },
+                            repulse: {
+                                distance: 200,
+                                duration: 0.4
+                            }
+                        }
+                    },
+                    particles: {
+                        color: {
+                            value: '#ffffff'
+                        },
+                        links: {
+                            color: '#aaaaaa',
+                            distance: 150,
+                            enable: true,
+                            opacity: 0.5,
+                            width: 1
+                        },
+                        collisions: {
+                            enable: true
+                        },
+                        move: {
+                            direction: 'none',
+                            enable: true,
+                            outMode: 'bounce',
+                            random: false,
+                            speed: 2,
+                            straight: false
+                        },
+                        number: {
+                            density: {
+                                enable: true,
+                                value_area: 800
+                            },
+                            value: 80
+                        },
+                        opacity: {
+                            value: 0.5
+                        },
+                        shape: {
+                            type: 'circle'
+                        },
+                        size: {
+                            random: true,
+                            value: 5
+                        }
+                    },
+                    detectRetina: true
+                }"
+    />
+
+    <div class="container">
+      <!--          :particlesInit="particlesInit"-->
+      <!--          :particlesLoaded="particlesLoaded"-->
+      <titlec>
+        About
+      </titlec>
       <h1>
-        Abubias v{{version}}
+        Abubias v{{ version }}
       </h1>
-      <img src="@/assets/img/logo.svg" alt="logo" class="logo">
-      <h2>
-        Main Developers
-      </h2>
-      <div class="main-carousel">
-        <div class="carousel-cell">
-          <div class="main">
-            <div class="content">
-              <div class="paralax-image">
-                <img src='@/assets/img/developers/a1gard.jpg' alt="">
-              </div>
-            </div>
-            <h3>
-              A1Gard
-            </h3>
-            <h4>
-              IDE Developer, Engine Developer
-            </h4>
-          </div>
-        </div>
-        <div class="carousel-cell">
-          <div class="main">
-            <div class="content">
-              <div class="paralax-image">
-              <img src='@/assets/img/developers/sadeghpm.jpg' alt="">
-              </div>
-            </div>
-            <h3>
-              SadeghPM
-            </h3>
-            <h4>
-              IDE Developer, Engine Developer
-            </h4>
-          </div>
-        </div>
-        <div class="carousel-cell">
-          <div class="main">
-            <div class="content">
-              <div class="paralax-image">
-              <img src='@/assets/img/developers/farzady.jpg' alt="">
-              </div>
-            </div>
-            <h3>
-              farzady
-            </h3>
-            <h4>
-              IDE Developer, Public relations
-            </h4>
-          </div>
-        </div>
-      </div>
-      <h2>
-        Security team
-      </h2>
-      <p>
-        Hamid Rezaei
-      </p>
-      <h2>
-        Other developer
-      </h2>
-      <p>
-        <span class="fa fa-smile"></span>
-      </p>
+      <a @click="openSite">
+        <img src="@/assets/img/logo.svg" alt="logo" class="logo">
+      </a>
       <h2>
         Developer team
       </h2>
@@ -86,10 +111,44 @@
         </h4>
       </div>
       <h2>
+        Lead Developers
+      </h2>
+
+      <ul class="collection">
+        <li class="collection-item">
+          SadeghPM
+          <span class="new badge" data-badge-caption="dev">Engine</span>
+          <span class="new badge" data-badge-caption="dev">Desktop</span>
+          <span class="new badge" data-badge-caption="Manager">Project</span>
+        </li>
+        <li class="collection-item">
+          A1Gard
+          <span class="new badge" data-badge-caption="dev">Engine</span>
+          <span class="new badge" data-badge-caption="dev">Desktop</span>
+        </li>
+        <li class="collection-item">
+          <span class="new badge" data-badge-caption="dev">Desktop</span>
+          Farzady
+        </li>
+      </ul>
+      <h2>
+        Security team
+      </h2>
+      <p>
+        Hamid Rezaei
+      </p>
+      <h2>
+        Other developer
+      </h2>
+      <p>
+        <span class="fa fa-smile"></span>
+      </p>
+
+      <h2>
         Thanks
       </h2>
       <p>
-        MiM1r, XeroDay, Ehsan Shabaviz, ParsaVPS team (parsavps.com)
+        MiM1r, XeroDay, Parsa VPS group (parsavps.com)
       </p>
       <h2>
         License
@@ -779,8 +838,13 @@ import titlec from '../elements/TitleElement';
 
 export default {
   name: "AboutPage",
-  data:function () {
-    return{
+  methods:{
+    openSite:function () {
+      window.api.send("openWeb", "https://anubias.app");
+    },
+  },
+  data: function () {
+    return {
       version: window.ide.version()
     };
   },
@@ -796,9 +860,9 @@ export default {
       autoPlay: 3500,
       pauseAutoPlayOnHover: true
     });
-    var onScroll = function() {
+    var onScroll = function () {
       var scrollTop = $(this).scrollTop();
-      $('.paralax-image').each(function(index, elem) {
+      $('.paralax-image').each(function (index, elem) {
         var $elem = $(elem);
         $elem.find('img').css('top', scrollTop - $elem.offset().top);
       });
@@ -823,14 +887,27 @@ h2 {
   white-space: pre-line;
 }
 
+.container {
+  z-index: 1;
+  position: relative;
+}
+
 .logo {
   width: 300px;
-  float: right;
-  margin-top: 100px;
+  position: absolute;
+  right: 0;
+  opacity: .5;
+  top: 0;
+  transition: 300ms;
+}
+
+.logo:hover {
+  opacity: 1;
 }
 
 p {
   padding: 10px 20px;
+  word-spacing: .5em;
 }
 
 .main-carousel {
@@ -878,6 +955,7 @@ p {
   max-width: 100%;
   max-height: 100px;
 }
+
 .content {
   height: 220px;
 }
@@ -894,5 +972,18 @@ p {
   height: 75vh;
   left: -30%;
   width: auto;
+}
+
+.collection {
+}
+
+#tsparticles {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 100vh;
+  z-index: 0;
+  opacity: .5;
 }
 </style>
