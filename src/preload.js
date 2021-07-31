@@ -28,6 +28,7 @@ contextBridge.exposeInMainWorld(
                 'app-close',
                 'app-max',
                 'app-min',
+                'devtools',
             ];
             if (validChannels.includes(channel)) {
                 ipcRenderer.send(channel, data);

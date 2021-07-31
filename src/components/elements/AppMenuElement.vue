@@ -85,7 +85,16 @@
           <i class="fa fa-cogs"></i>
           Setting
           <span class="shortcut">
-            Ctrl+Alt+S
+            Ctrl+Shift+S
+          </span>
+        </a>
+      </li>
+      <li @click="devTools">
+        <a>
+          <i class="fa fa-cogs"></i>
+          DevTools
+          <span class="shortcut">
+            Ctrl+Shift+I
           </span>
         </a>
       </li>
@@ -138,8 +147,12 @@ export default {
     var self = this;
 
     $(document).unbind('keyup.mainMenuShortcut').bind('keyup.mainMenuShortcut', function (e) {
-      if (e.ctrlKey && e.altKey && e.key === 'S') {
+      if (e.ctrlKey && e.shiftKey && e.key === 'S') {
         console.log('go to Setting');
+        return;
+      }
+      if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+        self.devTools();
         return;
       }
       if (e.ctrlKey && e.key === 's') {
@@ -168,9 +181,13 @@ export default {
       }
 
 
+
     });
 
   }, methods: {
+    devTools:function () {
+      window.api.send("devtools","");
+    },
     openSite:function () {
       window.api.send("openWeb", "https://anubias.app");
     },

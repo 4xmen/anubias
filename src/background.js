@@ -310,3 +310,9 @@ ipc.on('app-max', function (eventevent, data) {
 ipc.on('app-min', function (eventevent, data) {
     win.minimize();
 });
+/**
+ * open dev tools
+ */
+ipc.on('devtools', function (eventevent, data) {
+    win.webContents.toggleDevTools();
+});
