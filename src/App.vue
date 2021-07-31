@@ -6,11 +6,13 @@
         <i class="fa fa-circle yellow-text text-darken-2" @click="maxApp"></i>
         <i class="fa fa-circle green-text text-lighten-2" @click="minApp"></i>
       </div>
+      <div class="movable">
 
       Anubias
       <span v-if="title.length > 0"> -</span>
       {{title}}
       <span v-if="!isSaved">*</span>
+      </div>
     </div>
     <router-view/>
   </div>
@@ -103,7 +105,6 @@ export default {
 }
 
 .title-bar {
-  padding: 5px;
   text-align: center;
   position: fixed;
   top: 0;
@@ -115,5 +116,14 @@ export default {
 
 .title-bar .controls {
   float: left;
+  padding: 5px;
+
+}
+.title-bar .movable{
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+  display: inline-block;
+  width: calc(100% - 90px);
+  padding: 5px;
 }
 </style>
