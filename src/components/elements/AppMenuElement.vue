@@ -91,7 +91,7 @@
       </li>
       <li @click="devTools">
         <a>
-          <i class="fa fa-cogs"></i>
+          <i class="fa fa-eye-dropper"></i>
           DevTools
           <span class="shortcut">
             Ctrl+Shift+I

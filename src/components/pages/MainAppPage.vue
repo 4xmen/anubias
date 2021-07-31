@@ -207,6 +207,12 @@
         <action-control :actions="currentProperties.actions "></action-control>
       </div>
     </vue-final-modal>
+    <vue-final-modal v-model="showOptionsModal" @before-open="modalOpen" @before-close="modalClose"
+                     name="row-modal">
+      <div v-if="currentProperties.options !== undefined">
+        <option-control :options="currentProperties.options"></option-control>
+      </div>
+    </vue-final-modal>
 
   </div>
 </template>
@@ -221,6 +227,7 @@ import codeEditor from '../elements/CodeEditor'
 import terminal from '../elements/TerminalElement';
 import rowControl from '../elements/RowControlElement';
 import actionControl from '../elements/ActionControlElement';
+import optionControl from '../elements/OptionControlElement';
 import {Drag, Drop} from "vue-easy-dnd";
 import VueContext from 'vue-context';
 import Sortable from '@/assets/js/Sortable.min';
@@ -244,6 +251,7 @@ export default {
     rowControl,
     VueContext,
     actionControl,
+    optionControl,
     Drag,
     Drop
   },
@@ -255,6 +263,7 @@ export default {
       showCodeModal: false,
       showTerminalModal: false,
       showRowModal: false,
+      showOptionsModal: false,
       showActionsModal: false,
       rowData: [],
       content: '',
@@ -465,6 +474,7 @@ export default {
       this.showCodeModal = false;
       this.showTerminalModal = false;
       this.showRowModal = false;
+      this.showOptionsModal = false;
       this.showActionsModal = false;
     },
     contextOpen: function (i, ev) {

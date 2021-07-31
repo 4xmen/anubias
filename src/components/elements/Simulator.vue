@@ -32,20 +32,24 @@
     <div v-if="type === 'input'">
       <input-text :properties="properties" :scale="scale" :page="page"></input-text>
     </div>
+    <div v-if="type === 'dropdown'">
+      <dropdown :properties="properties" :scale="scale" :page="page"></dropdown>
+    </div>
   </div>
 </template>
 
 <script>
-import preloader from '../flutter/Preloader';
-import appbar from '../flutter/AppBar';
-import txt from '../flutter/Text';
-import icon from '../flutter/Icon';
-import imag from '../flutter/Image';
-import btn from '../flutter/Btn';
-import circleBtn from '../flutter/CircleBtn';
-import container from '../flutter/Container';
-import row from '../flutter/Row';
-import InputText from '../flutter/InputText';
+import preloader from '@/components/flutter/Preloader';
+import appbar from '@/components/flutter/AppBar';
+import txt from '@/components/flutter/Text';
+import icon from '@/components/flutter/Icon';
+import imag from '@/components/flutter/Image';
+import btn from '@/components/flutter/Btn';
+import circleBtn from '@/components/flutter/CircleBtn';
+import container from '@/components/flutter/Container';
+import row from '@/components/flutter/Row';
+import InputText from '@/components/flutter/InputText';
+import dropdown from "@/components/flutter/Dropdown";
 
 import {fnc} from '@/assets/js/functions';
 
@@ -61,6 +65,7 @@ export default {
     circleBtn,
     container,
     row,
+    dropdown,
     InputText
   },
   props: {

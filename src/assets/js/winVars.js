@@ -4,8 +4,8 @@
  */
 window.ide = {
     majorVersion: 0,
-    minorVersion: 9,
-    patchVersion: 1,
+    minorVersion: 10,
+    patchVersion: 0,
     version: function () {
         return this.majorVersion + '.' + this.minorVersion + '.' + this.patchVersion;
     },
@@ -68,3 +68,4 @@ window.defaults.circleButton = require('../json/defaults/defCircleButton.json');
 window.defaults.container = require('../json/defaults/defContainer.json');
 window.defaults.row = require('../json/defaults/defRow.json');
 window.defaults.input = require('../json/defaults/defInput.json');
+window.defaults.dropdown = require('../json/defaults/defDropdown.json');

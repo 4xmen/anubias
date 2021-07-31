@@ -71,6 +71,27 @@
       "data": "window.defaults.input"
     },
     {
+      "title": "Dropdown",
+      "icon": "fa fa-prescription-bottle",
+      "active": true,
+      "visual": true,
+      "data": "window.defaults.dropdown"
+    },
+    {
+      "title": "Divider",
+      "icon": "fa fa-window-minimize",
+      "active": true,
+      "visual": true,
+      "data": "window.defaults.divider"
+    },
+    {
+      "title": "Toggle",
+      "icon": "fa fa-toggle-on",
+      "active": false,
+      "visual": true,
+      "data": "window.defaults.toggle"
+    },
+    {
       "title": "Column",
       "icon": "fas fa-bars",
       "active": false,
@@ -90,20 +111,6 @@
       "active": false,
       "visual": true,
       "data": "window.defaults.list"
-    },
-    {
-      "title": "Dropdown",
-      "icon": "fa fa-prescription-bottle",
-      "active": false,
-      "visual": true,
-      "data": "window.defaults.dropdown"
-    },
-    {
-      "title": "Toggle",
-      "icon": "fa fa-toggle-on",
-      "active": false,
-      "visual": true,
-      "data": "window.defaults.toggle"
     },
     {
       "title": "Menu",

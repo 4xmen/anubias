@@ -92,7 +92,7 @@
 <!--                <option value="scaleDown"> scaleDown</option>-->
               </select>
             </div>
-            <div v-else-if="k === 'icon'">
+            <div v-else-if="k === 'icon' || k === 'trailing'">
               <select v-model="properties[k]" :id="k">
                 <option value="null"> No Icon </option>
                 <option v-for="(ic,n) in icons" :key="n" class="material-icons">
@@ -144,6 +144,9 @@
             </div>
             <div v-else-if="k == 'actions'" class="code" @click="showActionControl(k)">
               {{ k }} <b> <i class="fa fa-icons"></i> </b>
+            </div>
+            <div v-else-if="k == 'options'" class="code" @click="showOptionControl(k)">
+              {{ k }} <b> <i class="fa fa-list-ol"></i> </b>
             </div>
             <div v-else-if="k === 'image' && properties.type === 'image' && !properties.isOnline" class="code" @click="chooseImage">
               Choose <b> <i class="fa fa-folder-open"></i> </b>
@@ -234,6 +237,9 @@ export default {
     showActionControl:function () {
       this.$parent.showActionsModal = true;
     },
+    showOptionControl:function () {
+      this.$parent.showOptionsModal = true;
+    },
     searchNow: function () {
       let q = this.search;
       document.querySelectorAll('.row-searchable th').forEach((value) => {
@@ -274,12 +280,17 @@ export default {
     //     }
     // },
   }, watch: {
-    properties:function () {
-      this.updateScreen();
+    properties:{
+      handler:function () {
+        // this.$parent.updateProject();
+      },
+      deep: true,
     },
-    onEdit: function (newval) {
-      this.properties[this.onEditKey] = newval;
-    },
+    onEdit: {
+      handler:function (newval) {
+        this.properties[this.onEditKey] = newval;
+      },
+    }
   }
 }
 </script>
