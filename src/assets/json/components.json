@@ -87,7 +87,7 @@
     {
       "title": "Toggle",
       "icon": "fa fa-toggle-on",
-      "active": false,
+      "active": true,
       "visual": true,
       "data": "window.defaults.toggle"
     },

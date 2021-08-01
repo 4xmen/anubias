@@ -38,6 +38,9 @@
     <div v-if="type === 'divider'">
       <divider :properties="properties" :scale="scale" :page="page"></divider>
     </div>
+    <div v-if="type === 'toggle'">
+      <toggle :properties="properties"  :scale="scale" :page="page"></toggle>
+    </div>
   </div>
 </template>
 
@@ -54,6 +57,7 @@ import row from '@/components/flutter/Row';
 import InputText from '@/components/flutter/InputText';
 import dropdown from "@/components/flutter/Dropdown";
 import divider from '@/components/flutter/Divider';
+import toggle from '@/components/flutter/Toggle';
 
 import {fnc} from '@/assets/js/functions';
 
@@ -71,7 +75,8 @@ export default {
     row,
     dropdown,
     divider,
-    InputText
+    InputText,
+    toggle,
   },
   props: {
     properties: {
@@ -97,6 +102,9 @@ export default {
   }, computed: {
     getStyle: function () {
       let style = '';
+      if (this.properties.type == 'toggle' && this.properties.bgColor != 'null'){
+        style += 'background-color:' + fnc.color2web(this.properties.bgColor) + ';';
+      }
       if (this.properties.align !== undefined && this.properties.align !== 'default') {
         let temp = this.properties.align.split('.');
         if (temp.length === 2) {

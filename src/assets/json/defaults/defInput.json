@@ -38,5 +38,5 @@
   "onTap": "// on tap input",
   "onBlur": "// on lost focus input",
   "onFocus": "// on set focus input",
-  "onChanged": "// trigger when change input value \n // you can use `value` variable for new value"
+  "onChanged": "// trigger when change input value \n// you can use `value` variable for new value\n"
 }

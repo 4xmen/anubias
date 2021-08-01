@@ -154,6 +154,9 @@
             <div v-else-if="k === 'image' && properties.type === 'image' && properties.isOnline">
               <input type="url" v-model="properties.image"/>
             </div>
+            <div v-else-if="k == 'maxLines'">
+              <input type="number" :id="k" min="1" max="999" v-model="properties[k]">
+            </div>
             <div v-else>
               <input type="text" :id="k" v-model="properties[k]">
             </div>

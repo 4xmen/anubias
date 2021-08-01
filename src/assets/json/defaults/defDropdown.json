@@ -17,7 +17,7 @@
   "hint": "",
   "options": [],
   "modalBgColor": "null",
-  "onChanged": "// run when change value \n// you can use `state`,`state.value`, `state.title` ",
+  "onChanged": "// run when change value \n// you can use `state`,`state.value`, `state.title`\n",
   "multiple": false,
   "isTwoLine": false,
   "searchable": false,

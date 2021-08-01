@@ -6,7 +6,7 @@
   "bgColor": "Colors.green",
   "color": "null",
   "size": 25,
-  "onPressed": "// run when press on this button",
-  "onLongPress": "// run when long press on this button",
+  "onPressed": "// run when press on this button\n",
+  "onLongPress": "// run when long press on this button\n",
   "hide": false
 }

@@ -1,0 +1,15 @@
+{
+  "type": "toggle",
+  "name": "toggle",
+  "text": "Toggle title",
+  "size": 14.0,
+  "maxLine": 1,
+  "activeColor": "null",
+  "color": "null",
+  "bgColor": "null",
+  "state": false,
+  "hide": false,
+  "enabled": true,
+  "padding": "0",
+  "onChanged": "// run when `state` change\n"
+}

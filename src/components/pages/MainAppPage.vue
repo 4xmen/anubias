@@ -697,7 +697,7 @@ export default {
 }
 
 #side #components {
-  height: 50vh;
+  height: calc(50vh - 31px);
   overflow-y: scroll;
   font-weight: 100;
 }
