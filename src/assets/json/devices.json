@@ -6,7 +6,7 @@
       "height": 2340,
       "borderLess": true,
       "camera": "type1",
-      "cameraBorder": "cb1"
+      "cameraBorder": "cb1",
       "isDesktop": false
     },
     {
@@ -105,7 +105,7 @@
       "height": 2436,
       "borderLess": true,
       "camera": "type1",
-      "cameraBorder": "cb2"
+      "cameraBorder": "cb2",
       "isDesktop": false
     },
     {

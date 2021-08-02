@@ -57,6 +57,8 @@ export default {
 <style scoped>
 #appBar {
   margin-bottom: 5px !important;
+  position: relative;
+  z-index: 5;
 }
 .waves-light .material-icons{
   margin: 0 4px;

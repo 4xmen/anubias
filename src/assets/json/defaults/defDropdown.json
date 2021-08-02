@@ -22,6 +22,8 @@
   "isTwoLine": false,
   "searchable": false,
   "enabled": true,
+  "value": "",
+  "values": "",
   "isLoading": false,
   "hide": false
 }

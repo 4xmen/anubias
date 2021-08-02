@@ -3,173 +3,183 @@
   <div id="property">
     <table>
       <tr>
-          <td colspan="2" class="searching">
-            <i class="fa fa-search"></i>
-            <input type="search" @click="searchNow" v-model="search" placeholder="Search in properties" @keyup="searchNow" />
-          </td>
+        <td colspan="2" class="searching">
+          <i class="fa fa-search"></i>
+          <input type="search" @click="searchNow" v-model="search" placeholder="Search in properties"
+                 @keyup="searchNow"/>
+        </td>
       </tr>
       <template v-for="(p,k) in properties">
 
-        <tr class="row-searchable" v-if="k !== 'type' && k !== 'children' && !(k === 'image' && properties.type === 'page')" :key="k">
-          <th>
-            <label :for="k">
-              {{ k }}
-            </label>
-          </th>
-          <td>
-            <div v-if="typeof properties[k] === 'boolean'">
-              <div class="switch">
-                <label>
-                  <input type="checkbox" v-model="properties[k]">
-                  <span class="lever"></span>
-                </label>
+        <template v-if="(properties.type != 'dropdown') ||
+        (properties.type == 'dropdown' && k == 'value' && !properties.multiple ) ||
+        (properties.type == 'dropdown' && k == 'values' && properties.multiple ) ||
+        (properties.type == 'dropdown' && k != 'values' &&  k != 'value' )">
+
+          <tr class="row-searchable"
+              v-if="k !== 'type' && k !== 'children' && !(k === 'image' && properties.type === 'page')" :key="k">
+            <th>
+              <label :for="k">
+                {{ k }}
+              </label>
+            </th>
+            <td>
+              <div v-if="typeof properties[k] === 'boolean'">
+                <div class="switch">
+                  <label>
+                    <input type="checkbox" v-model="properties[k]">
+                    <span class="lever"></span>
+                  </label>
+                </div>
               </div>
-            </div>
-            <div v-else-if="k === 'name'">
-              <input type="text" @blur="nameCheck($event,true)" @keyup="nameCheck($event,false)" :id="k"
-                     v-model="properties[k]">
-            </div>
-            <div v-else-if="k === 'padding'">
-              <input type="text" @blur="paddingCheck($event,true)" @keyup="paddingCheck($event,false)" :id="k"
-                     v-model="properties[k]">
-            </div>
-            <div v-else-if="k === 'align'">
-              <div v-if="properties.type === 'text'">
+              <div v-else-if="k === 'name'">
+                <input type="text" @blur="nameCheck($event,true)" @keyup="nameCheck($event,false)" :id="k"
+                       v-model="properties[k]">
+              </div>
+              <div v-else-if="k === 'padding'">
+                <input type="text" @blur="paddingCheck($event,true)" @keyup="paddingCheck($event,false)" :id="k"
+                       v-model="properties[k]">
+              </div>
+              <div v-else-if="k === 'align'">
+                <div v-if="properties.type === 'text'">
+                  <select v-model="properties[k]" :id="k">
+                    <option value="null"> default</option>
+                    <option value="left"> left</option>
+                    <option value="center"> center</option>
+                    <option value="right"> right</option>
+                    <option value="justify"> justify</option>
+                  </select>
+                </div>
+                <div v-else>
+                  <select v-model="properties[k]" :id="k">
+                    <option value="null"> default</option>
+                    <option value="left"> left</option>
+                    <option value="center"> center</option>
+                    <option value="right"> right</option>
+                  </select>
+                </div>
+              </div>
+              <div v-else-if="k === 'overflow'">
                 <select v-model="properties[k]" :id="k">
                   <option value="null"> default</option>
-                  <option value="left"> left</option>
-                  <option value="center"> center</option>
-                  <option value="right"> right</option>
-                  <option value="justify"> justify</option>
+                  <option value="ellipsis"> ellipsis</option>
+                  <option value="fade"> fade</option>
+                  <option value="visible"> visible</option>
+                  <option value="clip"> clip</option>
                 </select>
               </div>
-              <div v-else>
+              <div v-else-if="k === 'font'">
                 <select v-model="properties[k]" :id="k">
                   <option value="null"> default</option>
-                  <option value="left"> left</option>
-                  <option value="center"> center</option>
-                  <option value="right"> right</option>
                 </select>
               </div>
-            </div>
-            <div v-else-if="k === 'overflow'">
-              <select v-model="properties[k]" :id="k">
-                <option value="null"> default</option>
-                <option value="ellipsis"> ellipsis</option>
-                <option value="fade"> fade</option>
-                <option value="visible"> visible</option>
-                <option value="clip"> clip</option>
-              </select>
-            </div>
-            <div v-else-if="k === 'font'">
-              <select v-model="properties[k]" :id="k">
-                <option value="null"> default</option>
-              </select>
-            </div>
-            <div v-else-if="k === 'weight'">
-              <select v-model="properties[k]" :id="k">
-                <option value="normal"> normal</option>
-                <option value="bold"> bold</option>
-                <option value="w100"> w100</option>
-                <option value="w200"> w200</option>
-                <option value="w300"> w300</option>
-                <option value="w400"> w400</option>
-                <option value="w500"> w500</option>
-                <option value="w600"> w600</option>
-                <option value="w700"> w700</option>
-                <option value="w800"> w800</option>
-                <option value="w900"> w900</option>
-              </select>
-            </div>
-            <div v-else-if="k === 'fit'">
-              <select v-model="properties[k]" :id="k">
-                <option value="none"> none</option>
-                <option value="fill"> fill</option>
-                <option value="contain"> contain</option>
-                <option value="cover"> cover</option>
-                <option value="fitWidth"> fitWidth</option>
-                <option value="fitHeight"> fitHeight</option>
-<!--                <option value="scaleDown"> scaleDown</option>-->
-              </select>
-            </div>
-            <div v-else-if="k === 'icon' || k === 'trailing'">
-              <select v-model="properties[k]" :id="k">
-                <option value="null"> No Icon </option>
-                <option v-for="(ic,n) in icons" :key="n" class="material-icons">
-                  {{ ic.value }}
-                </option>
-              </select>
-            </div>
-            <div v-else-if="k === 'axis'">
-              <select v-model="properties[k]" :id="k">
-                <option value="MainAxisAlignment.start"> start</option>
-                <option value="MainAxisAlignment.end"> end </option>
-                <option value="MainAxisAlignment.spaceAround"> spaceAround</option>
-                <option value="MainAxisAlignment.spaceBetween"> spaceBetween</option>
-              </select>
-            </div>
-            <div v-else-if="k === 'keyboardType'">
-              <select v-model="properties[k]" :id="k">
-                <option value="null"> default</option>
-                <option value="TextInputType.multiline"> multiline </option>
-                <option value="TextInputType.phone"> phone </option>
-                <option value="TextInputType.number"> number </option>
-                <option value="TextInputType.text"> text </option>
-                <option value="TextInputType.name"> name </option>
-                <option value="TextInputType.emailAddress"> emailAddress </option>
-                <option value="TextInputType.url"> url </option>
-                <option value="TextInputType.visiblePassword"> visiblePassword </option>
-                <option value="TextInputType.datetime">datetime</option>
-                <option value="TextInputType.streetAddress">streetAddress</option>
-              </select>
-            </div>
-            <div v-else-if="k.toLowerCase().indexOf('color') !== -1">
-              <select v-model="properties[k]" :id="k">
-                <option :value="cl.value" v-for="(cl,n) in colors" class="ui dropdown" v-bind:key="n"
-                        :style="'background:'+cl.color + (['white','transparent','yellow','lime','grey','default'].indexOf(cl.name) > -1?';color:black;':'')">
-                  {{ cl.name }}
-                </option>
-              </select>
-            </div>
-            <div v-else-if="k == 'child'" :class="properties.child == 'null'?'':'code'" @click="properties.child = 'null';">
+              <div v-else-if="k === 'weight'">
+                <select v-model="properties[k]" :id="k">
+                  <option value="normal"> normal</option>
+                  <option value="bold"> bold</option>
+                  <option value="w100"> w100</option>
+                  <option value="w200"> w200</option>
+                  <option value="w300"> w300</option>
+                  <option value="w400"> w400</option>
+                  <option value="w500"> w500</option>
+                  <option value="w600"> w600</option>
+                  <option value="w700"> w700</option>
+                  <option value="w800"> w800</option>
+                  <option value="w900"> w900</option>
+                </select>
+              </div>
+              <div v-else-if="k === 'fit'">
+                <select v-model="properties[k]" :id="k">
+                  <option value="none"> none</option>
+                  <option value="fill"> fill</option>
+                  <option value="contain"> contain</option>
+                  <option value="cover"> cover</option>
+                  <option value="fitWidth"> fitWidth</option>
+                  <option value="fitHeight"> fitHeight</option>
+                  <!--                <option value="scaleDown"> scaleDown</option>-->
+                </select>
+              </div>
+              <div v-else-if="k === 'icon' || k === 'trailing'">
+                <select v-model="properties[k]" :id="k">
+                  <option value="null"> No Icon</option>
+                  <option v-for="(ic,n) in icons" :key="n" class="material-icons">
+                    {{ ic.value }}
+                  </option>
+                </select>
+              </div>
+              <div v-else-if="k === 'axis'">
+                <select v-model="properties[k]" :id="k">
+                  <option value="MainAxisAlignment.start"> start</option>
+                  <option value="MainAxisAlignment.end"> end</option>
+                  <option value="MainAxisAlignment.spaceAround"> spaceAround</option>
+                  <option value="MainAxisAlignment.spaceBetween"> spaceBetween</option>
+                </select>
+              </div>
+              <div v-else-if="k === 'keyboardType'">
+                <select v-model="properties[k]" :id="k">
+                  <option value="null"> default</option>
+                  <option value="TextInputType.multiline"> multiline</option>
+                  <option value="TextInputType.phone"> phone</option>
+                  <option value="TextInputType.number"> number</option>
+                  <option value="TextInputType.text"> text</option>
+                  <option value="TextInputType.name"> name</option>
+                  <option value="TextInputType.emailAddress"> emailAddress</option>
+                  <option value="TextInputType.url"> url</option>
+                  <option value="TextInputType.visiblePassword"> visiblePassword</option>
+                  <option value="TextInputType.datetime">datetime</option>
+                  <option value="TextInputType.streetAddress">streetAddress</option>
+                </select>
+              </div>
+              <div v-else-if="k.toLowerCase().indexOf('color') !== -1">
+                <select v-model="properties[k]" :id="k">
+                  <option :value="cl.value" v-for="(cl,n) in colors" class="ui dropdown" v-bind:key="n"
+                          :style="'background:'+cl.color + (['white','transparent','yellow','lime','grey','default'].indexOf(cl.name) > -1?';color:black;':'')">
+                    {{ cl.name }}
+                  </option>
+                </select>
+              </div>
+              <div v-else-if="k == 'child'" :class="properties.child == 'null'?'':'code'"
+                   @click="properties.child = 'null';">
               <span v-if="properties.child == 'null'">
                   No Child
               </span>
-              <span v-else>
+                <span v-else>
                 Remove <b> <i class="fa fa-times"></i> </b>
               </span>
-            </div>
-            <div v-else-if="k.substr(0,2) == 'on'" class="code" @click="codeEdit(k)">
-              {{ k }} <b> <i class="fa fa-code"></i> </b>
-            </div>
-            <div v-else-if="k == 'actions'" class="code" @click="showActionControl(k)">
-              {{ k }} <b> <i class="fa fa-icons"></i> </b>
-            </div>
-            <div v-else-if="k == 'options'" class="code" @click="showOptionControl(k)">
-              {{ k }} <b> <i class="fa fa-list-ol"></i> </b>
-            </div>
-            <div v-else-if="k === 'image' && properties.type === 'image' && !properties.isOnline" class="code" @click="chooseImage">
-              Choose <b> <i class="fa fa-folder-open"></i> </b>
-            </div>
-            <div v-else-if="k === 'image' && properties.type === 'image' && properties.isOnline">
-              <input type="url" v-model="properties.image"/>
-            </div>
-            <div v-else-if="k == 'maxLines'">
-              <input type="number" :id="k" min="1" max="999" v-model="properties[k]">
-            </div>
-            <div v-else>
-              <input type="text" :id="k" v-model="properties[k]">
-            </div>
-          </td>
-        </tr>
+              </div>
+              <div v-else-if="k.substr(0,2) == 'on'" class="code" @click="codeEdit(k)">
+                {{ k }} <b> <i class="fa fa-code"></i> </b>
+              </div>
+              <div v-else-if="k == 'actions'" class="code" @click="showActionControl(k)">
+                {{ k }} <b> <i class="fa fa-icons"></i> </b>
+              </div>
+              <div v-else-if="k == 'options'" class="code" @click="showOptionControl(k)">
+                {{ k }} <b> <i class="fa fa-list-ol"></i> </b>
+              </div>
+              <div v-else-if="k === 'image' && properties.type === 'image' && !properties.isOnline" class="code"
+                   @click="chooseImage">
+                Choose <b> <i class="fa fa-folder-open"></i> </b>
+              </div>
+              <div v-else-if="k === 'image' && properties.type === 'image' && properties.isOnline">
+                <input type="url" v-model="properties.image"/>
+              </div>
+              <div v-else-if="k == 'maxLines'">
+                <input type="number" :id="k" min="1" max="999" v-model="properties[k]">
+              </div>
+              <div v-else>
+                <input type="text" :id="k" v-model="properties[k]">
+              </div>
+            </td>
+          </tr>
+        </template>
       </template>
-
     </table>
   </div>
 </template>
 
 <script>
 import {fnc} from '@/assets/js/functions';
+
 var setme;
 
 export default {
@@ -237,20 +247,20 @@ export default {
       }
 
     },
-    showActionControl:function () {
+    showActionControl: function () {
       this.$parent.showActionsModal = true;
     },
-    showOptionControl:function () {
+    showOptionControl: function () {
       this.$parent.showOptionsModal = true;
     },
     searchNow: function () {
       let q = this.search;
       document.querySelectorAll('.row-searchable th').forEach((value) => {
-        if (q.length == 0){
+        if (q.length == 0) {
           value.parentElement.classList.remove('row-hidden');
-        }else if (value.innerText.toLowerCase().indexOf(q.toLowerCase()) == -1){
+        } else if (value.innerText.toLowerCase().indexOf(q.toLowerCase()) == -1) {
           value.parentElement.classList.add('row-hidden');
-        }else{
+        } else {
           value.parentElement.classList.remove('row-hidden');
         }
       })
@@ -262,7 +272,7 @@ export default {
       this.$parent.showCodeModal = true;
       this.$parent.codeTitle = '[' + window.appData.pages[this.page].name + '] ' + this.properties.name + '.' + k;
     },
-    updateScreen:function () {
+    updateScreen: function () {
       var self = this;
       clearTimeout(setme);
       setme = setTimeout(function () {
@@ -283,14 +293,14 @@ export default {
     //     }
     // },
   }, watch: {
-    properties:{
-      handler:function () {
+    properties: {
+      handler: function () {
         // this.$parent.updateProject();
       },
       deep: true,
     },
     onEdit: {
-      handler:function (newval) {
+      handler: function (newval) {
         this.properties[this.onEditKey] = newval;
       },
     }
@@ -389,21 +399,21 @@ td b {
   margin-left: 5px;
 }
 
-.searching{
+.searching {
   position: relative;
 }
 
-.searching input{
+.searching input {
   padding-left: 25px;
 }
 
-.searching .fa-search{
+.searching .fa-search {
   position: absolute;
   left: 5px;
   top: 5px;
 }
 
-.row-searchable{
+.row-searchable {
   overflow: hidden;
   transition: .3s;
 }
