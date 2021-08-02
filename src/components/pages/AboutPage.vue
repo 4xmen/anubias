@@ -148,7 +148,7 @@
         Thanks
       </h2>
       <p>
-        MiM1r, XeroDay, Parsa VPS group (parsavps.com)
+        MiM1r, XeroDay, Parsa VPS group (parsavps.com), Mojtaba Eshaghi
       </p>
       <h2>
         License
