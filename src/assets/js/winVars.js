@@ -3,11 +3,12 @@
  * @type {{}}
  */
 window.ide = {
-    majorVersion: 0,
-    minorVersion: 10,
+    majorVersion: 1,
+    minorVersion: 0,
     patchVersion: 0,
+    suffix: 'alpha',
     version: function () {
-        return this.majorVersion + '.' + this.minorVersion + '.' + this.patchVersion;
+        return this.majorVersion + '.' + this.minorVersion + '.' + this.patchVersion + ' ' + this.suffix;
     },
     isDebuging: false,
     isInitReload: false,
