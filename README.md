@@ -41,5 +41,10 @@ npm run lint
 sudo sysctl kernel.unprivileged_userns_clone=1
 ```
 
+### notes
+
+- if you have problem to run or install use `yarn` replace `npm`
+- 
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).

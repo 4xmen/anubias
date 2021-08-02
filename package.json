@@ -1,10 +1,11 @@
 {
   "name": "anubias",
-  "version": "1.0.0 alpha",
+  "version": "1.0.0-alpha",
   "private": false,
   "description": "anubias desktop application",
+  "asarUnpack": ["**/*.node"],
   "author": {
-    "name": "A1Gard"
+    "name": "xStack Team"
   },
   "scripts": {
     "serve": "vue-cli-service serve",

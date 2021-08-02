@@ -23,6 +23,7 @@ async function createWindow() {
 
     // Create the browser window.
     win = new BrowserWindow({
+        icon: 'public/256x256.png',
         width: 1000,
         height: 600,
         minHeight:600,
