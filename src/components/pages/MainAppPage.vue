@@ -194,7 +194,10 @@
     <vue-final-modal v-model="showTerminalModal" @before-open="modalOpen" @before-close="modalClose"
                      name="teminal-modal">
       <terminal ref="terminal">
-        <div v-for="(c,i) in terminalContent" :key="i">{{ c }}</div>
+        <div v-for="(c,i) in terminalContent" :key="i">
+          <span v-if="c.substr(0,5) == '--err'" class="red-text">{{ c.substr(5) }}</span>
+          <span v-else>{{ c }}</span>
+        </div>
       </terminal>
     </vue-final-modal>
     <vue-final-modal v-model="showRowModal" @before-open="modalOpen" @before-close="modalClose"
@@ -321,14 +324,21 @@ export default {
       if (this.isInitProject && this.data.pages.length > 0) {
         this.changePage(this.data.project.mainPage);
         this.updateProject();
-      }else {
+      } else {
         this.$parent.title = '';
         this.$parent.isSaved = true;
       }
       /*eslint-disable */
       /*eslint-enable */
       window.api.receive("terminal", (data) => {
-        self.terminalContent.push(data);
+        if (data.trim().replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "").length > 0) {
+          self.terminalContent.push(data.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "").trim());
+        }
+      })
+      window.api.receive("terminal-error", (data) => {
+        if (data.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "").trim().length > 0) {
+          self.terminalContent.push('--err' + data.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "").trim());
+        }
       })
 
     } catch (e) {
@@ -340,20 +350,20 @@ export default {
   },
   watch: {
     codeContent: {
-      handler:function (newval) {
+      handler: function (newval) {
         // console.log(newval,'edited');
         this.$refs.properties.onEdit = newval;
         // console.log(this.$refs.properties.onEdit);
       }
     },
-    data:{
-      handler:function (val) {
+    data: {
+      handler: function (val) {
         this.updateProject(val);
       },
-      deep:true
+      deep: true
     },
     terminalContent: {
-      handler:function () {
+      handler: function () {
         this.$refs.terminal.scroll();
         var self = this;
         setTimeout(function () {
@@ -363,7 +373,7 @@ export default {
     }
   },
   methods: {
-    updateProject:function () {
+    updateProject: function () {
       this.$parent.isSaved = false;
       this.$parent.title = this.data.project.name;
     },
@@ -378,7 +388,7 @@ export default {
           style += 'border-radius: 0 0 45% 45% ;';
           if (this.display.landscape) {
             style += 'transform: rotateZ(-90deg);';
-            style += 'left: -'+(32 * this.display.scale )+'px;';
+            style += 'left: -' + (32 * this.display.scale) + 'px;';
             style += 'top: ' + (((this.currentDisplay.width * this.display.scale) / 2) - (150 * this.display.scale / 2)) + 'px;';
 
           } else {
@@ -393,9 +403,9 @@ export default {
           style += 'border-radius: 0 0 50% 50% ;';
           if (this.display.landscape) {
             style += 'transform: rotateZ(-90deg);';
-            style +='width:'+(this.currentDisplay.width * this.display.scale * .75)+'px;';
-            style +='left:-'+(this.currentDisplay.width * this.display.scale * .35)+'px;';
-            style +='top:'+(this.currentDisplay.width * this.display.scale * .45)+'px;';
+            style += 'width:' + (this.currentDisplay.width * this.display.scale * .75) + 'px;';
+            style += 'left:-' + (this.currentDisplay.width * this.display.scale * .35) + 'px;';
+            style += 'top:' + (this.currentDisplay.width * this.display.scale * .45) + 'px;';
           } else {
 
             style += 'width:auto;';
@@ -445,23 +455,23 @@ export default {
     },
     getStyleSafeArea: function () {
       let style = '';
-      style += 'height:' +(150 * this.display.scale)+ 'px;';
+      style += 'height:' + (150 * this.display.scale) + 'px;';
       try {
-          let app = this.data.pages[this.currentPage].children.visual[0];
-          if ( app != undefined && app.type == 'appbar'){
-            if ( app.color != 'null'){
-             style += 'background-color: '+this.color2web(app.color)+';';
-            }else{
+        let app = this.data.pages[this.currentPage].children.visual[0];
+        if (app != undefined && app.type == 'appbar') {
+          if (app.color != 'null') {
+            style += 'background-color: ' + this.color2web(app.color) + ';';
+          } else {
 
-             if (this.data.project.isDark == true){
-               style += 'background-color: gray;';
-             }else{
-               style += 'background-color: '+this.color2web(this.data.project.xColor)+';';
-             }
+            if (this.data.project.isDark == true) {
+              style += 'background-color: gray;';
+            } else {
+              style += 'background-color: ' + this.color2web(this.data.project.xColor) + ';';
             }
           }
-      } catch(e) {
-          console.log(e.message);
+        }
+      } catch (e) {
+        console.log(e.message);
       }
       style += 'margin:' + fnc.calcPadding(this.data.pages[this.currentPage].padding, this.display.scale, true) + ';';
 
@@ -680,9 +690,10 @@ export default {
 
 <style scoped>
 
-#safearea{
+#safearea {
   opacity: 0.5;
 }
+
 #side {
   background: #20252b;
   width: 25%;

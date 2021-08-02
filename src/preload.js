@@ -35,7 +35,15 @@ contextBridge.exposeInMainWorld(
             }
         },
         receive: (channel, func) => {
-            let validChannels = ["fromMain", 'selected-file', 'saved-file', 'message', 'image-selected', 'terminal', 'build-success'];
+            let validChannels = [
+                "fromMain",
+                'selected-file',
+                'saved-file',
+                'message',
+                'image-selected',
+                'terminal',
+                'terminal-error',
+                'build-success',];
             if (validChannels.includes(channel)) {
                 // Deliberately strip event as it includes `sender`
                 ipcRenderer.on(channel, (event, ...args) => func(...args));

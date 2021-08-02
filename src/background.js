@@ -261,7 +261,7 @@ ipc.on('command', function (eventevent, data) {
             // win.webContents.send('message', {type: 'info', 'msg': stderr});
         } else {
             win.webContents.send('terminal', stdout);
-            win.webContents.send('message', {type: 'error', 'msg': error.message});
+            win.webContents.send('terminal-error', error.message);
         }
     });
     if (data.isDebug !== undefined){
