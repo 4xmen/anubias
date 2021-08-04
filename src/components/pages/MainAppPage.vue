@@ -333,7 +333,7 @@ export default {
       /*eslint-enable */
       window.api.receive("terminal", (data) => {
         if (data.trim().replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "").length > 0) {
-          self.terminalContent.push(data.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "").trim());
+          self.terminalContent.push(data);
         }
       })
       window.api.receive("terminal-error", (data) => {

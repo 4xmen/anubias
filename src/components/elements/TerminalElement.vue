@@ -15,14 +15,22 @@
 </template>
 
 <script>
+var $;
 export default {
   name: "TerminalElement",
+  mounted() {
+     $ = window.jQuery;
+  },
   methods:{
     closeModal:function () {
       this.$parent.$parent.closeAllModal();
     },
     clear:function () {
-      this.$parent.$parent.terminalContent = [];
+      let self = this;
+      $("#container").fadeOut(500,function () {
+        self.$parent.$parent.terminalContent = [];
+        $("#container").show();
+      })
     },
     scroll:function () {
       let container = this.$el.querySelector("#container");
@@ -59,8 +67,9 @@ export default {
   padding: 0 20px;
   color: #eee;
   font-family: VazirCodeX;
-  white-space: pre;
+  white-space: pre-wrap;
   height: 600px;
+  width: 100%;
   overflow-x: hidden;
   overflow-y: scroll;
   scroll-behavior: smooth;

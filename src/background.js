@@ -266,7 +266,7 @@ ipc.on('command', function (eventevent, data) {
 
     let cwd = __dirname;
     if ( isDev ) {
-        cwd =  '/..';
+        cwd +=  '/..';
     }else{
         cwd = process.resourcesPath;
     }
@@ -274,13 +274,10 @@ ipc.on('command', function (eventevent, data) {
     if (data.cwd) {
         cwd = cwd + '/' + data.cwd;
     }
+    console.log(cwd,data);
     // fs.writeFileSync('/home/freeman/log', process.resourcesPath);
     let child = cp.exec(data.command, {
         cwd: cwd,
-        env: {
-            NODE_ENV: 'production',
-            PATH: process.env.PATH
-        }
     }, function (error, stdout, stderr) {
         if (!error) {
             // win.webContents.send('terminal', stdout);
