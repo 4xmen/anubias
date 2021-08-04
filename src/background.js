@@ -274,9 +274,15 @@ ipc.on('command', function (eventevent, data) {
     if (data.cwd) {
         cwd = cwd + '/' + data.cwd;
     }
-    console.log(cwd,data);
+    let cmd = data.command;
+    if (process.platform === 'win32' || process.platform === 'win64') {
+        cwd = cwd.replaceAll(/\//g, '\\')+'\\';
+        cmd = cmd.replaceAll(/\.\/anubias-engine/g, 'php anubias-engine');
+    }
+
+    console.log(cwd,cmd,process.platform);
     // fs.writeFileSync('/home/freeman/log', process.resourcesPath);
-    let child = cp.exec(data.command, {
+    let child = cp.exec(cmd, {
         cwd: cwd,
     }, function (error, stdout, stderr) {
         if (!error) {
