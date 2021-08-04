@@ -5,8 +5,8 @@ Anubias is project help you to make your
 mobile apps so easy and native. : )
 
 ## Requirment
- - vue cli
- - electron js cli
+ - vue cli ``npm install -g @vue/cli``
+ - electron js cli ``npm install electron -g``
 
 ## Project setup
 ```

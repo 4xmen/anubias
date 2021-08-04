@@ -11,8 +11,10 @@ const cp = require('child_process');
 const ipc = require('electron').ipcMain
 const dialog = require('electron').dialog
 const isDevelopment = process.env.NODE_ENV !== 'production';
+const isDev = process.mainModule.filename.indexOf('app.asar') === -1;
+
 var win;
-var underDebug ;
+var underDebug;
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -22,13 +24,24 @@ protocol.registerSchemesAsPrivileged([
 async function createWindow() {
 
     // Create the browser window.
+    let iconPath = 'public/256x256.png';
+    if (isDev){
+        if (process.platform == 'darwin'){
+            iconPath = 'public/icon.icns';
+        }
+    }else{
+        iconPath = process.resourcesPath +'/resources/icons/512x512.png';
+        if (process.platform == 'darwin'){
+            iconPath = process.resourcesPath +'/resources/icons/icon.icns';
+        }
+    }
     win = new BrowserWindow({
-        icon: 'public/256x256.png',
+        icon:iconPath,
         width: 1000,
         height: 600,
-        minHeight:600,
-        minWidth:800,
-        frame:false,
+        minHeight: 600,
+        minWidth: 800,
+        frame: false,
         webPreferences: {
 
             // Use pluginOptions.nodeIntegration, leave this alone
@@ -109,7 +122,7 @@ ipc.on('open-file-dialog', function (event) {
     dialog.showOpenDialog({
         properties: ['openFile']
     }, function (files) {
-        if (files){
+        if (files) {
             event.sender.send('selected-file', files);
         }
     })
@@ -206,7 +219,11 @@ ipc.on('save-as-file-project', function (event, arg) {
                     win.webContents.send('message', {type: 'error', 'msg': 'error: ' + path.basename(filename)});
                 }
                 // otherwise we saved send msg to ide saved :)
-                win.webContents.send('message', {type: 'success', 'msg': path.basename(filename) + ' saved', 'save':true});
+                win.webContents.send('message', {
+                    type: 'success',
+                    'msg': path.basename(filename) + ' saved',
+                    'save': true
+                });
             });
         } catch (e) {
             win.webContents.send('message', {type: 'error', 'error': e.message});
@@ -233,7 +250,7 @@ ipc.on('save-project', function (event, arg) {
                 win.webContents.send('message', {type: 'error', 'msg': 'error: ' + path.basename(filename)});
             }
             // otherwise we saved send msg to ide saved :)
-            win.webContents.send('message', {type: 'success', 'msg': path.basename(filename) + ' saved', 'save':true });
+            win.webContents.send('message', {type: 'success', 'msg': path.basename(filename) + ' saved', 'save': true});
         });
     } catch (e) {
         win.webContents.send('message', {type: 'error', 'error': e.message});
@@ -247,16 +264,27 @@ ipc.on('save-project', function (event, arg) {
 ipc.on('command', function (eventevent, data) {
     //
 
-    let cwd = __dirname + '/..';
+    let cwd = __dirname;
+    if ( isDev ) {
+        cwd =  '/..';
+    }else{
+        cwd = process.resourcesPath;
+    }
+    cwd += '/resources';
     if (data.cwd) {
         cwd = cwd + '/' + data.cwd;
     }
+    // fs.writeFileSync('/home/freeman/log', process.resourcesPath);
     let child = cp.exec(data.command, {
         cwd: cwd,
+        env: {
+            NODE_ENV: 'production',
+            PATH: process.env.PATH
+        }
     }, function (error, stdout, stderr) {
         if (!error) {
             // win.webContents.send('terminal', stdout);
-            if (data.isUpdate !== undefined){
+            if (data.isUpdate !== undefined) {
                 win.webContents.send('build-success', true);
             }
             // win.webContents.send('message', {type: 'info', 'msg': stderr});
@@ -265,10 +293,10 @@ ipc.on('command', function (eventevent, data) {
             win.webContents.send('terminal-error', error.message);
         }
     });
-    if (data.isDebug !== undefined){
+    if (data.isDebug !== undefined) {
         underDebug = child;
     }
-    child.stdout.on('data', function(data) {
+    child.stdout.on('data', function (data) {
         win.webContents.send('terminal', data);
     });
 });
@@ -280,7 +308,7 @@ ipc.on('update-project', function (eventevent, data) {
         underDebug.stdin.write("R");
         win.webContents.send('message', {type: 'success', 'msg': 'hot restart'});
 
-    } catch(e) {
+    } catch (e) {
         win.webContents.send('message', {type: 'error', 'msg': error.message});
     }
 

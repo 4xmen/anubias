@@ -233,8 +233,9 @@ import actionControl from '../elements/ActionControlElement';
 import optionControl from '../elements/OptionControlElement';
 import {Drag, Drop} from "vue-easy-dnd";
 import VueContext from 'vue-context';
+/*eslint-disable */
 import Sortable from '@/assets/js/Sortable.min';
-
+/*eslint-enable */
 
 // import editor  from '../elements/TitleElement';
 // const {remote} = require("electron");

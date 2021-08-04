@@ -3,7 +3,6 @@
   "version": "1.0.0-alpha",
   "private": false,
   "description": "anubias desktop application",
-  "asarUnpack": ["**/*.node"],
   "author": {
     "name": "xStack Team"
   },
@@ -12,7 +11,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "electron:build": "vue-cli-service electron:build",
-    "electron:serve": "vue-cli-service electron:serve",
+    "electron:serve": "vue-cli-service electron:serve ",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -23,7 +22,7 @@
     "alertifyjs": "^1.13.1",
     "brace": "^0.11.1",
     "core-js": "^3.6.5",
-    "electron": "^12.0.7",
+    "electron": "^13.1.8",
     "flickity": "^2.2.2",
     "fs": "0.0.1-security",
     "html2canvas": "^1.0.0-rc.7",
@@ -41,16 +40,16 @@
     "vue-router": "^3.5.1"
   },
   "devDependencies": {
+    "script-loader": "^0.7.2",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "babel-eslint": "^10.1.0",
-    "electron": "^11.0.0",
+    "electron": "^13.0.0",
     "electron-devtools-installer": "^3.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
-    "script-loader": "^0.7.2",
-    "vue-cli-plugin-electron-builder": "~2.0.0-rc.6",
+    "vue-cli-plugin-electron-builder": "~2.1.1",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
