@@ -163,7 +163,7 @@ export default {
       if (this.properties.borderColor != 'null') {
         style += 'border-color:' + this.color2web(this.properties.borderColor) + ';';
       }else{
-        style += 'border-color:' +  this.color2web(window.appData.project.xColor)+';';
+        style += 'border-color:' +  this.color2web(window.appData.project.appColor)+';';
       }
       if (this.properties.cursorColor != 'null') {
         style += 'caret-color:' + this.color2web(this.properties.cursorColor) + ';';
@@ -200,7 +200,7 @@ export default {
       if (this.properties.borderColor != 'null') {
         this.$refs.inp.style.borderColor = this.color2web(this.properties.borderColor) ;
       }else{
-        this.$refs.inp.style.borderColor = this.color2web(window.appData.project.xColor);
+        this.$refs.inp.style.borderColor = this.color2web(window.appData.project.appColor);
       }
     },
     color2web: fnc.color2web,

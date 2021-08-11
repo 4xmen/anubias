@@ -22,20 +22,20 @@ window.sample = {
         version: '1.0.0',
         isDark: false,
         isRTL: false,
-        xColor: 'Colors.green',
+        appColor: 'Colors.green',
         textColor: '#000000',
         bgColor: '#ffffff',
         mainPage: 0,
         lang: "en",
         country: "US",
-        icons: null
+        icon: null
     },
     pages: [],
     version: window.ide.version()
 };
 /**
  * main application data
- * @type {{pages: [], project: {isDark: boolean, xColor: string, bgColor: string, name: string, version: string, isRTL: boolean, textColor: string}}}
+ * @type {{pages: [], project: {isDark: boolean, appColor: string, bgColor: string, name: string, version: string, isRTL: boolean, textColor: string}}}
  */
 window.appData = JSON.parse(JSON.stringify(window.sample));
 /**

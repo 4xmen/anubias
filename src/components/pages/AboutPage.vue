@@ -135,7 +135,7 @@
         Security team
       </h2>
       <p>
-        Hamid Rezaei
+        Hamid Rezaei rahvard (AHA)
       </p>
       <h2>
         Other developer
@@ -148,7 +148,8 @@
         Thanks
       </h2>
       <p>
-        MiM1r, XeroDay, Parsa VPS group (parsavps.com), Mojtaba Eshaghi
+        MiM1r, XeroDay, Mobin GhasemPour, Parsa VPS group (parsavps.com),
+        Mojtaba Eshaghi, Dr Toufigh Mohades Javadi, Narjes Vojadni, Webscene.ir (team)
       </p>
       <h2>
         License

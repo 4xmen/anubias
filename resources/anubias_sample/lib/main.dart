@@ -30,19 +30,19 @@ class MyApp extends StatelessWidget {
         //     color: Colors.blue,
         //   ),
         // ),
-        primarySwatch: /**app.xColor*/Colors.blue/*app.xColor**/,
-        primaryColorDark:  /**app.xColor*/Colors.blue/*app.xColor**/,
-        accentColor:  /**app.xColor*/Colors.blue/*app.xColor**/,
-        primaryColor:  /**app.xColor*/Colors.blue/*app.xColor**/,
+        primarySwatch: /**app.appColor*/Colors.blue/*app.appColor**/,
+        primaryColorDark:  /**app.appColor*/Colors.blue/*app.appColor**/,
+        accentColor:  /**app.appColor*/Colors.blue/*app.appColor**/,
+        primaryColor:  /**app.appColor*/Colors.blue/*app.appColor**/,
       ),
       /**app.isDark*/
       themeMode: ThemeMode.dark,
       darkTheme: ThemeData(
         brightness: Brightness.dark,
-        primaryColorDark:  /**app.xColor*/Colors.blue/*app.xColor**/,
-        // primaryColor: /**app.xColor*/Colors.blue/*app.xColor**/,
-        accentColor: /**app.xColor*/ Colors.blue /*app.xColor**/,
-        // buttonColor: /**app.xColor*/ Colors.blue /*app.xColor**/,
+        primaryColorDark:  /**app.appColor*/Colors.blue/*app.appColor**/,
+        // primaryColor: /**app.appColor*/Colors.blue/*app.appColor**/,
+        accentColor: /**app.appColor*/ Colors.blue /*app.appColor**/,
+        // buttonColor: /**app.appColor*/ Colors.blue /*app.appColor**/,
       ),
       /*app.isDark**/
       home: Directionality( // add this

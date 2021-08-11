@@ -33,7 +33,7 @@
       </div>
       <div class="input-field col s12">
         <label for="clr" class="active">Color</label>
-        <select id="clr" @change="changeColor" v-model="data.xColor">
+        <select id="clr" @change="changeColor" v-model="data.appColor">
           <option :data-icon="'data:image/svg+xml;base64,'+color2base64svg(cl.color)" :value="cl.value"
                   v-for="(cl,n) in colors" class="circle left" v-bind:key="n"
                   :style="'background:'+cl.color + (cl.name === 'Black'?';color:white;':'')"
@@ -155,7 +155,7 @@ export default {
       this.$router.back();
     },
     changeColor: function () {
-      console.log(this.xColor);
+      // console.log(this.appColor);
     },
     // make svg form file
     color2base64svg: function (color) {

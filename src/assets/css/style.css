@@ -388,4 +388,7 @@ label {
     border-radius: 25px !important;
 }
 
-
+.pos-relative{
+    position: relative;
+    height: 100%;
+}

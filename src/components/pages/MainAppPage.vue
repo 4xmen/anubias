@@ -106,7 +106,7 @@
             </div>
           </div>
           <!-- right sidebar end -->
-          <div v-else class="text-center">
+          <div v-else class="text-center pos-relative">
             <img src="../../assets/img/logo.svg" class="logo" alt="">
           </div>
         </div>
@@ -136,7 +136,7 @@
           <div v-if="isInitProject">
             <property :properties="currentProperties" :page="currentPage" ref="properties"></property>
           </div>
-          <div v-else class="text-center">
+          <div v-else class="text-center pos-relative">
             <img src="../../assets/img/logo.svg" class="logo-sm" alt="">
           </div>
         </div>
@@ -467,7 +467,7 @@ export default {
             if (this.data.project.isDark == true) {
               style += 'background-color: gray;';
             } else {
-              style += 'background-color: ' + this.color2web(this.data.project.xColor) + ';';
+              style += 'background-color: ' + this.color2web(this.data.project.appColor) + ';';
             }
           }
         }
@@ -855,13 +855,17 @@ export default {
 }
 
 .logo {
-  width: 45%;
+  height: 40vh;
+  margin-top: 15vh;
 }
 
 .logo-sm {
-  width: 128px;
+  height: 128px;
   padding-top: 10px;
   opacity: .3;
+  position: absolute;
+  top: calc(50% - 70px);
+  left: calc(50% - 40px);
 }
 
 .modal-close {

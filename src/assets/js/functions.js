@@ -47,13 +47,13 @@ let getColor = function (color) {
 let color2web = function (color, isActiveWidget = true) {
     if (color === 'null') {
         if (isActiveWidget) {
-            return getColor(window.appData.project.xColor);
+            return getColor(window.appData.project.appColor);
         } else {
             if (window.appData.project.isDark) {
                 return "#222222";
             }
         }
-        return getColor(window.appData.project.xColor);
+        return getColor(window.appData.project.appColor);
     } else {
         return getColor(color);
     }
