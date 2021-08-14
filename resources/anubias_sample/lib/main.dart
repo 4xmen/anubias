@@ -21,9 +21,9 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: [
-        Locale(/**app.lang*/"en"/**app.lang*/, /**app.country*/"US"/**app.country*/),
+        Locale(/**app.lang*/"en"/*app.lang**/, /**app.country*/"US"/*app.country**/),
       ],
-      locale: Locale(/**app.lang*/"en"/**app.lang*/, /**app.country*/"US"/**app.country*/),
+      locale: Locale(/**app.lang*/"en"/*app.lang**/, /**app.country*/"US"/*app.country**/),
       theme: ThemeData(
         // primaryTextTheme: TextTheme(
         //   bodyText2: TextStyle(

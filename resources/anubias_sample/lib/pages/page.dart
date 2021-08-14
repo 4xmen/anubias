@@ -23,7 +23,7 @@ class /**name*/ MyHomePage /*name**/ extends StatefulWidget {
 class /**nameState*/ _MyHomePageState /*nameState**/
     extends State< /**name*/ MyHomePage /*name**/ > {
   App app;
-  /***property-class***/
+/***property-class***/
 
   void initState() {
     // TODO: implement initState
