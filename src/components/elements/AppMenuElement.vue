@@ -198,7 +198,7 @@ export default {
         this.save();
         let data = {
           isUpdate: true,
-          command: './anubias-engine build ' + window.project.file,
+          command: './'+this.engineName+' -b ' + window.project.file,
         }
         window.api.send("command", data);
       }
@@ -207,7 +207,7 @@ export default {
     test: function () {
       this.$parent.TerminalShow();
       let data = {
-        command: './anubias-engine',
+        command: './'+this.engineName,
       }
       window.api.send("command", data);
     },
@@ -221,7 +221,7 @@ export default {
       console.log(window.project.folder);
       let data = {
         isDebug: true,
-        command: './anubias-engine build ' + window.project.file + ' && cd ' + window.project.folder + '/build && flutter run',
+        command: './'+this.engineName+' -b ' + window.project.file + ' && cd ' + window.project.folder + '/build && flutter run',
       }
       window.api.send("command", data);
     },
@@ -282,6 +282,18 @@ export default {
   }, computed: {
     cantEditPrj: function () {
       return this.appData.project.name === '';
+    },
+    engineName: function () {
+      switch (fnc.getOS()) {
+        case "Linux":
+          return 'anubias-engine';
+        case "Windows":
+          return  'anubias-engine.exe';
+        case "Osx":
+          return 'anubias-engine-osx';
+        default:
+         return 'engine';
+      }
     }
   }
 }
