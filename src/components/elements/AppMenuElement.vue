@@ -292,7 +292,7 @@ export default {
         case "Osx":
           return 'anubias-engine-osx';
         default:
-         return 'engine';
+         return 'anubias-engine';
       }
     }
   }
