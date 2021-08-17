@@ -30,6 +30,9 @@ let clone = function (obj) {
  * @returns {string|*}
  */
 let getColor = function (color) {
+    if (color.indexOf('0x') != -1){
+        return '#' + color.substr(10, 6) + color.substr(8, 2);
+    }
     for (const clr of window.colors) {
         if (clr.value === color) {
             return clr.color;

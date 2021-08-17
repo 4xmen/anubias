@@ -392,3 +392,28 @@ label {
     position: relative;
     height: 100%;
 }
+
+/*fix color picker*/
+.vc-sketch{
+    width: 410px !important;
+    background: #20252b !important;
+}
+.vc-sketch input{
+    box-shadow: 0 1px 0px gray;
+    padding: 5px 0 5px 4px !important;
+    margin-bottom: 2px;
+    text-align: center;
+    height: auto;
+}
+.vc-sketch input:focus{
+    margin-bottom: 1px;
+}
+
+.vc-sketch-field .vc-input__label{
+    color: white !important;
+    margin-bottom: 5px;
+}
+
+.vc-sketch-color-wrap .vc-checkerboard{
+    background: none !important;
+}

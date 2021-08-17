@@ -34,13 +34,13 @@
     "path": "^0.12.7",
     "vazir-font": "^28.0.0",
     "vue": "^2.6.11",
+    "vue-color": "^2.8.1",
     "vue-context": "^6.0.0",
     "vue-easy-dnd": "^1.10.2",
     "vue-final-modal": "^2.3.1",
     "vue-router": "^3.5.1"
   },
   "devDependencies": {
-    "script-loader": "^0.7.2",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
@@ -49,6 +49,7 @@
     "electron-devtools-installer": "^3.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "script-loader": "^0.7.2",
     "vue-cli-plugin-electron-builder": "~2.1.1",
     "vue-template-compiler": "^2.6.11"
   },

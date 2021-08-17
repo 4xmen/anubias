@@ -18,7 +18,9 @@
 
           <tr class="row-searchable"
               v-if="k !== 'type' && k !== 'children' && !(k === 'image' && properties.type === 'page')" :key="k">
-            <th>
+            <th class="pos-relative">
+              <i @click="showColorPicker(k)" v-if="k.toLowerCase().indexOf('color') !== -1 && properties[k] != 'null'"
+                 class="square" :style="'background:'+color2web(properties[k],true)"></i>
               <label :for="k">
                 {{ k }}
               </label>
@@ -131,7 +133,11 @@
                 </select>
               </div>
               <div v-else-if="k.toLowerCase().indexOf('color') !== -1">
+<!--                <div class="btn btn-flat waves-effect white-text color-picker" @click="showColorPicker( k)">-->
+<!--                  <i class="fa fa-palette"></i>-->
+<!--                </div>-->
                 <select v-model="properties[k]" :id="k">
+                  <option v-if="properties[k].indexOf('0x') !== -1" :value="properties[k]"  disabled> {{properties[k]}} </option>
                   <option :value="cl.value" v-for="(cl,n) in colors" class="ui dropdown" v-bind:key="n"
                           :style="'background:'+cl.color + (['white','transparent','yellow','lime','grey','default'].indexOf(cl.name) > -1?';color:black;':'')">
                     {{ cl.name }}
@@ -212,6 +218,7 @@ export default {
       type: Number
     }
   }, methods: {
+    color2web: fnc.color2web,
     chooseImage: function () {
       var self = this;
       window.api.send('open-file-image', {});
@@ -252,6 +259,11 @@ export default {
     },
     showOptionControl: function () {
       this.$parent.showOptionsModal = true;
+    },
+    showColorPicker: function (k) {
+      this.$parent.showColorPickerModal = true;
+      this.$parent.onEditColor = this.properties[k];
+      this.$parent.onEditColorKey = k;
     },
     searchNow: function () {
       let q = this.search;
@@ -311,6 +323,21 @@ export default {
 <style scoped>
 #property {
   overflow-x: hidden;
+}
+
+.color-picker {
+  padding: 0;
+  padding-top: 3px;
+  display: inline-block;
+  width: 15%;
+  box-sizing: border-box;
+  line-height: normal;
+  height: auto;
+  text-align: center;
+}
+
+.color-picker i {
+  font-size: 15px;
 }
 
 table {
@@ -418,4 +445,17 @@ td b {
   transition: .3s;
 }
 
+.square {
+  position: absolute;
+  right: 6px;
+  top: 5px;
+  bottom: 5px;
+  width: 20px;
+  transition: 300ms;
+  cursor: pointer;
+}
+
+.pos-relative:hover .square {
+  opacity: 0.1;
+}
 </style>

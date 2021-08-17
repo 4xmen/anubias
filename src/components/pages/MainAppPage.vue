@@ -216,6 +216,11 @@
         <option-control :options="currentProperties.options"></option-control>
       </div>
     </vue-final-modal>
+    <vue-final-modal v-model="showColorPickerModal" @before-open="modalOpen" @before-close="modalClose"
+                     name="row-modal">
+      <color-picker :color="onEditColor"></color-picker>
+    </vue-final-modal>
+
 
   </div>
 </template>
@@ -231,8 +236,11 @@ import terminal from '../elements/TerminalElement';
 import rowControl from '../elements/RowControlElement';
 import actionControl from '../elements/ActionControlElement';
 import optionControl from '../elements/OptionControlElement';
+import colorPicker from '../elements/colorPickerElement';
+
 import {Drag, Drop} from "vue-easy-dnd";
 import VueContext from 'vue-context';
+
 /*eslint-disable */
 import Sortable from '@/assets/js/Sortable.min';
 /*eslint-enable */
@@ -256,6 +264,7 @@ export default {
     VueContext,
     actionControl,
     optionControl,
+    colorPicker,
     Drag,
     Drop
   },
@@ -269,6 +278,9 @@ export default {
       showRowModal: false,
       showOptionsModal: false,
       showActionsModal: false,
+      showColorPickerModal: false,
+      onEditColor: '',
+      onEditColorKey: '',
       rowData: [],
       content: '',
       data: window.appData,
@@ -374,6 +386,9 @@ export default {
     }
   },
   methods: {
+    changeColor: function (clr) {
+      this.currentProperties[this.onEditColorKey] = clr;
+    },
     updateProject: function () {
       this.$parent.isSaved = false;
       this.$parent.title = this.data.project.name;
@@ -487,6 +502,7 @@ export default {
       this.showRowModal = false;
       this.showOptionsModal = false;
       this.showActionsModal = false;
+      this.showColorPickerModal = false;
     },
     contextOpen: function (i, ev) {
       this.$refs.menu.open(ev);
