@@ -2,13 +2,12 @@
   <div id="app">
     <div class="title-bar">
       <div class="controls">
-        <i class="fa fa-circle red-text" @click="closeApp"></i>
-        <i class="fa fa-circle yellow-text text-darken-2" @click="maxApp"></i>
-        <i class="fa fa-circle green-text text-lighten-2" @click="minApp"></i>
+        <div class="circle red" @click="closeApp"> <i class="fa fa-times"></i>  </div>
+        <div class="circle yellow darken-2" @click="maxApp"> <i class="fa fa-expand-alt"></i> </div>
+        <div class="circle green lighten-2" @click="minApp"> <i class="fa fa-minus"></i> </div>
       </div>
       <div class="movable">
-
-      Anubias
+        Anubias
       <span v-if="title.length > 0"> -</span>
       {{title}}
       <span v-if="!isSaved">*</span>
@@ -100,9 +99,6 @@ export default {
   padding-top: 31px;
 }
 
-.fa-circle {
-  margin-right: 10px;
-}
 
 .title-bar {
   text-align: center;
@@ -125,5 +121,33 @@ export default {
   display: inline-block;
   width: calc(100% - 90px);
   padding: 5px;
+}
+
+.title-bar .circle{
+  width: 14px ;
+  height: 14px;
+  margin-left: 7px;
+  margin-right: 3px;
+  background: red;
+  display: inline-block;
+  margin-top: 3px;
+  position: relative;
+}
+
+.title-bar .circle i{
+  color: #333;
+  opacity: 0;
+  transition: 500ms;
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  font-size: 9px;
+}
+
+.title-bar .circle:first-child i{
+  left: 4px;
+}
+.title-bar .circle:hover i{
+  opacity: 1;
 }
 </style>
