@@ -112,10 +112,10 @@ export default {
 
 
       if (this.properties.width != 'null') {
-        style += 'width:' + (this.properties.width * this.scale * 3) + 'px;'
+        style += 'width:' + fnc.getSize(this.properties.width, this.scale, 3) + ';'
       }
       if (this.properties.height != 'null') {
-        style += 'height:' + (this.properties.height * this.scale * 3) + 'px;'
+        style += 'height:' + fnc.getSize(this.properties.height , this.scale , 3, true) + ';'
       }
       if (this.properties.size != 'null') {
         style += 'font-size:' + (this.properties.size * this.scale * 2.5) + 'px;';

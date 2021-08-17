@@ -30,7 +30,7 @@ let clone = function (obj) {
  * @returns {string|*}
  */
 let getColor = function (color) {
-    if (color.indexOf('0x') != -1){
+    if (color.indexOf('0x') != -1) {
         return '#' + color.substr(10, 6) + color.substr(8, 2);
     }
     for (const clr of window.colors) {
@@ -77,13 +77,16 @@ let calcPadding = function (paddingValue, scale = 1, invert = false) {
  * @param fromIndex
  * @param toIndex
  */
-let arrayMove = function(arr, fromIndex, toIndex) {
+let arrayMove = function (arr, fromIndex, toIndex) {
     let element = arr[fromIndex];
     arr.splice(fromIndex, 1);
     arr.splice(toIndex, 0, element);
 }
 
-
+/**
+ * get OS (win|linux|mac|etc.)
+ * @returns {null|string}
+ */
 let getOS = function () {
     var userAgent = window.navigator.userAgent,
         platform = window.navigator.platform,
@@ -106,6 +109,19 @@ let getOS = function () {
 
     return os;
 }
+/**
+ *
+ * @param value of properties
+ * @param scale sacale of display
+ * @param coefficient coefficient of size
+ * @param isHeight is hieght val
+ * @returns {string} size with px | %
+ */
+let getSize = function (value, scale, coefficient = 2.75, isHeight = false) {
+    return value.toString().slice(-1) == '%' ?
+        (!isHeight?value:(document.querySelector('#mobile').offsetHeight / 100) * parseFloat(value.toString().substr(0,value.length-1)) +'px')
+        : (parseFloat(value) * scale * coefficient) + 'px';
+}
 
 /**
  * for export
@@ -116,7 +132,8 @@ let fnc = {
     color2web,
     calcPadding,
     arrayMove,
-    getOS
+    getOS,
+    getSize,
 }
 export {
     fnc

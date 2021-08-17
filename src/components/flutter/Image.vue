@@ -30,9 +30,9 @@ export default {
         style += 'background-size: 100% auto;'
       } else if (this.properties.fit == 'fitHeight') {
         style += 'background-size: auto 100%;'
-      }else if (this.properties.fit == 'cover') {
+      } else if (this.properties.fit == 'cover') {
         style += 'background-size: cover;'
-      }else{
+      } else {
         style += 'background-size: contain;'
       }
 
@@ -40,10 +40,10 @@ export default {
 
       // style += 'margin:' + fnc.calcPadding(this.page.padding, this.scale, true) + ';';
       if (this.properties.width != 'null') {
-        style += 'width:' + (2.5 * this.scale * parseFloat(this.properties.width)) + 'px;';
+        style += 'width:' + fnc.getSize(this.properties.width, this.scale, 2.5) + ';';
       }
       if (this.properties.height != 'null') {
-        style += 'height:' + (2.5 * this.scale * parseFloat(this.properties.height)) + 'px;';
+        style += 'height:' + fnc.getSize(this.properties.height, this.scale, 2.5, true) + ';';
       }
       return style;
     },

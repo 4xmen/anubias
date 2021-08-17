@@ -2,8 +2,7 @@
   <div :style="getStyle()" class="fbtn waves-effect waves-light">
     <div class="content">
       <i class="material-icons" :style="'font-size:'+(properties.size * scale * 3)+
-      'px;width:'+(properties.size * scale * 3)+'px;height:'+
-      (properties.size * scale * 3)+'px;'">{{ properties.icon }}</i>
+      'px;'">{{ properties.icon }}</i>
     </div>
   </div>
 </template>
@@ -15,6 +14,7 @@ export default {
   name: "CircleBtn",
   props: ['properties', 'scale', 'page'],
   methods: {
+    getSize: fnc.getSize,
     getStyle: function () {
       let style = '';
       // style += 'background-color:' + this.color2web(this.properties.color, false) + ';';
