@@ -52,6 +52,7 @@ export default {
       terminal: [],
     }
   },
+
   methods:{
     start:function (e) {
         window.api.send("emulator", 'emulator -avd '+e+'&');
