@@ -26,6 +26,11 @@ export default new Router({
             component: view('ProjectLoadedPage')
         },
         {
+            path: "/emulator",
+            name: "emulator",
+            component: view('EmulatorPage')
+        },
+        {
             path: "/about",
             name: "About",
             component: view('AboutPage')

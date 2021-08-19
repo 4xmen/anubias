@@ -259,6 +259,54 @@ ipc.on('save-project', function (event, arg) {
 });
 
 /**
+ * Run emulator command line
+ */
+ipc.on('emulator', function (eventevent, data) {
+
+    try {
+        let cwd = __dirname;
+        if ( isDev ) {
+            cwd +=  '/..';
+        }else{
+            cwd = process.resourcesPath;
+        }
+        cwd += '/resources';
+        if (data.cwd) {
+            cwd = cwd + '/' + data.cwd;
+        }
+        let cmd = data.command;
+        if (process.platform === 'win32' || process.platform === 'win64') {
+            cwd = cwd.replaceAll(/\//g, '\\')+'\\';
+            // cmd = cmd.replaceAll(/\.\/anubias-engine/g, 'php anubias-engine');
+        }
+        let child = cp.exec(data,{
+            cwd:cwd
+        },function (error, stdout, stderr) {
+            if (!error) {
+                // win.webContents.send('terminal', stdout);
+                if (data == 'emulator -list-avds'){
+                    win.webContents.send('emulator', stdout);
+                }else{
+                    // win.webContents.send('message', {type: 'info', 'msg': stdout});
+                }
+                // win.webContents.send('message', {type: 'info', 'msg': stderr});
+            } else {
+                win.webContents.send('message', {type: 'error', 'msg': stdout + stderr});
+            }
+        });
+        child.stdout.on('data', function (dataz) {
+            if (data != 'emulator -list-avds') {
+                win.webContents.send('emulator-terminal', dataz);
+            }
+        });
+    } catch(e) {
+        console.log(e.message);
+    }
+
+
+
+});
+/**
  * Run command line
  */
 ipc.on('command', function (eventevent, data) {
@@ -277,10 +325,9 @@ ipc.on('command', function (eventevent, data) {
     let cmd = data.command;
     if (process.platform === 'win32' || process.platform === 'win64') {
         cwd = cwd.replaceAll(/\//g, '\\')+'\\';
-        cmd = cmd.replaceAll(/\.\/anubias-engine/g, 'php anubias-engine');
+        // cmd = cmd.replaceAll(/\.\/anubias-engine/g, 'php anubias-engine');
     }
 
-    console.log(cwd,cmd,process.platform);
     // fs.writeFileSync('/home/freeman/log', process.resourcesPath);
     let child = cp.exec(cmd, {
         cwd: cwd,

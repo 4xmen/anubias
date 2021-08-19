@@ -71,13 +71,22 @@
       </li>
     </ul>
     <ul id="dropdown2" class="dropdown-content grey darken-3">
-      <li @click="test">
+<!--      <li @click="test">-->
+<!--        <a>-->
+<!--          <i class="fa fa-eye"></i>-->
+<!--          EngineTest-->
+<!--          <span class="shortcut">-->
+<!--            Ctrl+Shift+F9-->
+<!--          </span>-->
+<!--        </a>-->
+<!--      </li>-->
+      <li @click="startEmulator">
         <a>
-          <i class="fa fa-eye"></i>
-          EngineTest
-          <span class="shortcut">
-            Ctrl+Shift+F9
-          </span>
+          <i class="fa fa-mobile"></i>
+          Emulator & Check
+<!--          <span class="shortcut">-->
+<!--            Ctrl+Shift+S-->
+<!--          </span>-->
         </a>
       </li>
       <li>
@@ -204,6 +213,22 @@ export default {
       }
 
     },
+    startEmulator:function () {
+
+
+      if (window.appData.project.name == '' || (window.project.isSave && window.appData.project.name != '' ) ){
+        this.$router.push('/emulator');
+        return;
+      }
+      let self = this;
+      window.alertify.confirm('Are you sure to leave page if you not saved, all data has been lose?',
+          'Remove confirm', function () {
+            self.$router.push('/emulator');
+          }
+          , function () {
+
+          });
+    },
     test: function () {
       this.$parent.TerminalShow();
       let data = {
@@ -218,7 +243,6 @@ export default {
       this.$parent.TerminalShow();
       this.startDebug = true;
       window.ide.isDebuging = true;
-      console.log(window.project.folder);
       let data = {
         isDebug: true,
         command: './'+this.engineName+' -b ' + window.project.file + ' && cd ' + window.project.folder + '/build && flutter run',

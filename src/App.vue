@@ -90,6 +90,10 @@ export default {
           window.alertify.message(data.msg);
       }
     });
+  },watch:{
+    isSaved: function (e) {
+      window.project.isSave = e;
+    },
   }
 }
 </script>

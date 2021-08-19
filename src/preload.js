@@ -29,6 +29,7 @@ contextBridge.exposeInMainWorld(
                 'app-max',
                 'app-min',
                 'devtools',
+                'emulator'
             ];
             if (validChannels.includes(channel)) {
                 ipcRenderer.send(channel, data);
@@ -43,7 +44,9 @@ contextBridge.exposeInMainWorld(
                 'image-selected',
                 'terminal',
                 'terminal-error',
-                'build-success',];
+                'build-success',
+                'emulator',
+                'emulator-terminal'];
             if (validChannels.includes(channel)) {
                 // Deliberately strip event as it includes `sender`
                 ipcRenderer.on(channel, (event, ...args) => func(...args));

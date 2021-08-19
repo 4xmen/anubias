@@ -306,6 +306,10 @@ export default {
 
     try {
 
+      window.project.isSave = true;
+      this.$parent.isSaved = true;
+      
+
       var $ = window.jQuery;
       // $("#main").niceScroll();
       // $("#mobile").niceScroll({touchbehavior: true});

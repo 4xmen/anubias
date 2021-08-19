@@ -79,6 +79,12 @@ label {
     transition: 1s;
 }
 
+.pre{
+    font-family: VazirCodeX;
+    white-space: pre-wrap;
+    line-height: 1em;
+}
+
 @keyframes cursor {
     0% {
         opacity: 1;
