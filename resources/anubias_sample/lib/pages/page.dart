@@ -46,6 +46,7 @@ class /**nameState*/ _MyHomePageState /*nameState**/
   @override
   Widget build(BuildContext context) {
     app = new App(context);
+    /***lastDefine***/
     return Scaffold(
       /**appbar*/
       // app bar her
@@ -69,7 +70,6 @@ class /**nameState*/ _MyHomePageState /*nameState**/
                     textAlign: null,
                   ),
                 ),
-
 
 
 

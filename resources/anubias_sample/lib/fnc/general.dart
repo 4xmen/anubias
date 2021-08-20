@@ -26,6 +26,8 @@ mixin Alignator {
   }
 }
 
+
+
 mixin Radidusator {
   String borderRadius = '5';
 
@@ -62,6 +64,35 @@ mixin Radidusator {
           bottomLeft: Radius.circular(double.parse(raid[3])),
         );
     }
+  }
+}
+
+mixin Widthator {
+  String width = '';
+  BuildContext context;
+  double getWidth(){
+    if( this.width == 'null'){
+      return MediaQuery.of(this.context).size.width;
+    }
+    if(this.width[this.width.length-1] == '%'){
+      return MediaQuery.of(this.context).size.width *
+          (double.parse(this.width.substring(0,this.width.length -1))) / 100;
+    }
+    return double.parse(this.width);
+  }
+}
+mixin Heightator {
+  String height = '';
+  BuildContext context;
+  double getHeight(){
+    if( this.height == 'null'){
+      return null;
+    }
+    if(this.height[this.height.length-1] == '%'){
+      return MediaQuery.of(this.context).size.height *
+          double.parse(this.height.substring(0,this.height.length -1)) / 100;
+    }
+    return double.parse(this.height);
   }
 }
 
@@ -133,17 +164,18 @@ mixin Marginator {
   }
 }
 
-class PreloaderProps with Paddinator, Alignator {
+class PreloaderProps with Paddinator, Alignator, Widthator, Heightator {
   PreloaderProps(
       {this.align,
       this.color,
       this.padding,
       this.hide,
       this.height,
-      this.width});
-
-  double width = 50;
-  double height = 50;
+      this.width,
+      this.context});
+  BuildContext context;
+  String width = '50';
+  String height = '50';
   String align = 'center';
   Color color = null;
   bool hide = false;
@@ -159,8 +191,10 @@ class AppBarProps {
   bool back = false;
   bool hide = false;
   var menu = null;
+  BuildContext context;
 
   AppBarProps({
+    this.context,
     this.title,
     this.color,
     this.textColor,
@@ -201,8 +235,9 @@ class TextProps with Alignator {
     this.hide,
     this.weight,
     this.softWrap,
+    this.context,
   });
-
+  BuildContext context;
   String text = 'center';
   String align = 'center';
   double size = 13.0;
@@ -277,8 +312,10 @@ class IconProp with Alignator, Paddinator {
     this.color,
     this.icon,
     this.padding,
+    this.context,
   });
 
+  BuildContext context;
   String padding = '15';
   String align = null;
   double size = 24.0;
@@ -287,7 +324,7 @@ class IconProp with Alignator, Paddinator {
   IconData icon = Icons.settings;
 }
 
-class ImageProp with Alignator, Paddinator {
+class ImageProp with Alignator, Paddinator,Widthator, Heightator {
   ImageProp({
     this.hide,
     this.padding,
@@ -297,11 +334,13 @@ class ImageProp with Alignator, Paddinator {
     this.image,
     this.isOnline,
     this.fit,
+    this.context,
   });
 
+  BuildContext context;
   String padding = '0';
-  double width = 150;
-  double height = null;
+  String width = '100%';
+  String height = 'null';
   String align = null;
   bool isOnline = false;
   bool hide = false;
@@ -341,7 +380,7 @@ class ImageProp with Alignator, Paddinator {
   }
 }
 
-class ButtonProp with Paddinator, Radidusator {
+class ButtonProp with Paddinator, Radidusator, Widthator, Heightator {
   ButtonProp({
     this.height,
     this.width,
@@ -355,11 +394,13 @@ class ButtonProp with Paddinator, Radidusator {
     this.borderRadius,
     this.noIcon,
     this.noText,
+    this.context,
   });
 
+  BuildContext context;
   String padding = '0';
-  double width = 120;
-  double height = null;
+  String width = '120';
+  String height = 'null';
   IconData icon = Icons.home;
   String text = 'Click me';
   Color color = null;
@@ -375,6 +416,7 @@ class RowProp {
   bool hide = false;
   bool scrollable = false;
   MainAxisAlignment axis;
+  BuildContext context;
 
   List<Widget> children;
 
@@ -383,6 +425,7 @@ class RowProp {
     this.axis,
     this.children,
     this.scrollable,
+    this.context,
   });
 }
 
@@ -395,8 +438,10 @@ class CircleButtonProp with Paddinator, Radidusator {
     this.icon,
     this.bgColor,
     this.borderRadius,
+    this.context,
   });
 
+  BuildContext context;
   String padding = '0';
   IconData icon = Icons.home;
   Color color = null;
@@ -406,16 +451,17 @@ class CircleButtonProp with Paddinator, Radidusator {
   bool hide = false;
 }
 
-class ContainerProp with Paddinator, Radidusator, Marginator {
+class ContainerProp with Paddinator, Radidusator, Marginator, Widthator,Heightator {
   String borderRadius = '5';
-  double width = 15;
-  double height = 15;
+  String width = '100%';
+  String height = 'null';
   bool hide = false;
   String padding = '0';
   String margin = '0';
   String border = '0';
   Color bgColor = null;
   Color borderColor = null;
+  BuildContext context;
 
   ContainerProp({
     this.borderRadius,
@@ -427,6 +473,7 @@ class ContainerProp with Paddinator, Radidusator, Marginator {
     this.border,
     this.borderColor,
     this.margin,
+    this.context,
   });
 
   getBorder() {
@@ -565,7 +612,8 @@ class InputProp with Alignator, Marginator {
       this.prefixSize,
       this.labelColor,
       this.onBlur,
-      this.onFocus}) {
+      this.onFocus,
+      this.context}) {
     focusnode.addListener(() async {
       if (focusnode.hasFocus) {
         await this.onFocus();
@@ -577,7 +625,7 @@ class InputProp with Alignator, Marginator {
 
   TextEditingController controller = new TextEditingController();
   FocusNode focusnode = new FocusNode();
-
+  BuildContext context;
   String _text = '';
   String margin = '0';
   String labelText = '';
@@ -664,6 +712,7 @@ class DividerProp {
   double indent = 0;
   double endIndent = 0;
   bool hide = false;
+  BuildContext context;
 
   DividerProp({
     this.color,
@@ -672,6 +721,7 @@ class DividerProp {
     this.endIndent,
     this.indent,
     this.thickness,
+    this.context,
   });
 }
 
@@ -687,6 +737,7 @@ class ToggleProp with Paddinator {
   bool enabled = false;
   Function onChanged;
   String padding;
+  BuildContext context;
 
   ToggleProp({
     this.color,
@@ -700,6 +751,7 @@ class ToggleProp with Paddinator {
     this.padding,
     this.activeColor,
     this.onChanged,
+    this.context,
   });
 }
 
@@ -746,6 +798,8 @@ class DropdownProp with Paddinator {
     return result;
   }
 
+  BuildContext context;
+
   DropdownProp({
     this.options,
     this.enabled,
@@ -772,5 +826,6 @@ class DropdownProp with Paddinator {
     this.trailingSize,
     this.value,
     this.values,
+    this.context,
   });
 }

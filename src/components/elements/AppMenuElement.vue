@@ -245,7 +245,7 @@ export default {
       window.ide.isDebuging = true;
       let data = {
         isDebug: true,
-        command: './'+this.engineName+' -b ' + window.project.file + ' && cd ' + window.project.folder + '/build && flutter run',
+        command: './'+this.engineName+' -b ' + window.project.file + ' && cd ' + window.project.folder + '/src && flutter run',
       }
       window.api.send("command", data);
     },
