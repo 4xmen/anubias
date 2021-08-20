@@ -105,14 +105,17 @@ export default {
       if (this.properties.type == 'toggle' && this.properties.bgColor != 'null'){
         style += 'background-color:' + fnc.color2web(this.properties.bgColor) + ';';
       }
-      if (this.properties.align !== undefined && this.properties.align !== 'default') {
+      if (this.properties.align !== undefined && this.properties.align !== 'null') {
         let temp = this.properties.align.split('.');
         if (temp.length === 2) {
           style += 'text-align:' + temp[1] + ';';
         } else {
           style += 'text-align:' + this.properties.align + ';';
         }
+      }else if (this.properties.align == 'null' || this.properties.align == undefined){
+        style += 'text-align: center ;';
       }
+
       if (this.properties.hide) {
         if (this.properties.type === "appbar") {
            style += "display:none;"

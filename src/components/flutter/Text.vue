@@ -51,6 +51,17 @@ export default {
           style +='font-weight:'+this.properties.weight.substr(1)+';';
         }
       }
+
+      if (this.properties.align !== undefined && this.properties.align !== 'null') {
+        let temp = this.properties.align.split('.');
+        if (temp.length === 2) {
+          style += 'text-align:' + temp[1] + ';';
+        } else {
+          style += 'text-align:' + this.properties.align + ';';
+        }
+      }else if (this.properties.align == 'null'){
+        style += 'text-align: start;';
+      }
       // style += 'margin:' + fnc.calcPadding(this.page.padding, this.scale, true) + ';';
       style += 'font-size:' + (2.5 * this.scale * parseFloat(this.properties.size)) + 'px;';
       return style;

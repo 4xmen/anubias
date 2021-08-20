@@ -1,5 +1,5 @@
 <template>
-  <div class="image">
+  <div class="image" :style="getStyleParent()">
     <div :style="getStyle()">
       <div v-if="properties.image == ''">
         <img src="@/assets/img/sample.jpg" alt="">
@@ -18,6 +18,22 @@ export default {
   name: "Imag",
   props: ['properties', 'scale'],
   methods: {
+    getStyleParent:function () {
+      let style = '';
+      if (this.properties.align !== undefined && this.properties.align !== 'null') {
+        let temp = this.properties.align.split('.');
+        if (temp.length === 2) {
+          style += 'text-align:' + temp[1] + ';';
+        } else {
+          style += 'text-align:' + this.properties.align + ';';
+        }
+      }else if (this.properties.align == 'null'){
+        style += 'text-align: center ;';
+      }
+      style += 'margin-top: ' + (this.scale * 10)+'px;';
+      style += 'margin-bottom: ' + (this.scale * -45)+'px;';
+      return style;
+    },
     getStyle: function () {
       let style = '';
       style += 'background-image: url("' + this.getImage() + '");'
@@ -35,6 +51,8 @@ export default {
       } else {
         style += 'background-size: contain;'
       }
+
+
 
       // style += 'background-color:' + this.color2web(this.properties.color, false) + ';';
 
@@ -60,8 +78,10 @@ export default {
 </script>
 
 <style scoped>
+
 .image, .image div {
   overflow: hidden;
+  display: inline-block;
 }
 
 .image div {

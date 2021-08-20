@@ -1,5 +1,7 @@
 <template>
-  <div id="divider" :style="getStyle()"></div>
+  <div>
+    <div id="divider" :style="getStyle()"></div>
+  </div>
 </template>
 
 <script>
@@ -14,14 +16,14 @@ export default {
   },
   methods: {
     getStyle:function () {
+      console.log('red');
       let style = '';
       if (this.properties.color != 'null'){
         style += 'border-color:'+this.color2web(this.properties.color)+';';
       }
+      let height = 16;
       if (this.properties.height != 'null' && this.properties.height.toString().trim() != '') {
-        style += 'height:'+(parseInt(this.properties.height) * this.scale)+'px;';
-      }else{
-        style += 'height:'+(16 * this.scale)+'px;';
+        height = parseInt(this.properties.height);
       }
       if (this.properties.thickness != 'null' && this.properties.thickness.toString().trim() != ''){
         style += ' border-bottom-width:'+(this.properties.thickness)+'px;';
@@ -39,7 +41,12 @@ export default {
       if (parseInt(this.properties.endIndent ) > 0 && this.properties.endIndent.toString().trim() != ''){
          minusWidth += parseInt(this.properties.endIndent);
       }
-      style += 'width: calc(100% - '+(minusWidth * this.scale)+'px)';
+      style += 'width: calc(100% - '+(minusWidth * this.scale)+'px);';
+      style += 'margin-top: ' + (this.scale * height * .5)+'px;';
+      style += 'margin-bottom: ' + (this.scale * height + (20*this.scale) )+'px;';
+
+      console.log(style);
+
       return style;
     },
     color2web: fnc.color2web,
@@ -52,5 +59,6 @@ export default {
   height: 16px;
   border-bottom: 1px solid gray;
   position: relative;
+  /*margin-bottom: var(--mb);*/
 }
 </style>
