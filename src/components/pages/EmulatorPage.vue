@@ -26,7 +26,7 @@
       Flutter check
     </div>
     <div class="btn btn-block btn-flat  waves-effect" @click="checkEngine">
-      Flutter engine
+      Anubias Engine check
     </div>
     <br>
     <blockquote class="pre">{{terminal.join('\n')}}</blockquote>
@@ -55,7 +55,7 @@ export default {
 
   methods:{
     start:function (e) {
-        window.api.send("emulator", 'emulator -avd '+e+'&');
+        window.api.send("emulator", 'emulator -avd '+e+' &');
     },
     checkFlutter:function () {
         this.terminal.push('______________________________________________________________________\n');
