@@ -123,6 +123,25 @@ let getSize = function (value, scale, coefficient = 2.75, isHeight = false) {
         : (parseFloat(value) * scale * coefficient) + 'px';
 }
 
+
+let linkify = function (inputText) {
+    let replacedText, replacePattern1, replacePattern2, replacePattern3;
+
+    //URLs starting with http://, https://, or ftp://
+    replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gim;
+    replacedText = inputText.replace(replacePattern1, '<a onclick="window.api.send(\'openWeb\',\'$1\')" >$1</a>');
+
+    //URLs starting with "www." (without // before it, or it'd re-link the ones done above).
+    replacePattern2 = /(^|[^/])(www\.[\S]+(\b|$))/gim;
+    replacedText = replacedText.replace(replacePattern2, '$1<a onclick="window.api.send(\'openWeb\',\'$2\')" target="_blank">$2</a>');
+
+    //Change email addresses to mailto:: links.
+    replacePattern3 = /(([a-zA-Z0-9\-_.])+@[a-zA-Z_]+?(\.[a-zA-Z]{2,6})+)/gim;
+    replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');
+
+    return replacedText;
+}
+
 /**
  * for export
  */
@@ -134,6 +153,7 @@ let fnc = {
     arrayMove,
     getOS,
     getSize,
+    linkify,
 }
 export {
     fnc

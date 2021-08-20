@@ -195,8 +195,8 @@
                      name="teminal-modal">
       <terminal ref="terminal">
         <div v-for="(c,i) in terminalContent" :key="i">
-          <span v-if="c.substr(0,5) == '--err'" class="red-text">{{ c.substr(5) }}</span>
-          <span v-else>{{ c }}</span>
+          <span v-if="c.substr(0,5) == '--err'" class="red-text" v-html="linkify(c.substr(5))"></span>
+          <span v-else v-html="linkify(c)"></span>
         </div>
       </terminal>
     </vue-final-modal>
@@ -390,6 +390,10 @@ export default {
     }
   },
   methods: {
+    linkify: fnc.linkify,
+    openSite:function (e) {
+      window.api.send("openWeb", e);
+    },
     changeColor: function (clr) {
       this.currentProperties[this.onEditColorKey] = clr;
     },

@@ -79,6 +79,11 @@ label {
     transition: 1s;
 }
 
+.terminal a{
+    background: #0f153b80;
+    cursor: pointer;
+}
+
 .pre{
     font-family: VazirCodeX;
     white-space: pre-wrap;
