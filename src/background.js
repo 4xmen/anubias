@@ -277,6 +277,7 @@ ipc.on('emulator', function (eventevent, data) {
         let cmd = data.command;
         if (process.platform === 'win32' || process.platform === 'win64') {
             cwd = cwd.replaceAll(/\//g, '\\')+'\\';
+            data = data.replaceAll(/\//g, '\\');
             // cmd = cmd.replaceAll(/\.\/anubias-engine/g, 'php anubias-engine');
         }
         let child = cp.exec(data,{
@@ -325,8 +326,9 @@ ipc.on('command', function (eventevent, data) {
     let cmd = data.command;
     if (process.platform === 'win32' || process.platform === 'win64') {
         cwd = cwd.replaceAll(/\//g, '\\')+'\\';
-        // cmd = cmd.replaceAll(/\.\/anubias-engine/g, 'php anubias-engine');
+        cmd = cmd.replaceAll(/\//g, '\\');
     }
+    // cmd = cmd.replaceAll(/\.\/anubias-engine/g, 'php anubias-engine');
 
     // console.log(cmd);
     // fs.writeFileSync('/home/freeman/log', process.resourcesPath);
