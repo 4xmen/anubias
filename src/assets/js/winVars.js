@@ -6,7 +6,7 @@ window.ide = {
     majorVersion: 1,
     minorVersion: 0,
     patchVersion: 0,
-    suffix: 'alpha',
+    suffix: 'beta',
     version: function () {
         return this.majorVersion + '.' + this.minorVersion + '.' + this.patchVersion + ' ' + this.suffix;
     },
