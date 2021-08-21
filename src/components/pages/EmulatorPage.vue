@@ -63,7 +63,12 @@ export default {
     },
     checkEngine:function () {
         this.terminal.push('______________________________________________________________________\n');
+      // console.log("emulator", './'+this.engineName())
+      if( fnc.getOS() == 'Windows' ){
+        window.api.send("emulator", '.\\'+this.engineName());
+      }else{
         window.api.send("emulator", './'+this.engineName());
+      }
     },
     engineName: function () {
       switch (fnc.getOS()) {

@@ -328,6 +328,7 @@ ipc.on('command', function (eventevent, data) {
         // cmd = cmd.replaceAll(/\.\/anubias-engine/g, 'php anubias-engine');
     }
 
+    // console.log(cmd);
     // fs.writeFileSync('/home/freeman/log', process.resourcesPath);
     let child = cp.exec(cmd, {
         cwd: cwd,
