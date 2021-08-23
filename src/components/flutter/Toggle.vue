@@ -64,6 +64,7 @@ export default {
       if (this.properties.maxLine != 0) {
         style += 'max-height:' + this.properties.maxLine * parseFloat(this.properties.height) + 'em;';
       }
+      style += 'text-align: start;';
       // style += 'margin:' + fnc.calcPadding(this.page.padding, this.scale, true) + ';';
       style += 'font-size:' + (2.5 * this.scale * parseFloat(this.properties.size)) + 'px;';
       return style;

@@ -165,19 +165,19 @@
         <li>
           <a href="#" class="no-paste" @click.prevent="contextTrigger('copy')">
             <i class="fa fa-copy"></i>
-            Copy <span>Ctrl+C</span>
+            Copy <span>Ctrl+Shift+C</span>
           </a>
         </li>
         <li>
           <a href="#" class="no-paste" @click.prevent="contextTrigger('cut')">
             <i class="fa fa-cut"></i>
-            Cut <span>Ctrl+X</span>
+            Cut <span>Ctrl+Shift+X</span>
           </a>
         </li>
         <li>
           <a href="#" @click.prevent="contextTrigger('paste')">
             <i class="fa fa-paste"></i>
-            Paste <span>Ctrl+V</span>
+            Paste <span>Ctrl+Shift+V</span>
           </a>
         </li>
         <li>

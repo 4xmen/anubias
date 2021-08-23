@@ -88,6 +88,7 @@ export default {
 <style scoped>
 .dropd {
   margin-top: 5px;
+  text-align: start;
 }
 
 .placeholder {
