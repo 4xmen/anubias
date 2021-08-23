@@ -298,6 +298,9 @@ ipc.on('emulator', async function  (eventevent, data) {
 
         // get setting and fix path problem
         var setting = await storage.getSync('setting');
+        if (setting.env  != undefined && setting.env.length > 0){
+            data = 'export PATH="$PATH:'+setting.env+'" && ' + data;
+        }
         if (setting.pathFix  != undefined && setting.pathFix){
             if (await fs.existsSync(require('os').homedir() + '/.bash_profile')){
                 data =  '. '+require('os').homedir() + '/.bash_profile && '+data;
@@ -306,6 +309,7 @@ ipc.on('emulator', async function  (eventevent, data) {
                 data =  '. '+require('os').homedir() + '/.zprofile && '+data;
             }
         }
+
         console.log('-----------------------emulator command--------------------');
         console.log(data);
         let child = cp.exec(data, {
@@ -363,6 +367,9 @@ ipc.on('command', async function (eventevent, data) {
     // console.log(cmd);
     // fs.writeFileSync('/home/freeman/log', process.resourcesPath);
     var setting = await storage.getSync('setting');
+    if (setting.env  != undefined && setting.env.length > 0){
+        data = 'export PATH="$PATH:'+setting.env+'" && ' + data;
+    }
     if (setting.pathFix  != undefined && setting.pathFix){
         if (await fs.existsSync(require('os').homedir() + '/.bash_profile')){
             data =  '. '+require('os').homedir() + '/.bash_profile && '+data;
@@ -371,7 +378,8 @@ ipc.on('command', async function (eventevent, data) {
             data =  '. '+require('os').homedir() + '/.zprofile && '+data;
         }
     }
-    console.log('-----------------------emulator command--------------------');
+
+    console.log('-----------------------other command--------------------');
     console.log(data);
     let child = cp.exec(cmd, {
         cwd: cwd,

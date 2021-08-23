@@ -152,6 +152,9 @@ let fixSetting = function (data) {
     if (data.exitConfirm === undefined) {
         data.exitConfirm = true;
     }
+    if (data.env === undefined) {
+        data.env = '';
+    }
     return data;
 }
 

@@ -44,7 +44,7 @@
             </div>
           </div>
           <span>
-            It can fix your problem to find flutter ( only OSX or Linux )
+            It can fix your problem to find flutter <span class="yellow-text">( only OSX or Linux )</span>
           </span>
         </div>
       </div>
@@ -63,7 +63,21 @@
             </div>
           </div>
           <span>
-            Exit IDE without save confirm (Not recommended)
+            Exit IDE without save confirm <span class="yellow-text">(Not recommended)</span>
+          </span>
+        </div>
+      </div>
+      <div class="collection-item">
+        <div>
+          <i class="fa fa-laptop-code ico"></i>
+          <b>
+            Custom environment path
+          </b>
+          <div class="secondary-content">
+            <input type="text" class="input-field"  v-model="setting.env"  placeholder="exm: /usr/bin:/usr/lib"/>
+          </div>
+          <span>
+            You can add your environment path here, Split with <span class="yellow-text">:</span>
           </span>
         </div>
       </div>
@@ -140,6 +154,7 @@ export default {
   overflow: hidden;
   transition: 900ms;
   box-sizing: border-box;
+  position: relative;
 }
 
 .collection-item span {
@@ -158,6 +173,23 @@ export default {
 }
 .collection-item:hover .ico{
   color: #00e676;
+}
+
+.collection-item input{
+  transition: 300ms;
+  position: static;
+  left: 700px;
+  background: #272c34;
+}
+.collection-item input:focus{
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+.yellow-text{
+  display: inline !important;
+  font-weight: 500 !important;
 }
 
 </style>
