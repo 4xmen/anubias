@@ -89,7 +89,7 @@
 <!--          </span>-->
         </a>
       </li>
-      <li>
+      <li @click="showSetting">
         <a>
           <i class="fa fa-cogs"></i>
           Setting
@@ -157,7 +157,7 @@ export default {
 
     $(document).unbind('keyup.mainMenuShortcut').bind('keyup.mainMenuShortcut', function (e) {
       if (e.ctrlKey && e.shiftKey && e.key === 'S') {
-        console.log('go to Setting');
+        self.showSetting();
         return;
       }
       if (e.ctrlKey && e.shiftKey && e.key === 'I') {
@@ -212,6 +212,9 @@ export default {
         window.api.send("command", data);
       }
 
+    },
+    showSetting:function () {
+      this.$router.push('/setting');
     },
     startEmulator:function () {
 

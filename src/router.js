@@ -31,6 +31,11 @@ export default new Router({
             component: view('EmulatorPage')
         },
         {
+            path: "/setting",
+            name: "setting",
+            component: view('SettingPage')
+        },
+        {
             path: "/about",
             name: "About",
             component: view('AboutPage')

@@ -23,6 +23,7 @@
     "brace": "^0.11.1",
     "core-js": "^3.6.5",
     "electron": "^13.1.8",
+    "electron-json-storage": "^4.5.0",
     "flickity": "^2.2.2",
     "fs": "0.0.1-security",
     "html2canvas": "^1.0.0-rc.7",

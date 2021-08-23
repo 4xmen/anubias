@@ -29,7 +29,9 @@ contextBridge.exposeInMainWorld(
                 'app-max',
                 'app-min',
                 'devtools',
-                'emulator'
+                'emulator',
+                'storage-get',
+                'storage-set',
             ];
             if (validChannels.includes(channel)) {
                 ipcRenderer.send(channel, data);
@@ -46,7 +48,9 @@ contextBridge.exposeInMainWorld(
                 'terminal-error',
                 'build-success',
                 'emulator',
-                'emulator-terminal'];
+                'emulator-terminal',
+                'storage-back'
+            ];
             if (validChannels.includes(channel)) {
                 // Deliberately strip event as it includes `sender`
                 ipcRenderer.on(channel, (event, ...args) => func(...args));

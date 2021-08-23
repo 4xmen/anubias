@@ -1,6 +1,7 @@
 'use strict'
 
-import {app, protocol, BrowserWindow, remote} from 'electron'
+
+import {app, protocol, BrowserWindow, remote, globalShortcut} from 'electron'
 import {createProtocol} from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, {VUEJS_DEVTOOLS} from 'electron-devtools-installer'
 import path from 'path'
@@ -12,6 +13,11 @@ const ipc = require('electron').ipcMain
 const dialog = require('electron').dialog
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const isDev = process.mainModule.filename.indexOf('app.asar') === -1;
+const storage = require('electron-json-storage');
+
+console.log('-------------------------STORAGE------------------------------');
+console.log(storage.getDefaultDataPath());
+console.log('--------------------------ASMVM-------------------------------');
 
 var win;
 var underDebug;
@@ -25,18 +31,18 @@ async function createWindow() {
 
     // Create the browser window.
     let iconPath = 'public/256x256.png';
-    if (isDev){
-        if (process.platform == 'darwin'){
+    if (isDev) {
+        if (process.platform == 'darwin') {
             iconPath = 'public/icon.icns';
         }
-    }else{
-        iconPath = process.resourcesPath +'/resources/icons/512x512.png';
-        if (process.platform == 'darwin'){
-            iconPath = process.resourcesPath +'/resources/icons/icon.icns';
+    } else {
+        iconPath = process.resourcesPath + '/resources/icons/512x512.png';
+        if (process.platform == 'darwin') {
+            iconPath = process.resourcesPath + '/resources/icons/icon.icns';
         }
     }
     win = new BrowserWindow({
-        icon:iconPath,
+        icon: iconPath,
         width: 1000,
         height: 600,
         minHeight: 600,
@@ -70,6 +76,7 @@ async function createWindow() {
     }
 }
 
+
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
     // On macOS it is common for applications and their menu bar
@@ -89,6 +96,12 @@ app.on('activate', () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
+
+    // CommandOrControl
+    globalShortcut.register('Alt+F4', () => {
+        console.log('Electron loves global shortcuts!');
+    });
+
     if (isDevelopment && !process.env.IS_TEST) {
         // Install Vue Devtools
         try {
@@ -263,11 +276,13 @@ ipc.on('save-project', function (event, arg) {
  */
 ipc.on('emulator', function (eventevent, data) {
 
+    // console.log(process.env.PATH);
+
     try {
         let cwd = __dirname;
-        if ( isDev ) {
-            cwd +=  '/..';
-        }else{
+        if (isDev) {
+            cwd += '/..';
+        } else {
             cwd = process.resourcesPath;
         }
         cwd += '/resources';
@@ -276,18 +291,23 @@ ipc.on('emulator', function (eventevent, data) {
         }
         let cmd = data.command;
         if (process.platform === 'win32' || process.platform === 'win64') {
-            cwd = cwd.replaceAll(/\//g, '\\')+'\\';
+            cwd = cwd.replaceAll(/\//g, '\\') + '\\';
             data = data.replaceAll(/\//g, '\\');
             // cmd = cmd.replaceAll(/\.\/anubias-engine/g, 'php anubias-engine');
         }
-        let child = cp.exec(data,{
-            cwd:cwd
-        },function (error, stdout, stderr) {
+
+        // data += '&&  echo $PATHZ';
+        let child = cp.exec(data, {
+            cwd: cwd,
+            env: {
+                PATH: process.env.PATH
+            }
+        }, function (error, stdout, stderr) {
             if (!error) {
                 // win.webContents.send('terminal', stdout);
-                if (data == 'emulator -list-avds'){
+                if (data == 'emulator -list-avds') {
                     win.webContents.send('emulator', stdout);
-                }else{
+                } else {
                     // win.webContents.send('message', {type: 'info', 'msg': stdout});
                 }
                 // win.webContents.send('message', {type: 'info', 'msg': stderr});
@@ -300,10 +320,9 @@ ipc.on('emulator', function (eventevent, data) {
                 win.webContents.send('emulator-terminal', dataz);
             }
         });
-    } catch(e) {
+    } catch (e) {
         console.log(e.message);
     }
-
 
 
 });
@@ -314,9 +333,9 @@ ipc.on('command', function (eventevent, data) {
     //
 
     let cwd = __dirname;
-    if ( isDev ) {
-        cwd +=  '/..';
-    }else{
+    if (isDev) {
+        cwd += '/..';
+    } else {
         cwd = process.resourcesPath;
     }
     cwd += '/resources';
@@ -325,7 +344,7 @@ ipc.on('command', function (eventevent, data) {
     }
     let cmd = data.command;
     if (process.platform === 'win32' || process.platform === 'win64') {
-        cwd = cwd.replaceAll(/\//g, '\\')+'\\';
+        cwd = cwd.replaceAll(/\//g, '\\') + '\\';
         cmd = cmd.replaceAll(/\//g, '\\');
     }
     // cmd = cmd.replaceAll(/\.\/anubias-engine/g, 'php anubias-engine');
@@ -398,3 +417,30 @@ ipc.on('app-min', function (eventevent, data) {
 ipc.on('devtools', function (eventevent, data) {
     win.webContents.toggleDevTools();
 });
+/**
+ * get storage values
+ */
+ipc.on('storage-get', function (eventevent, key) {
+
+    storage.get(key, function (error, data) {
+        if (error) {
+            win.webContents.send('message', {type: 'error', 'msg': error});
+        } else {
+            win.webContents.send('storage-back', data);
+        }
+    });
+})
+/**
+ * set storage values
+ */
+ipc.on('storage-set', function (eventevent, data) {
+    storage.set(data.key, data.value, function (error) {
+        if (error) {
+            console.log(error);
+            win.webContents.send('message', {type: 'error', 'msg': error});
+        } else {
+            win.webContents.send('message', {type: 'success', 'msg': 'Setting saved'})
+        }
+        // win.webContents.send('storage-back',data);
+    });
+})

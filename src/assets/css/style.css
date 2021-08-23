@@ -57,6 +57,10 @@ label {
     padding-top: 7px;
 }
 
+blockquote{
+    user-select: text;
+}
+
 #property .dropdown {
     background: transparent;
     color: #ffffff;
@@ -89,6 +93,13 @@ label {
     white-space: pre-wrap;
     line-height: 1em;
 }
+
+.fix-btn{
+    margin: 0 15px;
+    position: relative;
+    top: -2px;
+}
+
 
 @keyframes cursor {
     0% {
@@ -427,4 +438,15 @@ label {
 
 .vc-sketch-color-wrap .vc-checkerboard{
     background: none !important;
+}
+
+/*transiation*/
+
+.slide-fade-enter, .slide-fade-leave-to {
+    transform: translateX(-100px);
+    opacity: 0;
+    pointer-events: none;
+    padding: 0 !important;
+    max-height: 0;
+    margin: 0;
 }
