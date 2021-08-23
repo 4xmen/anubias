@@ -27,6 +27,7 @@ require('alertifyjs/build/css/alertify.min.css');
 require('flickity/dist/flickity.min.css');
 require('vue-context/dist/css/vue-context.css');
 require('./assets/css/style.css');
+import {fnc} from '@/assets/js/functions';
 
 export default {
   name: 'App',
@@ -38,7 +39,18 @@ export default {
   },
   methods: {
     closeApp: function () {
-      window.api.send('app-close', window.appData);
+      if (this.title.length == 0 || !window.ide.settings.exitConfirm){
+        window.api.send('app-close', window.appData);
+      }
+      if (this.isSaved && this.title.length > 0){
+        window.api.send('app-close', window.appData);
+      }else{
+        window.alertify.confirm('The project not saved ,Are you sure to ?', 'Close confirm', function () {
+          window.api.send('app-close', window.appData);
+        },function () {
+
+        });
+      }
     },
     maxApp: function () {
       window.api.send('app-max', window.appData);
@@ -52,6 +64,7 @@ export default {
     // mainPage
   }, mounted() {
     var self = this;
+    window.api.send('storage-get', 'setting');
     // load opened file receive command
     window.api.receive('selected-file', (data) => {
       // load data
@@ -64,6 +77,15 @@ export default {
       self.$router.push('/projectLoaded');
     });
 
+    window.api.receive("storage-back", (data) => {
+      if (data.key == 'setting') {
+        delete data.key ;
+        data = fnc.fixSetting(data);
+
+        window.ide.settings = data;
+      }
+    });
+
     window.api.receive('build-success', (data) => {
       if (data && window.ide.isDebuging) {
         window.alertify.success('Hot reload! 🔥');
@@ -71,6 +93,9 @@ export default {
       }
     });
 
+    window.api.receive("app-exit", () => {
+        self.closeApp();
+    });
     // get message receive command send by electron
     window.api.receive("message", (data) => {
       switch (data.type) {

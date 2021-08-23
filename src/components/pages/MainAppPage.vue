@@ -319,13 +319,13 @@ export default {
       var self = this;
 
       $(document).unbind('keyup.contextShortcut').bind('keyup.contextShortcut', function (e) {
-        if (e.ctrlKey && e.key === 'c') {
+        if (e.ctrlKey && e.shiftKey && e.key === 'c') {
           self.contextTrigger('copy');
         }
-        if (e.ctrlKey && e.key === 'x') {
+        if (e.ctrlKey  && e.shiftKey && e.key === 'x') {
           self.contextTrigger('cut');
         }
-        if (e.ctrlKey && e.key === 'v') {
+        if (e.ctrlKey  && e.shiftKey && e.key === 'v') {
           try {
             self.contextTrigger('paste');
           } catch (e) {

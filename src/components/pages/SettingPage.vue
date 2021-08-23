@@ -12,6 +12,7 @@
 
       <div class="collection-item">
         <div>
+          <i class="fa fa-tachometer-alt ico"></i>
           <b>
             Performance mode
           </b>
@@ -23,10 +24,14 @@
               </label>
             </div>
           </div>
+          <span>
+            Performance mode should improve IDE performance, By the way the page preview refresh reducing
+          </span>
         </div>
       </div>
       <div class="collection-item">
         <div>
+          <i class="fa fa-screwdriver ico"></i>
           <b>
             Path fix
           </b>
@@ -45,6 +50,7 @@
       </div>
       <div class="collection-item">
         <div>
+          <i class="fa fa-door-closed ico"></i>
           <b>
             Exit confirm
           </b>
@@ -56,6 +62,9 @@
               </label>
             </div>
           </div>
+          <span>
+            Exit IDE without save confirm (Not recommended)
+          </span>
         </div>
       </div>
       <br>
@@ -71,6 +80,7 @@
 
 <script>
 import titlec from '../elements/TitleElement';
+import {fnc} from '@/assets/js/functions';
 
 export default {
   name: "SettingPage",
@@ -89,17 +99,12 @@ export default {
   },
   mounted() {
     var self = this;
+
     window.api.receive("storage-back", (data) => {
-      if (data.performanceMode == undefined) {
-        data.performanceMode = false;
+      if (data.key == 'setting'){
+        delete  data.key;
+        self.setting = fnc.fixSetting(data);
       }
-      if (data.pathFix == undefined) {
-        data.pathFix = false;
-      }
-      if (data.exitConfirm == undefined) {
-        data.exitConfirm = true;
-      }
-      self.setting = data;
     });
     window.api.send('storage-get', 'setting');
 
@@ -121,6 +126,9 @@ export default {
       window.api.send('storage-set', data);
     }
   },
+  beforeDestroy() {
+    window.api.send('storage-get', 'setting');
+  }
 }
 </script>
 
@@ -140,5 +148,16 @@ export default {
   font-weight: 100;
 }
 
+
+.collection-item .ico{
+  float: left;
+  font-size: 35px;
+  margin: 7px 25px 7px 0;
+  color: #00e67644;
+  transition: 600ms;
+}
+.collection-item:hover .ico{
+  color: #00e676;
+}
 
 </style>

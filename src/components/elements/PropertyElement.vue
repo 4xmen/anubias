@@ -287,11 +287,13 @@ export default {
     updateScreen: function () {
       var self = this;
       clearTimeout(setme);
-      setme = setTimeout(function () {
-        fnc.takeScreenShot("#preview", function (e) {
-          window.appData.pages[self.page].image = e;
-        });
-      }, 1000);
+      if (!window.ide.settings.performanceMode){
+        setme = setTimeout(function () {
+          fnc.takeScreenShot("#preview", function (e) {
+            window.appData.pages[self.page].image = e;
+          });
+        }, 1000);
+      }
     },
     // blurTitle:function (e) {
     //

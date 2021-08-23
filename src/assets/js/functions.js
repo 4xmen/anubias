@@ -142,6 +142,19 @@ let linkify = function (inputText) {
     return replacedText;
 }
 
+let fixSetting = function (data) {
+    if (data.performanceMode === undefined) {
+        data.performanceMode = false;
+    }
+    if (data.pathFix === undefined) {
+        data.pathFix = false;
+    }
+    if (data.exitConfirm === undefined) {
+        data.exitConfirm = true;
+    }
+    return data;
+}
+
 /**
  * for export
  */
@@ -154,6 +167,7 @@ let fnc = {
     getOS,
     getSize,
     linkify,
+    fixSetting
 }
 export {
     fnc

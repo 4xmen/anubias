@@ -49,7 +49,8 @@ contextBridge.exposeInMainWorld(
                 'build-success',
                 'emulator',
                 'emulator-terminal',
-                'storage-back'
+                'storage-back',
+                'app-exit'
             ];
             if (validChannels.includes(channel)) {
                 // Deliberately strip event as it includes `sender`

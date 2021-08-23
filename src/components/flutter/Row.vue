@@ -142,11 +142,13 @@ export default {
       newComponent.name = this.properties.name + this.capitalizeFirstLetter(component.type) + i;
       visuals.push(newComponent);
 // update page preview
-      setTimeout(function () {
-        fnc.takeScreenShot("#preview", function (e) {
-          self.page.image = e;
-        });
-      }, 1000);
+      if (!window.ide.settings.performanceMode) {
+        setTimeout(function () {
+          fnc.takeScreenShot("#preview", function (e) {
+            self.page.image = e;
+          });
+        }, 1000);
+      }
       return true;
     },
     isVisual: function (n) { // check is visual component or not

@@ -99,7 +99,7 @@ app.on('ready', async () => {
 
     // CommandOrControl
     globalShortcut.register('Alt+F4', () => {
-        console.log('Electron loves global shortcuts!');
+        win.webContents.send('app-exit', {});
     });
 
     if (isDevelopment && !process.env.IS_TEST) {
@@ -274,7 +274,7 @@ ipc.on('save-project', function (event, arg) {
 /**
  * Run emulator command line
  */
-ipc.on('emulator', function (eventevent, data) {
+ipc.on('emulator', async function  (eventevent, data) {
 
     // console.log(process.env.PATH);
 
@@ -296,7 +296,18 @@ ipc.on('emulator', function (eventevent, data) {
             // cmd = cmd.replaceAll(/\.\/anubias-engine/g, 'php anubias-engine');
         }
 
-        // data += '&&  echo $PATHZ';
+        // get setting and fix path problem
+        var setting = await storage.getSync('setting');
+        if (setting.pathFix  != undefined && setting.pathFix){
+            if (await fs.existsSync(require('os').homedir() + '/.bash_profile')){
+                data =  '. '+require('os').homedir() + '/.bash_profile && '+data;
+            }
+            if (await fs.existsSync(require('os').homedir() + '/.zprofile')){
+                data =  '. '+require('os').homedir() + '/.zprofile && '+data;
+            }
+        }
+        console.log('-----------------------emulator command--------------------');
+        console.log(data);
         let child = cp.exec(data, {
             cwd: cwd,
             env: {
@@ -329,7 +340,7 @@ ipc.on('emulator', function (eventevent, data) {
 /**
  * Run command line
  */
-ipc.on('command', function (eventevent, data) {
+ipc.on('command', async function (eventevent, data) {
     //
 
     let cwd = __dirname;
@@ -351,6 +362,17 @@ ipc.on('command', function (eventevent, data) {
 
     // console.log(cmd);
     // fs.writeFileSync('/home/freeman/log', process.resourcesPath);
+    var setting = await storage.getSync('setting');
+    if (setting.pathFix  != undefined && setting.pathFix){
+        if (await fs.existsSync(require('os').homedir() + '/.bash_profile')){
+            data =  '. '+require('os').homedir() + '/.bash_profile && '+data;
+        }
+        if (await fs.existsSync(require('os').homedir() + '/.zprofile')){
+            data =  '. '+require('os').homedir() + '/.zprofile && '+data;
+        }
+    }
+    console.log('-----------------------emulator command--------------------');
+    console.log(data);
     let child = cp.exec(cmd, {
         cwd: cwd,
     }, function (error, stdout, stderr) {
@@ -426,6 +448,7 @@ ipc.on('storage-get', function (eventevent, key) {
         if (error) {
             win.webContents.send('message', {type: 'error', 'msg': error});
         } else {
+            data.key = key;
             win.webContents.send('storage-back', data);
         }
     });

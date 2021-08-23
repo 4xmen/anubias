@@ -23,5 +23,9 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
+#other resource
+/resources/*.json
+/resources/*.xz
+
 #Electron-builder output
 /dist_electron
