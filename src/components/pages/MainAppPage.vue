@@ -885,7 +885,8 @@ export default {
 
 .logo {
   height: 40vh;
-  margin-top: 15vh;
+  margin-top: calc(50vh - 40vh);
+  animation: fliper 15s infinite;
 }
 
 .logo-sm {
@@ -902,5 +903,30 @@ export default {
   color: red;
   margin-left: 20px;
   margin-top: 10px;
+}
+
+@keyframes fliper {
+  0%{
+    transform: translate(0px);
+  }
+  45%{
+    transform: translate(0px);
+    opacity: 1;
+  }
+  47%{
+    transform: translate(100px) scale(1.3);
+    opacity: .7;
+  }
+  50%{
+    transform: translate(-200px) scale(1.5);
+    opacity: .3 ;
+  }
+  53%{
+    transform: translate(0px);
+    opacity: 1;
+  }
+  100%{
+    transform: translate(0px);
+  }
 }
 </style>
