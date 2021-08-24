@@ -12,6 +12,7 @@ window.ide = {
     },
     isDebuging: false,
     isInitReload: false,
+    isOnline: false,
     settings: {},
 };
 /**

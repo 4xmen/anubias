@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="title-bar">
-      <div class="controls">
+      <div class="controls" v-if="!isOnline">
         <div class="circle red" @click="closeApp"> <i class="fa fa-times"></i>  </div>
         <div class="circle yellow darken-2" @click="maxApp"> <i class="fa fa-expand-alt"></i> </div>
         <div class="circle green lighten-2" @click="minApp"> <i class="fa fa-minus"></i> </div>
@@ -35,6 +35,7 @@ export default {
     return {
       title: '',
       isSaved: false,
+      isOnline : window.ide.isOnline,
     }
   },
   methods: {

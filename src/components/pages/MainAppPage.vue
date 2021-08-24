@@ -107,6 +107,9 @@
           </div>
           <!-- right sidebar end -->
           <div v-else class="text-center pos-relative">
+            <h5 v-if="isOnline && isNotChrome">
+              Please use `chromium` or `google chrome` to use online app
+            </h5>
             <img src="../../assets/img/logo.svg" class="logo" alt="">
           </div>
         </div>
@@ -290,6 +293,8 @@ export default {
       currentProperties: {},
       contextIndex: -1,
       contextClipBoard: '',
+      isOnline: window.ide.isOnline,
+      isNotChrome: window.chrome == undefined,
       terminalContent: ['Welcome to Anbuias v' + window.ide.version()],
       // isInitProject: false,
       display: {

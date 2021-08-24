@@ -13,8 +13,14 @@
       </li>
       <li>
         <a @click="openProject">
+          <span v-if="!isOnline">
           <i class="fa fa-folder-open"></i>
-          Open project
+            Open project
+          </span>
+          <span v-else>
+            <i class="fa fa-upload"></i>
+            Upload project
+          </span>
           <span class="shortcut">
             Ctrl+O
           </span>
@@ -22,27 +28,34 @@
       </li>
       <li :class="(cantEditPrj?' disabled':'')">
         <a @click="save">
+          <span v-if="!isOnline">
           <i class="fa fa-save"></i>
           Save project
+          </span>
+          <span v-else>
+            <i class="fa fa-download"></i>
+            Download Project
+          </span>
           <span class="shortcut">
             Ctrl+S
           </span>
         </a>
       </li>
-      <li :class="(cantEditPrj?' disabled':'')">
+      <li v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
         <a @click="saveAs">
-          <i class="fa fa-save"></i>
-          Save project as
+
+            <i class="fa fa-save"></i>
+            Save project as
         </a>
       </li>
       <li class="divider"></li>
-      <li :class="(cantEditPrj?' disabled':'')">
+      <li  :class="(cantEditPrj?' disabled':'')">
         <router-link :to="cantEditPrj?'':'/project'">
           <i class="fa fa-cog"></i>
           Project info
         </router-link>
       </li>
-      <li :class="(cantEditPrj?' disabled':'')">
+      <li  v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
         <a @click="debug">
           <i class="fa fa-bug"></i>
           Debug
@@ -51,8 +64,8 @@
           </span>
         </a>
       </li>
-      <li :class="(cantEditPrj?' disabled':'')">
-        <a>
+      <li  v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
+        <a @click="build">
           <i class="fa fa-hammer"></i>
           Build
           <span class="shortcut">
@@ -60,7 +73,7 @@
           </span>
         </a>
       </li>
-      <li @click="hotReload" :class="(!startDebug?' disabled':'')">
+      <li v-if="!isOnline" @click="hotReload" :class="(!startDebug?' disabled':'')">
         <a>
           <i class="fa fa-fire"></i>
           Hot reload
@@ -80,7 +93,7 @@
 <!--          </span>-->
 <!--        </a>-->
 <!--      </li>-->
-      <li @click="startEmulator">
+      <li v-if="!isOnline" @click="startEmulator">
         <a>
           <i class="fa fa-mobile"></i>
           Emulator & Check
@@ -89,7 +102,7 @@
 <!--          </span>-->
         </a>
       </li>
-      <li @click="showSetting">
+      <li v-if="!isOnline" @click="showSetting">
         <a>
           <i class="fa fa-cogs"></i>
           Setting
@@ -134,6 +147,7 @@
         </ul>
       </div>
     </nav>
+    <input type="file" style="display: none" ref="dialog" accept=".anb" />
   </div>
 </template>
 
@@ -148,6 +162,7 @@ export default {
     return {
       appData: window.appData,
       startDebug: window.ide.isDebuging,
+      isOnline: window.ide.isOnline,
     }
   },
   mounted() {
@@ -240,7 +255,7 @@ export default {
       window.api.send("command", data);
     },
     debug: function () {
-      if (this.cantEditPrj) {
+      if (this.cantEditPrj || this.isOnline) {
         return false;
       }
       this.$parent.TerminalShow();
@@ -252,10 +267,31 @@ export default {
       }
       window.api.send("command", data);
     },
+    build: function () {
+      if (this.cantEditPrj || this.isOnline) {
+        return false;
+      }
+      this.$parent.TerminalShow();
+      this.startDebug = true;
+      window.ide.isDebuging = true;
+      let data = {
+        isDebug: true,
+        command: './'+this.engineName+' -b ' + window.project.file + ' && cd ' + window.project.folder + '/src && flutter build apk',
+      }
+      window.api.send("command", data);
+    },
     save: function () {
+
       // check can edit project
       if (this.cantEditPrj) {
         return false;
+      }
+
+      if (this.isOnline){
+        // download project
+        fnc.downloadObjectAsJson(window.appData,
+            window.appData.project.name.split(' ').join('-'));
+        return  true;
       }
       // if not saved yet run save as auto
       if (window.project.file === '') {
@@ -271,7 +307,37 @@ export default {
       window.api.send("save-project", data);
     },
     openProject: function () {
-      window.api.send("open-file-dialog-project", {});
+      var self = this;
+      if (this.isOnline){
+        // open file
+        this.$refs.dialog.click();
+        this.$refs.dialog.onchange = function () {
+          if ( this.files[0] != undefined){
+            let file = this.files[0];
+            if (file) {
+              var reader = new FileReader();
+              reader.readAsText(file, "UTF-8");
+              reader.onload = function (e) {
+                try {
+                   let json = JSON.parse(e.target.result);
+                   window.appData = json;
+                   window.alertify.success('Project loaded :' + json.project.name);
+                  // go to verify
+                   self.$router.push('/projectLoaded');
+                } catch(e) {
+                  window.alertify.error("Error to parse anb file");
+                }
+
+              }
+              reader.onerror = function () {
+                window.alertify.error("Error reading file");
+              }
+            }
+          }
+        };
+      }else{
+        window.api.send("open-file-dialog-project", {});
+      }
     },
     newProject: function () {
 
