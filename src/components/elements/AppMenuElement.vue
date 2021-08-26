@@ -82,6 +82,15 @@
           </span>
         </a>
       </li>
+      <li v-if="!isOnline" @click="hotReload" :class="(!startDebug?' disabled':'')">
+        <a>
+          <i class="fa fa-cloud-upload"></i>
+          Online Build
+          <span class="shortcut">
+            Ctrl+Shif+B
+          </span>
+        </a>
+      </li>
     </ul>
     <ul id="dropdown2" class="dropdown-content grey darken-3">
 <!--      <li @click="test">-->
