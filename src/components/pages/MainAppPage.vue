@@ -2,7 +2,7 @@
   <div>
     <div id="wrapper">
 
-      <div id="main">
+      <div id="main" :class="(!settings.pages?'page-collapse ':'')">
         <!-- add app menu to main-->
         <app-menu class="blurable"></app-menu>
         <div class="container">
@@ -144,7 +144,7 @@
           </div>
         </div>
       </div>
-      <div id="pages" class="blurable">
+      <div id="pages" :class="'blurable '+(!settings.pages?'collapse ':'')" >
         <div class="container">
           <!-- if project init can pages -->
           <div v-if="isInitProject">
@@ -294,6 +294,7 @@ export default {
       contextIndex: -1,
       contextClipBoard: '',
       isOnline: window.ide.isOnline,
+      settings: window.ide.settings,
       isNotChrome: window.chrome == undefined,
       terminalContent: ['Welcome to Anbuias v' + window.ide.version()],
       // isInitProject: false,
@@ -767,6 +768,11 @@ export default {
 #main {
   width: 75%;
   min-height: 80vh;
+  margin-bottom: 20vh;
+}
+
+#main.page-collapse{
+  margin-bottom: 0;
 }
 
 
@@ -806,7 +812,24 @@ export default {
   overflow-y: scroll;
   overflow-x: hidden;
   z-index: 999;
+  transition: 200ms;
 }
+
+#pages.collapse {
+  height: 5px;
+}
+
+#pages.collapse .logo-sm{
+  display: none;
+}
+#pages.collapse:hover {
+  height: 20vh;
+}
+
+#pages.collapse:hover .logo-sm{
+  display: block;
+}
+
 
 #pages .container {
   padding: 5px;
@@ -887,6 +910,9 @@ export default {
   height: 40vh;
   margin-top: calc(50vh - 40vh);
   animation: fliper 15s infinite;
+}
+.page-collapse .logo{
+  margin-top: calc(50vh - 30vh);
 }
 
 .logo-sm {

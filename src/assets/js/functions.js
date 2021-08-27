@@ -155,6 +155,9 @@ let fixSetting = function (data) {
     if (data.env === undefined) {
         data.env = '';
     }
+    if (data.pages === undefined) {
+        data.pages = true;
+    }
     return data;
 }
 

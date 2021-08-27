@@ -81,6 +81,25 @@
           </span>
         </div>
       </div>
+      <div class="collection-item">
+        <div class="secondary-content">
+          <div class="switch">
+            <label>
+              <input type="checkbox" v-model="setting.pages">
+              <span class="lever"></span>
+            </label>
+          </div>
+        </div>
+        <div>
+          <i class="fa fa-copy ico"></i>
+          <b>
+            Pages control panel pin
+          </b>
+          <span>
+            You can choose page control view type here (active is penned)
+          </span>
+        </div>
+      </div>
       <br>
       <div class="btn waves-effect waves-block" @click="save">
         <i class="fa fa-save"></i>
@@ -108,6 +127,7 @@ export default {
         performanceMode: false,
         pathFix: false,
         exitConfirm: false,
+        pages: true,
       }
     }
   },
@@ -138,6 +158,7 @@ export default {
       let  data = {key: 'setting', value: this.setting};
       // console.log(data);
       window.api.send('storage-set', data);
+      window.ide.settings = this.setting;
     }
   },
   beforeDestroy() {
@@ -175,13 +196,13 @@ export default {
   color: #00e676;
 }
 
-.collection-item input{
+.collection-item input[type='text']{
   transition: 300ms;
   position: static;
   left: 700px;
   background: #272c34;
 }
-.collection-item input:focus{
+.collection-item input[type='text']:focus{
   position: absolute;
   left: 0;
   right: 0;
@@ -191,5 +212,8 @@ export default {
   display: inline !important;
   font-weight: 500 !important;
 }
-
+/*.switch .lever {*/
+/*  display: inline-block;*/
+/*  min-width: 35px;*/
+/*}*/
 </style>

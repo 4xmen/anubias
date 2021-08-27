@@ -84,10 +84,10 @@
       </li>
       <li v-if="!isOnline" @click="hotReload" :class="(!startDebug?' disabled':'')">
         <a>
-          <i class="fa fa-cloud-upload"></i>
+          <i class="fa fa-cloud"></i>
           Online Build
           <span class="shortcut">
-            Ctrl+Shif+B
+            Ctrl+Shift+B
           </span>
         </a>
       </li>
