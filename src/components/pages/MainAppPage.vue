@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div id="wrapper">
+    <div id="wrapper" :class="(!settings.pages?'page-collapse ':'')+(!settings.sidebar?'side-collapse ':'')">
 
-      <div id="main" :class="(!settings.pages?'page-collapse ':'')">
+      <div id="main" :class="(!settings.pages?'page-collapse ':'')+(!settings.sidebar?'side-collapse ':'')">
         <!-- add app menu to main-->
         <app-menu class="blurable"></app-menu>
         <div class="container">
@@ -114,7 +114,7 @@
           </div>
         </div>
       </div>
-      <div id="side" class="blurable">
+      <div id="side" :class="'blurable ' +(!settings.sidebar?'collapse ':'')">
         <div id="components">
           <h2>
             Components
@@ -247,7 +247,6 @@ import VueContext from 'vue-context';
 /*eslint-disable */
 import Sortable from '@/assets/js/Sortable.min';
 /*eslint-enable */
-
 // import editor  from '../elements/TitleElement';
 // const {remote} = require("electron");
 import {fnc} from '@/assets/js/functions';
@@ -736,6 +735,19 @@ export default {
   box-sizing: border-box;
   border-left: 1px solid rgba(0, 0, 0, .1);
   border-top: 1px solid rgba(0, 0, 0, .1);
+  transition: 300ms;
+  overflow: hidden;
+  z-index: 999;
+}
+
+#side.collapse{
+  width: 15px ;
+  opacity: 0.01;
+}
+#side.collapse:hover{
+  width: 25% ;
+  border-left: 2px;
+  opacity: 1;
 }
 
 #side #components {
@@ -774,6 +786,10 @@ export default {
 #main.page-collapse{
   margin-bottom: 0;
 }
+#main.side-collapse{
+  width: 100%;
+}
+
 
 
 #camera {
@@ -811,8 +827,12 @@ export default {
   border-right: 0;
   overflow-y: scroll;
   overflow-x: hidden;
-  z-index: 999;
+  z-index: 998;
   transition: 200ms;
+}
+
+.side-collapse #pages{
+  right: 0 ;
 }
 
 #pages.collapse {

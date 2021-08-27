@@ -158,6 +158,9 @@ let fixSetting = function (data) {
     if (data.pages === undefined) {
         data.pages = true;
     }
+    if (data.sidebar === undefined) {
+        data.sidebar = true;
+    }
     return data;
 }
 

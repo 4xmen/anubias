@@ -96,7 +96,26 @@
             Pages control panel pin
           </b>
           <span>
-            You can choose page control view type here (active is penned)
+            You can choose page control view type here (active is pinned)
+          </span>
+        </div>
+      </div>
+      <div class="collection-item">
+        <div class="secondary-content">
+          <div class="switch">
+            <label>
+              <input type="checkbox" v-model="setting.sidebar">
+              <span class="lever"></span>
+            </label>
+          </div>
+        </div>
+        <div>
+          <i class="fa fa-indent ico"></i>
+          <b>
+            Sidebar panel pin
+          </b>
+          <span>
+            You can choose sidebar view type here (active is pinned)
           </span>
         </div>
       </div>
