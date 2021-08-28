@@ -1,6 +1,6 @@
 <!--the main menu of ide-->
 <template>
-  <div>
+  <div  class="navbar-fixed">
     <ul id="dropdown1" class="dropdown-content grey darken-3">
       <li>
         <a @click="newProject">
@@ -409,6 +409,12 @@ export default {
 /*  }*/
 /*}*/
 
+#nav{
+  top: 33px;
+  left: 0;
+  right: 0;
+  position: fixed;
+}
 nav, nav .nav-wrapper i, nav > a.sidenav-trigger, nav > a.sidenav-trigger i {
   height: 40px;
   line-height: 40px;

@@ -1,10 +1,41 @@
 <template>
   <div>
+    <app-menu class="blurable"></app-menu>
+    <div class="clearfix"></div>
+    <div id="tabs">
+      <div class="active">
+        <i class="fa fa-laptop-code"></i>
+        main tab
+      </div>
+      <div>
+        <i class="fa fa-code"></i>
+        Code page - onpressed
+      </div>
+      <div>
+        <i class="fa fa-code"></i>
+        Code page - onlongpressed
+      </div>
+      <div>
+        <i class="fa fa-arrow-right"></i>
+        page 1 live binder
+      </div>
+      <div>
+        <i class="fa fa-code"></i>
+        Code page - onpressed
+      </div>
+      <div>
+        <i class="fa fa-code"></i>
+        Code page - onlongpressed
+      </div>
+      <div>
+        <i class="fa fa-arrow-right"></i>
+        page 1 live binder
+      </div>
+    </div>
     <div id="wrapper" :class="(!settings.pages?'page-collapse ':'')+(!settings.sidebar?'side-collapse ':'')">
 
       <div id="main" :class="(!settings.pages?'page-collapse ':'')+(!settings.sidebar?'side-collapse ':'')">
         <!-- add app menu to main-->
-        <app-menu class="blurable"></app-menu>
         <div class="container">
           <!-- if project init can show left side -->
           <!-- right sidebar start -->
@@ -313,7 +344,7 @@ export default {
 
       window.project.isSave = true;
       this.$parent.isSaved = true;
-      
+
 
       var $ = window.jQuery;
       // $("#main").niceScroll();
@@ -729,9 +760,9 @@ export default {
   width: 25%;
   position: fixed;
   right: 0;
-  top: 31px;
+  top: 105px;
   bottom: 0;
-  min-height: 100vh;
+  min-height: calc(100vh - 110px);
   box-sizing: border-box;
   border-left: 1px solid rgba(0, 0, 0, .1);
   border-top: 1px solid rgba(0, 0, 0, .1);
@@ -751,13 +782,13 @@ export default {
 }
 
 #side #components {
-  height: calc(50vh - 31px);
+  height: 50%;
   overflow-y: scroll;
   font-weight: 100;
 }
 
 #properties {
-  height: 50vh;
+  height: 50%;
   overflow: hidden;
   overflow-y: scroll;
 }

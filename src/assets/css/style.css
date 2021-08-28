@@ -60,6 +60,36 @@ blockquote{
     user-select: text;
 }
 
+#tabs{
+    background: #1a212999;
+    border-bottom: 1px solid #1a2129;
+    padding-top: 4px;
+    position: fixed;
+    left: 0;
+    top: 70px;
+    right: 0;
+    z-index: 995;
+    white-space: nowrap;
+    /*overflow: hidden;*/
+}
+
+
+#tabs > div{
+    display: inline-block;
+    padding: 5px 1rem;
+    margin-left: 5px;
+    background: #1a212999;
+    position: relative;
+    top: 1px;
+    /*float: left;*/
+}
+#tabs > div.active{
+    background: #282c34;
+}
+#tabs i{
+    margin-right: 1rem;
+}
+
 #property .dropdown {
     background: transparent;
     color: #ffffff;
