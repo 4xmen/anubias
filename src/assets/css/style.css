@@ -62,7 +62,6 @@ blockquote{
 
 #tabs{
     background: #1a212999;
-    border-bottom: 1px solid #1a2129;
     padding-top: 4px;
     position: fixed;
     left: 0;
@@ -70,24 +69,44 @@ blockquote{
     right: 0;
     z-index: 995;
     white-space: nowrap;
+    height: 40px;
     /*overflow: hidden;*/
 }
+#tabs:hover{
+    z-index: 1000;
+}
 
+#tabs ul{
+    margin: 0 ;
+    margin-top: 5px;
+}
 
-#tabs > div{
+#tabs li{
     display: inline-block;
     padding: 5px 1rem;
     margin-left: 5px;
     background: #1a212999;
-    position: relative;
-    top: 1px;
+    transition: 500ms;
     /*float: left;*/
 }
-#tabs > div.active{
+#tabs li.active{
     background: #282c34;
 }
 #tabs i{
     margin-right: 1rem;
+    color: yellowgreen;
+    opacity: .5;
+}
+#tabs li.active i{
+    opacity: 1;
+}
+#tabs span.fa{
+    margin-left: 1rem;
+    transition: 200ms;
+    color: #666666;
+}
+#tabs span.fa:hover{
+    color: red;
 }
 
 #property .dropdown {
@@ -103,6 +122,34 @@ blockquote{
     height: auto !important;
     margin: 0 !important;
 }
+
+
+#tab-content-1{
+    display: block;
+}
+
+.prev-sc,.next-sc{
+    position: fixed;
+    top: 110px;
+    left: 15px;
+    background: rgba(0,0,0,0.2);
+    padding: 2px;
+    text-align: center;
+    border: 1px solid #1a2129;
+}
+.prev-sc i,.next-sc i{
+    font-size: 12px;
+}
+.next-sc{
+    left: 45px;
+}
+
+.tab-content{
+    display: none;
+    transition: 800ms ease-in-out;
+    margin-top: 0;
+}
+
 
 .wrapper {
     -o-transition: 1s;
@@ -472,10 +519,31 @@ blockquote{
 /*transiation*/
 
 .slide-fade-enter, .slide-fade-leave-to {
-    transform: translateX(-100px);
-    opacity: 0;
     pointer-events: none;
     padding: 0 !important;
     max-height: 0;
     margin: 0;
+}
+.slide-fade-tab{
+    transform: translateX(-400px);
+    opacity: 0;
+    pointer-events: none;
+    margin-top: 0;
+}
+
+.slide-fade-tab #side{
+    opacity: 0;
+}
+.slide-fade-tab #pages{
+    opacity: 0;
+}
+
+.vs-dark,.hc-black{
+    min-width: 100% !important;
+    min-height: 100vh !important;
+}
+
+.vs-dark .monaco-editor-background{
+    background: #282c34;
+    padding-left: 1rem;
 }

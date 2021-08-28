@@ -133,11 +133,13 @@
                 </select>
               </div>
               <div v-else-if="k.toLowerCase().indexOf('color') !== -1">
-<!--                <div class="btn btn-flat waves-effect white-text color-picker" @click="showColorPicker( k)">-->
-<!--                  <i class="fa fa-palette"></i>-->
-<!--                </div>-->
+                <!--                <div class="btn btn-flat waves-effect white-text color-picker" @click="showColorPicker( k)">-->
+                <!--                  <i class="fa fa-palette"></i>-->
+                <!--                </div>-->
                 <select v-model="properties[k]" :id="k">
-                  <option v-if="properties[k].indexOf('0x') !== -1" :value="properties[k]"  disabled> {{properties[k]}} </option>
+                  <option v-if="properties[k].indexOf('0x') !== -1" :value="properties[k]" disabled>
+                    {{ properties[k] }}
+                  </option>
                   <option :value="cl.value" v-for="(cl,n) in colors" class="ui dropdown" v-bind:key="n"
                           :style="'background:'+cl.color + (['white','transparent','yellow','lime','grey','default'].indexOf(cl.name) > -1?';color:black;':'')">
                     {{ cl.name }}
@@ -278,16 +280,21 @@ export default {
       })
     },
     codeEdit: function (k) {
-      this.$parent.codeContent = this.properties[k];
-      this.onEdit = this.properties[k];
-      this.onEditKey = k;
-      this.$parent.showCodeModal = true;
-      this.$parent.codeTitle = '[' + window.appData.pages[this.page].name + '] ' + this.properties.name + '.' + k;
+      // this.$parent.codeContent = this.properties[k];
+      // this.onEdit = this.properties[k];
+      // this.onEditKey = k;
+      // this.$parent.showCodeModal = true;
+      // this.$parent.codeTitle = this.properties[k];;
+      let title = '[' + window.appData.pages[this.page].name + '] ' + this.properties.name + '.' + k;
+      // this.properties[k] += '// test \n';
+      this.$parent.addTab(title, 'code', {
+            codeTitle: title,
+          }, 'fa-code', k);
     },
     updateScreen: function () {
       var self = this;
       clearTimeout(setme);
-      if (!window.ide.settings.performanceMode){
+      if (!window.ide.settings.performanceMode) {
         setme = setTimeout(function () {
           fnc.takeScreenShot("#preview", function (e) {
             window.appData.pages[self.page].image = e;

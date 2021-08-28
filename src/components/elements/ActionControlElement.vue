@@ -44,55 +44,53 @@
 <script>
 import Sortable from '@/assets/js/Sortable.min';
 import {fnc} from "@/assets/js/functions";
-import ace from 'brace';
 // import {xscript} from "@/assets/js/xscript";
-var editor2;
 export default {
   mounted() {
     this.allActions = this.actions;
     // this.rowData = this.rwData;
     this.sortInit();
-    var self = this;
-    require('brace/ext/language_tools') //language extension prerequsite...
-    // require('brace/mode/javascript')    //language
-    // require('brace/snippets/javascript') //snippe
-    require("@/assets/js/xscript");
-    require("@/assets/js/xScriptSnipts");
-    require('brace/theme/dracula');
-    //
-    editor2 = ace.edit('codeEditor2');
-    editor2.getSession().setMode('ace/mode/xscript');
-    editor2.setTheme('ace/theme/dracula');
-    editor2.setOptions({
-      enableBasicAutocompletion: true,
-      enableLiveAutocompletion: true,
-      fontSize: 16,
-      highlightActiveLine: false,
-      enableSnippets: true,
-      showLineNumbers: true,
-      tabSize: 4,
-      showPrintMargin: false,
-      showGutter: true,
-    });
+    // var self = this;
+    // require('brace/ext/language_tools') //language extension prerequsite...
+    // // require('brace/mode/javascript')    //language
+    // // require('brace/snippets/javascript') //snippe
+    // require("@/assets/js/xscript");
+    // require("@/assets/js/xScriptSnipts");
+    // require('brace/theme/dracula');
+    // //
+    // editor2 = ace.edit('codeEditor2');
+    // editor2.getSession().setMode('ace/mode/xscript');
+    // editor2.setTheme('ace/theme/dracula');
+    // editor2.setOptions({
+    //   enableBasicAutocompletion: true,
+    //   enableLiveAutocompletion: true,
+    //   fontSize: 16,
+    //   highlightActiveLine: false,
+    //   enableSnippets: true,
+    //   showLineNumbers: true,
+    //   tabSize: 4,
+    //   showPrintMargin: false,
+    //   showGutter: true,
+    // });
     // // editor.$blockScrolling = Infinity;
-    if (this.allActions != undefined &&
-        this.allActions[this.current] != undefined &&
-        this.allActions[this.current].onPressed != undefined) {
-      editor2.setValue(this.allActions[this.current].onPressed, 1);
-      this.content = this.allActions[this.current].onPressed;
-    }
-    editor2.on('change', function () {
-      var content = editor2.getValue();
-      self.content = content;
-      if (self.allActions[self.current].onPressed !== undefined){
-        self.allActions[self.current].onPressed = content;
-      }
-      // self.$emit('input', content);
-    });
+    // if (this.allActions != undefined &&
+    //     this.allActions[this.current] != undefined &&
+    //     this.allActions[this.current].onPressed != undefined) {
+    //   editor2.setValue(this.allActions[this.current].onPressed, 1);
+    //   this.content = this.allActions[this.current].onPressed;
+    // }
+    // editor2.on('change', function () {
+    //   var content = editor2.getValue();
+    //   self.content = content;
+    //   if (self.allActions[self.current].onPressed !== undefined){
+    //     self.allActions[self.current].onPressed = content;
+    //   }
+    //   // self.$emit('input', content);
+    // });
 
   },
   beforeDestroy() {
-    editor2.destroy();
+    // editor2.destroy();
   },
   name: "ActionControlElement",
   data: function () {
@@ -144,10 +142,10 @@ export default {
       );
       // this.sortInit();
     },
-    change: function (k) {
-      this.current = k;
-      editor2.setValue( this.allActions[this.current].onPressed,1);
-    },
+    // change: function (k) {
+    //   this.current = k;
+    //   editor2.setValue( this.allActions[this.current].onPressed,1);
+    // },
     rem: function (i) {
       let self = this;
       window.alertify.confirm(`Are you sure to remove this action
@@ -164,13 +162,13 @@ export default {
   watch: {
     actions: function (newVal) {
       this.allActions = newVal;
-      if (this.allActions.length === 0){
-        editor2.setValue('',1);
-      }else{
-        if (this.allActions[0].onPressed !== undefined){
-          editor2.setValue( this.allActions[0].onPressed,1);
-        }
-      }
+      // if (this.allActions.length === 0){
+      //   editor2.setValue('',1);
+      // }else{
+      //   if (this.allActions[0].onPressed !== undefined){
+      //     editor2.setValue( this.allActions[0].onPressed,1);
+      //   }
+      // }
     }
     ,
   }

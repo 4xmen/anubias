@@ -16,7 +16,6 @@ export default {
   },
   methods: {
     getStyle:function () {
-      console.log('red');
       let style = '';
       if (this.properties.color != 'null'){
         style += 'border-color:'+this.color2web(this.properties.color)+';';
@@ -45,7 +44,7 @@ export default {
       style += 'margin-top: ' + (this.scale * height * .5)+'px;';
       style += 'margin-bottom: ' + (this.scale * height + (20*this.scale) )+'px;';
 
-      console.log(style);
+      //console.log(style);
 
       return style;
     },

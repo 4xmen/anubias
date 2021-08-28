@@ -1,230 +1,215 @@
 <template>
   <div>
     <app-menu class="blurable"></app-menu>
-    <div class="clearfix"></div>
-    <div id="tabs">
-      <div class="active">
-        <i class="fa fa-laptop-code"></i>
-        main tab
-      </div>
-      <div>
-        <i class="fa fa-code"></i>
-        Code page - onpressed
-      </div>
-      <div>
-        <i class="fa fa-code"></i>
-        Code page - onlongpressed
-      </div>
-      <div>
-        <i class="fa fa-arrow-right"></i>
-        page 1 live binder
-      </div>
-      <div>
-        <i class="fa fa-code"></i>
-        Code page - onpressed
-      </div>
-      <div>
-        <i class="fa fa-code"></i>
-        Code page - onlongpressed
-      </div>
-      <div>
-        <i class="fa fa-arrow-right"></i>
-        page 1 live binder
-      </div>
+    <div id="tabs" >
+      <ul class="clearfix">
+        <li :class="(activeTab == '-1'?'active':'')" @click="changeTab(-1)">
+          <i class="fa fa-laptop-code"></i>
+          Main
+        </li>
+        <li v-for="(tab,i) in tabs" :key="i" @click="changeTab(i)"  :class="(activeTab == i?'active':'')">
+          <i :class="'fa '+tab.icon"></i>
+          {{tab.title}}
+          <span class="fa fa-times" @click="closeTab(i)"></span>
+        </li>
+      </ul>
     </div>
-    <div id="wrapper" :class="(!settings.pages?'page-collapse ':'')+(!settings.sidebar?'side-collapse ':'')">
 
-      <div id="main" :class="(!settings.pages?'page-collapse ':'')+(!settings.sidebar?'side-collapse ':'')">
-        <!-- add app menu to main-->
-        <div class="container">
-          <!-- if project init can show left side -->
-          <!-- right sidebar start -->
-          <div v-if="isInitProject">
-            <!-- inactive when has not page -->
-            <div id="device-selector" :class="(data.pages.length < 1?'inactive':'blurable')">
-              <!-- select device -->
-              <div class="input-field">
-                <select @change="changeDisplay" id="dev" v-model="currentDisplay" class="white-text">
-                  <option :value="dev" v-for="(dev,i) in devices" :key="i">
-                    {{ dev.name }}
-                    ({{ dev.width }}x{{ dev.height }})
-                  </option>
-                </select>
-                <label for="dev">
-                  <span>Display devices</span>
-                  <br>
-                </label>
-              </div>
-              <!-- select scale size -->
-              <span>
+    <div id="tab-content-1" >
+      <div id="wrapper" :class="(!settings.pages?'page-collapse ':'')+(!settings.sidebar?'side-collapse ':'')">
+
+        <div id="main" :class="(!settings.pages?'page-collapse ':'')+(!settings.sidebar?'side-collapse ':'')">
+          <!-- add app menu to main-->
+          <div class="container">
+            <!-- if project init can show left side -->
+            <!-- right sidebar start -->
+            <div v-if="isInitProject">
+              <!-- inactive when has not page -->
+              <div id="device-selector" :class="(data.pages.length < 1?'inactive':'blurable')">
+                <!-- select device -->
+                <div class="input-field">
+                  <select @change="changeDisplay" id="dev" v-model="currentDisplay" class="white-text">
+                    <option :value="dev" v-for="(dev,i) in devices" :key="i">
+                      {{ dev.name }}
+                      ({{ dev.width }}x{{ dev.height }})
+                    </option>
+                  </select>
+                  <label for="dev">
+                    <span>Display devices</span>
+                    <br>
+                  </label>
+                </div>
+                <!-- select scale size -->
+                <span>
             Scale:
             </span>
-              <ul class="pagination">
-                <li @click="changeScale(1.25)"
-                    :class="'waves-effect waves-light btn btn-small '+(display.scale === 1.25?'green basic':'grey darken-4')">
-                  125%
-                </li>
-                <li @click="changeScale(1)"
-                    :class="'waves-effect waves-light btn btn-small '+(display.scale === 1?'green':'grey darken-4')">
-                  100%
-                </li>
-                <li @click="changeScale(0.25)"
-                    :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.25?'green ':'grey darken-4')">
-                  25%
-                </li>
-                <li @click="changeScale(0.5)"
-                    :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.5?'green ':'grey darken-4')">
-                  50%
-                </li>
-                <li @click="changeScale(0.35)"
-                    :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.35?'green':'grey darken-4')">
-                  auto
-                </li>
-              </ul>
-              <!-- device rotation -->
-              <span>
+                <ul class="pagination">
+                  <li @click="changeScale(1.25)"
+                      :class="'waves-effect waves-light btn btn-small '+(display.scale === 1.25?'green basic':'grey darken-4')">
+                    125%
+                  </li>
+                  <li @click="changeScale(1)"
+                      :class="'waves-effect waves-light btn btn-small '+(display.scale === 1?'green':'grey darken-4')">
+                    100%
+                  </li>
+                  <li @click="changeScale(0.25)"
+                      :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.25?'green ':'grey darken-4')">
+                    25%
+                  </li>
+                  <li @click="changeScale(0.5)"
+                      :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.5?'green ':'grey darken-4')">
+                    50%
+                  </li>
+                  <li @click="changeScale(0.35)"
+                      :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.35?'green':'grey darken-4')">
+                    auto
+                  </li>
+                </ul>
+                <!-- device rotation -->
+                <span>
             Rotate:
             </span>
-              <button @click="changeRotate(false)"
-                      :class="'waves-effect waves-light btn-small '+(!display.landscape?'green':'grey darken-4')">
-                <i class="fa fa-mobile-alt"></i>
-              </button>
-              <button @click="changeRotate(true)"
-                      :class="'waves-effect waves-light btn-small '+(display.landscape?'green':'grey darken-4')">
-                <i class="fa fa-mobile-alt fa-rotate-90"></i>
-              </button>
-              <!-- non visual components of page -->
-              <div id="non-visual">
-                <drop class="drop non-visual" @drop="onNonVisualDrop" :accepts-data="(n) => !isVisual(n)">
-                  <!--                <span v-for="(n, index) in oddDropped" :key="index">Dropped : {{ n }},&nbsp;</span>-->
-                </drop>
+                <button @click="changeRotate(false)"
+                        :class="'waves-effect waves-light btn-small '+(!display.landscape?'green':'grey darken-4')">
+                  <i class="fa fa-mobile-alt"></i>
+                </button>
+                <button @click="changeRotate(true)"
+                        :class="'waves-effect waves-light btn-small '+(display.landscape?'green':'grey darken-4')">
+                  <i class="fa fa-mobile-alt fa-rotate-90"></i>
+                </button>
+                <!-- non visual components of page -->
+                <div id="non-visual">
+                  <drop class="drop non-visual" @drop="onNonVisualDrop" :accepts-data="(n) => !isVisual(n)">
+                    <!--                <span v-for="(n, index) in oddDropped" :key="index">Dropped : {{ n }},&nbsp;</span>-->
+                  </drop>
+                </div>
               </div>
-            </div>
-            <!-- mobile drawing by project detail and user device selected -->
-            <!-- inactive when has not page -->
-            <!-- make device size and scale -->
-            <!-- bgcolor and text color apply -->
-            <div id="mobile" :style="getStyleMobile()"
-                 :class="(data.pages.length < 1?'inactive':'blurable')+(currentDisplay.borderLess?' borderless':'')+(display.landscape?' landscape':'')+' '+currentDisplay.camera+' '+currentDisplay.cameraBorder">
-              <div :style="getStyleCamera()" id="camera"><span :style="getStyleCameraDevice()"></span></div>
-              <div id="preview">
-                <div :style="'background-color:'+(data.project.isDark?'#2e2e2e':data.project.bgColor)
+              <!-- mobile drawing by project detail and user device selected -->
+              <!-- inactive when has not page -->
+              <!-- make device size and scale -->
+              <!-- bgcolor and text color apply -->
+              <div id="mobile" :style="getStyleMobile()"
+                   :class="(data.pages.length < 1?'inactive':'blurable')+(currentDisplay.borderLess?' borderless':'')+(display.landscape?' landscape':'')+' '+currentDisplay.camera+' '+currentDisplay.cameraBorder">
+                <div :style="getStyleCamera()" id="camera"><span :style="getStyleCameraDevice()"></span></div>
+                <div id="preview">
+                  <div :style="'background-color:'+(data.project.isDark?'#2e2e2e':data.project.bgColor)
                +';color:'+(data.project.isDark?'white':data.project.textColor)+' !important' ">
-                  <!-- direction of project and page padding -->
-                  <div id="dir" :style="getStyleDir()">
-                    <!-- visual components of page -->
-                    <div id="safearea" v-if="data.pages[currentPage].safeArea" :style="getStyleSafeArea()"></div>
-                    <div
-                        id="sortable"
-                        v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.visual !== undefined">
-                      <div v-for="(comp,i) in data.pages[currentPage].children.visual"
-                           :key="i">
-                        <simulator @contextmenu.native.prevent="contextOpen(i,$event)"
-                                   @click.native="currentProperties = comp; contextIndex = i"
-                                   :type="comp.type" :properties="comp" :scale="display.scale"
-                                   :page="data.pages[currentPage]"></simulator>
+                    <!-- direction of project and page padding -->
+                    <div id="dir" :style="getStyleDir()">
+                      <!-- visual components of page -->
+                      <div id="safearea" v-if="data.pages[currentPage].safeArea" :style="getStyleSafeArea()"></div>
+                      <div
+                          id="sortable"
+                          v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.visual !== undefined">
+                        <div v-for="(comp,i) in data.pages[currentPage].children.visual"
+                             :key="i">
+                          <simulator @contextmenu.native.prevent="contextOpen(i,$event)"
+                                     @click.native="currentProperties = comp; contextIndex = i; isVisualSelected = 1"
+                                     :type="comp.type" :properties="comp" :scale="display.scale"
+                                     :page="data.pages[currentPage]"></simulator>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <drop @contextmenu.native.prevent="contextOpen(-1,$event)" class="drop visual" @drop="onVisualDrop"
-                        :accepts-data="(n) => isVisual(n)"></drop>
-                  <!--              <drop class="drop any" @drop="onAnyDrop" mode="cut">-->
-                  <!--                <span v-for="(n, index) in anyDropped" :key="index">Dropped : {{n}},&nbsp;</span>-->
-                  <!--              </drop>-->
+                    <drop @contextmenu.native.prevent="contextOpen(-1,$event)" class="drop visual" @drop="onVisualDrop"
+                          :accepts-data="(n) => isVisual(n)"></drop>
+                    <!--              <drop class="drop any" @drop="onAnyDrop" mode="cut">-->
+                    <!--                <span v-for="(n, index) in anyDropped" :key="index">Dropped : {{n}},&nbsp;</span>-->
+                    <!--              </drop>-->
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <!-- right sidebar end -->
-          <div v-else class="text-center pos-relative">
-            <h5 v-if="isOnline && isNotChrome">
-              Please use `chromium` or `google chrome` to use online app
-            </h5>
-            <img src="../../assets/img/logo.svg" class="logo" alt="">
+            <!-- right sidebar end -->
+            <div v-else class="text-center pos-relative">
+              <h5 v-if="isOnline && isNotChrome">
+                Please use `chromium` or `google chrome` to use online app
+              </h5>
+              <img src="../../assets/img/logo.svg" class="logo" alt="">
+            </div>
           </div>
         </div>
-      </div>
-      <div id="side" :class="'blurable ' +(!settings.sidebar?'collapse ':'')">
-        <div id="components">
-          <h2>
-            Components
-            <i class="fa fa-cubes"></i>
-          </h2>
-          <!-- show dragable component to add to page -->
-          <transition-group name="list" tag="div">
-            <drag v-for="(comp,n) in components" :key="n" class="drag" :data="n">
-              <compo :title="comp.title" :icon="comp.icon" :active="comp.active"></compo>
-            </drag>
-          </transition-group>
+        <div id="side" :class="'blurable ' +(!settings.sidebar?'collapse ':'')">
+          <div id="components">
+            <h2>
+              Components
+              <i class="fa fa-cubes"></i>
+            </h2>
+            <!-- show dragable component to add to page -->
+            <transition-group name="list" tag="div">
+              <drag v-for="(comp,n) in components" :key="n" class="drag" :data="n">
+                <compo :title="comp.title" :icon="comp.icon" :active="comp.active"></compo>
+              </drag>
+            </transition-group>
 
-          <!--        <compo title="Scaffold" icon="fa fa-vector-square"></compo>-->
+            <!--        <compo title="Scaffold" icon="fa fa-vector-square"></compo>-->
 
-        </div>
-        <div id="properties">
-          <h2>
-            Properties
-            <i class="fa fa-expand"></i>
-          </h2>
-          <!-- if project init sho properties-->
-          <div v-if="isInitProject">
-            <property :properties="currentProperties" :page="currentPage" ref="properties"></property>
           </div>
-          <div v-else class="text-center pos-relative">
-            <img src="../../assets/img/logo.svg" class="logo-sm" alt="">
-          </div>
-        </div>
-      </div>
-      <div id="pages" :class="'blurable '+(!settings.pages?'collapse ':'')" >
-        <div class="container">
-          <!-- if project init can pages -->
-          <div v-if="isInitProject">
-            <!-- list of pages -->
-            <page v-for="(page,i) in data.pages" :image="page.image!= undefined? page.image: null"
-                  :isMain="data.project.mainPage === i" @click.native="changePage(i)" :key="i" :title="page.name"
-                  :active="currentPage === i" :bg="(data.project.isDark?'#2e2e2e':data.project.bgColor)">
-              <i class="fa fa-times" @click="removePage(i)"></i>
-            </page>
-            <i class="fa fa-plus-circle" id="page-add" @click="newPage"></i>
-          </div>
-          <div v-else class="text-center">
-            <img src="../../assets/img/logo.svg" class="logo-sm" alt="">
+          <div id="properties">
+            <h2>
+              Properties
+              <i class="fa fa-expand"></i>
+            </h2>
+            <!-- if project init sho properties-->
+            <div v-if="isInitProject">
+              <property :properties="currentProperties" :page="currentPage" ref="properties"></property>
+            </div>
+            <div v-else class="text-center pos-relative">
+              <img src="../../assets/img/logo.svg" class="logo-sm" alt="">
+            </div>
           </div>
         </div>
+        <div id="pages" :class="'blurable '+(!settings.pages?'collapse ':'')">
+          <div class="container">
+            <!-- if project init can pages -->
+            <div v-if="isInitProject">
+              <!-- list of pages -->
+              <page v-for="(page,i) in data.pages" :image="page.image!= undefined? page.image: null"
+                    :isMain="data.project.mainPage === i" @click.native="changePage(i)" :key="i" :title="page.name"
+                    :active="currentPage === i" :bg="(data.project.isDark?'#2e2e2e':data.project.bgColor)">
+                <i class="fa fa-times" @click="removePage(i)"></i>
+              </page>
+              <i class="fa fa-plus-circle" id="page-add" @click="newPage"></i>
+            </div>
+            <div v-else class="text-center">
+              <img src="../../assets/img/logo.svg" class="logo-sm" alt="">
+            </div>
+          </div>
+        </div>
+        <div id="terminal-btn" class="blurable" @click="showTerminalModal = true">
+          <i class="fa fa-terminal"></i>
+        </div>
+        <vue-context ref="menu" class="context-menu">
+          <li>
+            <a href="#" class="no-paste" @click.prevent="contextTrigger('copy')">
+              <i class="fa fa-copy"></i>
+              Copy <span>Ctrl+Shift+C</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="no-paste" @click.prevent="contextTrigger('cut')">
+              <i class="fa fa-cut"></i>
+              Cut <span>Ctrl+Shift+X</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" @click.prevent="contextTrigger('paste')">
+              <i class="fa fa-paste"></i>
+              Paste <span>Ctrl+Shift+V</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="no-paste" @click.prevent="contextTrigger('delete')">
+              <i class="fa fa-times"></i>
+              Delete <span>Shift+Del</span>
+            </a>
+          </li>
+        </vue-context>
       </div>
-      <div id="terminal-btn" class="blurable" @click="showTerminalModal = true">
-        <i class="fa fa-terminal"></i>
-      </div>
-      <vue-context ref="menu" class="context-menu">
-        <li>
-          <a href="#" class="no-paste" @click.prevent="contextTrigger('copy')">
-            <i class="fa fa-copy"></i>
-            Copy <span>Ctrl+Shift+C</span>
-          </a>
-        </li>
-        <li>
-          <a href="#" class="no-paste" @click.prevent="contextTrigger('cut')">
-            <i class="fa fa-cut"></i>
-            Cut <span>Ctrl+Shift+X</span>
-          </a>
-        </li>
-        <li>
-          <a href="#" @click.prevent="contextTrigger('paste')">
-            <i class="fa fa-paste"></i>
-            Paste <span>Ctrl+Shift+V</span>
-          </a>
-        </li>
-        <li>
-          <a href="#" class="no-paste" @click.prevent="contextTrigger('delete')">
-            <i class="fa fa-times"></i>
-            Delete <span>Shift+Del</span>
-          </a>
-        </li>
-      </vue-context>
     </div>
-    <vue-final-modal v-model="showCodeModal" @before-open="modalOpen" @before-close="modalClose" name="code-modal">
-      <code-editor :title="codeTitle" v-model="codeContent"></code-editor>
-    </vue-final-modal>
+    <div v-for="(tab,i) in tabs" :key="i" class="tab-content" :id="'tab-content'+i">
+      <tab-control :type="tab.type" :data="tab.data"  :pointer="tab.pointer"></tab-control>
+    </div>
     <vue-final-modal v-model="showTerminalModal" @before-open="modalOpen" @before-close="modalClose"
                      name="teminal-modal">
       <terminal ref="terminal">
@@ -254,8 +239,6 @@
                      name="row-modal">
       <color-picker :color="onEditColor"></color-picker>
     </vue-final-modal>
-
-
   </div>
 </template>
 
@@ -265,7 +248,8 @@ import property from '../elements/PropertyElement';
 import compo from '../elements/ComponentElement';
 import appMenu from '../elements/AppMenuElement';
 import simulator from '../elements/Simulator';
-import codeEditor from '../elements/CodeEditor'
+import tabControl from '../elements/TabControl';
+// import codeEditor from '../elements/CodeEditor'
 import terminal from '../elements/TerminalElement';
 import rowControl from '../elements/RowControlElement';
 import actionControl from '../elements/ActionControlElement';
@@ -282,6 +266,8 @@ import Sortable from '@/assets/js/Sortable.min';
 // const {remote} = require("electron");
 import {fnc} from '@/assets/js/functions';
 
+require( '@/assets/js/sly.min' );
+
 
 export default {
   name: "MainAppPage",
@@ -291,22 +277,20 @@ export default {
     compo,
     appMenu,
     simulator,
-    codeEditor,
+    // codeEditor,
     terminal,
     rowControl,
     VueContext,
     actionControl,
     optionControl,
     colorPicker,
+    tabControl,
     Drag,
     Drop
   },
   data: function () {
     return {
       sample: [{n: 1}, {n: 2}, {n: 3}, {n: 4}],
-      codeTitle: '',
-      codeContent: '',
-      showCodeModal: false,
       showTerminalModal: false,
       showRowModal: false,
       showOptionsModal: false,
@@ -322,6 +306,7 @@ export default {
       currentPage: 0,
       currentProperties: {},
       contextIndex: -1,
+      isVisualSelected: -1,
       contextClipBoard: '',
       isOnline: window.ide.isOnline,
       settings: window.ide.settings,
@@ -335,7 +320,14 @@ export default {
         scale: .35,
         landscape: false,
       },
-      devices: window.devices
+      devices: window.devices,
+      activeTab: -1,
+      lastActiveTab: -1,
+      tabs:[
+      ],
+      tabKeeper:[
+
+      ],
     }
   },
   mounted() {
@@ -347,6 +339,8 @@ export default {
 
 
       var $ = window.jQuery;
+
+
       // $("#main").niceScroll();
       // $("#mobile").niceScroll({touchbehavior: true});
       // $("#elements").niceScroll();
@@ -358,10 +352,10 @@ export default {
         if (e.ctrlKey && e.shiftKey && e.key === 'c') {
           self.contextTrigger('copy');
         }
-        if (e.ctrlKey  && e.shiftKey && e.key === 'x') {
+        if (e.ctrlKey && e.shiftKey && e.key === 'x') {
           self.contextTrigger('cut');
         }
-        if (e.ctrlKey  && e.shiftKey && e.key === 'v') {
+        if (e.ctrlKey && e.shiftKey && e.key === 'v') {
           try {
             self.contextTrigger('paste');
           } catch (e) {
@@ -392,23 +386,54 @@ export default {
         if (data.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "").trim().length > 0) {
           self.terminalContent.push('--err' + data.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "").trim());
         }
-      })
+      });
+
+
+      let options = {
+        horizontal: 1,
+        itemNav: 'centered',
+        activateMiddle: 1,
+        activateOn: 'click',
+        mouseDragging: 1,
+        touchDragging: 1,
+        releaseSwing: 1,
+        startAt: 0,
+        // scrollBar: document.querySelector('.scrollbar'),
+        scrollBy: 1,
+        speed: 300,
+        elasticBounds: 1,
+        dragHandle: 1,
+        dynamicHandle: 1,
+        clickBar: 1,
+        scrollTrap: 1,
+        // prev: document.querySelector('.prev-sc'),
+        // next: document.querySelector('.next-sc'),
+      };
+      /*eslint-disable */
+      //let frame = new
+      Sly('#tabs', options).init();
+      /*eslint-enable */
 
     } catch (e) {
       //
       // window.ipcRenderer.send('open-save-chart-dialog');
-
+      console.log(e.messages);
     }
 
   },
   watch: {
-    codeContent: {
-      handler: function (newval) {
-        // console.log(newval,'edited');
-        this.$refs.properties.onEdit = newval;
-        // console.log(this.$refs.properties.onEdit);
-      }
-    },
+    // tabs: {
+    //   handler: function (val) {
+    //     for( const i in val) {
+    //         console.log(this.tabKeeper[i],val[i].value);
+    //         this.tabKeeper[i] = val[i].value;
+    //     }
+    //
+    //     // this.$refs.properties.onEdit = newval;
+    //     // console.log(this.$refs.properties.onEdit);
+    //   },
+    //   deep: true,
+    // },
     data: {
       handler: function (val) {
         this.updateProject(val);
@@ -427,7 +452,78 @@ export default {
   },
   methods: {
     linkify: fnc.linkify,
-    openSite:function (e) {
+    changeTab:function (i) {
+      // check if active tab try to reactive
+      if (this.activeTab === i){
+        return;
+      }
+      let $ = window.jQuery;
+      let last = '#tab-content'+this.activeTab;
+      $(last).addClass('slide-fade-tab');
+      $('#tab-content'+i).addClass('slide-fade-tab');
+      this.lastActiveTab = this.activeTab;
+      this.activeTab = i;
+      setTimeout(function () {
+        $(last).hide();
+        $('#tab-content'+i).removeClass('slide-fade-tab').show();
+      },500);
+      // console.log(i);
+      // console.log(this.$refs[][0]);
+      // this.$refs['tab-content'+i][0].style.display = 'none';
+      // this.activeTab = i;
+      // this.$refs['tab-content'+i][0].style.display = 'block';
+    },
+    addTab: function (title,type,data,icon, key) {
+      // editable += '// ops \n ';
+      // return;
+       // check if tab exists active it
+        if (this.tabs.length > 0){
+          for( let i in this.tabs) {
+             let tab = this.tabs[i];
+             if (tab.title == title ){
+               this.changeTab(i);
+               return;
+             }
+          }
+        }
+        // add tab
+      // this.currentProperties[key] += '// yas \n';
+      let p = 'window.appData.pages['+this.currentPage+']';
+        switch (this.isVisualSelected){
+          case -1:
+            p += '.'+key;
+            break;
+          case 1:
+            p += '.children.visual['+this.contextIndex+'].'+key;
+            break;
+          case 0:
+            p += '.children.nonvisual['+this.contextIndex+'].'+key;
+            break;
+            default:
+            console.log('error isVisual selected');
+        }
+        this.tabs.push({
+          title: title,
+          type: type,
+          data:data,
+          pointer:p,
+          icon: icon,
+        });
+        this.tabKeeper.push(
+            this.currentProperties[key]
+        );
+        // show added tab
+        this.changeTab(this.tabs.length-1);
+    },
+    closeTab:function (i) {
+      this.tabs.splice(i, 1);
+      this.tabKeeper.splice(i, 1);
+      var self = this;
+      setTimeout(function () {
+        self.changeTab(-1);
+      },100);
+    },
+    openSite: function (e) {
       window.api.send("openWeb", e);
     },
     changeColor: function (clr) {
@@ -623,6 +719,7 @@ export default {
     },
     changePage: function (i) { // view clicked page
       this.currentPage = i;
+      this.isVisualSelected = -1;
       this.currentProperties = this.data.pages[i];
       this.contextIndex = -1;
       var that = this;
@@ -760,23 +857,24 @@ export default {
   width: 25%;
   position: fixed;
   right: 0;
-  top: 105px;
+  top: 70px;
   bottom: 0;
-  min-height: calc(100vh - 110px);
+  min-height: calc(100vh - 70px);
   box-sizing: border-box;
   border-left: 1px solid rgba(0, 0, 0, .1);
   border-top: 1px solid rgba(0, 0, 0, .1);
-  transition: 300ms;
+  transition: 900ms;
   overflow: hidden;
   z-index: 999;
 }
 
-#side.collapse{
-  width: 15px ;
-  opacity: 0.01;
+#side.collapse {
+  width: 15px;
+  opacity: 0.001;
 }
-#side.collapse:hover{
-  width: 25% ;
+
+#side.collapse:hover {
+  width: 25%;
   border-left: 2px;
   opacity: 1;
 }
@@ -814,13 +912,13 @@ export default {
   margin-bottom: 20vh;
 }
 
-#main.page-collapse{
+#main.page-collapse {
   margin-bottom: 0;
 }
-#main.side-collapse{
+
+#main.side-collapse {
   width: 100%;
 }
-
 
 
 #camera {
@@ -859,25 +957,26 @@ export default {
   overflow-y: scroll;
   overflow-x: hidden;
   z-index: 998;
-  transition: 200ms;
+  transition: 900ms;
 }
 
-.side-collapse #pages{
-  right: 0 ;
+.side-collapse #pages {
+  right: 0;
 }
 
 #pages.collapse {
   height: 5px;
 }
 
-#pages.collapse .logo-sm{
+#pages.collapse .logo-sm {
   display: none;
 }
+
 #pages.collapse:hover {
   height: 20vh;
 }
 
-#pages.collapse:hover .logo-sm{
+#pages.collapse:hover .logo-sm {
   display: block;
 }
 
@@ -962,7 +1061,8 @@ export default {
   margin-top: calc(50vh - 40vh);
   animation: fliper 15s infinite;
 }
-.page-collapse .logo{
+
+.page-collapse .logo {
   margin-top: calc(50vh - 30vh);
 }
 
@@ -983,26 +1083,26 @@ export default {
 }
 
 @keyframes fliper {
-  0%{
+  0% {
     transform: translate(0px);
   }
-  45%{
+  45% {
     transform: translate(0px);
     opacity: 1;
   }
-  47%{
+  47% {
     transform: translate(100px) scale(1.3);
     opacity: .7;
   }
-  50%{
+  50% {
     transform: translate(-200px) scale(1.5);
-    opacity: .3 ;
+    opacity: .3;
   }
-  53%{
+  53% {
     transform: translate(0px);
     opacity: 1;
   }
-  100%{
+  100% {
     transform: translate(0px);
   }
 }

@@ -1,81 +1,85 @@
 <template>
-  <div class="container">
-    <i class="fa fa-circle red-text" @click="closeModal"></i>
-    <i class="fa fa-circle yellow-text text-darken-2"></i>
-    <i class="fa fa-circle green-text text-lighten-2"></i>
-    <h4>
-      {{ title }}
-    </h4>
-    <div id="codeEditor" class="editor"></div>
+  <div class="codeEdit">
+    <div :id="'codeEdit'+id"></div>
+<!--    <textarea id="codeEditor" class="input-field" v-model="content" ></textarea>-->
   </div>
 </template>
 
 <script>
-import ace from 'brace';
-// import {xscript} from "@/assets/js/xscript";
-var editor;
+
+
+import loader from '@monaco-editor/loader';
+const myRnId = () => parseInt(Date.now() * Math.random());
 export default {
   name: "CodeEditor",
   data: function () {
     return {
-      content: this.value,
+      content: eval(this.pointer),
+      id : myRnId(),
+      options: {
+        //Monaco Editor Options
+      }
     }
   },
-  props: [
-    'title',
-    'value',
-  ],
-  beforeDestroy() {
-    editor.destroy();
+  components: {
+    // MonacoEditor
   },
-  watch: {
-    value: function (val) {
-      if (this.content !== val) {
-        editor.session.setValue(val, 1);
-        this.content = val;
-      }
-    },
+  props:{
+    pointer: String,
+  },
+  beforeDestroy() {
+    // editor.destroy();
+  },
+  watch:{
+    content:function () {
+      eval(this.pointer + `= this.content ;`)  ;
+    }
   },
   mounted() {
     var self = this;
-    require('brace/ext/language_tools') //language extension prerequsite...
-    // require('brace/mode/javascript')    //language
-    // require('brace/snippets/javascript') //snippe
-    require("@/assets/js/xscript");
-    require("@/assets/js/xScriptSnipts");
-    require('brace/theme/dracula');
-
-    editor = ace.edit('codeEditor');
-    editor.getSession().setMode('ace/mode/xscript');
-    editor.setTheme('ace/theme/dracula');
-    editor.setOptions({
-      enableBasicAutocompletion: true,
-      enableLiveAutocompletion: true,
-      fontSize: 16,
-      highlightActiveLine: false,
-      enableSnippets: true,
-      showLineNumbers: true,
-      tabSize: 4,
-      showPrintMargin: false,
-      showGutter: true,
-    });
-    // editor.$blockScrolling = Infinity;
-    if (this.value)
-      editor.setValue(this.value, 1);
-    this.content = this.value;
-    editor.on('change', function () {
-      var content = editor.getValue();
-      self.content = content;
-      self.$emit('input', content);
+    const wrapper = document.getElementById('codeEdit'+this.id);
+    loader.init().then(monaco => {
+      let monEditor = monaco.editor.create(wrapper, {
+        value: this.content,
+        language:"dart",
+        theme:"vs-dark",
+        fontFamily: "VazirCodeX",
+        fontSize: 18,
+        automaticLayout: true
+      });
+      /*eslint-disable */
+      monEditor.onDidChangeModelContent(function (e) {
+        // console.log(e);
+        self.content = monEditor.getValue();
+        // render();
+      });
+      /*eslint-enable */
+      // setTimeout(function () {
+      //   // console.log(monaco.editor);
+      //   // monaco.editor.width = '100%';
+      //   // monaco.editor.height = '100vh';
+      //
+      //   // monaco.editor.setTheme('vs-dark');
+      //
+      //   // monaco.editor.setModelLanguage('javascript');
+      // },1000);
     });
 
 
   },
   methods:{
-    closeModal:function () {
-      this.$parent.$parent.closeAllModal();
+    onChange(value) {
+      this.content = value;
     }
-  }
+    // closeModal:function () {
+    //   this.$parent.$parent.closeAllModal();
+    // }
+  },
+  plugins: [
+    // new MonacoWebpackPlugin({
+    //   languages: ['javascript']
+    // })
+  ]
 }
 </script>
 
@@ -103,7 +107,19 @@ h4{
   padding-left: 20px;
 }
 #codeEditor {
-  height: 80vh;
+  height: 100vh;
   font-size: 16px;
+  border: 0;
+  color: white;
+  outline: none;
+}
+
+.codeEdit{
+  padding-top: 1rem;
+}
+
+#codeEdit{
+  height: 100vh;
+  width: 100%;
 }
 </style>
