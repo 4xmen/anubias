@@ -119,7 +119,7 @@ let getOS = function () {
  */
 let getSize = function (value, scale, coefficient = 2.75, isHeight = false) {
     return value.toString().slice(-1) == '%' ?
-        (!isHeight?value:(document.querySelector('#mobile').offsetHeight / 100) * parseFloat(value.toString().substr(0,value.length-1)) +'px')
+        (!isHeight ? value : (document.querySelector('#mobile').offsetHeight / 100) * parseFloat(value.toString().substr(0, value.length - 1)) + 'px')
         : (parseFloat(value) * scale * coefficient) + 'px';
 }
 
@@ -164,15 +164,103 @@ let fixSetting = function (data) {
     return data;
 }
 
-let downloadObjectAsJson = function (exportObj, exportName){
+let downloadObjectAsJson = function (exportObj, exportName) {
     let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
     let downloadAnchorNode = document.createElement('a');
-    downloadAnchorNode.setAttribute("href",     dataStr);
+    downloadAnchorNode.setAttribute("href", dataStr);
     downloadAnchorNode.setAttribute("download", exportName + ".anb");
     document.body.appendChild(downloadAnchorNode); // required for firefox
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
 }
+
+let checkChildren = function (nodeList, name, key) {
+    let result = {
+        find: false,
+        path: ''
+    };
+    if (nodeList.children !== undefined) {
+        result.path = '.children';
+        for (const k in nodeList.children) {
+            let node = nodeList.children[k];
+            if (node.name === name) {
+                result.path += '[' + k + '].' + key;
+                result.find = true;
+                return result;
+            }
+            if (node.child !== undefined || node.children !== undefined) {
+                let tmp = checkChildren(node, name, key);
+                if (tmp.find == true) {
+                    result.path = '[' + k + '].' + tmp.path;
+                    result.find = true;
+                    return result;
+                }
+            }
+        }
+
+    } else if (nodeList.child != undefined) {
+        result.path = '.child';
+        if (nodeList.child.name === name) {
+            result.find = true;
+            result.path += '.' + key;
+            return result;
+        }
+
+        if (nodeList.child.child !== undefined || nodeList.child.children !== undefined) {
+            let tmp = checkChildren(nodeList.child, name, key);
+            if (tmp.find == true) {
+                result.path = '.child' + tmp.path;
+                result.find = true;
+                return result;
+            }
+        }
+    }
+    return result;
+};
+
+/**
+ * find variable path for tabs
+ * @param key key of for edit
+ * @param properties all propeties of this component
+ * @param currentPage current page
+ * @param isVisual  is visual component
+ * @returns {string|boolean} path of variable otherwise return false
+ */
+let findVarPath = function (key, properties, currentPage, isVisual = 1) {
+    // find path name cuz it's uniqe in page
+    let name = properties.name;
+    // ge all page elements to check
+    let node = window.appData.pages[currentPage];
+    // init path of var
+    let path = 'window.appData.pages[' + currentPage + '].';
+    // check visual or non visual
+    if (isVisual === 1) {
+        path += 'children.visual'
+        node = node.children.visual;
+    } else {
+        node = node.children.nonvisual;
+        path += 'children.nonvisual';
+    }
+    // each all element
+    for (const k in node) {
+        let n = node[k];
+        if (n.name === name) {
+            return path + '[' + k + '].' + key;
+        }
+    }
+    // not find check all children recursive
+    for (const k in node) {
+        let n = node[k];
+        if (n.children !== undefined || n.child !== undefined) {
+            let result = checkChildren(n, name, key);
+            if (result.find == true) {
+                return path + '[' + k + ']' + result.path;
+            }
+        }
+    }
+    return false;
+
+};
 
 /**
  * for export
@@ -187,6 +275,7 @@ let fnc = {
     getSize,
     linkify,
     fixSetting,
+    findVarPath,
     downloadObjectAsJson
 }
 export {

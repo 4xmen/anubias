@@ -188,6 +188,8 @@
 <script>
 import {fnc} from '@/assets/js/functions';
 
+
+
 var setme;
 
 export default {
@@ -280,11 +282,6 @@ export default {
       })
     },
     codeEdit: function (k) {
-      // this.$parent.codeContent = this.properties[k];
-      // this.onEdit = this.properties[k];
-      // this.onEditKey = k;
-      // this.$parent.showCodeModal = true;
-      // this.$parent.codeTitle = this.properties[k];;
       let title = '[' + window.appData.pages[this.page].name + '] ' + this.properties.name + '.' + k;
       // this.properties[k] += '// test \n';
       this.$parent.addTab(title, 'code', {

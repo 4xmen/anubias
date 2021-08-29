@@ -489,19 +489,19 @@ export default {
         // add tab
       // this.currentProperties[key] += '// yas \n';
       let p = 'window.appData.pages['+this.currentPage+']';
-        switch (this.isVisualSelected){
+        let isVisual = this.isVisualSelected;
+        switch (isVisual){
           case -1:
             p += '.'+key;
             break;
           case 1:
-            p += '.children.visual['+this.contextIndex+'].'+key;
-            break;
           case 0:
-            p += '.children.nonvisual['+this.contextIndex+'].'+key;
+            p = fnc.findVarPath(key,this.currentProperties,this.currentPage,isVisual);
             break;
             default:
             console.log('error isVisual selected');
         }
+      // console.log(p);
         this.tabs.push({
           title: title,
           type: type,
@@ -509,11 +509,11 @@ export default {
           pointer:p,
           icon: icon,
         });
-        this.tabKeeper.push(
-            this.currentProperties[key]
-        );
-        // show added tab
-        this.changeTab(this.tabs.length-1);
+        // this.tabKeeper.push(
+        //     this.currentProperties[key]
+        // );
+        // // show added tab
+        // this.changeTab(this.tabs.length-1);
     },
     closeTab:function (i) {
       this.tabs.splice(i, 1);
