@@ -146,7 +146,7 @@ blockquote{
 
 .tab-content{
     display: none;
-    transition: 800ms ease-in-out;
+    transition: 500ms ease-in-out;
     margin-top: 0;
 }
 
@@ -525,7 +525,7 @@ blockquote{
     margin: 0;
 }
 .slide-fade-tab{
-    transform: translateX(-400px);
+    transform: translateX(1000px);
     opacity: 0;
     pointer-events: none;
     margin-top: 0;

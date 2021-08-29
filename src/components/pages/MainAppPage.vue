@@ -387,32 +387,7 @@ export default {
           self.terminalContent.push('--err' + data.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "").trim());
         }
       });
-
-
-      let options = {
-        horizontal: 1,
-        itemNav: 'centered',
-        activateMiddle: 1,
-        activateOn: 'click',
-        mouseDragging: 1,
-        touchDragging: 1,
-        releaseSwing: 1,
-        startAt: 0,
-        // scrollBar: document.querySelector('.scrollbar'),
-        scrollBy: 1,
-        speed: 300,
-        elasticBounds: 1,
-        dragHandle: 1,
-        dynamicHandle: 1,
-        clickBar: 1,
-        scrollTrap: 1,
-        // prev: document.querySelector('.prev-sc'),
-        // next: document.querySelector('.next-sc'),
-      };
-      /*eslint-disable */
-      //let frame = new
-      Sly('#tabs', options).init();
-      /*eslint-enable */
+      this.handleSly();
 
     } catch (e) {
       //
@@ -452,21 +427,60 @@ export default {
   },
   methods: {
     linkify: fnc.linkify,
+    handleSly:function () {
+      let options = {
+        horizontal: 1,
+        itemNav: 'centered',
+        activateMiddle: 1,
+        // activateOn: 'click',
+        mouseDragging: 1,
+        touchDragging: 1,
+        releaseSwing: 1,
+        startAt: 0,
+        // scrollBar: document.querySelector('.scrollbar'),
+        scrollBy: 1,
+        speed: 300,
+        elasticBounds: 1,
+        dragHandle: 1,
+        dynamicHandle: 1,
+        clickBar: 1,
+        scrollTrap: 1,
+        // prev: document.querySelector('.prev-sc'),
+        // next: document.querySelector('.next-sc'),
+      };
+      /*eslint-disable */
+      //let frame = new
+      Sly('#tabs', options).init();
+      /*eslint-enable */
+
+    },
     changeTab:function (i) {
       // check if active tab try to reactive
+      console.log(i);
       if (this.activeTab === i){
         return;
       }
       let $ = window.jQuery;
+      if (i === -1 || this.activeTab === -1){
+        let last = '#tab-content'+this.activeTab;
+        $(last).slideUp(300);
+        // $('#tab-content'+i).addClass('slide-fade-tab');
+        this.lastActiveTab = this.activeTab;
+        this.activeTab = i;
+        setTimeout(function () {
+          $('#tab-content'+i).slideDown(300);
+        },100);
+        return;
+      }
       let last = '#tab-content'+this.activeTab;
       $(last).addClass('slide-fade-tab');
       $('#tab-content'+i).addClass('slide-fade-tab');
       this.lastActiveTab = this.activeTab;
       this.activeTab = i;
       setTimeout(function () {
-        $(last).hide();
+        $(last).hide().removeClass('slide-fade-tab');
         $('#tab-content'+i).removeClass('slide-fade-tab').show();
-      },500);
+      },450);
       // console.log(i);
       // console.log(this.$refs[][0]);
       // this.$refs['tab-content'+i][0].style.display = 'none';
@@ -513,7 +527,12 @@ export default {
         //     this.currentProperties[key]
         // );
         // // show added tab
-        // this.changeTab(this.tabs.length-1);
+        // var self = this;
+          $('.tab-content').removeClass('slide-fade-tab');
+        // console.log();
+          this.changeTab(parseInt(this.tabs.length)-1);
+
+        // this.handleSly();
     },
     closeTab:function (i) {
       this.tabs.splice(i, 1);
