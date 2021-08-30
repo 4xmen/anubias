@@ -456,10 +456,11 @@ export default {
     },
     changeTab:function (i) {
       // check if active tab try to reactive
-      console.log(i);
+      // console.log(i);
       if (this.activeTab === i){
         return;
       }
+
       let $ = window.jQuery;
       if (i === -1 || this.activeTab === -1){
         let last = '#tab-content'+this.activeTab;
@@ -745,6 +746,7 @@ export default {
       Sortable.create(document.querySelector('#sortable'), {
         animation: 200,
         onUpdate: function (e) {
+          that.$parent.isInternalDrag = false;
           var array = JSON.parse(JSON.stringify(that.data.pages[that.currentPage].children.visual));
           that.data.pages[that.currentPage].children.visual = [];
           fnc.arrayMove(array, e.oldIndex, e.newIndex);

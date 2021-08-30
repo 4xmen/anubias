@@ -32,6 +32,7 @@ export default {
     Sortable.create(document.querySelector('#rowSort'), {
       animation: 100,
       onUpdate: function (e) {
+        that.$parent.$parent.$parent.isInternalDrag = false;
         let arr = JSON.parse(JSON.stringify(that.rowData));
         that.rowData = [];
         fnc.arrayMove(arr, e.oldIndex, e.newIndex);

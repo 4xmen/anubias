@@ -108,6 +108,7 @@ export default {
       Sortable.create(document.querySelector('#actSort'), {
         animation: 100,
         onUpdate: function (e) {
+          that.$parent.$parent.$parent.isInternalDrag = false;
           let arr = JSON.parse(JSON.stringify(that.allActions));
           that.allActions = [];
           fnc.arrayMove(arr, e.oldIndex, e.newIndex);

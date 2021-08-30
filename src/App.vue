@@ -13,7 +13,10 @@
       <span v-if="!isSaved">*</span>
       </div>
     </div>
-    <router-view/>
+    <div id="dropable" ref="dropable"></div>
+    <div id="router" ref="appRouter" @dragstart="dragStart" @dragover="dragOver" @dragend="dragEnd" @drop="drop">
+      <router-view/>
+    </div>
   </div>
 </template>
 
@@ -28,7 +31,7 @@ require('flickity/dist/flickity.min.css');
 require('vue-context/dist/css/vue-context.css');
 require('./assets/css/style.css');
 import {fnc} from '@/assets/js/functions';
-
+var closeDrag;
 export default {
   name: 'App',
   data: function () {
@@ -36,9 +39,61 @@ export default {
       title: '',
       isSaved: false,
       isOnline : window.ide.isOnline,
+      isInternalDrag: false,
     }
   },
   methods: {
+    dragStart:function () {
+      this.isInternalDrag = true;
+    },
+    dropLeave:function () {
+      this.$refs.dropable.style.display = 'none';
+    },
+    dragEnd:function () {
+      this.isInternalDrag = false;
+    },
+    dragOver:function () {
+      if (!this.isInternalDrag){
+        this.$refs.dropable.style.opacity = 1;
+        var self = this;
+        clearTimeout(closeDrag);
+        closeDrag = setTimeout(function () {
+          self.$refs.dropable.style.opacity = 0;
+        },1000);
+      }
+    },
+    drop:function (e) {
+      // console.log('drop');
+      e.preventDefault();
+      var self = this;
+      // console.log(e.dataTransfer.files);
+      let files = e.dataTransfer.files;
+      if (files[0] !== undefined){
+        let f = files[0];
+        let extChecker = f.name.split('.');
+        if (extChecker[extChecker.length-1] == 'anb'){
+          var reader = new FileReader();
+          reader.readAsText(f, "UTF-8");
+          reader.onload = function (e) {
+            try {
+              let json = JSON.parse(e.target.result);
+              window.appData = json;
+              window.alertify.success('Project loaded :' + json.project.name);
+              // go to verify
+              self.$router.push('/projectLoaded');
+            } catch(e) {
+              window.alertify.error("Error to parse anb file");
+            }
+
+          }
+          reader.onerror = function () {
+            window.alertify.error("Error reading file");
+          }
+        }else{
+          window.alertify.error('Invalid file type :(');
+        }
+      }
+    },
     closeApp: function () {
       if (this.title.length == 0 || !window.ide.settings.exitConfirm){
         window.api.send('app-close', window.appData);
@@ -65,6 +120,10 @@ export default {
     // mainPage
   }, mounted() {
     var self = this;
+    document.body.addEventListener("dragover", evt => {
+      evt.preventDefault();
+    });
+
     window.api.send('storage-get', 'setting');
     // load opened file receive command
     window.api.receive('selected-file', (data) => {
@@ -129,6 +188,32 @@ export default {
   padding-top: 31px;
 }
 
+#router{
+  transition: 300ms;
+}
+
+#dropable{
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 31px;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 99999;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  opacity: 0;
+  transition: 1s;
+  pointer-events: none;
+}
+
+#dropable:after{
+  position: fixed;
+  font-size: 45px;
+  content: 'You can drop project here';
+  text-align: center;
+}
 
 .title-bar {
   text-align: center;

@@ -324,7 +324,7 @@ export default {
           if ( this.files[0] != undefined){
             let file = this.files[0];
             if (file) {
-              var reader = new FileReader();
+              let reader = new FileReader();
               reader.readAsText(file, "UTF-8");
               reader.onload = function (e) {
                 try {

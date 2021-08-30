@@ -60,6 +60,16 @@ blockquote{
     user-select: text;
 }
 
+img {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    user-drag: none;
+    -webkit-touch-callout: none;
+}
+
 #tabs{
     background: #1a212999;
     padding-top: 4px;
