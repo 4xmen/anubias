@@ -70,7 +70,7 @@
           <i class="fa fa-bug"></i>
           Debug Web (PWA)
           <span class="shortcut">
-            F9
+            Alt+F9
           </span>
         </a>
       </li>
@@ -213,6 +213,14 @@ export default {
       }
       if (e.ctrlKey && e.shiftKey && e.key === 'F9') {
         self.test();
+        return;
+      }
+      if (e.ctrlKey &&  e.key === 'F9') {
+        self.build();
+        return;
+      }
+      if (e.altKey &&  e.key === 'F9') {
+        self.debugWeb();
         return;
       }
       if (e.ctrlKey && e.key === 'r') {
@@ -449,7 +457,7 @@ nav, nav .nav-wrapper i, nav > a.sidenav-trigger, nav > a.sidenav-trigger i {
 }
 
 .dropdown-content {
-  min-width: 230px !important;
+  min-width: 270px !important;
 }
 
 .nav-wrapper img {
