@@ -240,8 +240,10 @@ export default {
   -webkit-user-select: none;
   -webkit-app-region: drag;
   display: inline-block;
-  width: calc(100% - 90px);
+  width: calc(100% - 155px);
   padding: 5px;
+  position: relative;
+  right: 40px;
 }
 
 .title-bar .circle{

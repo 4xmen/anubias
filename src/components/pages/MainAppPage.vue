@@ -7,12 +7,23 @@
           <i class="fa fa-laptop-code"></i>
           Main
         </li>
-        <li v-for="(tab,i) in tabs" :key="i" @click="changeTab(i)" :class="(activeTab == i?'active':'')">
+        <li v-for="(tab,i) in tabs" :key="i" @click="changeTab(i)" :class="(activeTab == i?'active':'')" @mouseup.middle="closeTab(i)">
           <i :class="'fa '+tab.icon"></i>
           {{ tab.title }}
           <span class="fa fa-times" @click="closeTab(i)"></span>
         </li>
+        <li class="hidden-tab">
+
+        </li>
       </ul>
+    </div>
+    <div :class="'tab-control-placeholder '+(tabs.length  === 0?'opacity-0':'')" >
+      <div class="prev-sc">
+        <i class="fa fa-angle-left"></i>
+      </div>
+      <div class="next-sc">
+        <i class="fa fa-angle-right"></i>
+      </div>
     </div>
 
     <div id="tab-content-1">
@@ -295,6 +306,7 @@ export default {
   },
   data: function () {
     return {
+      sly: null,
       sample: [{n: 1}, {n: 2}, {n: 3}, {n: 4}],
       showTerminalModal: false,
       showRowModal: false,
@@ -430,6 +442,13 @@ export default {
   methods: {
     linkify: fnc.linkify,
     handleSly: function () {
+      if (this.sly != null){
+        var self = this;
+        setTimeout(function () {
+          self.sly.reload();
+        },500);
+        return;
+      }
       let options = {
         horizontal: 1,
         itemNav: 'centered',
@@ -447,12 +466,14 @@ export default {
         dynamicHandle: 1,
         clickBar: 1,
         scrollTrap: 1,
-        // prev: document.querySelector('.prev-sc'),
-        // next: document.querySelector('.next-sc'),
+        moveBy:900,
+        forward: document.querySelector('.prev-sc'),
+        backward: document.querySelector('.next-sc'),
       };
       /*eslint-disable */
       //let frame = new
-      Sly('#tabs', options).init();
+      this.sly = Sly('#tabs', options).init();
+
       /*eslint-enable */
 
     },
@@ -536,7 +557,7 @@ export default {
       // console.log();
       this.changeTab(parseInt(this.tabs.length) - 1);
 
-      // this.handleSly();
+      this.handleSly();
     },
     closeTab: function (i) {
       this.tabs.splice(i, 1);
@@ -544,6 +565,7 @@ export default {
       var self = this;
       setTimeout(function () {
         self.changeTab(-1);
+        self.handleSly();
       }, 100);
     },
     openSite: function (e) {
