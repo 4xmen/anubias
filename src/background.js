@@ -320,19 +320,25 @@ ipc.on('emulator', async function  (eventevent, data) {
         }, function (error, stdout, stderr) {
             if (!error) {
                 // win.webContents.send('terminal', stdout);
-                if (data == 'emulator -list-avds') {
+                if (data.indexOf('list-avds') != -1) {
                     win.webContents.send('emulator', stdout);
                 } else {
                     // win.webContents.send('message', {type: 'info', 'msg': stdout});
                 }
                 // win.webContents.send('message', {type: 'info', 'msg': stderr});
-            } else {
-                win.webContents.send('message', {type: 'error', 'msg': stdout + stderr});
             }
+            // else {
+            //     // win.webContents.send('emulator-terminal', {err: true, data : stdout + stderr});
+            // }
         });
         child.stdout.on('data', function (dataz) {
-            if (data != 'emulator -list-avds') {
-                win.webContents.send('emulator-terminal', dataz);
+            if (data.indexOf('list-avds') == -1) {
+                win.webContents.send('emulator-terminal', {err: false, data: dataz});
+            }
+        });
+        child.stderr.on('data', function (dataz) {
+            if (data.indexOf('list-avds') == -1) {
+                win.webContents.send('emulator-terminal', {err: true, data : dataz});
             }
         });
     } catch (e) {

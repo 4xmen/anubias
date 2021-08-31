@@ -29,7 +29,9 @@
       Anubias Engine check
     </div>
     <br>
-    <blockquote class="pre">{{terminal.join('\n')}}</blockquote>
+    <blockquote class="pre">
+      <span v-for="(msg,i) in terminal" :key="i" :class="msg.err?'red-text':''">{{msg.data}}</span>
+    </blockquote>
     <div class="btn btn-block btn-flat  waves-effect" style="border-bottom-color: darkred" @click="terminal = []">
       Clear log
     </div>
@@ -55,7 +57,7 @@ export default {
 
   methods:{
     start:function (e) {
-        window.api.send("emulator", 'emulator -avd '+e+' &');
+        window.api.send("emulator", 'export QT_DEBUG_PLUGINS=1 && emulator -avd '+e);
     },
     checkFlutter:function () {
         this.terminal.push('______________________________________________________________________\n');
