@@ -26,6 +26,7 @@ pnpm-debug.log*
 #other resource
 /resources/*.json
 /resources/*.xz
+/resources/flutter
 
 #Electron-builder output
 /dist_electron

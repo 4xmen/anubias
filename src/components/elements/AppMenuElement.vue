@@ -48,7 +48,8 @@
             Save project as
         </a>
       </li>
-      <li class="divider"></li>
+    </ul>
+    <ul id="dropdown2" class="dropdown-content grey darken-3">
       <li  :class="(cantEditPrj?' disabled':'')">
         <router-link :to="cantEditPrj?'':'/project'">
           <i class="fa fa-cog"></i>
@@ -59,6 +60,15 @@
         <a @click="debug">
           <i class="fa fa-bug"></i>
           Debug
+          <span class="shortcut">
+            F9
+          </span>
+        </a>
+      </li>
+      <li  v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
+        <a @click="debugWeb">
+          <i class="fa fa-bug"></i>
+          Debug Web (PWA)
           <span class="shortcut">
             F9
           </span>
@@ -92,7 +102,7 @@
         </a>
       </li>
     </ul>
-    <ul id="dropdown2" class="dropdown-content grey darken-3">
+    <ul id="dropdown3" class="dropdown-content grey darken-3">
 <!--      <li @click="test">-->
 <!--        <a>-->
 <!--          <i class="fa fa-eye"></i>-->
@@ -138,11 +148,16 @@
           </li>
           <li>
             <a class="dropdown-trigger" href="#!" data-target="dropdown1">
-              Project <i class="material-icons right">arrow_drop_down</i>
+              File <i class="material-icons right">arrow_drop_down</i>
             </a>
           </li>
           <li>
             <a class="dropdown-trigger" href="#!" data-target="dropdown2">
+              Project <i class="material-icons right">arrow_drop_down</i>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-trigger" href="#!" data-target="dropdown3">
               Application <i class="material-icons right">arrow_drop_down</i>
             </a>
           </li>
@@ -273,6 +288,19 @@ export default {
       let data = {
         isDebug: true,
         command: './'+this.engineName+' -b ' + window.project.file + ' && cd ' + window.project.folder + '/src && flutter run',
+      }
+      window.api.send("command", data);
+    },
+    debugWeb: function () {
+      if (this.cantEditPrj || this.isOnline) {
+        return false;
+      }
+      this.$parent.TerminalShow();
+      this.startDebug = true;
+      window.ide.isDebuging = true;
+      let data = {
+        isDebug: true,
+        command: './'+this.engineName+' -b ' + window.project.file + ' && cd ' + window.project.folder + '/src && flutter run -d chrome',
       }
       window.api.send("command", data);
     },
