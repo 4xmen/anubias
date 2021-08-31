@@ -55,10 +55,12 @@ export default {
     dragOver:function () {
       if (!this.isInternalDrag){
         this.$refs.dropable.style.opacity = 1;
-        var self = this;
+        this.$refs.appRouter.classList.add('blur');
+        let self = this;
         clearTimeout(closeDrag);
         closeDrag = setTimeout(function () {
           self.$refs.dropable.style.opacity = 0;
+          self.$refs.appRouter.classList.remove('blur');
         },1000);
       }
     },
@@ -69,15 +71,19 @@ export default {
       // console.log(e.dataTransfer.files);
       let files = e.dataTransfer.files;
       if (files[0] !== undefined){
+        //
         let f = files[0];
+        // console.log();
         let extChecker = f.name.split('.');
         if (extChecker[extChecker.length-1] == 'anb'){
-          var reader = new FileReader();
+          let reader = new FileReader();
           reader.readAsText(f, "UTF-8");
           reader.onload = function (e) {
             try {
               let json = JSON.parse(e.target.result);
               window.appData = json;
+              window.project.file = f.path;
+              window.project.folder = f.path.substr(0,f.path.length - f.name) ;
               window.alertify.success('Project loaded :' + json.project.name);
               // go to verify
               self.$router.push('/projectLoaded');

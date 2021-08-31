@@ -1,21 +1,21 @@
 <template>
   <div>
     <app-menu class="blurable"></app-menu>
-    <div id="tabs" >
+    <div id="tabs">
       <ul class="clearfix">
         <li :class="(activeTab == '-1'?'active':'')" @click="changeTab(-1)">
           <i class="fa fa-laptop-code"></i>
           Main
         </li>
-        <li v-for="(tab,i) in tabs" :key="i" @click="changeTab(i)"  :class="(activeTab == i?'active':'')">
+        <li v-for="(tab,i) in tabs" :key="i" @click="changeTab(i)" :class="(activeTab == i?'active':'')">
           <i :class="'fa '+tab.icon"></i>
-          {{tab.title}}
+          {{ tab.title }}
           <span class="fa fa-times" @click="closeTab(i)"></span>
         </li>
       </ul>
     </div>
 
-    <div id="tab-content-1" >
+    <div id="tab-content-1">
       <div id="wrapper" :class="(!settings.pages?'page-collapse ':'')+(!settings.sidebar?'side-collapse ':'')">
 
         <div id="main" :class="(!settings.pages?'page-collapse ':'')+(!settings.sidebar?'side-collapse ':'')">
@@ -66,17 +66,19 @@
                   </li>
                 </ul>
                 <!-- device rotation -->
-                <span>
-            Rotate:
-            </span>
-                <button @click="changeRotate(false)"
-                        :class="'waves-effect waves-light btn-small '+(!display.landscape?'green':'grey darken-4')">
-                  <i class="fa fa-mobile-alt"></i>
-                </button>
-                <button @click="changeRotate(true)"
-                        :class="'waves-effect waves-light btn-small '+(display.landscape?'green':'grey darken-4')">
-                  <i class="fa fa-mobile-alt fa-rotate-90"></i>
-                </button>
+                <div v-if="!currentDisplay.isDesktop">
+                  <span>
+                  Rotate:
+                  </span>
+                  <button @click="changeRotate(false)"
+                          :class="'waves-effect waves-light btn-small '+(!display.landscape?'green':'grey darken-4')">
+                    <i class="fa fa-mobile-alt"></i>
+                  </button>
+                  <button @click="changeRotate(true)"
+                          :class="'waves-effect waves-light btn-small '+(display.landscape?'green':'grey darken-4')">
+                    <i class="fa fa-mobile-alt fa-rotate-90"></i>
+                  </button>
+                </div>
                 <!-- non visual components of page -->
                 <div id="non-visual">
                   <drop class="drop non-visual" @drop="onNonVisualDrop" :accepts-data="(n) => !isVisual(n)">
@@ -88,34 +90,37 @@
               <!-- inactive when has not page -->
               <!-- make device size and scale -->
               <!-- bgcolor and text color apply -->
-              <div id="mobile" :style="getStyleMobile()"
-                   :class="(data.pages.length < 1?'inactive':'blurable')+(currentDisplay.borderLess?' borderless':'')+(display.landscape?' landscape':'')+' '+currentDisplay.camera+' '+currentDisplay.cameraBorder">
-                <div :style="getStyleCamera()" id="camera"><span :style="getStyleCameraDevice()"></span></div>
-                <div id="preview">
-                  <div :style="'background-color:'+(data.project.isDark?'#2e2e2e':data.project.bgColor)
+              <div :class="currentDisplay.isDesktop? 'laptop':''">
+                <div id="mobile" :style="getStyleMobile()"
+                     :class="+(data.pages.length < 1?'inactive':'blurable')+(currentDisplay.borderLess?' borderless':'')+(display.landscape?' landscape':'')+' '+currentDisplay.camera+' '+currentDisplay.cameraBorder">
+                  <div :style="getStyleCamera()" id="camera"><span :style="getStyleCameraDevice()"></span></div>
+                  <div id="preview">
+                    <div :style="'background-color:'+(data.project.isDark?'#2e2e2e':data.project.bgColor)
                +';color:'+(data.project.isDark?'white':data.project.textColor)+' !important' ">
-                    <!-- direction of project and page padding -->
-                    <div id="dir" :style="getStyleDir()">
-                      <!-- visual components of page -->
-                      <div id="safearea" v-if="data.pages[currentPage].safeArea" :style="getStyleSafeArea()"></div>
-                      <div
-                          id="sortable"
-                          v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.visual !== undefined">
-                        <div v-for="(comp,i) in data.pages[currentPage].children.visual"
-                             :key="i">
-                          <simulator @contextmenu.native.prevent="contextOpen(i,$event)"
-                                     @click.native="currentProperties = comp; contextIndex = i; isVisualSelected = 1"
-                                     :type="comp.type" :properties="comp" :scale="display.scale"
-                                     :page="data.pages[currentPage]"></simulator>
+                      <!-- direction of project and page padding -->
+                      <div id="dir" :style="getStyleDir()">
+                        <!-- visual components of page -->
+                        <div id="safearea" v-if="data.pages[currentPage].safeArea" :style="getStyleSafeArea()"></div>
+                        <div
+                            id="sortable"
+                            v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.visual !== undefined">
+                          <div v-for="(comp,i) in data.pages[currentPage].children.visual"
+                               :key="i">
+                            <simulator @contextmenu.native.prevent="contextOpen(i,$event)"
+                                       @click.native="currentProperties = comp; contextIndex = i; isVisualSelected = 1"
+                                       :type="comp.type" :properties="comp" :scale="display.scale"
+                                       :page="data.pages[currentPage]"></simulator>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <drop @contextmenu.native.prevent="contextOpen(-1,$event)" class="drop visual" @drop="onVisualDrop"
-                          :accepts-data="(n) => isVisual(n)"></drop>
-                    <!--              <drop class="drop any" @drop="onAnyDrop" mode="cut">-->
-                    <!--                <span v-for="(n, index) in anyDropped" :key="index">Dropped : {{n}},&nbsp;</span>-->
-                    <!--              </drop>-->
+                      <drop @contextmenu.native.prevent="contextOpen(-1,$event)" class="drop visual"
+                            @drop="onVisualDrop"
+                            :accepts-data="(n) => isVisual(n)"></drop>
+                      <!--              <drop class="drop any" @drop="onAnyDrop" mode="cut">-->
+                      <!--                <span v-for="(n, index) in anyDropped" :key="index">Dropped : {{n}},&nbsp;</span>-->
+                      <!--              </drop>-->
+                    </div>
                   </div>
                 </div>
               </div>
@@ -208,7 +213,7 @@
       </div>
     </div>
     <div v-for="(tab,i) in tabs" :key="i" class="tab-content" :id="'tab-content'+i">
-      <tab-control :type="tab.type" :data="tab.data"  :pointer="tab.pointer"></tab-control>
+      <tab-control :type="tab.type" :data="tab.data" :pointer="tab.pointer"></tab-control>
     </div>
     <vue-final-modal v-model="showTerminalModal" @before-open="modalOpen" @before-close="modalClose"
                      name="teminal-modal">
@@ -266,7 +271,7 @@ import Sortable from '@/assets/js/Sortable.min';
 // const {remote} = require("electron");
 import {fnc} from '@/assets/js/functions';
 
-require( '@/assets/js/sly.min' );
+require('@/assets/js/sly.min');
 
 
 export default {
@@ -323,11 +328,8 @@ export default {
       devices: window.devices,
       activeTab: -1,
       lastActiveTab: -1,
-      tabs:[
-      ],
-      tabKeeper:[
-
-      ],
+      tabs: [],
+      tabKeeper: [],
     }
   },
   mounted() {
@@ -427,7 +429,7 @@ export default {
   },
   methods: {
     linkify: fnc.linkify,
-    handleSly:function () {
+    handleSly: function () {
       let options = {
         horizontal: 1,
         itemNav: 'centered',
@@ -454,94 +456,95 @@ export default {
       /*eslint-enable */
 
     },
-    changeTab:function (i) {
+    changeTab: function (i) {
       // check if active tab try to reactive
       // console.log(i);
-      if (this.activeTab === i){
+      if (this.activeTab === i) {
         return;
       }
 
       let $ = window.jQuery;
-      if (i === -1 || this.activeTab === -1){
-        let last = '#tab-content'+this.activeTab;
+      if (i === -1 || this.activeTab === -1) {
+        let last = '#tab-content' + this.activeTab;
         $(last).slideUp(300);
         // $('#tab-content'+i).addClass('slide-fade-tab');
         this.lastActiveTab = this.activeTab;
         this.activeTab = i;
         setTimeout(function () {
-          $('#tab-content'+i).slideDown(300);
-        },100);
+          $('#tab-content' + i).slideDown(300);
+        }, 100);
         return;
       }
-      let last = '#tab-content'+this.activeTab;
+      let last = '#tab-content' + this.activeTab;
       $(last).addClass('slide-fade-tab');
-      $('#tab-content'+i).addClass('slide-fade-tab');
+      $('#tab-content' + i).addClass('slide-fade-tab');
       this.lastActiveTab = this.activeTab;
       this.activeTab = i;
       setTimeout(function () {
         $(last).hide().removeClass('slide-fade-tab');
-        $('#tab-content'+i).removeClass('slide-fade-tab').show();
-      },450);
+        $('#tab-content' + i).removeClass('slide-fade-tab').show();
+      }, 450);
       // console.log(i);
       // console.log(this.$refs[][0]);
       // this.$refs['tab-content'+i][0].style.display = 'none';
       // this.activeTab = i;
       // this.$refs['tab-content'+i][0].style.display = 'block';
     },
-    addTab: function (title,type,data,icon, key) {
+    addTab: function (title, type, data, icon, key) {
       // editable += '// ops \n ';
       // return;
-       // check if tab exists active it
-        if (this.tabs.length > 0){
-          for( let i in this.tabs) {
-             let tab = this.tabs[i];
-             if (tab.title == title ){
-               this.changeTab(i);
-               return;
-             }
+      let $ = window.jQuery;
+      // check if tab exists active it
+      if (this.tabs.length > 0) {
+        for (let i in this.tabs) {
+          let tab = this.tabs[i];
+          if (tab.title == title) {
+            this.changeTab(i);
+            return;
           }
         }
-        // add tab
+      }
+      // add tab
       // this.currentProperties[key] += '// yas \n';
-      let p = 'window.appData.pages['+this.currentPage+']';
-        let isVisual = this.isVisualSelected;
-        switch (isVisual){
-          case -1:
-            p += '.'+key;
-            break;
-          case 1:
-          case 0:
-            p = fnc.findVarPath(key,this.currentProperties,this.currentPage,isVisual);
-            break;
-            default:
-            console.log('error isVisual selected');
-        }
+      let p = 'window.appData.pages[' + this.currentPage + ']';
+      let isVisual = this.isVisualSelected;
+      switch (isVisual) {
+        case -1:
+          p += '.' + key;
+          break;
+        case 1:
+        case 0:
+          p = fnc.findVarPath(key, this.currentProperties, this.currentPage, isVisual);
+          break;
+        default:
+          console.log('error isVisual selected');
+      }
       // console.log(p);
-        this.tabs.push({
-          title: title,
-          type: type,
-          data:data,
-          pointer:p,
-          icon: icon,
-        });
-        // this.tabKeeper.push(
-        //     this.currentProperties[key]
-        // );
-        // // show added tab
-        // var self = this;
-          $('.tab-content').removeClass('slide-fade-tab');
-        // console.log();
-          this.changeTab(parseInt(this.tabs.length)-1);
+      this.tabs.push({
+        title: title,
+        type: type,
+        data: data,
+        pointer: p,
+        icon: icon,
+      });
+      // this.tabKeeper.push(
+      //     this.currentProperties[key]
+      // );
+      // // show added tab
+      // var self = this;
+      $('.tab-content').removeClass('slide-fade-tab');
+      // console.log();
+      this.changeTab(parseInt(this.tabs.length) - 1);
 
-        // this.handleSly();
+      // this.handleSly();
     },
-    closeTab:function (i) {
+    closeTab: function (i) {
       this.tabs.splice(i, 1);
       this.tabKeeper.splice(i, 1);
       var self = this;
       setTimeout(function () {
         self.changeTab(-1);
-      },100);
+      }, 100);
     },
     openSite: function (e) {
       window.api.send("openWeb", e);
@@ -1103,6 +1106,7 @@ export default {
   margin-top: 10px;
 }
 
+
 @keyframes fliper {
   0% {
     transform: translate(0px);
@@ -1127,4 +1131,5 @@ export default {
     transform: translate(0px);
   }
 }
+
 </style>
