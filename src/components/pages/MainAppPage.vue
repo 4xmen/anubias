@@ -7,7 +7,8 @@
           <i class="fa fa-laptop-code"></i>
           Main
         </li>
-        <li v-for="(tab,i) in tabs" :key="i" @click="changeTab(i)" :class="(activeTab == i?'active':'')" @mouseup.middle="closeTab(i)">
+        <li v-for="(tab,i) in tabs" :key="i" @click="changeTab(i)" :class="(activeTab == i?'active':'')"
+            @mouseup.middle="closeTab(i)">
           <i :class="'fa '+tab.icon"></i>
           {{ tab.title }}
           <span class="fa fa-times" @click="closeTab(i)"></span>
@@ -17,7 +18,7 @@
         </li>
       </ul>
     </div>
-    <div :class="'tab-control-placeholder '+(tabs.length  === 0?'opacity-0':'')" >
+    <div :class="'tab-control-placeholder '+(tabs.length  === 0?'opacity-0':'')">
       <div class="prev-sc">
         <i class="fa fa-angle-left"></i>
       </div>
@@ -31,7 +32,7 @@
 
         <div id="main" :class="(!settings.pages?'page-collapse ':'')+(!settings.sidebar?'side-collapse ':'')">
           <!-- add app menu to main-->
-          <div class="container">
+          <div class="container-fluid text-center" id="hold">
             <!-- if project init can show left side -->
             <!-- right sidebar start -->
             <div v-if="isInitProject">
@@ -71,7 +72,7 @@
                       :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.5?'green ':'grey darken-4')">
                     50%
                   </li>
-                  <li @click="changeScale(0.35)"
+                  <li @click="changeScale(.35)"
                       :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.35?'green':'grey darken-4')">
                     auto
                   </li>
@@ -101,7 +102,7 @@
               <!-- inactive when has not page -->
               <!-- make device size and scale -->
               <!-- bgcolor and text color apply -->
-              <div :class="currentDisplay.isDesktop? 'laptop':''">
+              <div :class="'device-holder '+(currentDisplay.isDesktop? 'laptop':'')">
                 <div id="mobile" :style="getStyleMobile()"
                      :class="+(data.pages.length < 1?'inactive':'blurable')+(currentDisplay.borderLess?' borderless':'')+(display.landscape?' landscape':'')+' '+currentDisplay.camera+' '+currentDisplay.cameraBorder">
                   <div :style="getStyleCamera()" id="camera"><span :style="getStyleCameraDevice()"></span></div>
@@ -442,38 +443,47 @@ export default {
   methods: {
     linkify: fnc.linkify,
     handleSly: function () {
-      if (this.sly != null){
-        var self = this;
-        setTimeout(function () {
-          self.sly.reload();
-        },500);
-        return;
-      }
-      let options = {
-        horizontal: 1,
-        itemNav: 'centered',
-        activateMiddle: 1,
-        // activateOn: 'click',
-        mouseDragging: 1,
-        touchDragging: 1,
-        releaseSwing: 1,
-        startAt: 0,
-        // scrollBar: document.querySelector('.scrollbar'),
-        scrollBy: 1,
-        speed: 300,
-        elasticBounds: 1,
-        dragHandle: 1,
-        dynamicHandle: 1,
-        clickBar: 1,
-        scrollTrap: 1,
-        moveBy:900,
-        forward: document.querySelector('.prev-sc'),
-        backward: document.querySelector('.next-sc'),
-      };
-      /*eslint-disable */
-      //let frame = new
-      this.sly = Sly('#tabs', options).init();
+      try {
+        try {
+          if (this.sly != null) {
+            var self = this;
+            setTimeout(function () {
+              self.sly.reload();
+            }, 500);
+            return;
+          }
+        } catch (e) {
+          console.log(e.message);
+        }
 
+        let options = {
+          horizontal: 1,
+          itemNav: 'centered',
+          activateMiddle: 1,
+          // activateOn: 'click',
+          mouseDragging: 1,
+          touchDragging: 1,
+          releaseSwing: 1,
+          startAt: 0,
+          // scrollBar: document.querySelector('.scrollbar'),
+          scrollBy: 1,
+          speed: 300,
+          elasticBounds: 1,
+          dragHandle: 1,
+          dynamicHandle: 1,
+          clickBar: 1,
+          scrollTrap: 1,
+          moveBy: 900,
+          forward: document.querySelector('.prev-sc'),
+          backward: document.querySelector('.next-sc'),
+        };
+        /*eslint-disable */
+        //let frame = new
+        this.sly = Sly('#tabs', options).init();
+
+      } catch (e) {
+        console.log(e.message);
+      }
       /*eslint-enable */
 
     },
@@ -1128,30 +1138,5 @@ export default {
   margin-top: 10px;
 }
 
-
-@keyframes fliper {
-  0% {
-    transform: translate(0px);
-  }
-  45% {
-    transform: translate(0px);
-    opacity: 1;
-  }
-  47% {
-    transform: translate(100px) scale(1.3);
-    opacity: .7;
-  }
-  50% {
-    transform: translate(-200px) scale(1.5);
-    opacity: .3;
-  }
-  53% {
-    transform: translate(0px);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(0px);
-  }
-}
 
 </style>

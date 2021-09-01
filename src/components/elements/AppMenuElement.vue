@@ -320,7 +320,7 @@ export default {
       this.startDebug = true;
       window.ide.isDebuging = true;
       let data = {
-        isDebug: true,
+        isDebug: false,
         command: './'+this.engineName+' -b ' + window.project.file + ' && cd ' + window.project.folder + '/src && flutter build apk',
       }
       window.api.send("command", data);

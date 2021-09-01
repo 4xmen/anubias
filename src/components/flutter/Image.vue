@@ -79,6 +79,10 @@ export default {
 
 <style scoped>
 
+.image{
+  margin-top: 0 !important;
+}
+
 .image, .image div {
   overflow: hidden;
   display: inline-block;

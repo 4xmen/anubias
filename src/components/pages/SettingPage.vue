@@ -119,6 +119,24 @@
           </span>
         </div>
       </div>
+      <div class="collection-item">
+        <div class="secondary-content">
+          <input type="text" class="input-field"  v-model="setting.fontSize"  placeholder="font-size"/>
+        </div>
+        <div>
+          <i class="fa fa-code ico"></i>
+          <b>
+            Code style
+          </b>
+          <span>
+            You can change ide code here, font-size and code style
+          </span>
+          <div class="clearfix"></div>
+          <div :class="'code-style' + (setting.codeStyle === 'vs-dark'?' active':'') " @click="changeTheme('vs-dark')"></div>
+          <div :class="'code-style cs2' + (setting.codeStyle === 'hc-black'?' active':'') " @click="changeTheme('hc-black')"></div>
+          <div :class="'code-style cs3' + (setting.codeStyle === 'vs-light'?' active':'') " @click="changeTheme('vs-light')"></div>
+        </div>
+      </div>
       <br>
       <div class="btn waves-effect waves-block" @click="save">
         <i class="fa fa-save"></i>
@@ -126,6 +144,7 @@
             Save setting
          </span>
       </div>
+      <br>
     </div>
   </div>
 </template>
@@ -147,6 +166,9 @@ export default {
         pathFix: false,
         exitConfirm: false,
         pages: true,
+        sidebar: true,
+        codeStyle: 'vs-dark',
+        fontSize: 18,
       }
     }
   },
@@ -163,6 +185,9 @@ export default {
 
   },
   methods: {
+    changeTheme: function (e) {
+      this.setting.codeStyle = e;
+    },
     search: function () {
       let items = document.querySelectorAll('#settings .collection-item');
       for (const item of items) {
@@ -230,6 +255,34 @@ export default {
 .yellow-text{
   display: inline !important;
   font-weight: 500 !important;
+}
+
+.code-style{
+  margin-top: 15px;
+  width: 33%;
+  background: url("../../assets/img/code/code1.png") left center no-repeat;
+  height: 140px;
+  border: 1px solid black;
+  float: left;
+  margin-right: .49%;
+  opacity: .3;
+  transition: 300ms;
+}
+.code-style:nth-child(3n+1){
+  margin-right: 0;
+}
+.code-style.cs2{
+  background-image: url("../../assets/img/code/code2.png");
+}
+.code-style.cs3{
+  background-image: url("../../assets/img/code/code3.png");
+}
+.code-style:hover{
+  opacity: 1;
+}
+.code-style.active{
+  opacity: 1 !important;
+  border-color: #0f9d58 ;
 }
 /*.switch .lever {*/
 /*  display: inline-block;*/

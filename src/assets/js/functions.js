@@ -118,9 +118,17 @@ let getOS = function () {
  * @returns {string} size with px | %
  */
 let getSize = function (value, scale, coefficient = 2.75, isHeight = false) {
-    return value.toString().slice(-1) == '%' ?
-        (!isHeight ? value : (document.querySelector('#mobile').offsetHeight / 100) * parseFloat(value.toString().substr(0, value.length - 1)) + 'px')
-        : (parseFloat(value) * scale * coefficient) + 'px';
+    try {
+
+        return value.toString().slice(-1) == '%' ?
+            (!isHeight ? value : (document.querySelector('#mobile').offsetHeight / 100) * parseFloat(value.toString().substr(0, value.length - 1)) + 'px')
+            : (parseFloat(value) * scale * coefficient) + 'px';
+
+    } catch (e) {
+        return value.toString().slice(-1) == '%' ?
+            (!isHeight ? value : (document.querySelector('.container').offsetHeight / 200) * parseFloat(value.toString().substr(0, value.length - 1)) + 'px')
+            : (parseFloat(value) * scale * coefficient) + 'px';
+    }
 }
 
 
@@ -160,6 +168,12 @@ let fixSetting = function (data) {
     }
     if (data.sidebar === undefined) {
         data.sidebar = true;
+    }
+    if (data.fontSize === undefined) {
+        data.fontSize = 18;
+    }
+    if (data.codeStyle === undefined) {
+        data.codeStyle = 'vs-dark';
     }
     return data;
 }
