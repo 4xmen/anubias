@@ -42,9 +42,9 @@ export default {
       let monEditor = monaco.editor.create(wrapper, {
         value: this.content,
         language:"dart",
-        theme:"vs-dark",
+        theme:window.ide.settings.codeStyle,
         fontFamily: "VazirCodeX",
-        fontSize: 18,
+        fontSize: window.ide.settings.fontSize,
         automaticLayout: true
       });
       /*eslint-disable */
