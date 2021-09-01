@@ -521,9 +521,10 @@ export default {
       // this.activeTab = i;
       // this.$refs['tab-content'+i][0].style.display = 'block';
     },
-    addTab: function (title, type, data, icon, key) {
+    addTab: function (title, type, data, icon, key, pointer = null) {
       // editable += '// ops \n ';
       // return;
+      // console.log(pointer);
       let $ = window.jQuery;
       // check if tab exists active it
       if (this.tabs.length > 0) {
@@ -539,17 +540,22 @@ export default {
       // this.currentProperties[key] += '// yas \n';
       let p = 'window.appData.pages[' + this.currentPage + ']';
       let isVisual = this.isVisualSelected;
-      switch (isVisual) {
-        case -1:
-          p += '.' + key;
-          break;
-        case 1:
-        case 0:
-          p = fnc.findVarPath(key, this.currentProperties, this.currentPage, isVisual);
-          break;
-        default:
-          console.log('error isVisual selected');
+      if (pointer !== null){
+        p = pointer;
+      }else{
+        switch (isVisual) {
+          case -1:
+            p += '.' + key;
+            break;
+          case 1:
+          case 0:
+            p = fnc.findVarPath(key, this.currentProperties, this.currentPage, isVisual);
+            break;
+          default:
+            console.log('error isVisual selected');
+        }
       }
+
       // console.log(p);
       this.tabs.push({
         title: title,

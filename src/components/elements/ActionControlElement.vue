@@ -5,12 +5,9 @@
     <!--    <i class="fa fa-circle green-text text-lighten-2"></i>-->
     <div class="content" id="container">
       <div class="row">
-        <div class="col s9">
-          <div id="codeEditor2" class="editor"></div>
-        </div>
-        <div class="col s3">
+        <div class="col s12">
           <ul class="collection" id="actSort">
-            <li @click="change(k)" :class="'collection-item '+(k == current?'active':'')"
+            <li @click="change(k)" @dblclick="openCodeEditor(k)" :class="'collection-item '+(k == current?'active':'')"
                 v-for="(action,k) in allActions" :key="k">
               <i class="material-icons">{{ action.icon }}</i>
               <i class="secondary-content fa fa-times" title="Remove" @click="rem(k)"></i>
@@ -30,11 +27,20 @@
                 {{ ic.value }}
               </option>
             </select>
+            <br>
             <label for="text-hint">
               Tooltip:
             </label>
             <input type="text" id="text-hint" v-model="allActions[current].tooltip"/>
           </div>
+          <ul>
+            <li>
+              - Double click to change code
+            </li>
+            <li>
+              - You can drag and drop to sort
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -124,6 +130,16 @@ export default {
         },
       });
     },
+    openCodeEditor: function (e) {
+
+      let title = window.appData.pages[this.$parent.$parent.currentPage].name
+          + '.action[' + e + '].onPressed';
+      let pointer = 'window.appData.pages[' + this.$parent.$parent.currentPage + '].children.visual[0].actions['+e+'].onPressed';
+      this.$parent.$parent.addTab(title, 'code', {
+        codeTitle: title,
+      }, 'fa-code', e,pointer);
+      this.closeModal();
+    },
     updateResource: function () {
 
     },
@@ -143,10 +159,11 @@ export default {
       );
       // this.sortInit();
     },
-    // change: function (k) {
-    //   this.current = k;
-    //   editor2.setValue( this.allActions[this.current].onPressed,1);
-    // },
+    change: function (k) {
+      this.current = k;
+      // console.log(this.$parent.$parent.addTab);
+      // editor2.setValue( this.allActions[this.current].onPressed,1);
+    },
     rem: function (i) {
       let self = this;
       window.alertify.confirm(`Are you sure to remove this action
@@ -182,7 +199,7 @@ export default {
 .terminal {
   width: 80%;
   margin: 50px auto 0 auto;
-  max-width: 1100px;
+  max-width: 500px;
   border-radius: 7px;
   background: #272c34;
   padding: 15px;
@@ -248,5 +265,9 @@ export default {
 #codeEditor2 {
   height: 85vh;
   font-size: 16px;
+}
+
+li {
+  margin-bottom: 5px;
 }
 </style>
