@@ -102,7 +102,7 @@ export default {
         style += 'border-color:' + this.color2web(this.properties.borderColor) + ';';
       }
       if (this.properties.margin != '0') {
-        style += 'margin:' + this.calcPadding(this.properties.margin) + ';';
+        style += 'margin:' + this.calcPadding(this.properties.margin,this.scale * 2) + ';';
       }
       try {
         if (this.properties.bgColor === 'null') {

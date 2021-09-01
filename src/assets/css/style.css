@@ -390,7 +390,7 @@ img {
 /*materialz outline*/
 
 .input-field.input-outlined > input {
-    border: 2px solid #eee;
+    border: 1px solid #eee;
     border-radius: 4px;
     transition: box-shadow, border-color 0.15s;
 }

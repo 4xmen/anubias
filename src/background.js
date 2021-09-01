@@ -386,7 +386,7 @@ ipc.on('command', async function (eventevent, data) {
     }
 
     console.log('-----------------------other command--------------------');
-    console.log(data);
+    console.log(data.command);
     let child = cp.exec(cmd, {
         cwd: cwd,
     }, function (error, stdout, stderr) {
