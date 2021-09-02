@@ -31,6 +31,18 @@ require('flickity/dist/flickity.min.css');
 require('vue-context/dist/css/vue-context.css');
 require('./assets/css/style.css');
 import {fnc} from '@/assets/js/functions';
+
+let array_move = function(arr, old_index, new_index) {
+  if (new_index >= arr.length) {
+    var k = new_index - arr.length + 1;
+    while (k--) {
+      arr.push(undefined);
+    }
+  }
+  arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+  return arr; // for testing
+};
+
 var closeDrag;
 export default {
   name: 'App',
@@ -139,6 +151,19 @@ export default {
       window.project.isSave = true;
       window.appData = data.data;
       window.alertify.success('Project loaded :' + data.basename);
+
+      let inx = window.ide.settings.recents.indexOf(window.project.file);
+      if (inx === -1){
+        window.ide.settings.recents.unshift(window.project.file);
+        if (window.ide.settings.recents.length > 5){
+          window.ide.settings.recents.pop();
+        }
+      }else{
+          window.ide.settings.recents = array_move(window.ide.settings.recents,inx,0);
+      }
+      let  datas = {key: 'setting', value: window.ide.settings, silent: true};
+      window.api.send('storage-set', datas );
+
       // go to verify
       self.$router.push('/projectLoaded');
     });

@@ -19,6 +19,7 @@ contextBridge.exposeInMainWorld(
             let validChannels = ["toMain",
                 'openWeb',
                 'open-file-dialog',
+                'open-project-direct',
                 'save-as-file-project',
                 'save-project',
                 'open-file-dialog-project',

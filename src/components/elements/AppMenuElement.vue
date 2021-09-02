@@ -1,6 +1,6 @@
 <!--the main menu of ide-->
 <template>
-  <div  class="navbar-fixed">
+  <div class="navbar-fixed">
     <ul id="dropdown1" class="dropdown-content grey darken-3">
       <li>
         <a @click="newProject">
@@ -44,19 +44,28 @@
       <li v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
         <a @click="saveAs">
 
-            <i class="fa fa-save"></i>
-            Save project as
+          <i class="fa fa-save"></i>
+          Save project as
+        </a>
+      </li>
+      <li :class="(cantEditPrj?' disabled':'')">
+        <a @click="closeProject">
+          <i class="fa fa-times"></i>
+          Close project
+          <span class="shortcut">
+            Ctrl+Shit+W
+          </span>
         </a>
       </li>
     </ul>
     <ul id="dropdown2" class="dropdown-content grey darken-3">
-      <li  :class="(cantEditPrj?' disabled':'')">
+      <li :class="(cantEditPrj?' disabled':'')">
         <router-link :to="cantEditPrj?'':'/project'">
           <i class="fa fa-cog"></i>
           Project info
         </router-link>
       </li>
-      <li  v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
+      <li v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
         <a @click="debug">
           <i class="fa fa-bug"></i>
           Debug
@@ -65,7 +74,7 @@
           </span>
         </a>
       </li>
-      <li  v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
+      <li v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
         <a @click="debugWeb">
           <i class="fa fa-bug"></i>
           Debug Web (PWA)
@@ -74,7 +83,7 @@
           </span>
         </a>
       </li>
-      <li  v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
+      <li v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
         <a @click="build">
           <i class="fa fa-hammer"></i>
           Build
@@ -103,22 +112,22 @@
       </li>
     </ul>
     <ul id="dropdown3" class="dropdown-content grey darken-3">
-<!--      <li @click="test">-->
-<!--        <a>-->
-<!--          <i class="fa fa-eye"></i>-->
-<!--          EngineTest-->
-<!--          <span class="shortcut">-->
-<!--            Ctrl+Shift+F9-->
-<!--          </span>-->
-<!--        </a>-->
-<!--      </li>-->
+      <!--      <li @click="test">-->
+      <!--        <a>-->
+      <!--          <i class="fa fa-eye"></i>-->
+      <!--          EngineTest-->
+      <!--          <span class="shortcut">-->
+      <!--            Ctrl+Shift+F9-->
+      <!--          </span>-->
+      <!--        </a>-->
+      <!--      </li>-->
       <li v-if="!isOnline" @click="startEmulator">
         <a>
           <i class="fa fa-mobile"></i>
           Emulator & Check
-<!--          <span class="shortcut">-->
-<!--            Ctrl+Shift+S-->
-<!--          </span>-->
+          <!--          <span class="shortcut">-->
+          <!--            Ctrl+Shift+S-->
+          <!--          </span>-->
         </a>
       </li>
       <li v-if="!isOnline" @click="showSetting">
@@ -144,7 +153,7 @@
       <div class="nav-wrapper grey darken-4">
         <ul class="left">
           <li class="logo active" @click="openSite">
-            <a ><img src="@/assets/img/logo.svg" alt=""></a>
+            <a><img src="@/assets/img/logo.svg" alt=""></a>
           </li>
           <li>
             <a class="dropdown-trigger" href="#!" data-target="dropdown1">
@@ -171,7 +180,7 @@
         </ul>
       </div>
     </nav>
-    <input type="file" style="display: none" ref="dialog" accept=".anb" />
+    <input type="file" style="display: none" ref="dialog" accept=".anb"/>
   </div>
 </template>
 
@@ -215,16 +224,20 @@ export default {
         self.test();
         return;
       }
-      if (e.ctrlKey &&  e.key === 'F9') {
+      if (e.ctrlKey && e.key === 'F9') {
         self.build();
         return;
       }
-      if (e.altKey &&  e.key === 'F9') {
+      if (e.altKey && e.key === 'F9') {
         self.debugWeb();
         return;
       }
       if (e.ctrlKey && e.key === 'r') {
         self.hotReload();
+        return;
+      }
+      if (e.ctrlKey && e.shiftKey &&  e.key === 'W') {
+        self.closeProject();
         return;
       }
       if (e.key === 'F9') {
@@ -237,14 +250,27 @@ export default {
       }
 
 
-
     });
 
   }, methods: {
-    devTools:function () {
-      window.api.send("devtools","");
+    closeProject:function(){
+      if (this.cantEditPrj || this.isOnline) {
+        return false;
+      }
+      window.project = {
+        folder: '',
+        file: '',
+        isSave: false,
+      };
+      window.appData = fnc.clone(window.sample);
+      window.appData.pages.push(fnc.clone(window.defaults.page));
+      window.appData.pages[0].name += '1';
+      this.$router.go(this.$router.currentRoute);
     },
-    openSite:function () {
+    devTools: function () {
+      window.api.send("devtools", "");
+    },
+    openSite: function () {
       window.api.send("openWeb", "https://anubias.app");
     },
     hotReload: function () {
@@ -254,19 +280,19 @@ export default {
         this.save();
         let data = {
           isUpdate: true,
-          command: './'+this.engineName+' -b ' + window.project.file,
+          command: './' + this.engineName + ' -b ' + window.project.file,
         }
         window.api.send("command", data);
       }
 
     },
-    showSetting:function () {
+    showSetting: function () {
       this.$router.push('/setting');
     },
-    startEmulator:function () {
+    startEmulator: function () {
 
 
-      if (window.appData.project.name == '' || (window.project.isSave && window.appData.project.name != '' ) ){
+      if (window.appData.project.name == '' || (window.project.isSave && window.appData.project.name != '')) {
         this.$router.push('/emulator');
         return;
       }
@@ -282,7 +308,7 @@ export default {
     test: function () {
       this.$parent.TerminalShow();
       let data = {
-        command: './'+this.engineName,
+        command: './' + this.engineName,
       }
       window.api.send("command", data);
     },
@@ -295,7 +321,7 @@ export default {
       window.ide.isDebuging = true;
       let data = {
         isDebug: true,
-        command: './'+this.engineName+' -b ' + window.project.file + ' && cd ' + window.project.folder + '/src && flutter run',
+        command: './' + this.engineName + ' -b ' + window.project.file + ' && cd ' + window.project.folder + '/src && flutter run',
       }
       window.api.send("command", data);
     },
@@ -308,7 +334,7 @@ export default {
       window.ide.isDebuging = true;
       let data = {
         isDebug: true,
-        command: './'+this.engineName+' -b ' + window.project.file + ' && cd ' + window.project.folder + '/src && flutter run -d chrome',
+        command: './' + this.engineName + ' -b ' + window.project.file + ' && cd ' + window.project.folder + '/src && flutter run -d chrome',
       }
       window.api.send("command", data);
     },
@@ -321,7 +347,7 @@ export default {
       window.ide.isDebuging = true;
       let data = {
         isDebug: false,
-        command: './'+this.engineName+' -b ' + window.project.file + ' && cd ' + window.project.folder + '/src && flutter build apk',
+        command: './' + this.engineName + ' -b ' + window.project.file + ' && cd ' + window.project.folder + '/src && flutter build apk',
       }
       window.api.send("command", data);
     },
@@ -332,11 +358,11 @@ export default {
         return false;
       }
 
-      if (this.isOnline){
+      if (this.isOnline) {
         // download project
         fnc.downloadObjectAsJson(window.appData,
             window.appData.project.name.split(' ').join('-'));
-        return  true;
+        return true;
       }
       // if not saved yet run save as auto
       if (window.project.file === '') {
@@ -353,23 +379,23 @@ export default {
     },
     openProject: function () {
       var self = this;
-      if (this.isOnline){
+      if (this.isOnline) {
         // open file
         this.$refs.dialog.click();
         this.$refs.dialog.onchange = function () {
-          if ( this.files[0] != undefined){
+          if (this.files[0] != undefined) {
             let file = this.files[0];
             if (file) {
               let reader = new FileReader();
               reader.readAsText(file, "UTF-8");
               reader.onload = function (e) {
                 try {
-                   let json = JSON.parse(e.target.result);
-                   window.appData = json;
-                   window.alertify.success('Project loaded :' + json.project.name);
+                  let json = JSON.parse(e.target.result);
+                  window.appData = json;
+                  window.alertify.success('Project loaded :' + json.project.name);
                   // go to verify
-                   self.$router.push('/projectLoaded');
-                } catch(e) {
+                  self.$router.push('/projectLoaded');
+                } catch (e) {
                   window.alertify.error("Error to parse anb file");
                 }
 
@@ -380,7 +406,7 @@ export default {
             }
           }
         };
-      }else{
+      } else {
         window.api.send("open-file-dialog-project", {});
       }
     },
@@ -426,11 +452,11 @@ export default {
         case "Linux":
           return 'anubias-engine';
         case "Windows":
-          return  'anubias-engine.exe';
+          return 'anubias-engine.exe';
         case "Osx":
           return 'anubias-engine-osx';
         default:
-         return 'anubias-engine';
+          return 'anubias-engine';
       }
     }
   }
@@ -445,12 +471,13 @@ export default {
 /*  }*/
 /*}*/
 
-#nav{
+#nav {
   top: 33px;
   left: 0;
   right: 0;
   position: fixed;
 }
+
 nav, nav .nav-wrapper i, nav > a.sidenav-trigger, nav > a.sidenav-trigger i {
   height: 40px;
   line-height: 40px;

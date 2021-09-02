@@ -167,6 +167,7 @@ ipc.on('open-file-image', function (event) {
     })
 });
 
+
 /**
  * open project progress
  */
@@ -203,6 +204,28 @@ ipc.on('open-file-dialog-project', function (event) {
             }
         }
     })
+});
+
+/**
+ * open project direct for recent
+ */
+ipc.on('open-project-direct', function (event, arg) {
+
+    let filename = arg;
+    // read project file
+    try {
+        fs.readFile(filename, 'utf8', function (err, data) {
+            // then when loaded send data to ide
+            win.webContents.send('selected-file', {
+                file: filename,
+                basename: path.basename(filename),
+                folder: path.dirname(filename),
+                data: JSON.parse(data)
+            });
+        })
+    } catch (e) {
+        win.webContents.send('message', {type: 'error', 'error': e.message});
+    }
 });
 
 /**
@@ -274,7 +297,7 @@ ipc.on('save-project', function (event, arg) {
 /**
  * Run emulator command line
  */
-ipc.on('emulator', async function  (eventevent, data) {
+ipc.on('emulator', async function (eventevent, data) {
 
     // console.log(process.env.PATH);
 
@@ -298,15 +321,15 @@ ipc.on('emulator', async function  (eventevent, data) {
 
         // get setting and fix path problem
         var setting = await storage.getSync('setting');
-        if (setting.env  != undefined && setting.env.length > 0){
-            data = 'export PATH="$PATH:'+setting.env+'" && ' + data;
+        if (setting.env != undefined && setting.env.length > 0) {
+            data = 'export PATH="$PATH:' + setting.env + '" && ' + data;
         }
-        if (setting.pathFix  != undefined && setting.pathFix){
-            if (await fs.existsSync(require('os').homedir() + '/.bash_profile')){
-                data =  '. '+require('os').homedir() + '/.bash_profile && '+data;
+        if (setting.pathFix != undefined && setting.pathFix) {
+            if (await fs.existsSync(require('os').homedir() + '/.bash_profile')) {
+                data = '. ' + require('os').homedir() + '/.bash_profile && ' + data;
             }
-            if (await fs.existsSync(require('os').homedir() + '/.zprofile')){
-                data =  '. '+require('os').homedir() + '/.zprofile && '+data;
+            if (await fs.existsSync(require('os').homedir() + '/.zprofile')) {
+                data = '. ' + require('os').homedir() + '/.zprofile && ' + data;
             }
         }
 
@@ -338,7 +361,7 @@ ipc.on('emulator', async function  (eventevent, data) {
         });
         child.stderr.on('data', function (dataz) {
             if (data.indexOf('list-avds') == -1) {
-                win.webContents.send('emulator-terminal', {err: true, data : dataz});
+                win.webContents.send('emulator-terminal', {err: true, data: dataz});
             }
         });
     } catch (e) {
@@ -373,15 +396,15 @@ ipc.on('command', async function (eventevent, data) {
     // console.log(cmd);
     // fs.writeFileSync('/home/freeman/log', process.resourcesPath);
     var setting = await storage.getSync('setting');
-    if (setting.env  != undefined && setting.env.length > 0){
-        data = 'export PATH="$PATH:'+setting.env+'" && ' + data;
+    if (setting.env != undefined && setting.env.length > 0) {
+        data = 'export PATH="$PATH:' + setting.env + '" && ' + data;
     }
-    if (setting.pathFix  != undefined && setting.pathFix){
-        if (await fs.existsSync(require('os').homedir() + '/.bash_profile')){
-            data =  '. '+require('os').homedir() + '/.bash_profile && '+data;
+    if (setting.pathFix != undefined && setting.pathFix) {
+        if (await fs.existsSync(require('os').homedir() + '/.bash_profile')) {
+            data = '. ' + require('os').homedir() + '/.bash_profile && ' + data;
         }
-        if (await fs.existsSync(require('os').homedir() + '/.zprofile')){
-            data =  '. '+require('os').homedir() + '/.zprofile && '+data;
+        if (await fs.existsSync(require('os').homedir() + '/.zprofile')) {
+            data = '. ' + require('os').homedir() + '/.zprofile && ' + data;
         }
     }
 
@@ -476,7 +499,9 @@ ipc.on('storage-set', function (eventevent, data) {
             console.log(error);
             win.webContents.send('message', {type: 'error', 'msg': error});
         } else {
-            win.webContents.send('message', {type: 'success', 'msg': 'Setting saved'})
+            if (data.silent === undefined || !data.silent) {
+                win.webContents.send('message', {type: 'success', 'msg': 'Setting saved'})
+            }
         }
         // win.webContents.send('storage-back',data);
     });

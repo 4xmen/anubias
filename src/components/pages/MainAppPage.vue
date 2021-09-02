@@ -142,6 +142,19 @@
               <h5 v-if="isOnline && isNotChrome">
                 Please use `chromium` or `google chrome` to use online app
               </h5>
+              <div id="recent">
+                <h6>
+                  Recent projects:
+                </h6>
+                <ul>
+                  <li v-for="(f,i) in recents" :key="i" @click="openRecent(i)">
+                    <span>
+                      {{f.substr(0,f.lastIndexOf(slash))}}{{slash}}
+                    </span>
+                      {{f.substr(f.lastIndexOf(slash)+1)}}
+                  </li>
+                </ul>
+              </div>
               <img src="../../assets/img/logo.svg" class="logo" alt="">
             </div>
           </div>
@@ -330,6 +343,8 @@ export default {
       settings: window.ide.settings,
       isNotChrome: window.chrome == undefined,
       terminalContent: ['Welcome to Anbuias v' + window.ide.version()],
+      recents: window.ide.settings.recents,
+      slash: fnc.getOS() == 'Windows' ? '\\' : '/'   ,
       // isInitProject: false,
       display: {
         name: 'Nexus 5x',
@@ -583,6 +598,9 @@ export default {
         self.changeTab(-1);
         self.handleSly();
       }, 100);
+    },
+    openRecent:function (e) {
+      window.api.send( 'open-project-direct', this.recents[e]);
     },
     openSite: function (e) {
       window.api.send("openWeb", e);
@@ -930,6 +948,28 @@ export default {
   z-index: 999;
 }
 
+#recent{
+  text-align: start;
+  padding: 2rem;
+}
+
+#recent li{
+  background: rgba(0,0,0,0.1);
+  padding: 2px;
+  margin-bottom: 2px;
+  color: yellowgreen;
+  transition: 300ms;
+  cursor: pointer;
+}
+#recent li:hover{
+  color: yellow;
+  transform: scaleX(1.05);
+  box-shadow: 2px 2px 3px rgba(0,0,0,0.3);
+}
+#recent li span{
+  color: gray;
+}
+
 #side.collapse {
   width: 15px;
   opacity: 0.001;
@@ -1119,8 +1159,7 @@ export default {
 }
 
 .logo {
-  height: 40vh;
-  margin-top: calc(50vh - 40vh);
+  height: 30vh;
   animation: fliper 15s infinite;
 }
 

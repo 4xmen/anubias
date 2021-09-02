@@ -175,6 +175,9 @@ let fixSetting = function (data) {
     if (data.codeStyle === undefined) {
         data.codeStyle = 'vs-dark';
     }
+    if (data.recents === undefined) {
+        data.recents = [];
+    }
     return data;
 }
 
