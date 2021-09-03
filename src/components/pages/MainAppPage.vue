@@ -165,8 +165,14 @@
               <h5>
                 Templates:
               </h5>
-              <carousel-3d :height="500">
-                <slide :index="0">
+              <carousel-3d ref="carousel3d"
+                  :height="500"
+                  :autoplay="true"
+                  :autoplayTimeout="5000"
+                  :autoplayHoverPause="true"
+                  :controlsVisible="true"
+                  :onMainSlideClick="slideClick">
+                <slide :index="0"  >
                   <img src="../../assets/img/template-sample1.png" alt="123">
                 </slide>
                 <slide :index="1">
@@ -500,6 +506,9 @@ export default {
   },
   methods: {
     linkify: fnc.linkify,
+    slideClick: function () {
+      console.log(this.$refs.carousel3d.currentIndex);
+    },
     handleSly: function () {
       try {
         try {
