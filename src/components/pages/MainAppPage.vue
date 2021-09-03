@@ -142,6 +142,9 @@
               <h5 v-if="isOnline && isNotChrome">
                 Please use `chromium` or `google chrome` to use online app
               </h5>
+              <div v-if="!isOnline">
+
+
               <div id="recent">
                 <h6>
                   Recent projects:
@@ -155,7 +158,43 @@
                   </li>
                 </ul>
               </div>
-              <img src="../../assets/img/logo.svg" class="logo" alt="">
+              </div>
+              <div v-else>
+                <img src="../../assets/img/logo.svg" class="logo" alt="">
+              </div>
+              <h5>
+                Templates:
+              </h5>
+              <carousel-3d :height="500">
+                <slide :index="0">
+                  <img src="../../assets/img/template-sample1.png" alt="123">
+                </slide>
+                <slide :index="1">
+                  <img src="../../assets/img/template-sample.png" alt="123">
+                </slide>
+                <slide :index="2">
+                  <img src="../../assets/img/template-sample.png" alt="123">
+                </slide>
+                <slide :index="3">
+                  <img src="../../assets/img/template-sample.png" alt="123">
+                </slide>
+                <slide :index="4">
+                  <img src="../../assets/img/template-sample.png" alt="123">
+                </slide>
+                <slide :index="5">
+                  <img src="../../assets/img/template-sample.png" alt="123">
+                </slide>
+                <slide :index="6">
+                  <img src="../../assets/img/template-sample.png" alt="123">
+                </slide>
+                <slide :index="7">
+                  <img src="../../assets/img/template-sample.png" alt="123">
+                </slide>
+                <slide :index="8">
+                  <img src="../../assets/img/template-sample.png" alt="123">
+                </slide>
+              </carousel-3d>
+
             </div>
           </div>
         </div>
@@ -288,6 +327,8 @@ import colorPicker from '../elements/colorPickerElement';
 
 import {Drag, Drop} from "vue-easy-dnd";
 import VueContext from 'vue-context';
+import { Carousel3d, Slide } from 'vue-carousel-3d';
+
 
 /*eslint-disable */
 import Sortable from '@/assets/js/Sortable.min';
@@ -316,7 +357,9 @@ export default {
     colorPicker,
     tabControl,
     Drag,
-    Drop
+    Drop,
+    Carousel3d,
+    Slide,
   },
   data: function () {
     return {
@@ -951,6 +994,7 @@ export default {
 #recent{
   text-align: start;
   padding: 2rem;
+  padding-bottom: 0;
 }
 
 #recent li{

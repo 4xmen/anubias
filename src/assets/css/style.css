@@ -639,3 +639,12 @@ img {
         transform: translate(0px);
     }
 }
+
+.carousel-3d-slide{
+    opacity: 0.5 !important;
+    transition: 300ms;
+}
+
+.carousel-3d-slide.current{
+    opacity: 1 !important;
+}
