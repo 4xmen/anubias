@@ -204,7 +204,7 @@ img {
     border-radius: 50%;
     border: 2px solid black;
     background: radial-gradient(circle, rgba(2, 0, 36, 1) 0%, rgba(54, 54, 78, 1) 24%, rgba(26, 25, 56, 1) 30%, rgba(60, 60, 84, 1) 48%, rgba(30, 30, 42, 1) 67%, rgba(91, 91, 106, 1) 74%, rgba(0, 0, 0, 1) 100%);
-    top: 20px;
+    top: 35px;
     left: calc(50% - 10px);
     content: ' ';
     position: absolute;

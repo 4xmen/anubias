@@ -3,7 +3,8 @@
     <div class="rowc">
       <drop class="drop visual" @drop="onVisualDrop" :accepts-data="(n) => isVisual(n)"></drop>
       <div :class="'content '+getClass()" :style="'padding:'+(15 * scale)+'px;'+getStyleMain()">
-        <child-simulator class="flex-child" v-for="(child,k) in properties.children" :type="child.type" :properties="child" :scale="scale"
+        <child-simulator class="flex-child" v-for="(child,k) in properties.children" :type="child.type"
+                         :properties="child" :scale="scale"
                          :page="page" @click.native="setProperty(child)" :key="k"></child-simulator>
 
       </div>
@@ -13,16 +14,16 @@
       </div>
     </div>
 
-<!--    <vue-final-modal v-model="showChildrenModal" @before-open="modalOpen" @before-close="modalClose" name="code-modal">-->
-<!--      <div class="terminal" >-->
-<!--        <i class="fa fa-circle red-text" @click="showChildrenModal = false"></i>-->
-<!--        <i class="fa fa-circle yellow-text text-darken-2"></i>-->
-<!--        <i class="fa fa-circle green-text text-lighten-2"></i>-->
-<!--        <div class="content" id="container">-->
-<!--           hello-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </vue-final-modal>-->
+    <!--    <vue-final-modal v-model="showChildrenModal" @before-open="modalOpen" @before-close="modalClose" name="code-modal">-->
+    <!--      <div class="terminal" >-->
+    <!--        <i class="fa fa-circle red-text" @click="showChildrenModal = false"></i>-->
+    <!--        <i class="fa fa-circle yellow-text text-darken-2"></i>-->
+    <!--        <i class="fa fa-circle green-text text-lighten-2"></i>-->
+    <!--        <div class="content" id="container">-->
+    <!--           hello-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </vue-final-modal>-->
   </div>
 </template>
 
@@ -44,32 +45,33 @@ export default {
     'child-simulator': () => import('../elements/Simulator')
   },
   methods: {
-    getClass:function () {
-      if (this.properties.axis === 'MainAxisAlignment.spaceAround' || this.properties.axis === 'MainAxisAlignment.spaceBetween'){
-        if (this.properties.scrollable){
+    getClass: function () {
+      if (this.properties.axis === 'MainAxisAlignment.spaceAround' || this.properties.axis === 'MainAxisAlignment.spaceBetween') {
+        if (this.properties.scrollable) {
           return 'axis-flex.scroll';
-        }else {
+        } else {
           return 'axis-flex';
         }
       }
 
-      if (this.properties.axis === 'MainAxisAlignment.start' ){
+      if (this.properties.axis === 'MainAxisAlignment.start') {
         return 'axis-start';
       }
-      if (this.properties.axis === 'MainAxisAlignment.end' ){
-        if (window.appData.project.isRTL){
+      if (this.properties.axis === 'MainAxisAlignment.end') {
+        if (window.appData.project.isRTL) {
           return 'axis-end rtl';
-        }else {
+        } else {
           return 'axis-end';
         }
       }
 
     },
-    getStyleMain:function () {
-      if (this.properties.axis === 'MainAxisAlignment.spaceAround' || this.properties.axis === 'MainAxisAlignment.spaceBetween'){
-        return 'display:flex;flex-flow: row wrap; flex-basis: 100%;';
+    getStyleMain: function () {
+      let style = '';
+      if (this.properties.axis === 'MainAxisAlignment.spaceAround' || this.properties.axis === 'MainAxisAlignment.spaceBetween') {
+        style += 'display:flex;flex-flow: row wrap; flex-basis: 100%;';
       }
-      return  '';
+      return style;
     },
     modalOpen: function () {
       let n = this;
@@ -158,8 +160,33 @@ export default {
       let style = '';
       // style += 'background-color:' + this.color2web(this.properties.color, false) + ';';
 
+      if (this.properties.width != 'null') {
+        style += 'width:' + fnc.getSize(this.properties.width, this.scale, 3) + ';'
+      }
+      if (this.properties.height != 'null') {
+        style += 'height:' + fnc.getSize(this.properties.height , this.scale , 3, true) + ';'
+      }
       if (this.properties.scrollable == true) {
         style += 'overflow-y:hidden ;overflow-x: scroll;';
+      }
+
+      if (this.properties.bgColor != 'null') {
+        style += 'background:' + this.color2web(this.properties.bgColor) + ';';
+      }
+      console.log('bgRow',this.properties.bgColor,style);
+      style += 'border-style: solid;';
+      style += 'border-width:' + fnc.calcPadding(this.properties.border) + ';';
+      if (this.properties.borderColor != 'null') {
+        style += 'border-color:' + this.color2web(this.properties.borderColor) + ';';
+      }
+      if (this.properties.padding != 'null' && this.properties.padding != '') {
+        style += 'padding:' + this.calcPadding(this.properties.padding) + ';'
+      }
+      if (this.properties.margin != 'null' && this.properties.margin != '') {
+        style += 'margin:' + this.calcPadding(this.properties.margin) + ';'
+      }
+      if (this.properties.borderRadius != 'null' && this.properties.borderRadius != '') {
+        style += 'border-radius:' + this.calcPadding(this.properties.borderRadius) + ';'
       }
 
 
@@ -240,7 +267,7 @@ export default {
   /*display: none;*/
 }
 
-.terminal  .content ul li {
+.terminal .content ul li {
   white-space: pre;
 }
 
@@ -249,13 +276,15 @@ export default {
   margin-right: 10px;
 }
 
-.row{
+.row {
   border: 0;
 }
-.row .col{
+
+.row .col {
   height: 580px;
 }
-.row .s3{
+
+.row .s3 {
   /*border-left: 1px solid silver;*/
   text-align: center;
 }

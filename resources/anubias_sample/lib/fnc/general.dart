@@ -26,8 +26,6 @@ mixin Alignator {
   }
 }
 
-
-
 mixin Radidusator {
   String borderRadius = '5';
 
@@ -70,13 +68,15 @@ mixin Radidusator {
 mixin Widthator {
   String width = '';
   BuildContext context;
-  double getWidth(){
-    if( this.width == 'null'){
+
+  double getWidth() {
+    if (this.width == 'null') {
       return MediaQuery.of(this.context).size.width;
     }
-    if(this.width[this.width.length-1] == '%'){
+    if (this.width[this.width.length - 1] == '%') {
       return MediaQuery.of(this.context).size.width *
-          (double.parse(this.width.substring(0,this.width.length -1))) / 100;
+          (double.parse(this.width.substring(0, this.width.length - 1))) /
+          100;
     }
     return double.parse(this.width);
   }
@@ -84,397 +84,23 @@ mixin Widthator {
 mixin Heightator {
   String height = '';
   BuildContext context;
-  double getHeight(){
-    if( this.height == 'null'){
+
+  double getHeight() {
+    if (this.height == 'null') {
       return null;
     }
-    if(this.height[this.height.length-1] == '%'){
+    if (this.height[this.height.length - 1] == '%') {
       return MediaQuery.of(this.context).size.height *
-          double.parse(this.height.substring(0,this.height.length -1)) / 100;
+          double.parse(this.height.substring(0, this.height.length - 1)) /
+          100;
     }
     return double.parse(this.height);
   }
 }
 
-mixin Paddinator {
-  String padding = '15';
-
-  getPadding() {
-    if (this.padding.indexOf(',') == -1) {
-      return EdgeInsets.all(double.parse(this.padding));
-    }
-    var pad = this.padding.split(',');
-    switch (pad.length) {
-      case 2:
-        return EdgeInsets.only(
-          top: double.parse(pad[0]),
-          bottom: double.parse(pad[0]),
-          left: double.parse(pad[1]),
-          right: double.parse(pad[1]),
-        );
-      case 3:
-        return EdgeInsets.only(
-          top: double.parse(pad[0]),
-          bottom: double.parse(pad[2]),
-          left: double.parse(pad[1]),
-          right: double.parse(pad[1]),
-        );
-      case 4:
-        return EdgeInsets.only(
-          top: double.parse(pad[0]),
-          bottom: double.parse(pad[2]),
-          left: double.parse(pad[3]),
-          right: double.parse(pad[1]),
-        );
-    }
-  }
-}
-
-mixin Marginator {
-  String margin = '15';
-
-  getMargin() {
-    if (this.margin.indexOf(',') == -1) {
-      return EdgeInsets.all(double.parse(this.margin));
-    }
-    var marg = this.margin.split(',');
-    switch (marg.length) {
-      case 2:
-        return EdgeInsets.only(
-          top: double.parse(marg[0]),
-          bottom: double.parse(marg[0]),
-          left: double.parse(marg[1]),
-          right: double.parse(marg[1]),
-        );
-      case 3:
-        return EdgeInsets.only(
-          top: double.parse(marg[0]),
-          bottom: double.parse(marg[2]),
-          left: double.parse(marg[1]),
-          right: double.parse(marg[1]),
-        );
-      case 4:
-        return EdgeInsets.only(
-          top: double.parse(marg[0]),
-          bottom: double.parse(marg[2]),
-          left: double.parse(marg[3]),
-          right: double.parse(marg[1]),
-        );
-    }
-  }
-}
-
-class PreloaderProps with Paddinator, Alignator, Widthator, Heightator {
-  PreloaderProps(
-      {this.align,
-      this.color,
-      this.padding,
-      this.hide,
-      this.height,
-      this.width,
-      this.context});
-  BuildContext context;
-  String width = '50';
-  String height = '50';
-  String align = 'center';
-  Color color = null;
-  bool hide = false;
-  String padding = '15';
-  Color tempColor = Colors.green;
-}
-
-class AppBarProps {
-  String title = 'center';
-  List<Widget> actions = [];
-  Color color = null;
-  Color textColor = null;
-  bool back = false;
-  bool hide = false;
-  var menu = null;
-  BuildContext context;
-
-  AppBarProps({
-    this.context,
-    this.title,
-    this.color,
-    this.textColor,
-    this.hide,
-    this.back,
-    this.actions,
-    this.menu,
-  });
-
-// List<Widget> getActions (){
-//   List<Widget> lst ;
-//   this.actions.forEach((act) {
-//     lst.add(
-//       IconButton(
-//         icon: const Icon(Icons.add_alert),
-//         tooltip: act['tooltip'].toString(),
-//         onPressed: () {
-//           eval(act['onPressed'])
-//         },
-//       ),
-//     );
-//   });
-//   return  lst;
-// }
-
-}
-
-class TextProps with Alignator {
-  TextProps({
-    this.text,
-    this.align,
-    this.size,
-    this.height,
-    this.overflow,
-    this.maxLine,
-    this.color,
-    this.font,
-    this.hide,
-    this.weight,
-    this.softWrap,
-    this.context,
-  });
-  BuildContext context;
-  String text = 'center';
-  String align = 'center';
-  double size = 13.0;
-  double height = 1.2;
-  int maxLine = 0;
-  String overflow = null;
-  Color color = null;
-  bool hide = false;
-  String weight = null;
-  var font = null;
-  bool softWrap = true;
-  bool _isTextAlign = true;
-
-  getOverflow() {
-    switch (this.overflow) {
-      case 'clip':
-        return TextOverflow.clip;
-      case 'fade':
-        return TextOverflow.fade;
-      case 'visible':
-        return TextOverflow.visible;
-      case 'ellipsis':
-        return TextOverflow.ellipsis;
-      default:
-        return null;
-    }
-  }
-
-  getWeight() {
-    switch (this.weight) {
-      case 'normal':
-        return FontWeight.normal;
-      case 'bold':
-        return FontWeight.bold;
-      case 'w100':
-        return FontWeight.w100;
-      case 'w200':
-        return FontWeight.w200;
-      case 'w300':
-        return FontWeight.w300;
-      case 'w400':
-        return FontWeight.w400;
-      case 'w500':
-        return FontWeight.w500;
-      case 'w600':
-        return FontWeight.w600;
-      case 'w700':
-        return FontWeight.w700;
-      case 'w800':
-        return FontWeight.w800;
-      case 'w900':
-        return FontWeight.w900;
-      default:
-        return FontWeight.normal;
-    }
-  }
-
-  getMaxLine() {
-    if (this.maxLine > 0) {
-      return this.maxLine;
-    } else {
-      return null;
-    }
-  }
-}
-
-class IconProp with Alignator, Paddinator {
-  IconProp({
-    this.hide,
-    this.align,
-    this.size,
-    this.color,
-    this.icon,
-    this.padding,
-    this.context,
-  });
-
-  BuildContext context;
-  String padding = '15';
-  String align = null;
-  double size = 24.0;
-  bool hide = false;
-  Color color = null;
-  IconData icon = Icons.settings;
-}
-
-class ImageProp with Alignator, Paddinator,Widthator, Heightator {
-  ImageProp({
-    this.hide,
-    this.padding,
-    this.width,
-    this.height,
-    this.align,
-    this.image,
-    this.isOnline,
-    this.fit,
-    this.context,
-  });
-
-  BuildContext context;
-  String padding = '0';
-  String width = '100%';
-  String height = 'null';
-  String align = null;
-  bool isOnline = false;
-  bool hide = false;
-  String fit = 'null';
-  var image = null;
-
-  getImage() {
-    var temp = this.image.split(';base64,');
-    return Base64Decoder().convert(temp[1]);
-  }
-
-  getFit() {
-    switch (this.fit) {
-      case 'none':
-        return BoxFit.none;
-        break;
-      case 'cover':
-        return BoxFit.cover;
-        break;
-      case 'contain':
-        return BoxFit.contain;
-        break;
-      case 'scaleDown':
-        return BoxFit.scaleDown;
-        break;
-      case 'fill':
-        return BoxFit.fill;
-      case 'fitWidth':
-        return BoxFit.fitWidth;
-        break;
-      case 'fitHeight':
-        return BoxFit.fitHeight;
-        break;
-      default:
-        return null;
-    }
-  }
-}
-
-class ButtonProp with Paddinator, Radidusator, Widthator, Heightator {
-  ButtonProp({
-    this.height,
-    this.width,
-    this.padding,
-    this.hide,
-    this.color,
-    this.size,
-    this.icon,
-    this.text,
-    this.bgColor,
-    this.borderRadius,
-    this.noIcon,
-    this.noText,
-    this.context,
-  });
-
-  BuildContext context;
-  String padding = '0';
-  String width = '120';
-  String height = 'null';
-  IconData icon = Icons.home;
-  String text = 'Click me';
-  Color color = null;
-  Color bgColor = null;
-  String borderRadius = '5';
-  bool noText = false;
-  bool noIcon = false;
-  double size = 15;
-  bool hide = false;
-}
-
-class RowProp {
-  bool hide = false;
-  bool scrollable = false;
-  MainAxisAlignment axis;
-  BuildContext context;
-
-  List<Widget> children;
-
-  RowProp({
-    this.hide,
-    this.axis,
-    this.children,
-    this.scrollable,
-    this.context,
-  });
-}
-
-class CircleButtonProp with Paddinator, Radidusator {
-  CircleButtonProp({
-    this.padding,
-    this.hide,
-    this.color,
-    this.size,
-    this.icon,
-    this.bgColor,
-    this.borderRadius,
-    this.context,
-  });
-
-  BuildContext context;
-  String padding = '0';
-  IconData icon = Icons.home;
-  Color color = null;
-  Color bgColor = null;
-  String borderRadius = '5';
-  double size = 15;
-  bool hide = false;
-}
-
-class ContainerProp with Paddinator, Radidusator, Marginator, Widthator,Heightator {
-  String borderRadius = '5';
-  String width = '100%';
-  String height = 'null';
-  bool hide = false;
-  String padding = '0';
-  String margin = '0';
+mixin Borderator {
   String border = '0';
-  Color bgColor = null;
-  Color borderColor = null;
-  BuildContext context;
-
-  ContainerProp({
-    this.borderRadius,
-    this.width,
-    this.height,
-    this.bgColor,
-    this.hide,
-    this.padding,
-    this.border,
-    this.borderColor,
-    this.margin,
-    this.context,
-  });
+  Color borderColor = Colors.black;
 
   getBorder() {
     if (this.border.indexOf(',') == -1) {
@@ -574,6 +200,419 @@ class ContainerProp with Paddinator, Radidusator, Marginator, Widthator,Heightat
         ];
     }
   }
+}
+mixin Paddinator {
+  String padding = '15';
+
+  getPadding() {
+    if (this.padding.indexOf(',') == -1) {
+      return EdgeInsets.all(double.parse(this.padding));
+    }
+    var pad = this.padding.split(',');
+    switch (pad.length) {
+      case 2:
+        return EdgeInsets.only(
+          top: double.parse(pad[0]),
+          bottom: double.parse(pad[0]),
+          left: double.parse(pad[1]),
+          right: double.parse(pad[1]),
+        );
+      case 3:
+        return EdgeInsets.only(
+          top: double.parse(pad[0]),
+          bottom: double.parse(pad[2]),
+          left: double.parse(pad[1]),
+          right: double.parse(pad[1]),
+        );
+      case 4:
+        return EdgeInsets.only(
+          top: double.parse(pad[0]),
+          bottom: double.parse(pad[2]),
+          left: double.parse(pad[3]),
+          right: double.parse(pad[1]),
+        );
+    }
+  }
+}
+
+mixin Marginator {
+  String margin = '15';
+
+  getMargin() {
+    if (this.margin.indexOf(',') == -1) {
+      return EdgeInsets.all(double.parse(this.margin));
+    }
+    var marg = this.margin.split(',');
+    switch (marg.length) {
+      case 2:
+        return EdgeInsets.only(
+          top: double.parse(marg[0]),
+          bottom: double.parse(marg[0]),
+          left: double.parse(marg[1]),
+          right: double.parse(marg[1]),
+        );
+      case 3:
+        return EdgeInsets.only(
+          top: double.parse(marg[0]),
+          bottom: double.parse(marg[2]),
+          left: double.parse(marg[1]),
+          right: double.parse(marg[1]),
+        );
+      case 4:
+        return EdgeInsets.only(
+          top: double.parse(marg[0]),
+          bottom: double.parse(marg[2]),
+          left: double.parse(marg[3]),
+          right: double.parse(marg[1]),
+        );
+    }
+  }
+}
+
+class PreloaderProps with Paddinator, Alignator, Widthator, Heightator {
+  PreloaderProps(
+      {this.align,
+      this.color,
+      this.padding,
+      this.hide,
+      this.height,
+      this.width,
+      this.context});
+
+  BuildContext context;
+  String width = '50';
+  String height = '50';
+  String align = 'center';
+  Color color = null;
+  bool hide = false;
+  String padding = '15';
+  Color tempColor = Colors.green;
+}
+
+class AppBarProps {
+  String title = 'center';
+  List<Widget> actions = [];
+  Color color = null;
+  Color textColor = null;
+  bool back = false;
+  bool hide = false;
+  var menu = null;
+  BuildContext context;
+
+  AppBarProps({
+    this.context,
+    this.title,
+    this.color,
+    this.textColor,
+    this.hide,
+    this.back,
+    this.actions,
+    this.menu,
+  });
+
+// List<Widget> getActions (){
+//   List<Widget> lst ;
+//   this.actions.forEach((act) {
+//     lst.add(
+//       IconButton(
+//         icon: const Icon(Icons.add_alert),
+//         tooltip: act['tooltip'].toString(),
+//         onPressed: () {
+//           eval(act['onPressed'])
+//         },
+//       ),
+//     );
+//   });
+//   return  lst;
+// }
+
+}
+
+class TextProps with Alignator {
+  TextProps({
+    this.text,
+    this.align,
+    this.size,
+    this.height,
+    this.overflow,
+    this.maxLine,
+    this.color,
+    this.font,
+    this.hide,
+    this.weight,
+    this.softWrap,
+    this.context,
+  });
+
+  BuildContext context;
+  String text = 'center';
+  String align = 'center';
+  double size = 13.0;
+  double height = 1.2;
+  int maxLine = 0;
+  String overflow = null;
+  Color color = null;
+  bool hide = false;
+  String weight = null;
+  var font = null;
+  bool softWrap = true;
+  bool _isTextAlign = true;
+
+  getOverflow() {
+    switch (this.overflow) {
+      case 'clip':
+        return TextOverflow.clip;
+      case 'fade':
+        return TextOverflow.fade;
+      case 'visible':
+        return TextOverflow.visible;
+      case 'ellipsis':
+        return TextOverflow.ellipsis;
+      default:
+        return null;
+    }
+  }
+
+  getWeight() {
+    switch (this.weight) {
+      case 'normal':
+        return FontWeight.normal;
+      case 'bold':
+        return FontWeight.bold;
+      case 'w100':
+        return FontWeight.w100;
+      case 'w200':
+        return FontWeight.w200;
+      case 'w300':
+        return FontWeight.w300;
+      case 'w400':
+        return FontWeight.w400;
+      case 'w500':
+        return FontWeight.w500;
+      case 'w600':
+        return FontWeight.w600;
+      case 'w700':
+        return FontWeight.w700;
+      case 'w800':
+        return FontWeight.w800;
+      case 'w900':
+        return FontWeight.w900;
+      default:
+        return FontWeight.normal;
+    }
+  }
+
+  getMaxLine() {
+    if (this.maxLine > 0) {
+      return this.maxLine;
+    } else {
+      return null;
+    }
+  }
+}
+
+class IconProp with Alignator, Paddinator {
+  IconProp({
+    this.hide,
+    this.align,
+    this.size,
+    this.color,
+    this.icon,
+    this.padding,
+    this.context,
+  });
+
+  BuildContext context;
+  String padding = '15';
+  String align = null;
+  double size = 24.0;
+  bool hide = false;
+  Color color = null;
+  IconData icon = Icons.settings;
+}
+
+class ImageProp with Alignator, Paddinator, Widthator, Heightator {
+  ImageProp({
+    this.hide,
+    this.padding,
+    this.width,
+    this.height,
+    this.align,
+    this.image,
+    this.isOnline,
+    this.fit,
+    this.context,
+  });
+
+  BuildContext context;
+  String padding = '0';
+  String width = '100%';
+  String height = 'null';
+  String align = null;
+  bool isOnline = false;
+  bool hide = false;
+  String fit = 'null';
+  var image = null;
+
+  getImage() {
+    var temp = this.image.split(';base64,');
+    return Base64Decoder().convert(temp[1]);
+  }
+
+  getFit() {
+    switch (this.fit) {
+      case 'none':
+        return BoxFit.none;
+        break;
+      case 'cover':
+        return BoxFit.cover;
+        break;
+      case 'contain':
+        return BoxFit.contain;
+        break;
+      case 'scaleDown':
+        return BoxFit.scaleDown;
+        break;
+      case 'fill':
+        return BoxFit.fill;
+      case 'fitWidth':
+        return BoxFit.fitWidth;
+        break;
+      case 'fitHeight':
+        return BoxFit.fitHeight;
+        break;
+      default:
+        return null;
+    }
+  }
+}
+
+class ButtonProp with Paddinator, Radidusator, Widthator, Heightator {
+  ButtonProp({
+    this.height,
+    this.width,
+    this.padding,
+    this.hide,
+    this.color,
+    this.size,
+    this.icon,
+    this.text,
+    this.bgColor,
+    this.borderRadius,
+    this.noIcon,
+    this.noText,
+    this.context,
+  });
+
+  BuildContext context;
+  String padding = '0';
+  String width = '120';
+  String height = 'null';
+  IconData icon = Icons.home;
+  String text = 'Click me';
+  Color color = null;
+  Color bgColor = null;
+  String borderRadius = '5';
+  bool noText = false;
+  bool noIcon = false;
+  double size = 15;
+  bool hide = false;
+}
+
+class RowProp
+    with
+        Paddinator,
+        Marginator,
+        Widthator,
+        Heightator,
+        Radidusator,
+        Borderator {
+  bool hide = false;
+  bool scrollable = true;
+  String padding = '0';
+  String margin = '0';
+  String width = '100%';
+  String height = 'null';
+  String borderRadius = '0';
+  String border = '0';
+  Color borderColor = null;
+
+  Color bgColor = Colors.transparent;
+  MainAxisAlignment axis;
+  BuildContext context;
+
+  List<Widget> children;
+
+  RowProp({
+    this.hide,
+    this.axis,
+    this.children,
+    this.scrollable,
+    this.context,
+    this.bgColor,
+    this.padding,
+    this.margin,
+    this.width,
+    this.height,
+    this.borderColor,
+    this.border,
+    this.borderRadius,
+  });
+}
+
+class CircleButtonProp with Paddinator, Radidusator {
+  CircleButtonProp({
+    this.padding,
+    this.hide,
+    this.color,
+    this.size,
+    this.icon,
+    this.bgColor,
+    this.borderRadius,
+    this.context,
+  });
+
+  BuildContext context;
+  String padding = '0';
+  IconData icon = Icons.home;
+  Color color = null;
+  Color bgColor = null;
+  String borderRadius = '5';
+  double size = 15;
+  bool hide = false;
+}
+
+class ContainerProp
+    with
+        Paddinator,
+        Radidusator,
+        Marginator,
+        Widthator,
+        Heightator,
+        Borderator {
+  String borderRadius = '5';
+  String width = '100%';
+  String height = 'null';
+  bool hide = false;
+  String padding = '0';
+  String margin = '0';
+  String border = '0';
+  Color borderColor = null;
+  Color bgColor = null;
+  BuildContext context;
+
+  ContainerProp({
+    this.borderRadius,
+    this.width,
+    this.height,
+    this.bgColor,
+    this.hide,
+    this.padding,
+    this.border,
+    this.borderColor,
+    this.margin,
+    this.context,
+  });
 }
 
 class InputProp with Alignator, Marginator {
@@ -776,7 +815,7 @@ class DropdownProp with Paddinator {
   List<Map> options = [];
   double iconSize = 24;
   var value = null;
-  List<String> values  = [];
+  List<String> values = [];
 
   double trailingSize = 24;
 

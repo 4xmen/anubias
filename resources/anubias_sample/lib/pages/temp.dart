@@ -454,3 +454,60 @@ class _Page2State extends State<Page2> {
   }
 }
 
+
+Offstage(
+offstage: row1.hide,
+child: Container(
+padding: row1.getPadding(),
+margin: row1.getMargin(),
+width: row1.getWidth() ,
+height: row1.getHeight(),
+decoration: BoxDecoration(
+border: row1.border.indexOf(',') == -1?
+Border.all(
+color: row1.borderColor,
+width: double.parse(row1.border),
+):null,
+color: row1.bgColor,
+boxShadow:row1.border.indexOf(',') == -1? null: row1.getBorder(),
+borderRadius: row1.getBorderRadius(),
+),
+child: SingleChildScrollView(
+scrollDirection: row1.scrollable ? Axis.horizontal : Axis.vertical,
+child: Row(
+mainAxisAlignment: row1.axis,
+children: row1.children ,
+),
+),
+)
+),
+
+RowProp row1 = new RowProp(
+    hide: false,
+    scrollable: true,
+    axis: MainAxisAlignment.spaceAround,
+    children: [
+      Text('txt1  '),
+      Text('txt2  '),
+      Text('txt2  '),
+      Text('txt4  '),
+      Text('txt2  '),
+      Text('txt2  '),
+      Text('txt4  '),
+      Text('txt1  '),
+      Text('txt2  '),
+      Text('txt2  '),
+      Text('txt4  '),
+      Text('txt2  '),
+      Text('txt2  '),
+      Text('txt4  '),
+    ],
+    padding: '15',
+    margin: '5',
+    bgColor: Colors.black38,
+    width: '50%',
+    height: 'null',
+    border: '0',
+    borderColor: Colors.cyan,
+    borderRadius: '7'
+);
