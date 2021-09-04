@@ -449,7 +449,7 @@ img {
 }
 
 
-.rowc .visual{
+.rowc .visual, .colc .visual{
     position: absolute;
     left: 15px;
     top: 15px;

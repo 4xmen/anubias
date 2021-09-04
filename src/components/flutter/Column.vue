@@ -1,9 +1,9 @@
 <template>
   <div :style="getStyle()">
-    <div class="rowc">
+    <div class="colc" :style="getStyleCol()">
       <drop class="drop visual" @drop="onVisualDrop" :accepts-data="(n) => isVisual(n)"></drop>
       <div :class="'content '+getClass()" :style="'padding:'+(15 * scale)+'px;'+getStyleMain()">
-        <child-simulator class="flex-child" v-for="(child,k) in properties.children" :type="child.type"
+        <child-simulator class="col-child" v-for="(child,k) in properties.children" :type="child.type"
                          :properties="child" :scale="scale"
                          :page="page" @click.native="setProperty(child)" :key="k"></child-simulator>
 
@@ -33,7 +33,7 @@ import {Drop} from "vue-easy-dnd";
 // import Sortable from '@/assets/js/Sortable.min';
 
 export default {
-  name: "Row",
+  name: "Column",
   data: function () {
     return {
       showChildrenModal: false,
@@ -89,7 +89,6 @@ export default {
         do {
           n = n.$parent;
         } while (n.currentProperties === undefined);
-        console.log(n.currentProperties);
         n.currentProperties = prop;
       }, 50);
     },
@@ -156,6 +155,22 @@ export default {
     isVisual: function (n) { // check is visual component or not
       return window.components[n].visual;
     },
+    getStyleCol: function () {
+      let style = '';
+      if (this.properties.align != 'null') {
+        switch (this.properties.align) {
+          case 'right':
+            style += 'align-items: flex-end;'
+            break;
+          case 'left':
+            style += 'align-items: flex-start;'
+            break;
+          default:
+
+        }
+      }
+      return style;
+    },
     getStyle: function () {
       let style = '';
       // style += 'background-color:' + this.color2web(this.properties.color, false) + ';';
@@ -164,7 +179,7 @@ export default {
         style += 'width:' + fnc.getSize(this.properties.width, this.scale, 3) + ';'
       }
       if (this.properties.height != 'null') {
-        style += 'height:' + fnc.getSize(this.properties.height , this.scale , 3, true) + ';'
+        style += 'height:' + fnc.getSize(this.properties.height, this.scale, 3, true) + ';'
       }
       if (this.properties.scrollable == true) {
         style += 'overflow-y:hidden ;overflow-x: scroll;';
@@ -205,13 +220,18 @@ export default {
 </script>
 
 <style scoped>
-.rowc {
+.colc {
   background: transparent;
   min-height: 75px;
   border: 1px dotted silver;
   position: relative;
   white-space: nowrap;
   display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.col-child {
 }
 
 .control {
@@ -288,4 +308,6 @@ export default {
   /*border-left: 1px solid silver;*/
   text-align: center;
 }
+
+
 </style>

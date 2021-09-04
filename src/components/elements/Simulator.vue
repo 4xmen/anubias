@@ -29,6 +29,9 @@
     <div v-if="type === 'row'">
      <row :properties="properties" :scale="scale" :page="page"></row>
     </div>
+    <div v-if="type === 'column'">
+     <column :properties="properties" :scale="scale" :page="page"></column>
+    </div>
     <div v-if="type === 'input'">
       <input-text :properties="properties" :scale="scale" :page="page"></input-text>
     </div>
@@ -54,6 +57,7 @@ import btn from '@/components/flutter/Btn';
 import circleBtn from '@/components/flutter/CircleBtn';
 import container from '@/components/flutter/Container';
 import row from '@/components/flutter/Row';
+import column from '@/components/flutter/Column';
 import InputText from '@/components/flutter/InputText';
 import dropdown from "@/components/flutter/Dropdown";
 import divider from '@/components/flutter/Divider';
@@ -73,6 +77,7 @@ export default {
     circleBtn,
     container,
     row,
+    column,
     dropdown,
     divider,
     InputText,

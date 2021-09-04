@@ -94,7 +94,7 @@
     {
       "title": "Column",
       "icon": "fas fa-bars",
-      "active": false,
+      "active": true,
       "visual": true,
       "data": "window.defaults.column"
     },

@@ -26,6 +26,35 @@ mixin Alignator {
   }
 }
 
+mixin AlignatorChildren {
+  String align = 'center';
+
+  getAlignCross() {
+    switch (this.align) {
+      case 'center':
+        return CrossAxisAlignment.center;
+      case 'left':
+        return CrossAxisAlignment.start;
+      case 'right':
+        return CrossAxisAlignment.end;
+      default:
+        return CrossAxisAlignment.center;
+    }
+  }
+  getAlignMain() {
+    switch (this.align) {
+      case 'center':
+        return MainAxisAlignment.center;
+      case 'left':
+        return MainAxisAlignment.start;
+      case 'right':
+        return MainAxisAlignment.end;
+      default:
+        return MainAxisAlignment.center;
+    }
+  }
+}
+
 mixin Radidusator {
   String borderRadius = '5';
 
@@ -548,6 +577,48 @@ class RowProp
     this.axis,
     this.children,
     this.scrollable,
+    this.context,
+    this.bgColor,
+    this.padding,
+    this.margin,
+    this.width,
+    this.height,
+    this.borderColor,
+    this.border,
+    this.borderRadius,
+  });
+}
+
+class ColumnProp
+    with
+        Paddinator,
+        Marginator,
+        Widthator,
+        Heightator,
+        Radidusator,
+        AlignatorChildren,
+        Borderator {
+  bool hide = false;
+  String padding = '0';
+  String margin = '0';
+  String width = '100%';
+  String height = 'null';
+  String borderRadius = '0';
+  String border = '0';
+  Color borderColor = null;
+  String align = 'null';
+
+  Color bgColor = Colors.transparent;
+  MainAxisAlignment axis;
+  BuildContext context;
+
+  List<Widget> children;
+
+  ColumnProp({
+    this.hide,
+    this.axis,
+    this.children,
+    this.align,
     this.context,
     this.bgColor,
     this.padding,

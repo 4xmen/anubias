@@ -1,0 +1,15 @@
+{
+  "type": "column",
+  "name": "column",
+  "align": "center",
+  "width": "100%",
+  "height": "null",
+  "bgColor": "null",
+  "border": "0",
+  "borderColor": "Colors.black",
+  "padding": "0",
+  "margin": "0",
+  "borderRadius": "0",
+  "children": [],
+  "hide": false
+}
