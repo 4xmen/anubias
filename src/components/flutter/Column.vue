@@ -3,7 +3,7 @@
     <div class="colc" :style="getStyleCol()">
       <drop class="drop visual" @drop="onVisualDrop" :accepts-data="(n) => isVisual(n)"></drop>
       <div :class="'content '+getClass()" :style="'padding:'+(15 * scale)+'px;'+getStyleMain()">
-        <child-simulator class="col-child" v-for="(child,k) in properties.children" :type="child.type"
+        <child-simulator :style="getStyleChild(child)" class="col-child" v-for="(child,k) in properties.children" :type="child.type"
                          :properties="child" :scale="scale"
                          :page="page" @click.native="setProperty(child)" :key="k"></child-simulator>
 
@@ -92,6 +92,19 @@ export default {
         n.currentProperties = prop;
       }, 50);
     },
+    getStyleChild: function (child) {
+      let $ = window.jQuery;
+
+      if (child.type === 'column' || child.type === 'row'){
+
+        // console.log($("#"+this.page.name+this.properties.name).width(), (  / 100));
+        if (child.width[child.width.length-1] === '%'){
+          return 'min-width:75px; width:'+ ($("#mobile").width() ) * (child.width.substr(0,child.width.length-1)   / 100) +'px;';
+        }else {
+          return 'min-width:75px; width:'+child.width * this.scale+'px;';
+        }
+      }
+    },
     capitalizeFirstLetter: function (string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
@@ -119,7 +132,7 @@ export default {
       var self = this;
       if (component.type === 'appbar' || component.type === 'row') {
         // check non appbar or row
-        window.alertify.error("You can't drop appbar or row into row");
+        window.alertify.error("You can't drop appbar");
         return false;
       }
       // add component

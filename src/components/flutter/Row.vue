@@ -1,9 +1,9 @@
 <template>
   <div :style="getStyle()">
-    <div class="rowc">
+    <div class="rowc" :id="page.name+properties.name">
       <drop class="drop visual" @drop="onVisualDrop" :accepts-data="(n) => isVisual(n)"></drop>
       <div :class="'content '+getClass()" :style="'padding:'+(15 * scale)+'px;'+getStyleMain()">
-        <child-simulator class="flex-child" v-for="(child,k) in properties.children" :type="child.type"
+        <child-simulator :style="getStyleChild(child)" class="flex-child" v-for="(child,k) in properties.children" :type="child.type"
                          :properties="child" :scale="scale"
                          :page="page" @click.native="setProperty(child)" :key="k"></child-simulator>
 
@@ -118,9 +118,9 @@ export default {
     },
     visualValidator: function (component, visuals) {
       var self = this;
-      if (component.type === 'appbar' || component.type === 'row') {
+      if (component.type === 'appbar' ) {
         // check non appbar or row
-        window.alertify.error("You can't drop appbar or row into row");
+        window.alertify.error("You can't drop appbar into row");
         return false;
       }
       // add component
@@ -193,6 +193,19 @@ export default {
       return style;
     }
     ,
+    getStyleChild: function (child) {
+      let $ = window.jQuery;
+
+        if (child.type === 'column'){
+
+          // console.log($("#"+this.page.name+this.properties.name).width(), (  / 100));
+          if (child.width[child.width.length-1] === '%'){
+            return 'min-width:75px; width:'+ ($("#mobile").width() ) * (child.width.substr(0,child.width.length-1)   / 100) +'px;';
+          }else {
+            return 'min-width:75px; width:'+child.width * this.scale+'px;';
+          }
+        }
+    },
     color2web: function (clr, b = false) {
       return fnc.color2web(clr, b);
     }
