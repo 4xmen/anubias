@@ -5,7 +5,7 @@
       <div :class="'content '+getClass()" :style="'padding:'+(15 * scale)+'px;'+getStyleMain()">
         <child-simulator :style="getStyleChild(child)" class="flex-child" v-for="(child,k) in properties.children" :type="child.type"
                          :properties="child" :scale="scale"
-                         :page="page" @click.native="setProperty(child)" :key="k"></child-simulator>
+                         :page="page" @click.native.capture="setProperty(child)" :key="k"></child-simulator>
 
       </div>
 

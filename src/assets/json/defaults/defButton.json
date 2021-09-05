@@ -2,6 +2,7 @@
   "type": "button",
   "name": "button",
   "padding": "0",
+  "margin": "0",
   "width": "120",
   "height": "null",
   "icon": "home",

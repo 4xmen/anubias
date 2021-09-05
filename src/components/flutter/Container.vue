@@ -6,7 +6,7 @@
       </div>
       <div v-else>
         <child-simulator :type="properties.child.type" :properties="properties.child" :scale="scale"
-                   :page="page" @click.native="setProperty(properties.child)"></child-simulator>
+                   :page="page" @click.native.capture="setProperty(properties.child)"></child-simulator>
       </div>
     </div>
   </div>

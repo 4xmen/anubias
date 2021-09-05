@@ -516,7 +516,7 @@ class ImageProp with Alignator, Paddinator, Widthator, Heightator {
   }
 }
 
-class ButtonProp with Paddinator, Radidusator, Widthator, Heightator {
+class ButtonProp with Paddinator, Radidusator, Widthator, Heightator, Marginator {
   ButtonProp({
     this.height,
     this.width,
@@ -531,10 +531,12 @@ class ButtonProp with Paddinator, Radidusator, Widthator, Heightator {
     this.noIcon,
     this.noText,
     this.context,
+    this.margin,
   });
 
   BuildContext context;
   String padding = '0';
+  String margin = '0';
   String width = '120';
   String height = 'null';
   IconData icon = Icons.home;

@@ -459,6 +459,23 @@ img {
     box-sizing: border-box;
 }
 
+.rowc:before{
+    content: 'Row';
+    color: transparent;
+    text-shadow: 0 0 2px #7a7a7a;
+    right: 0;
+    position: absolute;
+    font-size: 13px;
+}
+.colc:before{
+    font-size: 13px;
+    left: 0;
+    content: 'Column';
+    color: transparent;
+    text-shadow: 0 0 2px #7a7a7a;
+    position: absolute;
+}
+
 
 
 /*.rowc .visual::before{*/

@@ -38,6 +38,9 @@ export default {
       if (this.properties.padding != 'null' && this.properties.padding != '') {
         style += 'padding:' + this.calcPadding(this.properties.padding) + ';'
       }
+      if (this.properties.margin != 'null' && this.properties.margin != '') {
+        style += 'margin:' + this.calcPadding(this.properties.margin) + ';'
+      }
       if (this.properties.borderRadius != 'null' && this.properties.borderRadius != '') {
         style += 'border-radius:' + this.calcPadding(this.properties.borderRadius) + ';'
       }
