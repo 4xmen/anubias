@@ -904,6 +904,7 @@ class NavProp {
   int index = 0;
   BuildContext context;
   List<BottomNavigationBarItem> items = [];
+  bool hide = false;
 
   NavProp({
     this.bgColor,
@@ -911,6 +912,7 @@ class NavProp {
     this.index,
     this.unselectedItemColor,
     this.items,
+    this.hide,
     this.context,
   });
 }

@@ -49,6 +49,7 @@ export default {
 .nav {
   padding: 5px 0;
   color: gray;
+  font-size: 80%;
 }
 
 .nav-bar {

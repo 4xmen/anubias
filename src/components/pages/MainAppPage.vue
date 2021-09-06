@@ -468,7 +468,7 @@ export default {
       /*eslint-enable */
       window.api.receive("terminal", (data) => {
         if (data.trim().replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "").length > 0) {
-          self.terminalContent.push(data);
+          self.terminalContent.push(data.replace(/^\s*$(?:\r\n?|\n)/gm,''));
         }
       })
       window.api.receive("terminal-error", (data) => {
