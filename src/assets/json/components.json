@@ -108,7 +108,7 @@
     {
       "title": "Nav",
       "icon": "far fa-window-maximize fa-rotate-180",
-      "active": false,
+      "active": true,
       "visual": true,
       "data": "window.defaults.nav"
     },

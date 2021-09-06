@@ -62,9 +62,9 @@ export default {
     //    , visuals
     ) {
       var self = this;
-      if (component.type === 'appbar') {
+      if (component.type === 'appbar' || component.type === 'nav' ) {
         // check non duplicate app bar
-        window.alertify.warning("You can't drop two AppBar in container");
+        window.alertify.warning("You can't drop two AppBar or Nav in container");
         return false;
       }
       // add component

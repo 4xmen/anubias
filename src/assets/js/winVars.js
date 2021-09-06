@@ -76,3 +76,4 @@ window.defaults.input = require('../json/defaults/defInput.json');
 window.defaults.dropdown = require('../json/defaults/defDropdown.json');
 window.defaults.divider = require('../json/defaults/defDivider.json');
 window.defaults.toggle = require('../json/defaults/defToggle.json');
+window.defaults.nav = require('../json/defaults/defNav.json');

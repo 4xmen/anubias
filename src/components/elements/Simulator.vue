@@ -47,6 +47,9 @@
     <div v-if="type === 'toggle'">
       <toggle :properties="properties"  :scale="scale" :page="page"></toggle>
     </div>
+    <div v-if="type === 'nav'" class="nav-bottom">
+      <nav-bottom   :properties="properties"  :scale="scale" :page="page"></nav-bottom>
+    </div>
   </div>
 </template>
 
@@ -66,6 +69,7 @@ import InputText from '@/components/flutter/InputText';
 import dropdown from "@/components/flutter/Dropdown";
 import divider from '@/components/flutter/Divider';
 import toggle from '@/components/flutter/Toggle';
+import navBottom from '@/components/flutter/NavBottom';
 
 import {fnc} from '@/assets/js/functions';
 
@@ -86,6 +90,7 @@ export default {
     dropdown,
     divider,
     InputText,
+    navBottom,
     toggle,
   },
   props: {
@@ -143,5 +148,11 @@ export default {
 </script>
 
 <style scoped>
-
+.nav-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -85px;
+  z-index: 9;
+}
 </style>

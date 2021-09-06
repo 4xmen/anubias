@@ -1,0 +1,14 @@
+{
+  "type": "nav",
+  "name": "nav",
+  "bgColor": "null",
+  "color": "null",
+  "unselectedItemColor": "null",
+  "index": 0,
+  "items": [{
+    "label": "Setting",
+    "icon": "settings"
+  }],
+  "onTap": "// when tab and item `index` new is selected \n ",
+  "hide": false
+}

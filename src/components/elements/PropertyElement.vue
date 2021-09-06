@@ -164,6 +164,9 @@
               <div v-else-if="k == 'options'" class="code" @click="showOptionControl(k)">
                 {{ k }} <b> <i class="fa fa-list-ol"></i> </b>
               </div>
+              <div v-else-if="k == 'items'" class="code" @click="showItemControl(k)">
+                {{ k }} <b> <i class="fa fa-list-ol"></i> </b>
+              </div>
               <div v-else-if="k === 'image' && properties.type === 'image' && !properties.isOnline" class="code"
                    @click="chooseImage">
                 Choose <b> <i class="fa fa-folder-open"></i> </b>
@@ -263,6 +266,9 @@ export default {
     },
     showOptionControl: function () {
       this.$parent.showOptionsModal = true;
+    },
+    showItemControl: function () {
+      this.$parent.showItemsModal = true;
     },
     showColorPicker: function (k) {
       this.$parent.showColorPickerModal = true;

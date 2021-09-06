@@ -98,9 +98,9 @@ export default {
     },
     visualValidator: function (component, visuals) {
       var self = this;
-      if (component.type === 'appbar') {
+      if (component.type === 'appbar' || component.type === 'nav') {
         // check non appbar or row
-        window.alertify.error("You can't drop appbar into row");
+        window.alertify.error("You can't drop appbar or nav into row");
         return false;
       }
       // add component

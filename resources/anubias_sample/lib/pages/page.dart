@@ -26,6 +26,31 @@ class /**nameState*/ _MyHomePageState /*nameState**/
 
   /***property-class***/
 
+  NavProp nnn = NavProp(
+    color: null,
+    bgColor: null,
+    index: 0,
+    unselectedItemColor: Colors.grey,
+    items: <BottomNavigationBarItem>[
+      BottomNavigationBarItem(
+        icon: Icon(Icons.call),
+        label: 'Calls',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.camera),
+        label: 'Camera',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.chat),
+        label: 'Chats',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.timeline_sharp),
+        label: 'Chart',
+      ),
+    ],
+  );
+
 
   void initState() {
     // TODO: implement initState
@@ -72,7 +97,6 @@ class /**nameState*/ _MyHomePageState /*nameState**/
                   ),
                 ),
 
-
                 // MaterialButton(
                 //   shape: CircleBorder(),
                 //   padding: EdgeInsets.all(10),
@@ -102,6 +126,20 @@ class /**nameState*/ _MyHomePageState /*nameState**/
       //     });
       //   },
       // ),
+
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: nnn.bgColor,
+        unselectedItemColor: nnn.unselectedItemColor,
+        currentIndex: nnn.index,
+        selectedItemColor: null,
+        type: BottomNavigationBarType.fixed,
+        onTap: (index){
+          setState(() {
+            nnn.index = index;
+          });
+        },
+        items: nnn.items,
+      ),
     );
   }
 }

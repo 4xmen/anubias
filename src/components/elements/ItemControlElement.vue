@@ -8,35 +8,32 @@
         <div class="col s12">
           <ul class="collection" id="actSort">
             <li @click="change(k)" @dblclick="openCodeEditor(k)" :class="'collection-item '+(k == current?'active':'')"
-                v-for="(action,k) in allActions" :key="k">
+                v-for="(action,k) in allItems" :key="k">
               <i class="material-icons">{{ action.icon }}</i>
               <i class="secondary-content fa fa-times" title="Remove" @click="rem(k)"></i>
             </li>
           </ul>
           <div class="btn  waves-effect waves-light green" id="new-action" @click="newAction">
-            Add new action
+            Add new item
           </div>
 
           <hr>
-          <div v-if="allActions[current] !== undefined">
+          <div v-if="allItems[current] !== undefined">
             <label for="icon-select">
               Icon:
             </label>
-            <select v-model="allActions[current].icon" id="icon-select">
+            <select v-model="allItems[current].icon" id="icon-select">
               <option v-for="(ic,n) in icons" :key="n" data-icon="" class="material-icons">
                 {{ ic.value }}
               </option>
             </select>
             <br>
             <label for="text-hint">
-              Tooltip:
+              Label:
             </label>
-            <input type="text" id="text-hint" v-model="allActions[current].tooltip"/>
+            <input type="text" id="text-hint" v-model="allItems[current].label"/>
           </div>
           <ul>
-            <li>
-              - Double click to change code
-            </li>
             <li>
               - You can drag and drop to sort
             </li>
@@ -53,23 +50,23 @@ import {fnc} from "@/assets/js/functions";
 // import {xscript} from "@/assets/js/xscript";
 export default {
   mounted() {
-    this.allActions = this.actions;
+    this.allItems = this.items;
     // this.rowData = this.rwData;
     this.sortInit();
   },
   beforeDestroy() {
     // editor2.destroy();
   },
-  name: "ActionControlElement",
+  name: "ItemControlElement",
   data: function () {
     return {
-      allActions: [],
+      allItems: [],
       icons: window.material_icons,
       current: 0,
       content: '//',
     };
   },
-  props: ['actions', 'value'],
+  props: ['items', 'value'],
   methods: {
     sortInit: function () {
       var that = this;
@@ -77,17 +74,17 @@ export default {
         animation: 100,
         onUpdate: function (e) {
           that.$parent.$parent.$parent.isInternalDrag = false;
-          let arr = JSON.parse(JSON.stringify(that.allActions));
-          that.allActions = [];
+          let arr = JSON.parse(JSON.stringify(that.allItems));
+          that.allItems = [];
           fnc.arrayMove(arr, e.oldIndex, e.newIndex);
           let n = that;
           do {
             n = n.$parent;
           } while (n.closeAllModal === undefined);
-          n.currentProperties.actions = [];
+          n.currentProperties.items = [];
           setTimeout(function () {
-            that.allActions = arr;
-            n.currentProperties.actions = arr;
+            that.allItems = arr;
+            n.currentProperties.items = arr;
           }, 100);
         },
       });
@@ -96,7 +93,7 @@ export default {
 
       let title = window.appData.pages[this.$parent.$parent.currentPage].name
           + '.action[' + e + '].onPressed';
-      let pointer = 'window.appData.pages[' + this.$parent.$parent.currentPage + '].children.visual[0].actions['+e+'].onPressed';
+      let pointer = 'window.appData.pages[' + this.$parent.$parent.currentPage + '].children.visual[0].items['+e+'].onPressed';
       this.$parent.$parent.addTab(title, 'code', {
         codeTitle: title,
       }, 'fa-code', e,pointer);
@@ -113,10 +110,9 @@ export default {
       n.closeAllModal();
     },
     newAction: function () {
-      this.allActions.push({
-            icon: 'settings',
-            onPressed: "// run when press on action ",
-            tooltip: 'action tooltip',
+      this.allItems.push({
+            icon: 'home',
+            label: 'home',
           }
       );
       // this.sortInit();
@@ -124,14 +120,14 @@ export default {
     change: function (k) {
       this.current = k;
       // console.log(this.$parent.$parent.addTab);
-      // editor2.setValue( this.allActions[this.current].onPressed,1);
+      // editor2.setValue( this.allItems[this.current].onPressed,1);
     },
     rem: function (i) {
       let self = this;
       window.alertify.confirm(`Are you sure to remove this action
       "${i}" ?`,
           'Remove confirm', function () {
-            self.allActions.splice(i, 1);
+            self.allItems.splice(i, 1);
           }
           , function () {
             // window.alertify.error('Cancel')
@@ -140,13 +136,13 @@ export default {
   }
   ,
   watch: {
-    actions: function (newVal) {
-      this.allActions = newVal;
-      // if (this.allActions.length === 0){
+    items: function (newVal) {
+      this.allItems = newVal;
+      // if (this.allItems.length === 0){
       //   editor2.setValue('',1);
       // }else{
-      //   if (this.allActions[0].onPressed !== undefined){
-      //     editor2.setValue( this.allActions[0].onPressed,1);
+      //   if (this.allItems[0].onPressed !== undefined){
+      //     editor2.setValue( this.allItems[0].onPressed,1);
       //   }
       // }
     }
