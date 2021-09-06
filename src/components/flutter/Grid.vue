@@ -1,9 +1,10 @@
 <template>
   <div :style="getStyle()">
-    <div class="colc" :style="getStyleCol()">
+    <div class="gridc" :id="page.name+properties.name">
       <drop class="drop visual" @drop="onVisualDrop" :accepts-data="(n) => isVisual(n)"></drop>
-      <div :class="'content '+getClass()" :style="'padding:'+(15 * scale)+'px;'+getStyleMain()">
-        <child-simulator :style="getStyleChild(child)" class="col-child" v-for="(child,k) in properties.children" :type="child.type"
+      <div class="content" :style="getStyleMain()">
+        <child-simulator :style="getStyleChild(child)" class="grid-child" v-for="(child,k) in properties.children"
+                         :type="child.type"
                          :properties="child" :scale="scale"
                          :page="page" @click.native.capture="setProperty(child)" :key="k"></child-simulator>
 
@@ -33,7 +34,7 @@ import {Drop} from "vue-easy-dnd";
 // import Sortable from '@/assets/js/Sortable.min';
 
 export default {
-  name: "Column",
+  name: "Row",
   data: function () {
     return {
       showChildrenModal: false,
@@ -46,31 +47,11 @@ export default {
   },
   methods: {
     getClass: function () {
-      if (this.properties.axis === 'MainAxisAlignment.spaceAround' || this.properties.axis === 'MainAxisAlignment.spaceBetween') {
-        if (this.properties.scrollable) {
-          return 'axis-flex.scroll';
-        } else {
-          return 'axis-flex';
-        }
-      }
-
-      if (this.properties.axis === 'MainAxisAlignment.start') {
-        return 'axis-start';
-      }
-      if (this.properties.axis === 'MainAxisAlignment.end') {
-        if (window.appData.project.isRTL) {
-          return 'axis-end rtl';
-        } else {
-          return 'axis-end';
-        }
-      }
-
+      return '';
     },
     getStyleMain: function () {
       let style = '';
-      if (this.properties.axis === 'MainAxisAlignment.spaceAround' || this.properties.axis === 'MainAxisAlignment.spaceBetween') {
-        style += 'display:flex;flex-flow: row wrap; flex-basis: 100%;';
-      }
+      style += 'grid-template-columns: repeat(' + this.properties.column + '  , 1fr) ;';
       return style;
     },
     modalOpen: function () {
@@ -91,12 +72,6 @@ export default {
         } while (n.currentProperties === undefined);
         n.currentProperties = prop;
       }, 50);
-    },
-    getStyleChild: function (child) {
-
-      if (child.type === 'column' || child.type === 'row' || child.type === 'container'){
-        return 'min-width:75px;' // width:'+fnc.getSize( child.width, this.scale, 2.5) +';';
-      }
     },
     capitalizeFirstLetter: function (string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
@@ -123,9 +98,9 @@ export default {
     },
     visualValidator: function (component, visuals) {
       var self = this;
-      if (component.type === 'appbar' || component.type === 'row') {
+      if (component.type === 'appbar') {
         // check non appbar or row
-        window.alertify.error("You can't drop appbar");
+        window.alertify.error("You can't drop appbar into row");
         return false;
       }
       // add component
@@ -161,35 +136,9 @@ export default {
     isVisual: function (n) { // check is visual component or not
       return window.components[n].visual;
     },
-    getStyleCol: function () {
-      let style = '';
-      if (this.properties.align != 'null') {
-        switch (this.properties.align) {
-          case 'right':
-            style += 'align-items: flex-end;'
-            break;
-          case 'left':
-            style += 'align-items: flex-start;'
-            break;
-          default:
-
-        }
-      }
-      return style;
-    },
     getStyle: function () {
       let style = '';
       // style += 'background-color:' + this.color2web(this.properties.color, false) + ';';
-
-      if (this.properties.width != 'null') {
-        style += 'width:' + fnc.getSize(this.properties.width, this.scale, 3) + ';'
-      }
-      if (this.properties.height != 'null') {
-        style += 'height:' + fnc.getSize(this.properties.height, this.scale, 3, true) + ';'
-      }
-      if (this.properties.scrollable == true) {
-        style += 'overflow-y:hidden ;overflow-x: scroll;';
-      }
 
       if (this.properties.bgColor != 'null') {
         style += 'background:' + this.color2web(this.properties.bgColor) + ';';
@@ -214,6 +163,13 @@ export default {
       return style;
     }
     ,
+    getStyleChild: function (child) {
+      let style = '';
+      if (child.type === 'column' || child.type === 'row' || child.type === 'container') {
+        style += 'min-width:75px;' // width:'+fnc.getSize( child.width, this.scale, 2.5) +';';
+      }
+      return style;
+    },
     color2web: function (clr, b = false) {
       return fnc.color2web(clr, b);
     }
@@ -226,24 +182,18 @@ export default {
 </script>
 
 <style scoped>
-.colc {
+.gridc {
   background: transparent;
   min-height: 25px;
   border: 1px dotted silver;
   position: relative;
   white-space: nowrap;
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-}
-
-.col-child {
 }
 
 .control {
   position: absolute;
   right: 0;
-  bottom: 0;
+  top: 0;
   padding: 5px;
   color: white;
   width: 35px;
@@ -257,63 +207,15 @@ export default {
   background: rgba(0, 0, 0, 0.7);
 }
 
-.modal {
-  color: white;
+.content{
+  /*display: flex;*/
+  /*flex-direction: column;*/
+  /*flex-wrap: wrap ;*/
+  /*column-count: 2 ;*/
+  /*width: 100%;*/
+  display: grid;
 }
 
-
-.terminal {
-  width: 80%;
-  margin: 50px auto 0 auto;
-  max-width: 1000px;
-  border-radius: 7px;
-  background: #272c34;
-  padding: 15px;
-  line-height: 1.2em;
-
+.grid-child{
 }
-
-
-.clear:hover {
-  background: rgba(0, 0, 0, .5);
-}
-
-.terminal .content {
-  padding: 0 20px;
-  color: #eee;
-  font-family: VazirCodeX;
-  height: 600px;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  scroll-behavior: smooth;
-  -webkit-user-select: text; /* Chrome 49+ */
-  -moz-user-select: text; /* Firefox 43+ */
-  -ms-user-select: text; /* No support yet */
-  user-select: text; /* Likely future */
-  /*display: none;*/
-}
-
-.terminal .content ul li {
-  white-space: pre;
-}
-
-
-.fa-circle {
-  margin-right: 10px;
-}
-
-.row {
-  border: 0;
-}
-
-.row .col {
-  height: 580px;
-}
-
-.row .s3 {
-  /*border-left: 1px solid silver;*/
-  text-align: center;
-}
-
-
 </style>

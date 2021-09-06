@@ -99,6 +99,13 @@
       "data": "window.defaults.column"
     },
     {
+      "title": "Grid",
+      "icon": "fa fa-th",
+      "active": true,
+      "visual": true,
+      "data": "window.defaults.grid"
+    },
+    {
       "title": "Nav",
       "icon": "far fa-window-maximize fa-rotate-180",
       "active": false,
@@ -118,13 +125,6 @@
       "active": false,
       "visual": false,
       "data": "window.defaults.menu"
-    },
-    {
-      "title": "Grid",
-      "icon": "fa fa-th",
-      "active": false,
-      "visual": true,
-      "data": "window.defaults.grid"
     },
     {
       "title": "Rate",

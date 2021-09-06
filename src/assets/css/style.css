@@ -429,8 +429,9 @@ img {
 .drop {
     margin: 20px 10px;
     height: 80px;
-    border: 2px dashed rgba(0, 0, 0, 0.2);
+    border: 1px dashed rgba(0, 0, 0, 0.2);
     position: relative;
+    transition: 300ms;
 }
 
 .drop::before {
@@ -449,14 +450,26 @@ img {
 }
 
 
-.rowc .visual, .colc .visual{
+
+.rowc, .colc, .gridc{
+    transition: 300ms;
+}
+.rowc:hover, .colc:hover, .gridc:hover{
+    padding-bottom: 85px;
+}
+.rowc .visual, .colc .visual, .gridc .visual{
     position: absolute;
     left: 15px;
-    top: 15px;
+    bottom: 7px;
     right: 15px;
     margin: 0;
-    max-height: calc(100% - 30px);
+    height: 5px;
     box-sizing: border-box;
+    opacity: 0;
+}
+.rowc:hover .visual, .colc:hover .visual, .gridc:hover .visual{
+    height: 75px;
+    opacity: 1;
 }
 
 .rowc:before{
@@ -471,6 +484,15 @@ img {
     font-size: 13px;
     left: 0;
     content: 'Column';
+    color: transparent;
+    text-shadow: 0 0 2px #7a7a7a;
+    position: absolute;
+}
+
+.gridc:before{
+    font-size: 13px;
+    left: 45%;
+    content: 'grid';
     color: transparent;
     text-shadow: 0 0 2px #7a7a7a;
     position: absolute;

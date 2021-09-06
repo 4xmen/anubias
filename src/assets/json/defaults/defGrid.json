@@ -1,0 +1,13 @@
+{
+  "type": "grid",
+  "name": "grid",
+  "column": "2",
+  "bgColor": "null",
+  "border": "0",
+  "borderColor": "Colors.transparent",
+  "padding": "0",
+  "margin": "0",
+  "borderRadius": "0",
+  "children": [],
+  "hide": false
+}

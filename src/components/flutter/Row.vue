@@ -89,7 +89,6 @@ export default {
         do {
           n = n.$parent;
         } while (n.currentProperties === undefined);
-        console.log(n.currentProperties);
         n.currentProperties = prop;
       }, 50);
     },
@@ -212,7 +211,7 @@ export default {
 <style scoped>
 .rowc {
   background: transparent;
-  min-height: 75px;
+  min-height: 25px;
   border: 1px dotted silver;
   position: relative;
   white-space: nowrap;
