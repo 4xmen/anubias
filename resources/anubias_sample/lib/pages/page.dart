@@ -23,8 +23,8 @@ class /**name*/ MyHomePage /*name**/ extends StatefulWidget {
 class /**nameState*/ _MyHomePageState /*nameState**/
     extends State< /**name*/ MyHomePage /*name**/ > {
   App app;
-/***property-class***/
 
+  /***property-class***/
 
 
   void initState() {
@@ -43,7 +43,6 @@ class /**nameState*/ _MyHomePageState /*nameState**/
       /***defineVars2***/
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +71,6 @@ class /**nameState*/ _MyHomePageState /*nameState**/
                     textAlign: null,
                   ),
                 ),
-
 
 
                 // MaterialButton(

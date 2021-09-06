@@ -481,11 +481,29 @@ children: row1.children ,
 ),
 )
 ),
+RowGrid ddd = RowGrid(
+  hide: false,
+  children: List.generate(100, (index) {
+    return Container(
+      color: Colors.black38,
+      child: Text(
+        'Item $index',
+      ),
+    );
+  }),
+  padding: '15',
+  margin: '5',
+  bgColor: Colors.black38,
+  border: '0',
+  borderColor: Colors.cyan,
+  borderRadius: '7',
+  column: 3,
+);
 
 RowProp row1 = new RowProp(
-    hide: false,
     scrollable: true,
     axis: MainAxisAlignment.spaceAround,
+    hide: false,
     children: [
       Text('txt1  '),
       Text('txt2  '),
@@ -511,3 +529,32 @@ RowProp row1 = new RowProp(
     borderColor: Colors.cyan,
     borderRadius: '7'
 );
+
+Offstage(
+offstage: ddd.hide,
+child: Container(
+padding: ddd.getPadding(),
+margin: ddd.getMargin(),
+decoration: BoxDecoration(
+border: ddd.border.indexOf(",") == -1
+? Border.all(
+color: ddd.borderColor,
+width: double.parse(ddd.border),
+)
+: null,
+color: ddd.bgColor,
+boxShadow: ddd.border.indexOf(",") == -1
+? null
+    : ddd.getBorder(),
+borderRadius: ddd.getBorderRadius(),
+),
+child: SizedBox(
+child: GridView.count(
+physics: NeverScrollableScrollPhysics(),
+shrinkWrap: true,
+crossAxisCount: 2,
+children: ddd.children,
+),
+),
+),
+),

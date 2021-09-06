@@ -591,6 +591,39 @@ class RowProp
   });
 }
 
+class GridProp
+    with
+        Paddinator,
+        Marginator,
+        Radidusator,
+        Borderator {
+  bool hide = false;
+  String padding = '0';
+  String margin = '0';
+  String borderRadius = '0';
+  String border = '0';
+  Color borderColor = null;
+  int column = 2;
+
+  Color bgColor = Colors.transparent;
+  BuildContext context;
+
+  List<Widget> children;
+
+  GridProp({
+    this.hide,
+    this.children,
+    this.context,
+    this.bgColor,
+    this.padding,
+    this.margin,
+    this.borderColor,
+    this.border,
+    this.borderRadius,
+    this.column,
+  });
+}
+
 class ColumnProp
     with
         Paddinator,
