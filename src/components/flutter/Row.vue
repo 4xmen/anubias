@@ -194,17 +194,9 @@ export default {
     }
     ,
     getStyleChild: function (child) {
-      let $ = window.jQuery;
-
-        if (child.type === 'column'){
-
-          // console.log($("#"+this.page.name+this.properties.name).width(), (  / 100));
-          if (child.width[child.width.length-1] === '%'){
-            return 'min-width:75px; width:'+ ($("#mobile").width() ) * (child.width.substr(0,child.width.length-1)   / 100) +'px;';
-          }else {
-            return 'min-width:75px; width:'+child.width * this.scale+'px;';
-          }
-        }
+      if (child.type === 'column' || child.type === 'row' || child.type === 'container'){
+        return 'min-width:75px;' // width:'+fnc.getSize( child.width, this.scale, 2.5) +';';
+      }
     },
     color2web: function (clr, b = false) {
       return fnc.color2web(clr, b);

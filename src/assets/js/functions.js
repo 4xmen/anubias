@@ -121,12 +121,16 @@ let getSize = function (value, scale, coefficient = 2.75, isHeight = false) {
     try {
 
         return value.toString().slice(-1) == '%' ?
-            (!isHeight ? value : (document.querySelector('#mobile').offsetHeight / 100) * parseFloat(value.toString().substr(0, value.length - 1)) + 'px')
+            (!isHeight ?
+            (document.querySelector('#mobile').offsetWidth / 100) * parseFloat(value.toString().substr(0, value.length - 1) - 4) + 'px' :
+            (document.querySelector('#mobile').offsetHeight / 100) * parseFloat(value.toString().substr(0, value.length - 1)) + 'px')
             : (parseFloat(value) * scale * coefficient) + 'px';
 
     } catch (e) {
         return value.toString().slice(-1) == '%' ?
-            (!isHeight ? value : (document.querySelector('.container').offsetHeight / 200) * parseFloat(value.toString().substr(0, value.length - 1)) + 'px')
+            (!isHeight ?
+            (document.querySelector('.container').offsetWidth / 200) * parseFloat(value.toString().substr(0, value.length - 1) - 4) + 'px' :
+            (document.querySelector('.container').offsetHeight / 200) * parseFloat(value.toString().substr(0, value.length - 1)) + 'px')
             : (parseFloat(value) * scale * coefficient) + 'px';
     }
 }
