@@ -1226,6 +1226,10 @@ export default {
   opacity: 1;
 }
 
+#dir{
+  position: relative;
+}
+
 .logo {
   height: 30vh;
   animation: fliper 15s infinite;

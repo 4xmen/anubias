@@ -503,6 +503,10 @@ img {
     opacity: 1;
 }
 
+.rowc .content{
+    white-space: nowrap;
+}
+
 .rowc:before {
     content: 'Row';
     color: transparent;

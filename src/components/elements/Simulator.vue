@@ -152,7 +152,7 @@ export default {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: -85px;
+  bottom: -170px;
   z-index: 9;
 }
 </style>

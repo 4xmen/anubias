@@ -5,10 +5,16 @@
   "color": "null",
   "unselectedItemColor": "null",
   "index": 0,
-  "items": [{
-    "label": "Setting",
-    "icon": "settings"
-  }],
+  "items": [
+    {
+      "label": "Setting",
+      "icon": "settings"
+    },
+    {
+      "label": "Help",
+      "icon": "help"
+    }
+  ],
   "onTap": "// when tab and item `index` new is selected \n ",
   "hide": false
 }

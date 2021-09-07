@@ -216,6 +216,8 @@ export default {
   position: relative;
   white-space: nowrap;
   display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
 }
 
 .control {

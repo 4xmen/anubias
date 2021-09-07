@@ -600,6 +600,7 @@ class GridProp with Paddinator, Marginator, Radidusator, Borderator {
   String borderRadius = '0';
   String border = '0';
   Color borderColor = null;
+  double childAspectRatio = 1;
   int column = 2;
 
   Color bgColor = Colors.transparent;
@@ -618,6 +619,7 @@ class GridProp with Paddinator, Marginator, Radidusator, Borderator {
     this.border,
     this.borderRadius,
     this.column,
+    this.childAspectRatio
   });
 }
 
