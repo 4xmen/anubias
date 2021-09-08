@@ -3,8 +3,8 @@
   "name": "menu",
   "title": "Menu title",
   "bgColor": "null",
-  "headColor": "null",
   "color": "null",
+  "image": "",
   "items": [
     {
       "label": "Setting",

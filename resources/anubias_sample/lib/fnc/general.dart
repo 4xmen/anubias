@@ -919,6 +919,24 @@ class NavProp {
   });
 }
 
+class MenuProp {
+  Color bgColor = null;
+  Color color = null;
+  BuildContext context;
+  List<ListTile> items = [];
+  String image = '';
+  String title = '';
+
+  MenuProp({
+    this.title,
+    this.bgColor,
+    this.color,
+    this.items,
+    this.image,
+    this.context,
+  });
+}
+
 class DropdownProp with Paddinator {
   Color color = null;
   Color iconColor = null;

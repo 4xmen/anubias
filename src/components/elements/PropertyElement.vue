@@ -21,10 +21,12 @@
             <th class="pos-relative">
               <i @click="showColorPicker(k)" v-if="k.toLowerCase().indexOf('color') !== -1 && properties[k] != 'null'"
                  class="square" :style="'background:'+color2web(properties[k],true)"></i>
+              <i @click="properties.image = ''" v-if="k === 'image'" class="fa fa-times square" style="font-size: 17px;margin-bottom: -10px;"></i>
               <label :for="k">
                 {{ k }}
               </label>
             </th>
+
             <td>
               <div v-if="typeof properties[k] === 'boolean'">
                 <div class="switch">
@@ -171,6 +173,9 @@
                    @click="chooseImage">
                 Choose <b> <i class="fa fa-folder-open"></i> </b>
               </div>
+              <div v-else-if="k === 'image'" class="code" @click="chooseImage">
+                Choose <b> <i class="fa fa-folder-open"></i> </b>
+              </div>
               <div v-else-if="k === 'image' && properties.type === 'image' && properties.isOnline">
                 <input type="url" v-model="properties.image"/>
               </div>
@@ -190,9 +195,6 @@
 
 <script>
 import {fnc} from '@/assets/js/functions';
-
-
-
 var setme;
 
 export default {
@@ -371,7 +373,9 @@ th {
   padding: 0;
   margin: 0;
   text-align: center;
+  vertical-align: middle;
 }
+
 
 td {
   border: 1px solid rgba(0, 0, 0, 0.2);

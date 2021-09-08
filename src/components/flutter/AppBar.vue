@@ -1,6 +1,7 @@
 <template>
   <div id="appBar" :style="getStyle()">
     <i :class="'fa '+(isRTL?'fa-arrow-right':'fa-arrow-left')" v-if="properties.back"></i>
+    <i v-if="isMenu" :class="'fa '+('fa-bars')"  :style="getIconMenuStyle()+';margin: 4px 10px 0 10px;'"></i>
     <b>
       {{ properties.title }}
     </b>
@@ -31,13 +32,16 @@ export default {
         return 'float:right';
       }
     },
+    getIconMenuStyle:function () {
+      if (this.isRTL){
+        return 'float:right';
+      }else{
+        return 'float:left';
+      }
+    },
     getStyle: function () {
       let style = '';
-      if (this.isRTL){
-        style += 'text-align: right;';
-      }else {
-        style += 'text-align: left;';
-      }
+      style += 'text-align: start;';
       style += 'background-color:' + this.color2web(this.properties.color,false) + ';';
       if (this.properties.textColor === 'null'){
         style += 'color: white;';
@@ -50,6 +54,17 @@ export default {
       return style;
     },
     color2web: fnc.color2web
+  },
+  computed:{
+    isMenu: function () {
+      let menu = window.appData.pages[this.$parent.$parent.currentPage].children.nonvisual[0];
+      if (menu === undefined){
+        return  false
+      }else if(menu.type === 'menu'){
+        return true;
+      }
+      return false;
+    }
   }
 }
 </script>
