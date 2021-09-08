@@ -445,6 +445,32 @@ img {
 
 /*dnd fix*/
 
+.non-visual-placeholder{
+    text-align: start;
+    padding: 15px;
+}
+
+.non-visual-component{
+    background: rgba(0,0,0,.3);
+    color: white;
+    display: inline-block;
+    text-align: center;
+    box-sizing: content-box;
+    margin: 2px 7px 2px 2px;
+    min-width: 40px;
+    padding: 5px;
+}
+.non-visual-component span{
+    padding: 0 !important;
+    font-size: 12px;
+    font-weight: 100;
+}
+.non-visual-component i{
+    margin: 12px;
+    display: inline-block;
+    font-size: 24px;
+}
+
 .drag {
     /*border: 1px solid rgba(220, 220, 255,.2);*/
     display: inline-flex;
@@ -538,6 +564,7 @@ img {
 /*.rowc .visual::before{*/
 /*    content: "Drop";*/
 /*}*/
+
 .drop.non-visual::before {
     content: "non-visual component";
 }

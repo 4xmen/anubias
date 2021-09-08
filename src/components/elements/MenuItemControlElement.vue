@@ -6,8 +6,8 @@
     <div class="content" id="container">
       <div class="row">
         <div class="col s12">
-          <ul class="collection" id="itemsSort">
-            <li @click="change(k)" :class="'collection-item '+(k == current?'active':'')"
+          <ul class="collection" id="menuSort">
+            <li @click="change(k)" @dblclick="openCodeEditor(k)" :class="'collection-item '+(k == current?'active':'')"
                 v-for="(item,k) in allItems" :key="k">
               <i class="material-icons">{{ item.icon }}</i>
               <h5>
@@ -37,6 +37,9 @@
             <input type="text" id="text-hint" v-model="allItems[current].label"/>
           </div>
           <ul>
+            <li>
+              - Double click to change code
+            </li>
             <li>
               - You can drag and drop to sort
             </li>
@@ -73,7 +76,7 @@ export default {
   methods: {
     sortInit: function () {
       var that = this;
-      Sortable.create(document.querySelector('#itemsSort'), {
+      Sortable.create(document.querySelector('#menuSort'), {
         animation: 100,
         onUpdate: function (e) {
           that.$parent.$parent.$parent.isInternalDrag = false;
@@ -85,12 +88,24 @@ export default {
             n = n.$parent;
           } while (n.closeAllModal === undefined);
           n.currentProperties.items = [];
+          n.closeMultiTab(window.appData.pages[n.currentPage].name + '.menu.items');
           setTimeout(function () {
             that.allItems = arr;
             n.currentProperties.items = arr;
           }, 100);
         },
       });
+    },
+    openCodeEditor: function (e) {
+
+      let title = window.appData.pages[this.$parent.$parent.currentPage].name
+          + '.menu.items[' + e + '].onTap';
+      let pointer = 'window.appData.pages[' + this.$parent.$parent.currentPage + '].children.nonvisual[0].items['+e+'].onTap';
+      console.log(pointer);
+      this.$parent.$parent.addTab(title, 'code', {
+        codeTitle: title,
+      }, 'fa-code', e,pointer);
+      this.closeModal();
     },
     updateResource: function () {
 
@@ -105,7 +120,8 @@ export default {
     newAction: function () {
       this.allItems.push({
             icon: 'home',
-            label: 'home',
+            label: 'Home',
+            onTap:'// on this menu item click \n'
           }
       );
       // this.sortInit();
@@ -151,7 +167,6 @@ h5{
   position: relative;
   top: -4px;
   padding-left: 5px;
-  font-size: 17px;
 }
 
 .terminal {

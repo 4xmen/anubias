@@ -84,6 +84,7 @@ export default {
           do {
             n = n.$parent;
           } while (n.closeAllModal === undefined);
+          n.closeMultiTab(window.appData.pages[n.currentPage].name + '.appbar.actions');
           n.currentProperties.actions = [];
           setTimeout(function () {
             that.allActions = arr;
@@ -95,7 +96,7 @@ export default {
     openCodeEditor: function (e) {
 
       let title = window.appData.pages[this.$parent.$parent.currentPage].name
-          + '.action[' + e + '].onPressed';
+          + '.appbar.actions[' + e + '].onPressed';
       let pointer = 'window.appData.pages[' + this.$parent.$parent.currentPage + '].children.visual[0].actions['+e+'].onPressed';
       this.$parent.$parent.addTab(title, 'code', {
         codeTitle: title,

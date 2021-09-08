@@ -26,7 +26,6 @@ class /**nameState*/ _MyHomePageState /*nameState**/
 
   /***property-class***/
 
-
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -51,7 +50,55 @@ class /**nameState*/ _MyHomePageState /*nameState**/
     return Scaffold(
       /**appbar*/
       // app bar her
+      appBar: AppBar(
+        title: Text('appbar'),
+      ),
       /*appbar**/
+      /**drawer*/
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Text(
+                'Drawer Header',
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+              decoration: BoxDecoration(
+                  color: null,
+                  image: false
+                      ? null
+                      : DecorationImage(
+                          image: AssetImage("assets/images/sample.jpg"),
+                          fit: BoxFit.cover)),
+            ),
+            ListTile(
+              leading: Icon(Icons.message),
+              title: Text('Messages'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.account_circle),
+              title: Text('Profile'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Settings'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+      /*drawer**/
       body: /**body*/ Container(
         alignment: Alignment.topRight,
         padding: EdgeInsets.only(

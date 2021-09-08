@@ -113,18 +113,18 @@
       "data": "window.defaults.nav"
     },
     {
+      "title": "Menu",
+      "icon": "fa fa-list-alt",
+      "active": true,
+      "visual": false,
+      "data": "window.defaults.menu"
+    },
+    {
       "title": "List",
       "icon": "fa fa-list",
       "active": false,
       "visual": true,
       "data": "window.defaults.list"
-    },
-    {
-      "title": "Menu",
-      "icon": "fa fa-list-alt",
-      "active": false,
-      "visual": false,
-      "data": "window.defaults.menu"
     },
     {
       "title": "Rate",

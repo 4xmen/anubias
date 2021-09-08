@@ -93,6 +93,19 @@
                 </div>
                 <!-- non visual components of page -->
                 <div id="non-visual">
+                  <div class="non-visual-placeholder" v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.nonvisual !== undefined">
+                    <div v-for="(nvc,i) in data.pages[currentPage].children.nonvisual"
+                         class="non-visual-component" :key="i" @dblclick="removeNonVisual(i)"
+                         @click="currentProperties = nvc; isVisualSelected = -1">
+                      <i :class="nonVisualIcon[nvc.type]"></i>
+                      <span>
+                          {{nvc.name}}
+                      </span>
+                    </div>
+                  </div>
+                  <ul  v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.nonvisual !== undefined && data.pages[currentPage].children.nonvisual.length > 0">
+                    <li> - Double click to remove component</li>
+                  </ul>
                   <drop class="drop non-visual" @drop="onNonVisualDrop" :accepts-data="(n) => !isVisual(n)">
                     <!--                <span v-for="(n, index) in oddDropped" :key="index">Dropped : {{ n }},&nbsp;</span>-->
                   </drop>
@@ -304,6 +317,12 @@
         <item-control :items="currentProperties.items "></item-control>
       </div>
     </vue-final-modal>
+    <vue-final-modal v-model="showMenuItemsModal" @before-open="modalOpen" @before-close="modalClose"
+                     name="row-modal">
+      <div v-if="currentProperties.items !== undefined">
+        <menu-item-control :items="currentProperties.items "></menu-item-control>
+      </div>
+    </vue-final-modal>
     <vue-final-modal v-model="showActionsModal" @before-open="modalOpen" @before-close="modalClose"
                      name="row-modal">
       <div v-if="currentProperties.actions !== undefined">
@@ -337,6 +356,7 @@ import rowControl from '../elements/RowControlElement';
 import actionControl from '../elements/ActionControlElement';
 import optionControl from '../elements/OptionControlElement';
 import itemControl from '../elements/ItemControlElement';
+import menuItemControl from '../elements/MenuItemControlElement';
 import colorPicker from '../elements/colorPickerElement';
 
 import {Drag, Drop} from "vue-easy-dnd";
@@ -369,6 +389,7 @@ export default {
     actionControl,
     optionControl,
     itemControl,
+    menuItemControl,
     colorPicker,
     tabControl,
     Drag,
@@ -379,12 +400,15 @@ export default {
   data: function () {
     return {
       sly: null,
-      sample: [{n: 1}, {n: 2}, {n: 3}, {n: 4}],
+      nonVisualIcon:{
+        menu:'fa fa-list-alt',
+      },
       showTerminalModal: false,
       showRowModal: false,
       showOptionsModal: false,
       showActionsModal: false,
       showItemsModal: false,
+      showMenuItemsModal: false,
       showColorPickerModal: false,
       onEditColor: '',
       onEditColorKey: '',
@@ -516,6 +540,15 @@ export default {
   },
   methods: {
     linkify: fnc.linkify,
+    closeAllModal() {
+      this.showItemsModal = false;
+      this.showTerminalModal = false;
+      this.showRowModal = false;
+      this.showOptionsModal = false;
+      this.showActionsModal = false;
+      this.showColorPickerModal = false;
+      this.showMenuItemsModal = false;
+    },
     slideClick: function () {
       console.log(this.$refs.carousel3d.currentIndex);
     },
@@ -661,6 +694,22 @@ export default {
         self.handleSly();
       }, 100);
     },
+    closeMultiTab: function (title) {
+      for( const i in this.tabs) {
+        let tab = this.tabs[i] ;
+        if (tab.title.indexOf(title) !== -1){
+          this.tabs.splice(i, 1);
+          this.tabKeeper.splice(i, 1);
+          this.closeMultiTab(title);
+          return;
+        }
+      }
+      var self = this;
+      setTimeout(function () {
+        self.changeTab(-1);
+        self.handleSly();
+      }, 100);
+    },
     openRecent:function (e) {
       window.api.send( 'open-project-direct', this.recents[e]);
     },
@@ -776,15 +825,6 @@ export default {
     },
     TerminalShow: function () {
       this.showTerminalModal = true;
-    },
-    closeAllModal() {
-      this.showItemsModal = false;
-      this.showTerminalModal = false;
-      this.showRowModal = false;
-      this.showOptionsModal = false;
-      this.showActionsModal = false;
-      this.showColorPickerModal = false;
-      this.showColorPickerModal = false;
     },
     contextOpen: function (i, ev) {
       this.$refs.menu.open(ev);
@@ -942,6 +982,41 @@ export default {
       }, 1000);
       return true;
     },
+    nonVisualValidator: function (component, nonVisuals) {
+      if (component.type === 'menu' ) {
+        // check non duplicate app bar and nav
+        for (const comp of nonVisuals) {
+          if (comp.type === 'menu' && component.type === 'menu') {
+            window.alertify.warning("You can't drop two Menu in page");
+            return false;
+          }
+        }
+        if (component.type === 'menu'){
+          nonVisuals.unshift(fnc.clone(component));
+          return true;
+        }
+      }
+      // add component
+      nonVisuals.push(fnc.clone(component));
+      // choose name
+      // check not duplicate name add number to name
+      let names = [];
+      for (const comp of nonVisuals) {
+        names.push(comp.name);
+      }
+      let i = 0;
+      let nextName = false;
+      do {
+        nextName = false;
+        i++;
+        if (names.indexOf(component.type + i.toString()) > -1) {
+          nextName = true;
+        }
+      } while (nextName);
+      nonVisuals[nonVisuals.length - 1].name = component.type + i.toString();
+
+      return true;
+    },
     onVisualDrop(event) {
       // on add a viusal component to page
       // this.evenDropped.push(event.data);
@@ -966,7 +1041,17 @@ export default {
     },
     onNonVisualDrop(event) {
       // this.oddDropped.push(event.data);
-      console.log(event);
+      // find component
+      let component = window.components[event.data];
+      // load default value
+      let properties = eval(component.data);
+      if (properties === undefined) {
+        window.alertify.warning('Invalid component', 15);
+      } else {
+        // when loaded add to page with validate
+        this.nonVisualValidator(properties, this.data.pages[this.currentPage].children.nonvisual);
+        // ***!*** need sort and rename here
+      }
     },
     removeVisual(n) { // remove visual component from page
       var self = this;
@@ -979,12 +1064,24 @@ export default {
             // window.alertify.error('Cancel')
           });
     },
+    removeNonVisual(n) { // remove visual component from page
+      var self = this;
+      window.alertify.confirm(`Are you sure to remove this component
+      "${this.data.pages[this.currentPage].children.nonvisual[n].name}" ?`,
+          'Remove confirm', function () {
+            self.data.pages[self.currentPage].children.nonvisual.splice(n, 1);
+          }
+          , function () {
+            // window.alertify.error('Cancel')
+          });
+    },
     isVisual: function (n) { // check is visual component or not
       return window.components[n].visual;
     },
     calcPadding: fnc.calcPadding,
     color2web: fnc.color2web,
-  }, computed: {
+  },
+  computed: {
     // check is init project or not
     isInitProject: function () {
       return window.appData.project.name !== '';

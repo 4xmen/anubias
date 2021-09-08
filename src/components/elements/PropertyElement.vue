@@ -268,7 +268,11 @@ export default {
       this.$parent.showOptionsModal = true;
     },
     showItemControl: function () {
-      this.$parent.showItemsModal = true;
+      if (this.properties.type === 'nav'){
+        this.$parent.showItemsModal = true;
+      }else{
+        this.$parent.showMenuItemsModal = true;
+      }
     },
     showColorPicker: function (k) {
       this.$parent.showColorPickerModal = true;

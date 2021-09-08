@@ -1,0 +1,15 @@
+{
+  "type": "menu",
+  "name": "menu",
+  "title": "Menu title",
+  "bgColor": "null",
+  "headColor": "null",
+  "color": "null",
+  "items": [
+    {
+      "label": "Setting",
+      "icon": "settings",
+      "onTap" : "// on this menu item click \n"
+    }
+  ]
+}
