@@ -33,6 +33,7 @@ export default {
   data: function () {
     return {
       isRTL: window.appData.project.isRTL,
+      isDark: window.appData.project.isDark,
     }
   },
   watch: {},
@@ -150,6 +151,11 @@ export default {
 
       if (this.properties.labelColor != 'null') {
         style += 'color:' + this.color2web(this.properties.labelColor) + ' !important ;';
+      }else{
+        if (this.isDark){
+        style += 'color: white !important ;';
+        }
+        style += 'color: black !important ;';
       }
 
       return style;
