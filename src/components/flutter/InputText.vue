@@ -1,25 +1,25 @@
 <template>
-    <div :style="getStyle()" ref="main"  :class="'input input-field'+(properties.outlined?' input-outlined':'')"
-    >
+  <div :style="getStyle()" ref="main" :class="'input input-field'+(properties.outlined?' input-outlined':'')"
+  >
       <span v-if="properties.prefix.length !== 0" class="abs" :style="getStylePrefix()">
         {{ properties.prefix }}
       </span>
-      <i v-if="properties.icon != 'null'" class="material-icons"
-         :style="(properties.iconSize != 'null'?'font-size:'+properties.iconSize * scale * 2.5 +'px':'')">
-        {{ properties.icon }}
-      </i>
-      <input type="text"  :value="properties.text" :readonly="properties.readOnly"
-             :id="properties.name"
-             ref="inp"
-             @focus="focusing" @blur="bluring"
-             :maxlength="properties.maxLength"
-             :disabled="!properties.enabled"
-             :style="getStyleInput()">
-      <label :for="properties.name" ref="lbl" :class="properties.text != ''?'active':''"
-             :style="getStyleLabel()">
-        {{ properties.labelText }}
-      </label>
-      <span v-if="properties.suffix.length !== 0" class="abs" :style="getStyleSuffix()">
+    <i v-if="properties.icon != 'null'" class="material-icons"
+       :style="getStyleIcon()">
+      {{ properties.icon }}
+    </i>
+    <input type="text" :value="properties.text" :readonly="properties.readOnly"
+           :id="properties.name"
+           ref="inp"
+           @focus="focusing" @blur="bluring"
+           :maxlength="properties.maxLength"
+           :disabled="!properties.enabled"
+           :style="getStyleInput()">
+    <label :for="properties.name" ref="lbl" :class="properties.text != ''?'active':''"
+           :style="getStyleLabel()">
+      {{ properties.labelText }}
+    </label>
+    <span v-if="properties.suffix.length !== 0" class="abs" :style="getStyleSuffix()">
         {{ properties.suffix }}
       </span>
   </div>
@@ -35,8 +35,7 @@ export default {
       isRTL: window.appData.project.isRTL,
     }
   },
-  watch:{
-  },
+  watch: {},
   computed: {
     pad: function () {
       if (this.isRTL) {
@@ -61,7 +60,14 @@ export default {
   },
   props: ['properties', 'scale', 'page'],
   methods: {
+    getStyleIcon: function () {
+      let style = (this.properties.iconSize != 'null' ? 'font-size:' +this.properties.iconSize * this.scale * 2.5 + 'px' : '');
 
+      if (this.properties.iconColor != 'null') {
+        style += 'color:' + fnc.color2web(this.properties.iconColor) + ';';
+      }
+      return style;
+    },
     getStylePrefix: function () {
       let style = '';
       if (this.properties.icon != 'null') {
@@ -102,11 +108,11 @@ export default {
         style += 'border-color:' + this.color2web(this.properties.borderColor) + ';';
       }
       if (this.properties.margin != '0') {
-        style += 'margin:' + this.calcPadding(this.properties.margin,this.scale * 2) + ';';
+        style += 'margin:' + this.calcPadding(this.properties.margin, this.scale * 2) + ';';
       }
       try {
         if (this.properties.bgColor === 'null') {
-          style += 'background:'+document.querySelector('#preview > div').style.backgroundColor+';';
+          style += 'background:' + document.querySelector('#preview > div').style.backgroundColor + ';';
         }
       } catch {
         //
@@ -134,16 +140,16 @@ export default {
         style += 'font-size:' + (2.5 * this.scale * parseFloat(this.properties.labelSize)) + 'px;';
       }
       if (this.properties.icon != 'null') {
-        if(this.isRTL){
-          style+= 'right:';
-        }else{
-          style+= 'left:';
+        if (this.isRTL) {
+          style += 'right:';
+        } else {
+          style += 'left:';
         }
-        style += this.properties.iconSize != 'null' ? this.properties.iconSize : 30+'px;';
+        style += this.properties.iconSize != 'null' ? this.properties.iconSize : 30 + 'px;';
       }
 
       if (this.properties.labelColor != 'null') {
-        style += 'color:' + this.color2web(this.properties.labelColor) + ' !important;';
+        style += 'color:' + this.color2web(this.properties.labelColor) + ' !important ;';
       }
 
       return style;
@@ -162,8 +168,8 @@ export default {
       }
       if (this.properties.borderColor != 'null') {
         style += 'border-color:' + this.color2web(this.properties.borderColor) + ';';
-      }else{
-        style += 'border-color:' +  this.color2web(window.appData.project.appColor)+';';
+      } else {
+        style += 'border-color:' + this.color2web(window.appData.project.appColor) + ';';
       }
       if (this.properties.cursorColor != 'null') {
         style += 'caret-color:' + this.color2web(this.properties.cursorColor) + ';';
@@ -171,11 +177,11 @@ export default {
       if (this.properties.size != 'null') {
         style += 'font-size:' + (2.5 * this.scale * parseFloat(this.properties.size)) + 'px;';
       }
-      if (this.properties.weight != 'normal'){
-        if (this.properties.weight =='bold'){
-          style +='font-weight: 400;';
-        }else{
-          style +='font-weight:'+this.properties.weight.substr(1)+';';
+      if (this.properties.weight != 'normal') {
+        if (this.properties.weight == 'bold') {
+          style += 'font-weight: 400;';
+        } else {
+          style += 'font-weight:' + this.properties.weight.substr(1) + ';';
         }
       }
       style += this.pad + ':' + pad + 'px;';
@@ -186,8 +192,8 @@ export default {
       if (this.properties.hintText != 'null' && this.properties.hintText != '') {
         e.target.setAttribute('placeholder', this.properties.hintText);
       }
-      if (this.properties.borderFocusedColor != 'null'){
-        this.$refs.inp.style.borderColor = fnc.color2web(this.properties.borderFocusedColor) ;
+      if (this.properties.borderFocusedColor != 'null') {
+        this.$refs.inp.style.borderColor = fnc.color2web(this.properties.borderFocusedColor);
       }
     },
     bluring: function (e) {
@@ -198,8 +204,8 @@ export default {
 
       }
       if (this.properties.borderColor != 'null') {
-        this.$refs.inp.style.borderColor = this.color2web(this.properties.borderColor) ;
-      }else{
+        this.$refs.inp.style.borderColor = this.color2web(this.properties.borderColor);
+      } else {
         this.$refs.inp.style.borderColor = this.color2web(window.appData.project.appColor);
       }
     },
@@ -221,7 +227,7 @@ export default {
   top: 10px;
 }
 
-.input input{
+.input input {
   box-shadow: none !important;
   box-sizing: border-box;
 }
