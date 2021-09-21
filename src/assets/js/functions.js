@@ -63,12 +63,16 @@ let color2web = function (color, isActiveWidget = true) {
 };
 
 let calcPadding = function (paddingValue, scale = 1, invert = false) {
-    let calced = paddingValue.split(',');
-    let result = '';
-    for (const c of calced) {
-        result += (parseFloat(c) * scale * (invert ? -1 : 1)).toString() + 'px ';
+    try {
+        let calced = paddingValue.split(',');
+        let result = '';
+        for (const c of calced) {
+            result += (parseFloat(c) * scale * (invert ? -1 : 1)).toString() + 'px ';
+        }
+        return result;
+    } catch(e) {
+        return '0';
     }
-    return result;
 }
 
 /**

@@ -101,7 +101,7 @@
           </span>
         </a>
       </li>
-      <li v-if="!isOnline" @click="hotReload" :class="(!startDebug?' disabled':'')">
+      <li @click="onlineBuild" :class="(cantEditPrj?' disabled':'')">
         <a>
           <i class="fa fa-cloud"></i>
           Online Build
@@ -152,7 +152,7 @@
     <nav class="top-nav">
       <div class="nav-wrapper grey darken-4">
         <ul class="left">
-          <li class="logo active" @click="openSite">
+          <li class="logo active" @click="openSite('https://anubias.app')">
             <a><img src="@/assets/img/logo.svg" alt=""></a>
           </li>
           <li>
@@ -172,6 +172,16 @@
           </li>
           <!--          <li><a href="badges.html">Components</a></li>-->
           <!--          <li><a href="collapsible.html">JavaScript</a></li>-->
+          <li v-if="id != null || download != null" class="">
+            <span v-if="download == null">
+            Online compile: {{compileStatus}}  <span class="fa fa-spinner fa-spin"></span>
+            </span>
+            <a v-else @click="openSite(download)">
+              <span class="fa fa-download"></span>
+                Download APK :)
+            </a>
+
+          </li>
         </ul>
         <ul id="nav-mobile" class="right">
           <li>
@@ -188,7 +198,8 @@
 /*eslint-disable */
 /*eslint-enable */
 import {fnc} from '@/assets/js/functions';
-
+import axios from 'axios';
+import https from 'https';
 export default {
   name: "AppMenuElement",
   data: function () {
@@ -196,12 +207,45 @@ export default {
       appData: window.appData,
       startDebug: window.ide.isDebuging,
       isOnline: window.ide.isOnline,
+      id: null,
+      compileStatus: 'Processing',
+      download: null,
     }
   },
   mounted() {
     var $ = window.jQuery;
     $(".dropdown-trigger").dropdown();
     var self = this;
+    setInterval(function () {
+      if (self.id != null){
+        const agent = new https.Agent({
+          rejectUnauthorized: false,
+        });
+        axios({
+          baseURL: 'https://anubias.4xmen.ir/?status='+self.id,
+          method: 'get',
+          config: {
+
+            maxRedirects: 0,
+            httpsAgent: agent,
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            }
+          }
+        }) // http://build.anubias.app/api/compile
+            .then(function (e) {
+              // console.log('SUCCESS!!', e);
+              console.log(e.data);
+              self.compileStatus = e.data.status;
+              if (self.compileStatus == 'SUCCESSFUL'){
+                self.download = e.data.download ;
+                self.id = null;
+              }
+            }).catch(function (e) {
+          console.log(e);
+        });
+      }
+    },3000);
 
     $(document).unbind('keyup.mainMenuShortcut').bind('keyup.mainMenuShortcut', function (e) {
       if (e.ctrlKey && e.shiftKey && e.key === 'S') {
@@ -210,6 +254,10 @@ export default {
       }
       if (e.ctrlKey && e.shiftKey && e.key === 'I') {
         self.devTools();
+        return;
+      }
+      if (e.ctrlKey && e.shiftKey && e.key === 'B') {
+        self.onlineBuild();
         return;
       }
       if (e.ctrlKey && e.key === 's') {
@@ -236,7 +284,7 @@ export default {
         self.hotReload();
         return;
       }
-      if (e.ctrlKey && e.shiftKey &&  e.key === 'W') {
+      if (e.ctrlKey && e.shiftKey && e.key === 'W') {
         self.closeProject();
         return;
       }
@@ -253,7 +301,7 @@ export default {
     });
 
   }, methods: {
-    closeProject:function(){
+    closeProject: function () {
       if (this.cantEditPrj || this.isOnline) {
         return false;
       }
@@ -270,8 +318,39 @@ export default {
     devTools: function () {
       window.api.send("devtools", "");
     },
-    openSite: function () {
-      window.api.send("openWeb", "https://anubias.app");
+    openSite: function (web) {
+      window.api.send("openWeb", web);
+    },
+    onlineBuild: function () {
+      this.download = null;
+      var self = this;
+      let blob = new Blob([JSON.stringify(window.appData)], {type: 'text/json;charset=utf-8'});
+      let formData = new FormData();
+      formData.append('anubias_file', blob, 'anubias_file.anb');
+
+      const agent = new https.Agent({
+        rejectUnauthorized: false,
+      });
+
+        axios({
+        baseURL: 'https://anubias.4xmen.ir/?compile',
+        method: 'post',
+        data: formData,
+        config: {
+
+          maxRedirects: 0,
+          httpsAgent: agent,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          }
+        }
+      }) // http://build.anubias.app/api/compile
+          .then(function (e) {
+            // console.log('SUCCESS!!', e);
+            self.id = e.data.request_id;
+          }).catch(function (e) {
+        console.log(e);
+      });
     },
     hotReload: function () {
       if (!this.startDebug) {
@@ -285,13 +364,13 @@ export default {
         window.api.send("command", data);
       }
 
-    },
+    }
+    ,
     showSetting: function () {
       this.$router.push('/setting');
-    },
+    }
+    ,
     startEmulator: function () {
-
-
       if (window.appData.project.name == '' || (window.project.isSave && window.appData.project.name != '')) {
         this.$router.push('/emulator');
         return;
@@ -304,14 +383,16 @@ export default {
           , function () {
 
           });
-    },
+    }
+    ,
     test: function () {
       this.$parent.TerminalShow();
       let data = {
         command: './' + this.engineName,
       }
       window.api.send("command", data);
-    },
+    }
+    ,
     debug: function () {
       if (this.cantEditPrj || this.isOnline) {
         return false;
@@ -324,7 +405,8 @@ export default {
         command: './' + this.engineName + ' -b ' + window.project.file + ' && cd ' + window.project.folder + '/src && flutter run',
       }
       window.api.send("command", data);
-    },
+    }
+    ,
     debugWeb: function () {
       if (this.cantEditPrj || this.isOnline) {
         return false;
@@ -337,7 +419,8 @@ export default {
         command: './' + this.engineName + ' -b ' + window.project.file + ' && cd ' + window.project.folder + '/src && flutter run -d chrome',
       }
       window.api.send("command", data);
-    },
+    }
+    ,
     build: function () {
       if (this.cantEditPrj || this.isOnline) {
         return false;
@@ -350,7 +433,8 @@ export default {
         command: './' + this.engineName + ' -b ' + window.project.file + ' && cd ' + window.project.folder + '/src && flutter build apk',
       }
       window.api.send("command", data);
-    },
+    }
+    ,
     save: function () {
 
       // check can edit project
@@ -376,7 +460,8 @@ export default {
         data: window.appData
       };
       window.api.send("save-project", data);
-    },
+    }
+    ,
     openProject: function () {
       var self = this;
       if (this.isOnline) {
@@ -409,7 +494,8 @@ export default {
       } else {
         window.api.send("open-file-dialog-project", {});
       }
-    },
+    }
+    ,
     newProject: function () {
 
       // prepare new empty project
@@ -422,7 +508,8 @@ export default {
       window.appData.pages.push(fnc.clone(window.defaults.page));
       window.appData.pages[0].name += '1';
       this.$router.push('/project');
-    },
+    }
+    ,
     saveAs: function () {
       // check can edit project
       if (this.cantEditPrj) {
@@ -443,10 +530,13 @@ export default {
       };
       window.api.send("save-as-file-project", data);
     }
-  }, computed: {
+  }
+  ,
+  computed: {
     cantEditPrj: function () {
       return this.appData.project.name === '';
-    },
+    }
+    ,
     engineName: function () {
       switch (fnc.getOS()) {
         case "Linux":
@@ -470,6 +560,10 @@ export default {
 /*    display: none;*/
 /*  }*/
 /*}*/
+
+.fa-spin,.fa-download{
+  margin:0 10px;
+}
 
 #nav {
   top: 33px;
