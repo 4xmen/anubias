@@ -461,6 +461,10 @@ export default {
 
       var self = this;
 
+      setTimeout(function () {
+        self.changeScale(.3501);
+      },100);
+
       $(document).unbind('keyup.contextShortcut').bind('keyup.contextShortcut', function (e) {
         if (e.ctrlKey && e.shiftKey && e.key === 'c') {
           self.contextTrigger('copy');
