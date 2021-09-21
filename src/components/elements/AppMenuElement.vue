@@ -178,7 +178,7 @@
             </span>
             <a v-else @click="openSite(download)">
               <span class="fa fa-download"></span>
-                Download APK :)
+                Download APK &nbsp; <i class="fa fa-smile"></i>
             </a>
 
           </li>
@@ -210,6 +210,7 @@ export default {
       id: null,
       compileStatus: 'Processing',
       download: null,
+      isOnlineCompile: false,
     }
   },
   mounted() {
@@ -240,6 +241,12 @@ export default {
               if (self.compileStatus == 'SUCCESSFUL'){
                 self.download = e.data.download ;
                 self.id = null;
+                self.isOnlineCompile = false;
+                window.alertify.success('Congratulation, You download your ap,. Look at menu :) ');
+              }else if(self.compileStatus === 'FAIL'){
+                window.alertify.error('Sorry, Compile failed :(');
+                self.id = null;
+                self.isOnlineCompile = false;
               }
             }).catch(function (e) {
           console.log(e);
@@ -322,7 +329,14 @@ export default {
       window.api.send("openWeb", web);
     },
     onlineBuild: function () {
+
+      if (this.isOnlineCompile){
+        window.alertify.warning('You must wait to compile complete, then try again.');
+        return false;
+      }
+      window.alertify.message('Online compile started, Please wait a few moments. Look at menu :) ');
       this.download = null;
+      this.isOnlineCompile = true;
       var self = this;
       let blob = new Blob([JSON.stringify(window.appData)], {type: 'text/json;charset=utf-8'});
       let formData = new FormData();
@@ -561,8 +575,9 @@ export default {
 /*  }*/
 /*}*/
 
-.fa-spin,.fa-download{
-  margin:0 10px;
+.fa-spin,.fa-download,.fa-smile{
+  margin:0 8px;
+  display: inline-block;
 }
 
 #nav {
