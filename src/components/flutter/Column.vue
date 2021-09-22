@@ -3,7 +3,8 @@
     <div class="colc" :style="getStyleCol()">
       <drop class="drop visual" @drop="onVisualDrop" :accepts-data="(n) => isVisual(n)"></drop>
       <div :class="'content '+getClass()" :style="'padding:'+(15 * scale)+'px;'+getStyleMain()">
-        <child-simulator :style="getStyleChild(child)" class="col-child" v-for="(child,k) in properties.children" :type="child.type"
+        <child-simulator :style="getStyleChild(child)" class="col-child" v-for="(child,k) in properties.children"
+                         :type="child.type"
                          :properties="child" :scale="scale"
                          :page="page" @click.native.capture="setProperty(child)" :key="k"></child-simulator>
 
@@ -83,18 +84,20 @@ export default {
       // console.log(n.rowData);
     },
     setProperty: function (prop) {
-      var self = this;
+      var propcont = prop;
+      var n = this;
+      let counter = 0;
+      do {
+        n = n.$parent;
+        counter++;
+      } while (n.currentProperties === undefined);
       setTimeout(function () {
-        let n = self;
-        do {
-          n = n.$parent;
-        } while (n.currentProperties === undefined);
-        n.currentProperties = prop;
-      }, 50);
+        n.currentProperties = propcont;
+      },counter * 10);
     },
     getStyleChild: function (child) {
 
-      if (child.type === 'column' || child.type === 'row' || child.type === 'container'){
+      if (child.type === 'column' || child.type === 'row' || child.type === 'container') {
         return 'min-width:75px;' // width:'+fnc.getSize( child.width, this.scale, 2.5) +';';
       }
     },
@@ -123,7 +126,7 @@ export default {
     },
     visualValidator: function (component, visuals) {
       var self = this;
-      if (component.type === 'appbar' || component.type === 'nav' ) {
+      if (component.type === 'appbar' || component.type === 'nav') {
         // check non appbar or row
         window.alertify.error("You can't drop appbar or nav into col");
         return false;

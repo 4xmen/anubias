@@ -1,12 +1,12 @@
 <template>
   <div :style="getStyle()" class="cont">
     <div class="content" :style="'padding:'+(15 * scale)+'px'">
-      <div v-if="properties.child == 'null'">
+      <div v-if="properties.child == 'null'" class="visual-holder">
         <drop class="drop visual" @drop="onVisualDrop" :accepts-data="(n) => isVisual(n)"></drop>
       </div>
-      <div v-else>
+      <div class="visual-holder" v-else>
         <child-simulator :type="properties.child.type" :properties="properties.child" :scale="scale"
-                   :page="page" @click.native.capture="setProperty(properties.child)"></child-simulator>
+                         :page="page" @click.native.capture="setProperty(properties.child)"></child-simulator>
       </div>
     </div>
   </div>
@@ -25,16 +25,16 @@ export default {
   },
   methods: {
     setProperty: function (prop) {
-      var self = this;
       var propcont = prop;
+      var n = this;
+      let counter = 0;
+      do {
+        n = n.$parent;
+        counter++;
+      } while (n.currentProperties === undefined);
       setTimeout(function () {
-          let  n = self;
-          do{
-            n = n.$parent;
-          } while (n.currentProperties === undefined );
-          console.log(n.currentProperties);
-          n.currentProperties = propcont;
-      }, 20);
+        n.currentProperties = propcont;
+      },counter * 10);
     },
     capitalizeFirstLetter: function (string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
@@ -59,10 +59,10 @@ export default {
       }
     },
     visualValidator: function (component
-    //    , visuals
+                               //    , visuals
     ) {
       var self = this;
-      if (component.type === 'appbar' || component.type === 'nav' ) {
+      if (component.type === 'appbar' || component.type === 'nav') {
         // check non duplicate app bar
         window.alertify.warning("You can't drop two AppBar or Nav in container");
         return false;
@@ -84,7 +84,7 @@ export default {
       //     nextName = true;
       //   }
       // } while (nextName);
-      newComponent.name = this.properties.name +  this.capitalizeFirstLetter(component.type);
+      newComponent.name = this.properties.name + this.capitalizeFirstLetter(component.type);
       this.properties.child = newComponent;
 // update page preview
       setTimeout(function () {
@@ -105,7 +105,7 @@ export default {
         style += 'background:' + this.color2web(this.properties.bgColor) + ';';
       }
       style += 'border-style:solid;';
-      style += 'border-width:'+fnc.calcPadding(this.properties.border)+';';
+      style += 'border-width:' + fnc.calcPadding(this.properties.border) + ';';
       if (this.properties.borderColor != 'null') {
         style += 'border-color:' + this.color2web(this.properties.borderColor) + ';';
       }
@@ -115,7 +115,7 @@ export default {
         style += 'width:' + fnc.getSize(this.properties.width, this.scale, 3) + ';'
       }
       if (this.properties.height != 'null') {
-        style += 'height:' + fnc.getSize(this.properties.height , this.scale , 3, true) + ';'
+        style += 'height:' + fnc.getSize(this.properties.height, this.scale, 3, true) + ';'
       }
       if (this.properties.size != 'null') {
         style += 'font-size:' + (this.properties.size * this.scale * 2.5) + 'px;';
@@ -142,7 +142,7 @@ export default {
       try {
         return fnc.calcPadding(pad);
       } catch {
-          return '0';
+        return '0';
       }
 
     }
@@ -153,5 +153,15 @@ export default {
 <style scoped>
 .cont {
   background: transparent;
+}
+
+.visual-holder {
+  height: 100%;
+  position: relative;
+}
+
+.cont .visual {
+  top: 0;
+  bottom: 0;
 }
 </style>

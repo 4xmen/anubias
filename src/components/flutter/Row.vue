@@ -83,14 +83,16 @@ export default {
       // console.log(n.rowData);
     },
     setProperty: function (prop) {
-      var self = this;
+      var propcont = prop;
+      var n = this;
+      let counter = 0;
+      do {
+        n = n.$parent;
+        counter++;
+      } while (n.currentProperties === undefined);
       setTimeout(function () {
-        let n = self;
-        do {
-          n = n.$parent;
-        } while (n.currentProperties === undefined);
-        n.currentProperties = prop;
-      }, 50);
+        n.currentProperties = propcont;
+      },counter * 10);
     },
     capitalizeFirstLetter: function (string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
