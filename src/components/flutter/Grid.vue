@@ -155,6 +155,7 @@ export default {
       if (this.properties.margin != 'null' && this.properties.margin != '') {
         style += 'margin:' + this.calcPadding(this.properties.margin) + ';'
       }
+      style += 'margin-top:' + 100 * this.scale + 'px;'
       if (this.properties.borderRadius != 'null' && this.properties.borderRadius != '') {
         style += 'border-radius:' + this.calcPadding(this.properties.borderRadius) + ';'
       }
