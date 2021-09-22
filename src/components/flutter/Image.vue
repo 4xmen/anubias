@@ -1,5 +1,5 @@
 <template>
-  <div class="image" :style="getStyleParent()">
+  <div :class="'image ' + (this.properties.fit == 'cover'?'img-cover':'')" :style="getStyleParent()">
     <div :style="getStyle()">
       <div v-if="properties.image == ''">
         <img src="@/assets/img/sample.jpg" alt="">

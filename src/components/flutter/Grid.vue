@@ -7,7 +7,6 @@
                          :type="child.type"
                          :properties="child" :scale="scale"
                          :page="page" @click.native.capture="setProperty(child)" :key="k"></child-simulator>
-
       </div>
 
       <div class="control" title="Children control" @click="modalOpen">
@@ -51,7 +50,11 @@ export default {
     },
     getStyleMain: function () {
       let style = '';
+      let $ = window.jQuery;
+      let height = (($("#" + this.page.name + this.properties.name).width() / this.properties.column));
+      let rowsCount = Math.ceil(this.properties.children.length /this.properties.column);
       style += 'grid-template-columns: repeat(' + this.properties.column + '  , 1fr) ;';
+      style += 'grid-template-rows: repeat('+ rowsCount +', ' + height +'px);';
       return style;
     },
     modalOpen: function () {
@@ -208,7 +211,7 @@ export default {
   background: rgba(0, 0, 0, 0.7);
 }
 
-.content{
+.content {
   /*display: flex;*/
   /*flex-direction: column;*/
   /*flex-wrap: wrap ;*/
@@ -217,6 +220,9 @@ export default {
   display: grid;
 }
 
-.grid-child{
+.grid-child {
+  overflow: hidden;
+  position: relative;
 }
+
 </style>

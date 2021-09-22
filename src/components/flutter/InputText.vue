@@ -183,6 +183,14 @@ export default {
       if (this.properties.size != 'null') {
         style += 'font-size:' + (2.5 * this.scale * parseFloat(this.properties.size)) + 'px;';
       }
+      if (this.properties.color != 'null') {
+        style += 'color:' + this.color2web(this.properties.color) + ' !important ;';
+      }else{
+        if (this.isDark){
+          style += 'color: white !important ;';
+        }
+        style += 'color: black !important ;';
+      }
       if (this.properties.weight != 'normal') {
         if (this.properties.weight == 'bold') {
           style += 'font-weight: 400;';

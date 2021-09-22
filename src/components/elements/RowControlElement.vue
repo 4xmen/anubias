@@ -90,6 +90,7 @@ export default {
       newComp.name += 'dpc';
       newComp.name = this.nameCheck(newComp, this.rowData);
       this.rowData.push(newComp);
+      fnc.nameDuplicateFixer();
     },
     rem: function (i) {
       var self = this;

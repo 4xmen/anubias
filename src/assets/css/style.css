@@ -750,3 +750,11 @@ img {
 .carousel-3d-slide.current {
     opacity: 1 !important;
 }
+
+.grid-child .img-cover > div{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+}

@@ -70,7 +70,7 @@ let calcPadding = function (paddingValue, scale = 1, invert = false) {
             result += (parseFloat(c) * scale * (invert ? -1 : 1)).toString() + 'px ';
         }
         return result;
-    } catch(e) {
+    } catch (e) {
         return '0';
     }
 }
@@ -126,15 +126,15 @@ let getSize = function (value, scale, coefficient = 2.75, isHeight = false) {
 
         return value.toString().slice(-1) == '%' ?
             (!isHeight ?
-            (document.querySelector('#mobile').offsetWidth / 100) * parseFloat(value.toString().substr(0, value.length - 1) - 4) + 'px' :
-            (document.querySelector('#mobile').offsetHeight / 100) * parseFloat(value.toString().substr(0, value.length - 1)) + 'px')
+                (document.querySelector('#mobile').offsetWidth / 100) * parseFloat(value.toString().substr(0, value.length - 1) - 4) + 'px' :
+                (document.querySelector('#mobile').offsetHeight / 100) * parseFloat(value.toString().substr(0, value.length - 1)) + 'px')
             : (parseFloat(value) * scale * coefficient) + 'px';
 
     } catch (e) {
         return value.toString().slice(-1) == '%' ?
             (!isHeight ?
-            (document.querySelector('.container').offsetWidth / 200) * parseFloat(value.toString().substr(0, value.length - 1) - 4) + 'px' :
-            (document.querySelector('.container').offsetHeight / 200) * parseFloat(value.toString().substr(0, value.length - 1)) + 'px')
+                (document.querySelector('.container').offsetWidth / 200) * parseFloat(value.toString().substr(0, value.length - 1) - 4) + 'px' :
+                (document.querySelector('.container').offsetHeight / 200) * parseFloat(value.toString().substr(0, value.length - 1)) + 'px')
             : (parseFloat(value) * scale * coefficient) + 'px';
     }
 }
@@ -199,6 +199,70 @@ let downloadObjectAsJson = function (exportObj, exportName) {
     downloadAnchorNode.remove();
 }
 
+
+/**
+ * name duplicator fixer children
+ * @param namesList
+ * @param parent
+ * @returns {*}
+ */
+let nameDuplicatorFixerForChildren = function (namesList, parent) {
+    console.log(parent.name);
+    if (parent.child !== undefined) {
+        if (namesList.indexOf(parent.child.name) !== -1) {
+            parent.child.name += '_new';
+            while(namesList.indexOf(parent.child.name) !== -1){
+                parent.child.name += '_new';
+            }
+        }
+        if (parent.child.child !== undefined || parent.child.children !== undefined) {
+            namesList = nameDuplicatorFixerForChildren(namesList, parent.child);
+        }
+        namesList.push(parent.child.name);
+    } else if (parent.children !== undefined) {
+        for (const cm of parent.children) {
+            if (namesList.indexOf(cm.name) !== -1) {
+                while(namesList.indexOf(cm.name) !== -1){
+                    cm.name += '_new';
+                }
+            }
+            namesList.push(cm.name);
+            if (cm.child !== undefined || cm.children !== undefined) {
+                namesList = nameDuplicatorFixerForChildren(namesList, cm);
+            }
+        }
+    }
+    return namesList;
+};
+
+/**
+ * check duplicate names
+ */
+let nameDuplicateFixer = function () {
+    console.log('duplicator');
+    for (const page of window.appData.pages) {
+        let namesList = [];
+        for (const cm of page.children.visual) {
+            if (namesList.indexOf(cm.name) !== -1) {
+                while(namesList.indexOf(cm.name) !== -1){
+                    cm.name += '_new';
+                }
+            }
+            namesList.push(cm.name);
+            if (cm.child !== undefined || cm.children !== undefined) {
+                namesList = nameDuplicatorFixerForChildren(namesList, cm);
+            }
+        }
+    }
+}
+
+/**
+ * check children or child for code
+ * @param nodeList
+ * @param name
+ * @param key
+ * @returns {{path: string, find: boolean}}
+ */
 let checkChildren = function (nodeList, name, key) {
     let result = {
         find: false,
@@ -301,7 +365,8 @@ let fnc = {
     linkify,
     fixSetting,
     findVarPath,
-    downloadObjectAsJson
+    downloadObjectAsJson,
+    nameDuplicateFixer
 }
 export {
     fnc

@@ -93,7 +93,7 @@ export default {
       } while (n.currentProperties === undefined);
       setTimeout(function () {
         n.currentProperties = propcont;
-      },counter * 10);
+      },counter * 3);
     },
     getStyleChild: function (child) {
 

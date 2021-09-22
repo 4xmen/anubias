@@ -92,7 +92,7 @@ export default {
       } while (n.currentProperties === undefined);
       setTimeout(function () {
         n.currentProperties = propcont;
-      },counter * 10);
+      },counter * 3);
     },
     capitalizeFirstLetter: function (string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
@@ -295,5 +295,9 @@ export default {
 .row .s3 {
   /*border-left: 1px solid silver;*/
   text-align: center;
+}
+
+.rowc .content{
+  align-items: center;
 }
 </style>
