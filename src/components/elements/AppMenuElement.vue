@@ -224,7 +224,7 @@ export default {
           rejectUnauthorized: false,
         });
         let url = 'https://build.anubias.app/api/status/'
-        if (window.ide.setting.proxy) {
+        if (window.ide.settings.proxy) {
           url = 'http://78.141.225.223/api/status/';
         }
         axios({
@@ -346,6 +346,7 @@ export default {
         window.alertify.warning('You must wait to compile complete, then try again.');
         return false;
       }
+      document.querySelector("#preloader").style.display = 'flex';
       this.compileStatus = 'Uploading';
       this.id = '-1';
       window.alertify.message('Online compile started, Please wait a few moments. Look at menu :) ');
@@ -361,16 +362,18 @@ export default {
       });
 
       let url = 'https://build.anubias.app/api/compile'
-      if (window.ide.setting.proxy) {
-        url = 'http://78.141.225.223/api/compile';
+      var timeout = 60000;
+      if (window.ide.settings.proxy) {
+        url = 'https://anubias.4xmen.ir/?compile';
+        timeout *= 2;
       }
       axios({
         baseURL: url,
         // baseURL: '',
         method: 'post',
         data: formData,
+        timeout: timeout,
         config: {
-
           maxRedirects: 0,
           httpsAgent: agent,
           headers: {
@@ -379,10 +382,17 @@ export default {
         }
       }) // http://build.anubias.app/api/compile
           .then(function (e) {
+            document.querySelector("#preloader").style.display = 'none';
             // console.log('SUCCESS!!', e);
             self.id = e.data.request_id;
           }).catch(function (e) {
-        console.log(e);
+        window.alertify.error(e.message);
+        if (e.message === 'Network Error' && !window.ide.settings.proxy){
+          window.alertify.warning('Maybe your ip blocked and need to use proxy setting (Open setting and active proxy)',30);
+        }
+        self.id = null;
+        self.isOnlineCompile = false;
+        document.querySelector("#preloader").style.display = 'none';
       });
     },
     hotReload: function () {

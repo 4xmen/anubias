@@ -57,7 +57,8 @@ async function createWindow() {
             // contextIsolation: false ,
             enableRemoteModule: false, // turn off remote
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, 'preload.js'),
+            webSecurity: false
         }
     })
     win.removeMenu();
@@ -101,6 +102,8 @@ app.on('ready', async () => {
     globalShortcut.register('Alt+F4', () => {
         win.webContents.send('app-exit', {});
     });
+
+
 
     if (isDevelopment && !process.env.IS_TEST) {
         // Install Vue Devtools
