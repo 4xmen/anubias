@@ -208,7 +208,7 @@ export default {
       startDebug: window.ide.isDebuging,
       isOnline: window.ide.isOnline,
       id: null,
-      compileStatus: 'Processing',
+      compileStatus: 'Uploading',
       download: null,
       isOnlineCompile: false,
     }
@@ -218,12 +218,12 @@ export default {
     $(".dropdown-trigger").dropdown();
     var self = this;
     setInterval(function () {
-      if (self.id != null){
+      if (self.id != null && self.id != -1){
         const agent = new https.Agent({
           rejectUnauthorized: false,
         });
         axios({
-          baseURL: 'https://anubias.4xmen.ir/?status='+self.id,
+          baseURL: 'http://78.141.225.223/api/status/'+self.id,
           method: 'get',
           config: {
 
@@ -242,7 +242,14 @@ export default {
                 self.download = e.data.download ;
                 self.id = null;
                 self.isOnlineCompile = false;
-                window.alertify.success('Congratulation, You download your ap,. Look at menu :) ');
+
+                var n = self;
+                do {
+                  n = n.$parent;
+                } while (n.currentProperties === undefined);
+                n.download = self.download;
+                n.showDownloadModal = true;
+                window.alertify.success('Congratulation, Download your app,. Look at menu :) ');
               }else if(self.compileStatus === 'FAIL'){
                 window.alertify.error('Sorry, Compile failed :(');
                 self.id = null;
@@ -334,6 +341,8 @@ export default {
         window.alertify.warning('You must wait to compile complete, then try again.');
         return false;
       }
+      this.compileStatus = 'Uploading';
+      this.id = '-1' ;
       window.alertify.message('Online compile started, Please wait a few moments. Look at menu :) ');
       this.download = null;
       this.isOnlineCompile = true;
@@ -347,7 +356,8 @@ export default {
       });
 
         axios({
-        baseURL: 'https://anubias.4xmen.ir/?compile',
+        baseURL: 'http://78.141.225.223/api/compile',
+        // baseURL: 'https://build.anubias.app/api/compile',
         method: 'post',
         data: formData,
         config: {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <app-menu class="blurable"></app-menu>
-    <div id="tabs">
+    <div id="tabs" class="blurable">
       <ul class="clearfix">
         <li :class="(activeTab == '-1'?'active':'')" @click="changeTab(-1)">
           <i class="fa fa-laptop-code"></i>
@@ -115,7 +115,7 @@
               <!-- inactive when has not page -->
               <!-- make device size and scale -->
               <!-- bgcolor and text color apply -->
-              <div :class="'device-holder '+(currentDisplay.isDesktop? 'laptop':'')">
+              <div :class="'device-holder blurable '+(currentDisplay.isDesktop? 'laptop':'')">
                 <div id="mobile" :style="getStyleMobile()"
                      :class="+(data.pages.length < 1?'inactive':'blurable')+(currentDisplay.borderLess?' borderless':'')+(display.landscape?' landscape':'')+' '+currentDisplay.camera+' '+currentDisplay.cameraBorder">
                   <div :style="getStyleCamera()" id="camera"><span :style="getStyleCameraDevice()"></span></div>
@@ -186,31 +186,19 @@
                   :controlsVisible="true"
                   :onMainSlideClick="slideClick">
                 <slide :index="0"  >
-                  <img src="../../assets/img/template-sample1.png" alt="123">
+                  <img src="../../assets/img/template/login.png" alt="login">
                 </slide>
                 <slide :index="1">
-                  <img src="../../assets/img/template-sample.png" alt="123">
+                  <img src="../../assets/img/template/cyber.png" alt="cyber">
                 </slide>
                 <slide :index="2">
-                  <img src="../../assets/img/template-sample.png" alt="123">
+                  <img src="../../assets/img/template/travel.png" alt="travel">
                 </slide>
                 <slide :index="3">
-                  <img src="../../assets/img/template-sample.png" alt="123">
+                  <img src="../../assets/img/template/shop.png" alt="shop">
                 </slide>
                 <slide :index="4">
-                  <img src="../../assets/img/template-sample.png" alt="123">
-                </slide>
-                <slide :index="5">
-                  <img src="../../assets/img/template-sample.png" alt="123">
-                </slide>
-                <slide :index="6">
-                  <img src="../../assets/img/template-sample.png" alt="123">
-                </slide>
-                <slide :index="7">
-                  <img src="../../assets/img/template-sample.png" alt="123">
-                </slide>
-                <slide :index="8">
-                  <img src="../../assets/img/template-sample.png" alt="123">
+                  <img src="../../assets/img/template/dna.png" alt="dna">
                 </slide>
               </carousel-3d>
 
@@ -339,6 +327,10 @@
                      name="row-modal">
       <color-picker :color="onEditColor"></color-picker>
     </vue-final-modal>
+    <vue-final-modal v-model="showDownloadModal" @before-open="modalOpen" @before-close="modalClose"
+                     name="row-modal">
+        <download :dl="download"></download>
+    </vue-final-modal>
   </div>
 </template>
 
@@ -350,6 +342,7 @@ import compo from '../elements/ComponentElement';
 import appMenu from '../elements/AppMenuElement';
 import simulator from '../elements/Simulator';
 import tabControl from '../elements/TabControl';
+import download from '../elements/Download';
 // import codeEditor from '../elements/CodeEditor'
 import terminal from '../elements/TerminalElement';
 import rowControl from '../elements/RowControlElement';
@@ -392,6 +385,7 @@ export default {
     menuItemControl,
     colorPicker,
     tabControl,
+    download,
     Drag,
     Drop,
     Carousel3d,
@@ -410,6 +404,8 @@ export default {
       showItemsModal: false,
       showMenuItemsModal: false,
       showColorPickerModal: false,
+      showDownloadModal: false,
+      download: '',
       onEditColor: '',
       onEditColorKey: '',
       rowData: [],
