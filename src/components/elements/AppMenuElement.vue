@@ -261,7 +261,7 @@ export default {
                 self.isOnlineCompile = false;
               }
             }).catch(function (e) {
-          console.log(e);
+            window.alertify.error(e.message);
         });
       }
     }, 3000);

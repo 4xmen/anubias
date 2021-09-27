@@ -331,6 +331,12 @@
                      name="row-modal">
         <download :dl="download"></download>
     </vue-final-modal>
+    <div id="preloader">
+      <h4>
+        Please wait...
+      </h4>
+      <i class="fa fa-spin fa-spinner"></i>
+    </div>
   </div>
 </template>
 
@@ -354,7 +360,7 @@ import colorPicker from '../elements/colorPickerElement';
 
 import {Drag, Drop} from "vue-easy-dnd";
 import VueContext from 'vue-context';
-import { Carousel3d, Slide } from 'vue-carousel-3d';
+import {Carousel3d, Slide} from 'vue-carousel-3d';
 
 
 /*eslint-disable */
@@ -363,6 +369,7 @@ import Sortable from '@/assets/js/Sortable.min';
 // import editor  from '../elements/TitleElement';
 // const {remote} = require("electron");
 import {fnc} from '@/assets/js/functions';
+import axios from "axios";
 
 require('@/assets/js/sly.min');
 
@@ -550,7 +557,46 @@ export default {
       this.showMenuItemsModal = false;
     },
     slideClick: function () {
-      console.log(this.$refs.carousel3d.currentIndex);
+      let template = '';
+      switch (this.$refs.carousel3d.currentIndex) {
+        case 0:
+          template = 'login';
+          break;
+        case 1:
+          template = 'cyber';
+          break;
+        case 2:
+          template = 'travel';
+          break;
+        case 3:
+          template = 'shop';
+          break;
+        case 4:
+          template = 'dna';
+          break;
+        default:
+          template = 'login';
+      }
+      let url = 'https://anubias.app/templates/dl.php?dl='+template;
+
+      var self = this;
+      document.querySelector("#preloader").style.display = 'flex';
+      window.alertify.message('Wait a few moments to download template :)');
+      axios.get(url).then(
+          function (e) {
+          document.querySelector("#preloader").style.display = 'none';
+            if (e.data.ok === false){
+              window.alertify.error(e.data.message);
+            }else{
+              window.appData = e.data.data;
+              self.$router.push('/projectLoaded');
+            }
+          }
+      ).catch(function (e) {
+        document.querySelector("#preloader").style.display = 'none';
+        window.alertify.error(e.message);
+      });
+
     },
     handleSly: function () {
       try {
@@ -1352,5 +1398,26 @@ export default {
   margin-top: 10px;
 }
 
+#preloader{
+  position: fixed;
+  top: 30vh;
+  bottom: 30vh;
+  left: 25%;
+  right: 25%;
+  z-index: 99999;
+  background: rgba(0,0,0,.6);
+  color: white;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  border-radius: 15px;
+  padding: 25px;
+  display: none;
+}
+#preloader .fa{
+  font-size: 90px;
+  display: block;
+  margin: auto;
+}
 
 </style>
