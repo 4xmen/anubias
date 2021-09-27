@@ -174,6 +174,9 @@ let fixSetting = function (data) {
     if (data.pages === undefined) {
         data.pages = true;
     }
+    if (data.proxy === undefined) {
+        data.proxy = true;
+    }
     if (data.sidebar === undefined) {
         data.sidebar = true;
     }

@@ -104,6 +104,25 @@
         <div class="secondary-content">
           <div class="switch">
             <label>
+              <input type="checkbox" v-model="setting.proxy">
+              <span class="lever"></span>
+            </label>
+          </div>
+        </div>
+        <div>
+          <i class="fa fa-user-secret ico"></i>
+          <b>
+            Use proxy
+          </b>
+          <span>
+            If you can't online compile use VPN or active proxy (it's not recommended for large files)
+          </span>
+        </div>
+      </div>
+      <div class="collection-item">
+        <div class="secondary-content">
+          <div class="switch">
+            <label>
               <input type="checkbox" v-model="setting.sidebar">
               <span class="lever"></span>
             </label>
@@ -167,6 +186,7 @@ export default {
         exitConfirm: false,
         pages: true,
         sidebar: true,
+        proxy: false,
         codeStyle: 'vs-dark',
         fontSize: 18,
       }

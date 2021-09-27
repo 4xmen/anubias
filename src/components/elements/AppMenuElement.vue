@@ -174,11 +174,11 @@
           <!--          <li><a href="collapsible.html">JavaScript</a></li>-->
           <li v-if="id != null || download != null" class="">
             <span v-if="download == null">
-            Online compile: {{compileStatus}}  <span class="fa fa-spinner fa-spin"></span>
+            Online compile: {{ compileStatus }}  <span class="fa fa-spinner fa-spin"></span>
             </span>
             <a v-else @click="openSite(download)">
               <span class="fa fa-download"></span>
-                Download APK &nbsp; <i class="fa fa-smile"></i>
+              Download APK &nbsp; <i class="fa fa-smile"></i>
             </a>
 
           </li>
@@ -200,6 +200,7 @@
 import {fnc} from '@/assets/js/functions';
 import axios from 'axios';
 import https from 'https';
+
 export default {
   name: "AppMenuElement",
   data: function () {
@@ -218,12 +219,16 @@ export default {
     $(".dropdown-trigger").dropdown();
     var self = this;
     setInterval(function () {
-      if (self.id != null && self.id != -1){
+      if (self.id != null && self.id != -1) {
         const agent = new https.Agent({
           rejectUnauthorized: false,
         });
+        let url = 'https://build.anubias.app/api/status/'
+        if (window.ide.setting.proxy) {
+          url = 'http://78.141.225.223/api/status/';
+        }
         axios({
-          baseURL: 'http://78.141.225.223/api/status/'+self.id,
+          baseURL: url + self.id,
           method: 'get',
           config: {
 
@@ -238,8 +243,8 @@ export default {
               // console.log('SUCCESS!!', e);
               console.log(e.data);
               self.compileStatus = e.data.status;
-              if (self.compileStatus == 'SUCCESSFUL'){
-                self.download = e.data.download ;
+              if (self.compileStatus == 'SUCCESSFUL') {
+                self.download = e.data.download;
                 self.id = null;
                 self.isOnlineCompile = false;
 
@@ -250,7 +255,7 @@ export default {
                 n.download = self.download;
                 n.showDownloadModal = true;
                 window.alertify.success('Congratulation, Download your app,. Look at menu :) ');
-              }else if(self.compileStatus === 'FAIL'){
+              } else if (self.compileStatus === 'FAIL') {
                 window.alertify.error('Sorry, Compile failed :(');
                 self.id = null;
                 self.isOnlineCompile = false;
@@ -259,7 +264,7 @@ export default {
           console.log(e);
         });
       }
-    },3000);
+    }, 3000);
 
     $(document).unbind('keyup.mainMenuShortcut').bind('keyup.mainMenuShortcut', function (e) {
       if (e.ctrlKey && e.shiftKey && e.key === 'S') {
@@ -337,12 +342,12 @@ export default {
     },
     onlineBuild: function () {
 
-      if (this.isOnlineCompile){
+      if (this.isOnlineCompile) {
         window.alertify.warning('You must wait to compile complete, then try again.');
         return false;
       }
       this.compileStatus = 'Uploading';
-      this.id = '-1' ;
+      this.id = '-1';
       window.alertify.message('Online compile started, Please wait a few moments. Look at menu :) ');
       this.download = null;
       this.isOnlineCompile = true;
@@ -355,9 +360,13 @@ export default {
         rejectUnauthorized: false,
       });
 
-        axios({
-        baseURL: 'http://78.141.225.223/api/compile',
-        // baseURL: 'https://build.anubias.app/api/compile',
+      let url = 'https://build.anubias.app/api/compile'
+      if (window.ide.setting.proxy) {
+        url = 'http://78.141.225.223/api/compile';
+      }
+      axios({
+        baseURL: url,
+        // baseURL: '',
         method: 'post',
         data: formData,
         config: {
@@ -585,8 +594,8 @@ export default {
 /*  }*/
 /*}*/
 
-.fa-spin,.fa-download,.fa-smile{
-  margin:0 8px;
+.fa-spin, .fa-download, .fa-smile {
+  margin: 0 8px;
   display: inline-block;
 }
 
