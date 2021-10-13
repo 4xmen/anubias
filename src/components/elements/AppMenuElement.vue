@@ -174,7 +174,7 @@
           <!--          <li><a href="collapsible.html">JavaScript</a></li>-->
           <li v-if="id != null || download != null" class="">
             <span v-if="download == null">
-            Online compile: {{ compileStatus }}  <span class="fa fa-spinner fa-spin"></span>
+              Online compile: {{ compileStatus }}  <span class="fa fa-spinner fa-spin"></span>
             </span>
             <a v-else @click="openSite(download)">
               <span class="fa fa-download"></span>
@@ -223,7 +223,7 @@ export default {
         const agent = new https.Agent({
           rejectUnauthorized: false,
         });
-        let url = 'https://build.anubias.app/api/status/'
+        let url = 'http://34.141.206.70:9090/api/status/'
         if (window.ide.settings.proxy) {
           url = 'http://78.141.225.223/api/status/';
         }
@@ -242,11 +242,12 @@ export default {
             .then(function (e) {
               // console.log('SUCCESS!!', e);
               console.log(e.data);
-              self.compileStatus = e.data.status;
+              self.compileStatus = e.data.data.status;
               if (self.compileStatus == 'SUCCESSFUL') {
-                self.download = e.data.download;
+                self.download = e.data.data.download;
                 self.id = null;
                 self.isOnlineCompile = false;
+                console.log(self.download);
 
                 var n = self;
                 do {
@@ -264,7 +265,7 @@ export default {
             window.alertify.error(e.message);
         });
       }
-    }, 3000);
+    }, 10000);
 
     $(document).unbind('keyup.mainMenuShortcut').bind('keyup.mainMenuShortcut', function (e) {
       if (e.ctrlKey && e.shiftKey && e.key === 'S') {
@@ -361,7 +362,7 @@ export default {
         rejectUnauthorized: false,
       });
 
-      let url = 'https://build.anubias.app/api/compile'
+      let url = 'http://34.141.206.70:9090/api/compile'
       var timeout = 60000;
       if (window.ide.settings.proxy) {
         url = 'https://anubias.4xmen.ir/?compile';
@@ -384,7 +385,7 @@ export default {
           .then(function (e) {
             document.querySelector("#preloader").style.display = 'none';
             // console.log('SUCCESS!!', e);
-            self.id = e.data.request_id;
+            self.id = e.data.id;
           }).catch(function (e) {
         window.alertify.error(e.message);
         if (e.message === 'Network Error' && !window.ide.settings.proxy){
