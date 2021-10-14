@@ -104,7 +104,7 @@
         <div class="secondary-content">
           <div class="switch">
             <label>
-              <input type="checkbox" v-model="setting.proxy">
+              <input type="checkbox" disabled v-model="setting.proxy">
               <span class="lever"></span>
             </label>
           </div>
@@ -115,7 +115,7 @@
             Use proxy
           </b>
           <span>
-            If you can't online compile use VPN or active proxy (it's not recommended for large files)
+            If you can't online compile use VPN or active proxy (it's not recommended for large files) [temporarily disabled]
           </span>
         </div>
       </div>
