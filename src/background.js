@@ -415,6 +415,9 @@ ipc.on('command', async function (eventevent, data) {
     console.log(data.command);
     let child = cp.exec(cmd, {
         cwd: cwd,
+        env: {
+            PATH: process.env.PATH
+        }
     }, function (error, stdout, stderr) {
         if (!error) {
             // win.webContents.send('terminal', stdout);
