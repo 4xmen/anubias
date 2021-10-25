@@ -322,7 +322,7 @@ export default {
 
   }, methods: {
     closeProject: function () {
-      if (this.cantEditPrj || this.isOnline) {
+      if (this.cantEditPrj) {
         return false;
       }
       window.project = {

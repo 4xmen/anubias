@@ -78,3 +78,8 @@ window.defaults.divider = require('../json/defaults/defDivider.json');
 window.defaults.toggle = require('../json/defaults/defToggle.json');
 window.defaults.nav = require('../json/defaults/defNav.json');
 window.defaults.menu = require('../json/defaults/defMenu.json');
+
+if (window.ide.isOnline){
+    window.ide.settings.pages = true;
+    window.ide.settings.sidebar = true;
+}

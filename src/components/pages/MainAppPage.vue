@@ -153,6 +153,7 @@
             <!-- right sidebar end -->
             <div v-else class="text-center pos-relative">
               <h5 v-if="isOnline && isNotChrome">
+                <br><br>
                 Please use `chromium` or `google chrome` to use online app
               </h5>
               <div v-if="!isOnline">
@@ -173,7 +174,9 @@
               </div>
               </div>
               <div v-else>
-                <img src="../../assets/img/logo.svg" class="logo" alt="">
+                <h4 class="welcome">
+                  Welcome to Anubias online demo
+                </h4>
               </div>
               <h5>
                 Templates:
@@ -1418,6 +1421,10 @@ export default {
   font-size: 90px;
   display: block;
   margin: auto;
+}
+
+.welcome{
+  margin: 2rem auto;
 }
 
 </style>
