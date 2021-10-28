@@ -1,344 +1,354 @@
 <template>
   <div>
-    <app-menu class="blurable"></app-menu>
-    <div id="tabs" class="blurable">
-      <ul class="clearfix">
-        <li :class="(activeTab == '-1'?'active':'')" @click="changeTab(-1)">
-          <i class="fa fa-laptop-code"></i>
-          Main
-        </li>
-        <li v-for="(tab,i) in tabs" :key="i" @click="changeTab(i)" :class="(activeTab == i?'active':'')"
-            @mouseup.middle="closeTab(i)">
-          <i :class="'fa '+tab.icon"></i>
-          {{ tab.title }}
-          <span class="fa fa-times" @click="closeTab(i)"></span>
-        </li>
-        <li class="hidden-tab">
-
-        </li>
-      </ul>
-    </div>
-    <div :class="'tab-control-placeholder '+(tabs.length  === 0?'opacity-0':'')">
-      <div class="prev-sc">
-        <i class="fa fa-angle-left"></i>
-      </div>
-      <div class="next-sc">
-        <i class="fa fa-angle-right"></i>
+    <div v-if="mobile_error" id="mobile-error">
+      <div>
+        <div class="fa fa-sad-tear"></div>
+        <br>
+        Please use desktop to use, Online demo
       </div>
     </div>
+    <div v-else>
+      <app-menu class="blurable"></app-menu>
+      <div id="tabs" class="blurable">
+        <ul class="clearfix">
+          <li :class="(activeTab == '-1'?'active':'')" @click="changeTab(-1)">
+            <i class="fa fa-laptop-code"></i>
+            Main
+          </li>
+          <li v-for="(tab,i) in tabs" :key="i" @click="changeTab(i)" :class="(activeTab == i?'active':'')"
+              @mouseup.middle="closeTab(i)">
+            <i :class="'fa '+tab.icon"></i>
+            {{ tab.title }}
+            <span class="fa fa-times" @click="closeTab(i)"></span>
+          </li>
+          <li class="hidden-tab">
 
-    <div id="tab-content-1">
-      <div id="wrapper" :class="(!settings.pages?'page-collapse ':'')+(!settings.sidebar?'side-collapse ':'')">
+          </li>
+        </ul>
+      </div>
+      <div :class="'tab-control-placeholder '+(tabs.length  === 0?'opacity-0':'')">
+        <div class="prev-sc">
+          <i class="fa fa-angle-left"></i>
+        </div>
+        <div class="next-sc">
+          <i class="fa fa-angle-right"></i>
+        </div>
+      </div>
 
-        <div id="main" :class="(!settings.pages?'page-collapse ':'')+(!settings.sidebar?'side-collapse ':'')">
-          <!-- add app menu to main-->
-          <div class="container-fluid text-center" id="hold">
-            <!-- if project init can show left side -->
-            <!-- right sidebar start -->
-            <div v-if="isInitProject">
-              <!-- inactive when has not page -->
-              <div id="device-selector" :class="(data.pages.length < 1?'inactive':'blurable')">
-                <!-- select device -->
-                <div class="input-field">
-                  <select @change="changeDisplay" id="dev" v-model="currentDisplay" class="white-text">
-                    <option :value="dev" v-for="(dev,i) in devices" :key="i">
-                      {{ dev.name }}
-                      ({{ dev.width }}x{{ dev.height }})
-                    </option>
-                  </select>
-                  <label for="dev">
-                    <span>Display devices</span>
-                    <br>
-                  </label>
-                </div>
-                <!-- select scale size -->
-                <span>
+      <div id="tab-content-1">
+        <div id="wrapper" :class="(!settings.pages?'page-collapse ':'')+(!settings.sidebar?'side-collapse ':'')">
+
+          <div id="main" :class="(!settings.pages?'page-collapse ':'')+(!settings.sidebar?'side-collapse ':'')">
+            <!-- add app menu to main-->
+            <div class="container-fluid text-center" id="hold">
+              <!-- if project init can show left side -->
+              <!-- right sidebar start -->
+              <div v-if="isInitProject">
+                <!-- inactive when has not page -->
+                <div id="device-selector" :class="(data.pages.length < 1?'inactive':'blurable')">
+                  <!-- select device -->
+                  <div class="input-field">
+                    <select @change="changeDisplay" id="dev" v-model="currentDisplay" class="white-text">
+                      <option :value="dev" v-for="(dev,i) in devices" :key="i">
+                        {{ dev.name }}
+                        ({{ dev.width }}x{{ dev.height }})
+                      </option>
+                    </select>
+                    <label for="dev">
+                      <span>Display devices</span>
+                      <br>
+                    </label>
+                  </div>
+                  <!-- select scale size -->
+                  <span>
             Scale:
             </span>
-                <ul class="pagination">
-                  <li @click="changeScale(1.25)"
-                      :class="'waves-effect waves-light btn btn-small '+(display.scale === 1.25?'green basic':'grey darken-4')">
-                    125%
-                  </li>
-                  <li @click="changeScale(1)"
-                      :class="'waves-effect waves-light btn btn-small '+(display.scale === 1?'green':'grey darken-4')">
-                    100%
-                  </li>
-                  <li @click="changeScale(0.25)"
-                      :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.25?'green ':'grey darken-4')">
-                    25%
-                  </li>
-                  <li @click="changeScale(0.5)"
-                      :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.5?'green ':'grey darken-4')">
-                    50%
-                  </li>
-                  <li @click="changeScale(.35)"
-                      :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.35?'green':'grey darken-4')">
-                    auto
-                  </li>
-                </ul>
-                <!-- device rotation -->
-                <div v-if="!currentDisplay.isDesktop">
+                  <ul class="pagination">
+                    <li @click="changeScale(1.25)"
+                        :class="'waves-effect waves-light btn btn-small '+(display.scale === 1.25?'green basic':'grey darken-4')">
+                      125%
+                    </li>
+                    <li @click="changeScale(1)"
+                        :class="'waves-effect waves-light btn btn-small '+(display.scale === 1?'green':'grey darken-4')">
+                      100%
+                    </li>
+                    <li @click="changeScale(0.25)"
+                        :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.25?'green ':'grey darken-4')">
+                      25%
+                    </li>
+                    <li @click="changeScale(0.5)"
+                        :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.5?'green ':'grey darken-4')">
+                      50%
+                    </li>
+                    <li @click="changeScale(.35)"
+                        :class="'waves-effect waves-light btn btn-small '+(display.scale === 0.35?'green':'grey darken-4')">
+                      auto
+                    </li>
+                  </ul>
+                  <!-- device rotation -->
+                  <div v-if="!currentDisplay.isDesktop">
                   <span>
                   Rotate:
                   </span>
-                  <button @click="changeRotate(false)"
-                          :class="'waves-effect waves-light btn-small '+(!display.landscape?'green':'grey darken-4')">
-                    <i class="fa fa-mobile-alt"></i>
-                  </button>
-                  <button @click="changeRotate(true)"
-                          :class="'waves-effect waves-light btn-small '+(display.landscape?'green':'grey darken-4')">
-                    <i class="fa fa-mobile-alt fa-rotate-90"></i>
-                  </button>
-                </div>
-                <!-- non visual components of page -->
-                <div id="non-visual">
-                  <div class="non-visual-placeholder" v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.nonvisual !== undefined">
-                    <div v-for="(nvc,i) in data.pages[currentPage].children.nonvisual"
-                         class="non-visual-component" :key="i" @dblclick="removeNonVisual(i)"
-                         @click="currentProperties = nvc; isVisualSelected = -1">
-                      <i :class="nonVisualIcon[nvc.type]"></i>
-                      <span>
-                          {{nvc.name}}
-                      </span>
-                    </div>
+                    <button @click="changeRotate(false)"
+                            :class="'waves-effect waves-light btn-small '+(!display.landscape?'green':'grey darken-4')">
+                      <i class="fa fa-mobile-alt"></i>
+                    </button>
+                    <button @click="changeRotate(true)"
+                            :class="'waves-effect waves-light btn-small '+(display.landscape?'green':'grey darken-4')">
+                      <i class="fa fa-mobile-alt fa-rotate-90"></i>
+                    </button>
                   </div>
-                  <ul  v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.nonvisual !== undefined && data.pages[currentPage].children.nonvisual.length > 0">
-                    <li> - Double click to remove component</li>
-                  </ul>
-                  <drop class="drop non-visual" @drop="onNonVisualDrop" :accepts-data="(n) => !isVisual(n)">
-                    <!--                <span v-for="(n, index) in oddDropped" :key="index">Dropped : {{ n }},&nbsp;</span>-->
-                  </drop>
+                  <!-- non visual components of page -->
+                  <div id="non-visual">
+                    <div class="non-visual-placeholder"
+                         v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.nonvisual !== undefined">
+                      <div v-for="(nvc,i) in data.pages[currentPage].children.nonvisual"
+                           class="non-visual-component" :key="i" @dblclick="removeNonVisual(i)"
+                           @click="currentProperties = nvc; isVisualSelected = -1">
+                        <i :class="nonVisualIcon[nvc.type]"></i>
+                        <span>
+                          {{ nvc.name }}
+                      </span>
+                      </div>
+                    </div>
+                    <ul v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.nonvisual !== undefined && data.pages[currentPage].children.nonvisual.length > 0">
+                      <li> - Double click to remove component</li>
+                    </ul>
+                    <drop class="drop non-visual" @drop="onNonVisualDrop" :accepts-data="(n) => !isVisual(n)">
+                      <!--                <span v-for="(n, index) in oddDropped" :key="index">Dropped : {{ n }},&nbsp;</span>-->
+                    </drop>
+                  </div>
                 </div>
-              </div>
-              <!-- mobile drawing by project detail and user device selected -->
-              <!-- inactive when has not page -->
-              <!-- make device size and scale -->
-              <!-- bgcolor and text color apply -->
-              <div :class="'device-holder blurable '+(currentDisplay.isDesktop? 'laptop':'')">
-                <div id="mobile" :style="getStyleMobile()"
-                     :class="+(data.pages.length < 1?'inactive':'blurable')+(currentDisplay.borderLess?' borderless':'')+(display.landscape?' landscape':'')+' '+currentDisplay.camera+' '+currentDisplay.cameraBorder">
-                  <div :style="getStyleCamera()" id="camera"><span :style="getStyleCameraDevice()"></span></div>
-                  <div id="preview">
-                    <div :style="'background-color:'+(data.project.isDark?'#2e2e2e':data.project.bgColor)
+                <!-- mobile drawing by project detail and user device selected -->
+                <!-- inactive when has not page -->
+                <!-- make device size and scale -->
+                <!-- bgcolor and text color apply -->
+                <div :class="'device-holder blurable '+(currentDisplay.isDesktop? 'laptop':'')">
+                  <div id="mobile" :style="getStyleMobile()"
+                       :class="+(data.pages.length < 1?'inactive':'blurable')+(currentDisplay.borderLess?' borderless':'')+(display.landscape?' landscape':'')+' '+currentDisplay.camera+' '+currentDisplay.cameraBorder">
+                    <div :style="getStyleCamera()" id="camera"><span :style="getStyleCameraDevice()"></span></div>
+                    <div id="preview">
+                      <div :style="'background-color:'+(data.project.isDark?'#2e2e2e':data.project.bgColor)
                +';color:'+(data.project.isDark?'white':data.project.textColor)+' !important' ">
-                      <!-- direction of project and page padding -->
-                      <div id="dir" :style="getStyleDir()">
-                        <!-- visual components of page -->
-                        <div id="safearea" v-if="data.pages[currentPage].safeArea" :style="getStyleSafeArea()"></div>
-                        <div
-                            id="sortable"
-                            v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.visual !== undefined">
-                          <div v-for="(comp,i) in data.pages[currentPage].children.visual"
-                               :key="i">
-                            <simulator @contextmenu.native.prevent="contextOpen(i,$event)"
-                                       @click.native="currentProperties = comp; contextIndex = i; isVisualSelected = 1"
-                                       :type="comp.type" :properties="comp" :scale="display.scale"
-                                       :page="data.pages[currentPage]"></simulator>
+                        <!-- direction of project and page padding -->
+                        <div id="dir" :style="getStyleDir()">
+                          <!-- visual components of page -->
+                          <div id="safearea" v-if="data.pages[currentPage].safeArea" :style="getStyleSafeArea()"></div>
+                          <div
+                              id="sortable"
+                              v-if="data.pages[currentPage] !== undefined && data.pages[currentPage].children.visual !== undefined">
+                            <div v-for="(comp,i) in data.pages[currentPage].children.visual"
+                                 :key="i">
+                              <simulator @contextmenu.native.prevent="contextOpen(i,$event)"
+                                         @click.native="currentProperties = comp; contextIndex = i; isVisualSelected = 1"
+                                         :type="comp.type" :properties="comp" :scale="display.scale"
+                                         :page="data.pages[currentPage]"></simulator>
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      <drop @contextmenu.native.prevent="contextOpen(-1,$event)" class="drop visual"
-                            @drop="onVisualDrop"
-                            :accepts-data="(n) => isVisual(n)"></drop>
-                      <!--              <drop class="drop any" @drop="onAnyDrop" mode="cut">-->
-                      <!--                <span v-for="(n, index) in anyDropped" :key="index">Dropped : {{n}},&nbsp;</span>-->
-                      <!--              </drop>-->
+                        <drop @contextmenu.native.prevent="contextOpen(-1,$event)" class="drop visual"
+                              @drop="onVisualDrop"
+                              :accepts-data="(n) => isVisual(n)"></drop>
+                        <!--              <drop class="drop any" @drop="onAnyDrop" mode="cut">-->
+                        <!--                <span v-for="(n, index) in anyDropped" :key="index">Dropped : {{n}},&nbsp;</span>-->
+                        <!--              </drop>-->
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <!-- right sidebar end -->
-            <div v-else class="text-center pos-relative">
-              <h5 v-if="isOnline && isNotChrome">
-                <br><br>
-                Please use `chromium` or `google chrome` to use online app
-              </h5>
-              <div v-if="!isOnline">
+              <!-- right sidebar end -->
+              <div v-else class="text-center pos-relative">
+                <h5 v-if="isOnline && isNotChrome">
+                  <br><br>
+                  Please use `chromium` or `google chrome` to use online app
+                </h5>
+                <div v-if="!isOnline">
 
 
-              <div id="recent">
-                <h6>
-                  Recent projects:
-                </h6>
-                <ul>
-                  <li v-for="(f,i) in recents" :key="i" @click="openRecent(i)">
+                  <div id="recent">
+                    <h6>
+                      Recent projects:
+                    </h6>
+                    <ul>
+                      <li v-for="(f,i) in recents" :key="i" @click="openRecent(i)">
                     <span>
-                      {{f.substr(0,f.lastIndexOf(slash))}}{{slash}}
+                      {{ f.substr(0, f.lastIndexOf(slash)) }}{{ slash }}
                     </span>
-                      {{f.substr(f.lastIndexOf(slash)+1)}}
-                  </li>
-                </ul>
+                        {{ f.substr(f.lastIndexOf(slash) + 1) }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div v-else>
+                  <h4 class="welcome">
+                    Welcome to Anubias online demo
+                  </h4>
+                </div>
+                <h5>
+                  Templates:
+                </h5>
+                <carousel-3d ref="carousel3d"
+                             :height="500"
+                             :autoplay="true"
+                             :autoplayTimeout="5000"
+                             :autoplayHoverPause="true"
+                             :controlsVisible="true"
+                             :onMainSlideClick="slideClick">
+                  <slide :index="0">
+                    <img src="../../assets/img/template/login.png" alt="login">
+                  </slide>
+                  <slide :index="1">
+                    <img src="../../assets/img/template/cyber.png" alt="cyber">
+                  </slide>
+                  <slide :index="2">
+                    <img src="../../assets/img/template/travel.png" alt="travel">
+                  </slide>
+                  <slide :index="3">
+                    <img src="../../assets/img/template/shop.png" alt="shop">
+                  </slide>
+                  <slide :index="4">
+                    <img src="../../assets/img/template/dna.png" alt="dna">
+                  </slide>
+                </carousel-3d>
+
               </div>
-              </div>
-              <div v-else>
-                <h4 class="welcome">
-                  Welcome to Anubias online demo
-                </h4>
-              </div>
-              <h5>
-                Templates:
-              </h5>
-              <carousel-3d ref="carousel3d"
-                  :height="500"
-                  :autoplay="true"
-                  :autoplayTimeout="5000"
-                  :autoplayHoverPause="true"
-                  :controlsVisible="true"
-                  :onMainSlideClick="slideClick">
-                <slide :index="0"  >
-                  <img src="../../assets/img/template/login.png" alt="login">
-                </slide>
-                <slide :index="1">
-                  <img src="../../assets/img/template/cyber.png" alt="cyber">
-                </slide>
-                <slide :index="2">
-                  <img src="../../assets/img/template/travel.png" alt="travel">
-                </slide>
-                <slide :index="3">
-                  <img src="../../assets/img/template/shop.png" alt="shop">
-                </slide>
-                <slide :index="4">
-                  <img src="../../assets/img/template/dna.png" alt="dna">
-                </slide>
-              </carousel-3d>
+            </div>
+          </div>
+          <div id="side" :class="'blurable ' +(!settings.sidebar?'collapse ':'')">
+            <div id="components">
+              <h2>
+                Components
+                <i class="fa fa-cubes"></i>
+              </h2>
+              <!-- show dragable component to add to page -->
+              <transition-group name="list" tag="div">
+                <drag v-for="(comp,n) in components" :key="n" class="drag" :data="n">
+                  <compo :title="comp.title" :icon="comp.icon" :active="comp.active"></compo>
+                </drag>
+              </transition-group>
+
+              <!--        <compo title="Scaffold" icon="fa fa-vector-square"></compo>-->
 
             </div>
-          </div>
-        </div>
-        <div id="side" :class="'blurable ' +(!settings.sidebar?'collapse ':'')">
-          <div id="components">
-            <h2>
-              Components
-              <i class="fa fa-cubes"></i>
-            </h2>
-            <!-- show dragable component to add to page -->
-            <transition-group name="list" tag="div">
-              <drag v-for="(comp,n) in components" :key="n" class="drag" :data="n">
-                <compo :title="comp.title" :icon="comp.icon" :active="comp.active"></compo>
-              </drag>
-            </transition-group>
-
-            <!--        <compo title="Scaffold" icon="fa fa-vector-square"></compo>-->
-
-          </div>
-          <div id="properties">
-            <h2>
-              Properties
-              <i class="fa fa-expand"></i>
-            </h2>
-            <!-- if project init sho properties-->
-            <div v-if="isInitProject">
-              <property :properties="currentProperties" :page="currentPage" ref="properties"></property>
-            </div>
-            <div v-else class="text-center pos-relative">
-              <img src="../../assets/img/logo.svg" class="logo-sm" alt="">
+            <div id="properties">
+              <h2>
+                Properties
+                <i class="fa fa-expand"></i>
+              </h2>
+              <!-- if project init sho properties-->
+              <div v-if="isInitProject">
+                <property :properties="currentProperties" :page="currentPage" ref="properties"></property>
+              </div>
+              <div v-else class="text-center pos-relative">
+                <img src="../../assets/img/logo.svg" class="logo-sm" alt="">
+              </div>
             </div>
           </div>
-        </div>
-        <div id="pages" :class="'blurable '+(!settings.pages?'collapse ':'')">
-          <div class="container">
-            <!-- if project init can pages -->
-            <div v-if="isInitProject">
-              <!-- list of pages -->
-              <page v-for="(page,i) in data.pages" :image="page.image!= undefined? page.image: null"
-                    :isMain="data.project.mainPage === i" @click.native="changePage(i)" :key="i" :title="page.name"
-                    :active="currentPage === i" :bg="(data.project.isDark?'#2e2e2e':data.project.bgColor)">
-                <i class="fa fa-times" @click="removePage(i)"></i>
-              </page>
-              <i class="fa fa-plus-circle" id="page-add" @click="newPage"></i>
-            </div>
-            <div v-else class="text-center">
-              <img src="../../assets/img/logo.svg" class="logo-sm" alt="">
+          <div id="pages" :class="'blurable '+(!settings.pages?'collapse ':'')">
+            <div class="container">
+              <!-- if project init can pages -->
+              <div v-if="isInitProject">
+                <!-- list of pages -->
+                <page v-for="(page,i) in data.pages" :image="page.image!= undefined? page.image: null"
+                      :isMain="data.project.mainPage === i" @click.native="changePage(i)" :key="i" :title="page.name"
+                      :active="currentPage === i" :bg="(data.project.isDark?'#2e2e2e':data.project.bgColor)">
+                  <i class="fa fa-times" @click="removePage(i)"></i>
+                </page>
+                <i class="fa fa-plus-circle" id="page-add" @click="newPage"></i>
+              </div>
+              <div v-else class="text-center">
+                <img src="../../assets/img/logo.svg" class="logo-sm" alt="">
+              </div>
             </div>
           </div>
+          <div id="terminal-btn" class="blurable" @click="showTerminalModal = true">
+            <i class="fa fa-terminal"></i>
+          </div>
+          <vue-context ref="menu" class="context-menu">
+            <li>
+              <a href="#" class="no-paste" @click.prevent="contextTrigger('copy')">
+                <i class="fa fa-copy"></i>
+                Copy <span>Ctrl+Shift+C</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="no-paste" @click.prevent="contextTrigger('cut')">
+                <i class="fa fa-cut"></i>
+                Cut <span>Ctrl+Shift+X</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" @click.prevent="contextTrigger('paste')">
+                <i class="fa fa-paste"></i>
+                Paste <span>Ctrl+Shift+V</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="no-paste" @click.prevent="contextTrigger('delete')">
+                <i class="fa fa-times"></i>
+                Delete <span>Shift+Del</span>
+              </a>
+            </li>
+          </vue-context>
         </div>
-        <div id="terminal-btn" class="blurable" @click="showTerminalModal = true">
-          <i class="fa fa-terminal"></i>
+      </div>
+      <div v-for="(tab,i) in tabs" :key="i" class="tab-content" :id="'tab-content'+i">
+        <tab-control :type="tab.type" :data="tab.data" :pointer="tab.pointer"></tab-control>
+      </div>
+      <vue-final-modal v-model="showTerminalModal" @before-open="modalOpen" @before-close="modalClose"
+                       name="teminal-modal">
+        <terminal ref="terminal">
+          <div v-for="(c,i) in terminalContent" :key="i">
+            <span v-if="c.substr(0,5) == '--err'" class="red-text" v-html="linkify(c.substr(5))"></span>
+            <span v-else v-html="linkify(c)"></span>
+          </div>
+        </terminal>
+      </vue-final-modal>
+      <vue-final-modal v-model="showRowModal" @before-open="modalOpen" @before-close="modalClose"
+                       name="row-modal">
+        <row-control :clpbrd="contextClipBoard" :row-name="currentProperties.name" :rw-data="rowData"></row-control>
+      </vue-final-modal>
+      <vue-final-modal v-model="showItemsModal" @before-open="modalOpen" @before-close="modalClose"
+                       name="row-modal">
+        <div v-if="currentProperties.items !== undefined">
+          <item-control :items="currentProperties.items "></item-control>
         </div>
-        <vue-context ref="menu" class="context-menu">
-          <li>
-            <a href="#" class="no-paste" @click.prevent="contextTrigger('copy')">
-              <i class="fa fa-copy"></i>
-              Copy <span>Ctrl+Shift+C</span>
-            </a>
-          </li>
-          <li>
-            <a href="#" class="no-paste" @click.prevent="contextTrigger('cut')">
-              <i class="fa fa-cut"></i>
-              Cut <span>Ctrl+Shift+X</span>
-            </a>
-          </li>
-          <li>
-            <a href="#" @click.prevent="contextTrigger('paste')">
-              <i class="fa fa-paste"></i>
-              Paste <span>Ctrl+Shift+V</span>
-            </a>
-          </li>
-          <li>
-            <a href="#" class="no-paste" @click.prevent="contextTrigger('delete')">
-              <i class="fa fa-times"></i>
-              Delete <span>Shift+Del</span>
-            </a>
-          </li>
-        </vue-context>
-      </div>
-    </div>
-    <div v-for="(tab,i) in tabs" :key="i" class="tab-content" :id="'tab-content'+i">
-      <tab-control :type="tab.type" :data="tab.data" :pointer="tab.pointer"></tab-control>
-    </div>
-    <vue-final-modal v-model="showTerminalModal" @before-open="modalOpen" @before-close="modalClose"
-                     name="teminal-modal">
-      <terminal ref="terminal">
-        <div v-for="(c,i) in terminalContent" :key="i">
-          <span v-if="c.substr(0,5) == '--err'" class="red-text" v-html="linkify(c.substr(5))"></span>
-          <span v-else v-html="linkify(c)"></span>
+      </vue-final-modal>
+      <vue-final-modal v-model="showMenuItemsModal" @before-open="modalOpen" @before-close="modalClose"
+                       name="row-modal">
+        <div v-if="currentProperties.items !== undefined">
+          <menu-item-control :items="currentProperties.items "></menu-item-control>
         </div>
-      </terminal>
-    </vue-final-modal>
-    <vue-final-modal v-model="showRowModal" @before-open="modalOpen" @before-close="modalClose"
-                     name="row-modal">
-      <row-control :clpbrd="contextClipBoard" :row-name="currentProperties.name" :rw-data="rowData"></row-control>
-    </vue-final-modal>
-    <vue-final-modal v-model="showItemsModal" @before-open="modalOpen" @before-close="modalClose"
-                     name="row-modal">
-      <div v-if="currentProperties.items !== undefined">
-        <item-control :items="currentProperties.items "></item-control>
-      </div>
-    </vue-final-modal>
-    <vue-final-modal v-model="showMenuItemsModal" @before-open="modalOpen" @before-close="modalClose"
-                     name="row-modal">
-      <div v-if="currentProperties.items !== undefined">
-        <menu-item-control :items="currentProperties.items "></menu-item-control>
-      </div>
-    </vue-final-modal>
-    <vue-final-modal v-model="showActionsModal" @before-open="modalOpen" @before-close="modalClose"
-                     name="row-modal">
-      <div v-if="currentProperties.actions !== undefined">
-        <action-control :actions="currentProperties.actions "></action-control>
-      </div>
-    </vue-final-modal>
-    <vue-final-modal v-model="showOptionsModal" @before-open="modalOpen" @before-close="modalClose"
-                     name="row-modal">
-      <div v-if="currentProperties.options !== undefined">
-        <option-control :options="currentProperties.options"></option-control>
-      </div>
-    </vue-final-modal>
-    <vue-final-modal v-model="showColorPickerModal" @before-open="modalOpen" @before-close="modalClose"
-                     name="row-modal">
-      <color-picker :color="onEditColor"></color-picker>
-    </vue-final-modal>
-    <vue-final-modal v-model="showDownloadModal" @before-open="modalOpen" @before-close="modalClose"
-                     name="row-modal">
+      </vue-final-modal>
+      <vue-final-modal v-model="showActionsModal" @before-open="modalOpen" @before-close="modalClose"
+                       name="row-modal">
+        <div v-if="currentProperties.actions !== undefined">
+          <action-control :actions="currentProperties.actions "></action-control>
+        </div>
+      </vue-final-modal>
+      <vue-final-modal v-model="showOptionsModal" @before-open="modalOpen" @before-close="modalClose"
+                       name="row-modal">
+        <div v-if="currentProperties.options !== undefined">
+          <option-control :options="currentProperties.options"></option-control>
+        </div>
+      </vue-final-modal>
+      <vue-final-modal v-model="showColorPickerModal" @before-open="modalOpen" @before-close="modalClose"
+                       name="row-modal">
+        <color-picker :color="onEditColor"></color-picker>
+      </vue-final-modal>
+      <vue-final-modal v-model="showDownloadModal" @before-open="modalOpen" @before-close="modalClose"
+                       name="row-modal">
         <download :dl="download"></download>
-    </vue-final-modal>
-    <div id="preloader">
-      <h4>
-        Please wait...
-      </h4>
-      <i class="fa fa-spin fa-spinner"></i>
+      </vue-final-modal>
+      <div id="preloader">
+        <h4>
+          Please wait...
+        </h4>
+        <i class="fa fa-spin fa-spinner"></i>
+      </div>
     </div>
   </div>
 </template>
@@ -404,8 +414,8 @@ export default {
   data: function () {
     return {
       sly: null,
-      nonVisualIcon:{
-        menu:'fa fa-list-alt',
+      nonVisualIcon: {
+        menu: 'fa fa-list-alt',
       },
       showTerminalModal: false,
       showRowModal: false,
@@ -416,6 +426,7 @@ export default {
       showColorPickerModal: false,
       showDownloadModal: false,
       download: '',
+      mobile_error: false,
       onEditColor: '',
       onEditColorKey: '',
       rowData: [],
@@ -433,7 +444,7 @@ export default {
       isNotChrome: window.chrome == undefined,
       terminalContent: ['Welcome to Anbuias v' + window.ide.version()],
       recents: window.ide.settings.recents,
-      slash: fnc.getOS() == 'Windows' ? '\\' : '/'   ,
+      slash: fnc.getOS() == 'Windows' ? '\\' : '/',
       // isInitProject: false,
       display: {
         name: 'Nexus 5x',
@@ -456,6 +467,10 @@ export default {
       window.project.isSave = true;
       this.$parent.isSaved = true;
 
+      if (window.ide.isOnline && window.innerWidth < 1000) {
+        this.mobile_error = true;
+      }
+
 
       var $ = window.jQuery;
 
@@ -469,7 +484,7 @@ export default {
 
       setTimeout(function () {
         self.changeScale(.3501);
-      },100);
+      }, 100);
 
       $(document).unbind('keyup.contextShortcut').bind('keyup.contextShortcut', function (e) {
         if (e.ctrlKey && e.shiftKey && e.key === 'c') {
@@ -502,7 +517,7 @@ export default {
       /*eslint-enable */
       window.api.receive("terminal", (data) => {
         if (data.trim().replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "").length > 0) {
-          self.terminalContent.push(data.replace(/^\s*$(?:\r\n?|\n)/gm,''));
+          self.terminalContent.push(data.replace(/^\s*$(?:\r\n?|\n)/gm, ''));
         }
       })
       window.api.receive("terminal-error", (data) => {
@@ -580,17 +595,17 @@ export default {
         default:
           template = 'login';
       }
-      let url = 'https://anubias.app/templates/dl.php?dl='+template;
+      let url = 'https://anubias.app/templates/dl.php?dl=' + template;
 
       var self = this;
       document.querySelector("#preloader").style.display = 'flex';
       window.alertify.message('Wait a few moments to download template :)');
       axios.get(url).then(
           function (e) {
-          document.querySelector("#preloader").style.display = 'none';
-            if (e.data.ok === false){
+            document.querySelector("#preloader").style.display = 'none';
+            if (e.data.ok === false) {
               window.alertify.error(e.data.message);
-            }else{
+            } else {
               window.appData = e.data.data;
               self.$router.push('/projectLoaded');
             }
@@ -699,9 +714,9 @@ export default {
       // this.currentProperties[key] += '// yas \n';
       let p = 'window.appData.pages[' + this.currentPage + ']';
       let isVisual = this.isVisualSelected;
-      if (pointer !== null){
+      if (pointer !== null) {
         p = pointer;
-      }else{
+      } else {
         switch (isVisual) {
           case -1:
             p += '.' + key;
@@ -744,9 +759,9 @@ export default {
       }, 100);
     },
     closeMultiTab: function (title) {
-      for( const i in this.tabs) {
-        let tab = this.tabs[i] ;
-        if (tab.title.indexOf(title) !== -1){
+      for (const i in this.tabs) {
+        let tab = this.tabs[i];
+        if (tab.title.indexOf(title) !== -1) {
           this.tabs.splice(i, 1);
           this.tabKeeper.splice(i, 1);
           this.closeMultiTab(title);
@@ -759,8 +774,8 @@ export default {
         self.handleSly();
       }, 100);
     },
-    openRecent:function (e) {
-      window.api.send( 'open-project-direct', this.recents[e]);
+    openRecent: function (e) {
+      window.api.send('open-project-direct', this.recents[e]);
     },
     openSite: function (e) {
       window.api.send("openWeb", e);
@@ -988,19 +1003,19 @@ export default {
     },
     visualValidator: function (component, visuals) {
       var self = this;
-      if (component.type === 'appbar' ||component.type === 'nav' ) {
+      if (component.type === 'appbar' || component.type === 'nav') {
         // check non duplicate app bar and nav
         for (const comp of visuals) {
           if (comp.type === 'appbar' && component.type === 'appbar') {
             window.alertify.warning("You can't drop two AppBar in page");
             return false;
-          }else if (comp.type === 'nav' && component.type === 'nav') {
+          } else if (comp.type === 'nav' && component.type === 'nav') {
             window.alertify.warning("You can't drop two Nav in page");
             return false;
           }
         }
         // add appbar
-        if (component.type === 'appbar'){
+        if (component.type === 'appbar') {
           visuals.unshift(fnc.clone(component));
           return true;
         }
@@ -1032,7 +1047,7 @@ export default {
       return true;
     },
     nonVisualValidator: function (component, nonVisuals) {
-      if (component.type === 'menu' ) {
+      if (component.type === 'menu') {
         // check non duplicate app bar and nav
         for (const comp of nonVisuals) {
           if (comp.type === 'menu' && component.type === 'menu') {
@@ -1040,7 +1055,7 @@ export default {
             return false;
           }
         }
-        if (component.type === 'menu'){
+        if (component.type === 'menu') {
           nonVisuals.unshift(fnc.clone(component));
           return true;
         }
@@ -1161,26 +1176,28 @@ export default {
   z-index: 999;
 }
 
-#recent{
+#recent {
   text-align: start;
   padding: 2rem;
   padding-bottom: 0;
 }
 
-#recent li{
-  background: rgba(0,0,0,0.1);
+#recent li {
+  background: rgba(0, 0, 0, 0.1);
   padding: 2px;
   margin-bottom: 2px;
   color: yellowgreen;
   transition: 300ms;
   cursor: pointer;
 }
-#recent li:hover{
+
+#recent li:hover {
   color: yellow;
   transform: scaleX(1.05);
-  box-shadow: 2px 2px 3px rgba(0,0,0,0.3);
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
 }
-#recent li span{
+
+#recent li span {
   color: gray;
 }
 
@@ -1372,7 +1389,7 @@ export default {
   opacity: 1;
 }
 
-#dir{
+#dir {
   position: relative;
 }
 
@@ -1401,14 +1418,14 @@ export default {
   margin-top: 10px;
 }
 
-#preloader{
+#preloader {
   position: fixed;
   top: 30vh;
   bottom: 30vh;
   left: 25%;
   right: 25%;
   z-index: 99999;
-  background: rgba(0,0,0,.6);
+  background: rgba(0, 0, 0, .6);
   color: white;
   display: flex;
   text-align: center;
@@ -1417,13 +1434,28 @@ export default {
   padding: 25px;
   display: none;
 }
-#preloader .fa{
+
+#preloader .fa {
   font-size: 90px;
   display: block;
   margin: auto;
 }
 
-.welcome{
+#mobile-error{
+  display: flex;
+  font-size: 25px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 95vh;
+}
+
+#mobile-error .fa{
+  font-size: 75px;
+  display: block;
+}
+
+.welcome {
   margin: 2rem auto;
 }
 
