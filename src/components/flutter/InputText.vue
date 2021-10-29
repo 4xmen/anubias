@@ -8,7 +8,7 @@
        :style="getStyleIcon()">
       {{ properties.icon }}
     </i>
-    <input type="text" :value="properties.text" :readonly="properties.readOnly"
+    <input :type="properties.password ? 'password':'text'" :value="properties.text" :readonly="properties.readOnly"
            :id="properties.name"
            ref="inp"
            @focus="focusing" @blur="bluring"
