@@ -1172,7 +1172,6 @@ export default {
   border-left: 1px solid rgba(0, 0, 0, .1);
   border-top: 1px solid rgba(0, 0, 0, .1);
   transition: 900ms;
-  overflow: hidden;
   z-index: 999;
 }
 
