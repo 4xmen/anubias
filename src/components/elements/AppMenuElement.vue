@@ -325,15 +325,24 @@ export default {
       if (this.cantEditPrj) {
         return false;
       }
+
+      let self = this;
+      window.alertify.confirm('Are you sure to leave page if you not saved, all data has been lose?',
+          'Remove confirm', function () {
+            window.appData = fnc.clone(window.sample);
+            window.appData.pages.push(fnc.clone(window.defaults.page));
+            window.appData.pages[0].name += '1';
+            self.$router.go(self.$router.currentRoute);
+          }
+          , function () {
+
+          });
       window.project = {
         folder: '',
         file: '',
         isSave: false,
       };
-      window.appData = fnc.clone(window.sample);
-      window.appData.pages.push(fnc.clone(window.defaults.page));
-      window.appData.pages[0].name += '1';
-      this.$router.go(this.$router.currentRoute);
+
     },
     devTools: function () {
       window.api.send("devtools", "");
@@ -419,14 +428,7 @@ export default {
         this.$router.push('/emulator');
         return;
       }
-      let self = this;
-      window.alertify.confirm('Are you sure to leave page if you not saved, all data has been lose?',
-          'Remove confirm', function () {
-            self.$router.push('/emulator');
-          }
-          , function () {
-
-          });
+      this.$router.push('/emulator');
     }
     ,
     test: function () {
