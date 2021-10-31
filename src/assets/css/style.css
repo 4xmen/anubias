@@ -1,4 +1,5 @@
 @import url(vazircodex.css);
+@import url(menu.css);
 
 ::-webkit-scrollbar {
     width: 3px;
@@ -74,7 +75,7 @@ img {
     padding-top: 4px;
     position: fixed;
     left: 0;
-    top: 70px;
+    top: 65px;
     right: 0;
     z-index: 995;
     white-space: nowrap;
@@ -758,3 +759,4 @@ img {
     bottom: 0;
     top: 0;
 }
+

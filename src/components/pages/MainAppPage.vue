@@ -1165,9 +1165,9 @@ export default {
   width: 25%;
   position: fixed;
   right: 0;
-  top: 70px;
+  top: 69px;
   bottom: 0;
-  min-height: calc(100vh - 70px);
+  min-height: calc(100vh - 65px);
   box-sizing: border-box;
   border-left: 1px solid rgba(0, 0, 0, .1);
   border-top: 1px solid rgba(0, 0, 0, .1);
@@ -1242,6 +1242,7 @@ export default {
   width: 75%;
   min-height: 80vh;
   margin-bottom: 20vh;
+  padding-top: 55px;
 }
 
 #main.page-collapse {
@@ -1410,7 +1411,7 @@ export default {
   padding-top: 10px;
   opacity: .3;
   position: absolute;
-  top: calc(50% - 70px);
+  top: calc(50% - 65px);
   left: calc(50% - 40px);
 }
 

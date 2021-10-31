@@ -214,7 +214,7 @@ let nameDuplicatorFixerForChildren = function (namesList, parent) {
     if (parent.child !== undefined) {
         if (namesList.indexOf(parent.child.name) !== -1) {
             parent.child.name += '_new';
-            while(namesList.indexOf(parent.child.name) !== -1){
+            while (namesList.indexOf(parent.child.name) !== -1) {
                 parent.child.name += '_new';
             }
         }
@@ -225,7 +225,7 @@ let nameDuplicatorFixerForChildren = function (namesList, parent) {
     } else if (parent.children !== undefined) {
         for (const cm of parent.children) {
             if (namesList.indexOf(cm.name) !== -1) {
-                while(namesList.indexOf(cm.name) !== -1){
+                while (namesList.indexOf(cm.name) !== -1) {
                     cm.name += '_new';
                 }
             }
@@ -247,7 +247,7 @@ let nameDuplicateFixer = function () {
         let namesList = [];
         for (const cm of page.children.visual) {
             if (namesList.indexOf(cm.name) !== -1) {
-                while(namesList.indexOf(cm.name) !== -1){
+                while (namesList.indexOf(cm.name) !== -1) {
                     cm.name += '_new';
                 }
             }
@@ -354,6 +354,78 @@ let findVarPath = function (key, properties, currentPage, isVisual = 1) {
 
 };
 
+/*eslint-disable */
+let menuInit = function () {
+    function $(selector, context) {
+        context = context || document;
+        return context["querySelectorAll"](selector);
+    }
+
+    function forEach(collection, iterator) {
+        for (var key in Object.keys(collection)) {
+            iterator(collection[key]);
+        }
+    }
+
+    function showMenu(menu) {
+        var menu = this;
+        var ul = $("ul", menu)[0];
+
+        if (!ul || ul.classList.contains("-visible")) return;
+
+        menu.classList.add("-active");
+        ul.classList.add("-animating");
+        ul.classList.add("-visible");
+        setTimeout(function () {
+            ul.classList.remove("-animating")
+        }, 25);
+    }
+
+    function hideMenu(menu) {
+        var menu = this;
+        var ul = $("ul", menu)[0];
+
+        if (!ul || !ul.classList.contains("-visible")) return;
+
+        menu.classList.remove("-active");
+        ul.classList.add("-animating");
+        setTimeout(function () {
+            ul.classList.remove("-visible");
+            ul.classList.remove("-animating");
+        }, 300);
+    }
+
+    function hideAllInactiveMenus(menu) {
+        var menu = this;
+        forEach(
+            $("li.-hasSubmenu.-active:not(:hover)", menu.parent),
+            function (e) {
+                e.hideMenu && e.hideMenu();
+            }
+        );
+    }
+
+    forEach($(".Menu li.-hasSubmenu"), function (e) {
+        e.showMenu = showMenu;
+        e.hideMenu = hideMenu;
+    });
+
+    forEach($(".Menu > li.-hasSubmenu"), function (e) {
+        e.addEventListener("click", showMenu);
+    });
+
+    forEach($(".Menu > li.-hasSubmenu li"), function (e) {
+        e.addEventListener("mouseenter", hideAllInactiveMenus);
+    });
+
+    forEach($(".Menu > li.-hasSubmenu li.-hasSubmenu"), function (e) {
+        e.addEventListener("mouseenter", showMenu);
+    });
+
+    document.addEventListener("click", hideAllInactiveMenus);
+};
+/*eslint-enable */
+
 /**
  * for export
  */
@@ -369,8 +441,10 @@ let fnc = {
     fixSetting,
     findVarPath,
     downloadObjectAsJson,
-    nameDuplicateFixer
+    nameDuplicateFixer,
+    menuInit
 }
 export {
     fnc
 }
+

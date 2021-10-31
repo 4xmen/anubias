@@ -1,196 +1,170 @@
 <!--the main menu of ide-->
 <template>
-  <div class="navbar-fixed">
-    <ul id="dropdown1" class="dropdown-content grey darken-3">
-      <li>
-        <a @click="newProject">
-          <i class="fa fa-plus"></i>
-          New project
-          <span class="shortcut">
-            Ctrl+N
-          </span>
-        </a>
-      </li>
-      <li>
-        <a @click="openProject">
-          <span v-if="!isOnline">
-          <i class="fa fa-folder-open"></i>
-            Open project
-          </span>
-          <span v-else>
-            <i class="fa fa-upload"></i>
-            Upload project
-          </span>
-          <span class="shortcut">
-            Ctrl+O
-          </span>
-        </a>
-      </li>
-      <li :class="(cantEditPrj?' disabled':'')">
-        <a @click="save">
-          <span v-if="!isOnline">
-          <i class="fa fa-save"></i>
-          Save project
-          </span>
-          <span v-else>
-            <i class="fa fa-download"></i>
-            Download Project
-          </span>
-          <span class="shortcut">
-            Ctrl+S
-          </span>
-        </a>
-      </li>
-      <li v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
-        <a @click="saveAs">
-
-          <i class="fa fa-save"></i>
-          Save project as
-        </a>
-      </li>
-      <li :class="(cantEditPrj?' disabled':'')">
-        <a @click="closeProject">
-          <i class="fa fa-times"></i>
-          Close project
-          <span class="shortcut">
-            Ctrl+Shit+W
-          </span>
-        </a>
-      </li>
-    </ul>
-    <ul id="dropdown2" class="dropdown-content grey darken-3">
-      <li :class="(cantEditPrj?' disabled':'')">
-        <router-link :to="cantEditPrj?'':'/project'">
-          <i class="fa fa-cog"></i>
-          Project info
-        </router-link>
-      </li>
-      <li v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
-        <a @click="debug">
-          <i class="fa fa-bug"></i>
-          Debug
-          <span class="shortcut">
-            F9
-          </span>
-        </a>
-      </li>
-      <li v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
-        <a @click="debugWeb">
-          <i class="fa fa-bug"></i>
-          Debug Web (PWA)
-          <span class="shortcut">
-            Alt+F9
-          </span>
-        </a>
-      </li>
-      <li v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
-        <a @click="build">
-          <i class="fa fa-hammer"></i>
-          Build
-          <span class="shortcut">
-            Ctrl+F9
-          </span>
-        </a>
-      </li>
-      <li v-if="!isOnline" @click="hotReload" :class="(!startDebug?' disabled':'')">
-        <a>
-          <i class="fa fa-fire"></i>
-          Hot reload
-          <span class="shortcut">
-            Ctrl+R
-          </span>
-        </a>
-      </li>
-      <li @click="onlineBuild" :class="(cantEditPrj?' disabled':'')">
-        <a>
-          <i class="fa fa-cloud"></i>
-          Online Build
-          <span class="shortcut">
-            Ctrl+Shift+B
-          </span>
-        </a>
-      </li>
-    </ul>
-    <ul id="dropdown3" class="dropdown-content grey darken-3">
-      <!--      <li @click="test">-->
-      <!--        <a>-->
-      <!--          <i class="fa fa-eye"></i>-->
-      <!--          EngineTest-->
-      <!--          <span class="shortcut">-->
-      <!--            Ctrl+Shift+F9-->
-      <!--          </span>-->
-      <!--        </a>-->
-      <!--      </li>-->
-      <li v-if="!isOnline" @click="startEmulator">
-        <a>
-          <i class="fa fa-mobile"></i>
-          Emulator & Check
-          <!--          <span class="shortcut">-->
-          <!--            Ctrl+Shift+S-->
-          <!--          </span>-->
-        </a>
-      </li>
-      <li v-if="!isOnline" @click="showSetting">
-        <a>
-          <i class="fa fa-cogs"></i>
-          Setting
-          <span class="shortcut">
-            Ctrl+Shift+S
-          </span>
-        </a>
-      </li>
-      <li @click="devTools">
-        <a>
-          <i class="fa fa-eye-dropper"></i>
-          DevTools
-          <span class="shortcut">
-            Ctrl+Shift+I
-          </span>
-        </a>
-      </li>
-    </ul>
-    <nav class="top-nav">
-      <div class="nav-wrapper grey darken-4">
-        <ul class="left">
-          <li class="logo active" @click="openSite('https://anubias.app')">
-            <a><img src="@/assets/img/logo.svg" alt=""></a>
-          </li>
-          <li>
-            <a class="dropdown-trigger" href="#!" data-target="dropdown1">
-              File <i class="material-icons right">arrow_drop_down</i>
-            </a>
-          </li>
-          <li>
-            <a class="dropdown-trigger" href="#!" data-target="dropdown2">
-              Project <i class="material-icons right">arrow_drop_down</i>
-            </a>
-          </li>
-          <li>
-            <a class="dropdown-trigger" href="#!" data-target="dropdown3">
-              Application <i class="material-icons right">arrow_drop_down</i>
-            </a>
-          </li>
-          <!--          <li><a href="badges.html">Components</a></li>-->
-          <!--          <li><a href="collapsible.html">JavaScript</a></li>-->
-          <li v-if="id != null || download != null" class="">
-            <span v-if="download == null">
-              Online compile: {{ compileStatus }}  <span class="fa fa-spinner fa-spin"></span>
-            </span>
-            <a v-else @click="openSite(download)">
-              <span class="fa fa-download"></span>
-              Download APK &nbsp; <i class="fa fa-smile"></i>
-            </a>
-
-          </li>
-        </ul>
-        <ul id="nav-mobile" class="right">
-          <li>
-            <router-link to="/about">About</router-link>
-          </li>
-        </ul>
-      </div>
-    </nav>
+  <div>
     <input type="file" style="display: none" ref="dialog" accept=".anb"/>
+    <ul class="Menu -horizontal">
+      <li class="logo" @click="openSite('https://anubias.app')">
+        <a><img src="@/assets/img/logo.svg" alt=""></a>
+      </li>
+      <li class="-hasSubmenu"><a href="#">File</a>
+        <ul>
+          <li>
+            <a @click="newProject">
+              <i class="fa fa-plus"></i>
+              New project
+              <span class="shortcut">
+              Ctrl+N
+            </span>
+            </a>
+          </li>
+          <li>
+            <a @click="openProject">
+            <span v-if="!isOnline">
+            <i class="fa fa-folder-open"></i>
+              Open project
+            </span>
+              <span v-else>
+              <i class="fa fa-upload"></i>
+              Upload project
+            </span>
+              <span class="shortcut">
+              Ctrl+O
+            </span>
+            </a>
+          </li>
+          <li :class="(cantEditPrj?' disabled':'')">
+            <a @click="save">
+            <span v-if="!isOnline">
+            <i class="fa fa-save"></i>
+            Save project
+            </span>
+              <span v-else>
+              <i class="fa fa-download"></i>
+              Download Project
+            </span>
+              <span class="shortcut">
+              Ctrl+S
+            </span>
+            </a>
+          </li>
+          <li v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
+            <a @click="saveAs">
+
+              <i class="fa fa-save"></i>
+              Save project as
+            </a>
+          </li>
+          <li :class="(cantEditPrj?' disabled':'')">
+            <a @click="closeProject">
+              <i class="fa fa-times"></i>
+              Close project
+              <span class="shortcut">
+              Ctrl+Shit+W
+            </span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="-hasSubmenu"><a href="#">Project</a>
+        <ul>
+          <li :class="(cantEditPrj?' disabled':'')">
+            <router-link :to="cantEditPrj?'':'/project'">
+              <i class="fa fa-cog"></i>
+              Project info
+            </router-link>
+          </li>
+          <li v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
+            <a @click="debug">
+              <i class="fa fa-bug"></i>
+              Debug
+              <span class="shortcut">
+              F9
+            </span>
+            </a>
+          </li>
+          <li v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
+            <a @click="debugWeb">
+              <i class="fa fa-bug"></i>
+              Debug Web (PWA)
+              <span class="shortcut">
+              Alt+F9
+            </span>
+            </a>
+          </li>
+          <li v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
+            <a @click="build">
+              <i class="fa fa-hammer"></i>
+              Build
+              <span class="shortcut">
+              Ctrl+F9
+            </span>
+            </a>
+          </li>
+          <li v-if="!isOnline" @click="hotReload" :class="(!startDebug?' disabled':'')">
+            <a>
+              <i class="fa fa-fire"></i>
+              Hot reload
+              <span class="shortcut">
+              Ctrl+R
+            </span>
+            </a>
+          </li>
+          <li @click="onlineBuild" :class="(cantEditPrj?' disabled':'')">
+            <a>
+              <i class="fa fa-cloud"></i>
+              Online Build
+              <span class="shortcut">
+              Ctrl+Shift+B
+            </span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li  class="-hasSubmenu"><a>Application</a>
+        <ul>
+          <li v-if="!isOnline" @click="startEmulator">
+            <a>
+              <i class="fa fa-mobile"></i>
+              Emulator & Check
+              <!--          <span class="shortcut">-->
+              <!--            Ctrl+Shift+S-->
+              <!--          </span>-->
+            </a>
+          </li>
+          <li v-if="!isOnline" @click="showSetting">
+            <a>
+              <i class="fa fa-cogs"></i>
+              Setting
+              <span class="shortcut">
+              Ctrl+Shift+S
+            </span>
+            </a>
+          </li>
+          <li @click="devTools">
+            <a>
+              <i class="fa fa-eye-dropper"></i>
+              DevTools
+              <span class="shortcut">
+              Ctrl+Shift+I
+            </span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li v-if="id != null || download != null" class="">
+              <span v-if="download == null">
+                Online compile: {{ compileStatus }}  <span class="fa fa-spinner fa-spin"></span>
+              </span>
+        <a v-else @click="openSite(download)">
+          <span class="fa fa-download"></span>
+          Download APK &nbsp; <i class="fa fa-smile"></i>
+        </a>
+
+      </li>
+      <li>
+        <router-link to="/about">About</router-link>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -200,6 +174,7 @@
 import {fnc} from '@/assets/js/functions';
 import axios from 'axios';
 import https from 'https';
+
 
 export default {
   name: "AppMenuElement",
@@ -216,8 +191,8 @@ export default {
   },
   mounted() {
     var $ = window.jQuery;
-    $(".dropdown-trigger").dropdown();
     var self = this;
+    fnc.menuInit();
     setInterval(function () {
       if (self.id != null && self.id != -1) {
         const agent = new https.Agent({
@@ -262,7 +237,7 @@ export default {
                 self.isOnlineCompile = false;
               }
             }).catch(function (e) {
-            window.alertify.error(e.message);
+          window.alertify.error(e.message);
         });
       }
     }, 10000);
@@ -397,8 +372,8 @@ export default {
             self.id = e.data.id;
           }).catch(function (e) {
         window.alertify.error(e.message);
-        if (e.message === 'Network Error' && !window.ide.settings.proxy){
-          window.alertify.warning('Maybe your ip blocked and need to use proxy setting (Open setting and active proxy)',30);
+        if (e.message === 'Network Error' && !window.ide.settings.proxy) {
+          window.alertify.warning('Maybe your ip blocked and need to use proxy setting (Open setting and active proxy)', 30);
         }
         self.id = null;
         self.isOnlineCompile = false;
@@ -624,8 +599,8 @@ nav, nav .nav-wrapper i, nav > a.sidenav-trigger, nav > a.sidenav-trigger i {
   line-height: 40px;
 }
 
-.dropdown-content {
-  min-width: 270px !important;
+.Menu li li {
+  /*border-bottom: 1px solid rgba(0,0,0,0.05);*/
 }
 
 .nav-wrapper img {
@@ -634,7 +609,7 @@ nav, nav .nav-wrapper i, nav > a.sidenav-trigger, nav > a.sidenav-trigger i {
   margin-bottom: -7px;
 }
 
-nav .fa {
+.Menu .fa {
   margin-top: -10px;
   margin-bottom: 0;
   margin-right: 5px;
@@ -649,7 +624,13 @@ nav .fa {
   float: right;
   color: darkgray;
   font-size: 85%;
-  padding-top: 2px;
+}
+.logo{
+  cursor: pointer;
+}
+.logo img{
+  width: 25px;
+  margin-top: 8px;
 }
 
 </style>
