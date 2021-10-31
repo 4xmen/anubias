@@ -793,6 +793,12 @@ export default {
         if (this.currentDisplay.cameraBorder === '') {
           style += 'left: calc( 50% - ' + (55 * this.display.scale / 2) + 'px);';
         } else if (this.currentDisplay.cameraBorder === 'cb1') {
+
+          try {
+            document.querySelector('#preview').style.marginTop = '-'+document.querySelector('#camera').clientHeight+'px';
+          } catch {
+            //
+          }
           style += 'padding:' + (15 * this.display.scale) + 'px ' + (50 * this.display.scale) + 'px;';
           style += 'background-image: url("data:image/svg+xml,%3Csvg xmlns:dc=\'http://purl.org/dc/elements/1.1/\' xmlns:cc=\'http://creativecommons.org/ns%23\' xmlns:rdf=\'http://www.w3.org/1999/02/22-rdf-syntax-ns%23\' xmlns:svg=\'http://www.w3.org/2000/svg\' xmlns=\'http://www.w3.org/2000/svg\' xmlns:sodipodi=\'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\' xmlns:inkscape=\'http://www.inkscape.org/namespaces/inkscape\' width=\'900\' height=\'700\' viewBox=\'0 0 238.12501 185.20834\' version=\'1.1\' id=\'svg8\' inkscape:version=\'0.92.4 (5da689c313, 2019-01-14)\' sodipodi:docname=\'ops.svg\'%3E%3Cdefs id=\'defs2\' /%3E%3Csodipodi:namedview id=\'base\' pagecolor=\'%23ffffff\' bordercolor=\'%23666666\' borderopacity=\'1.0\' inkscape:pageopacity=\'0.0\' inkscape:pageshadow=\'2\' inkscape:zoom=\'0.98994949\' inkscape:cx=\'227.62831\' inkscape:cy=\'512.07454\' inkscape:document-units=\'mm\' inkscape:current-layer=\'layer1\' showgrid=\'true\' units=\'px\' showguides=\'true\' inkscape:snap-object-midpoints=\'true\' inkscape:guide-bbox=\'true\' inkscape:window-width=\'1920\' inkscape:window-height=\'1053\' inkscape:window-x=\'0\' inkscape:window-y=\'27\' inkscape:window-maximized=\'1\'%3E%3Cinkscape:grid type=\'xygrid\' id=\'grid10\' /%3E%3Csodipodi:guide position=\'119.06251,124.35417\' orientation=\'1,0\' id=\'guide20\' inkscape:locked=\'false\' /%3E%3Csodipodi:guide position=\'47.625002,134.9375\' orientation=\'0,1\' id=\'guide27\' inkscape:locked=\'false\' /%3E%3Csodipodi:guide position=\'148.16667,42.333335\' orientation=\'0,1\' id=\'guide29\' inkscape:locked=\'false\' /%3E%3Csodipodi:guide position=\'222.25001,74.083336\' orientation=\'0,1\' id=\'guide31\' inkscape:locked=\'false\' /%3E%3Csodipodi:guide position=\'219.60418,177.27084\' orientation=\'0,1\' id=\'guide33\' inkscape:locked=\'false\' /%3E%3C/sodipodi:namedview%3E%3Cmetadata id=\'metadata5\'%3E%3Crdf:RDF%3E%3Ccc:Work rdf:about=\'\'%3E%3Cdc:format%3Eimage/svg+xml%3C/dc:format%3E%3Cdc:type rdf:resource=\'http://purl.org/dc/dcmitype/StillImage\' /%3E%3Cdc:title%3E%3C/dc:title%3E%3C/cc:Work%3E%3C/rdf:RDF%3E%3C/metadata%3E%3Cg inkscape:label=\'Layer 1\' inkscape:groupmode=\'layer\' id=\'layer1\' transform=\'translate(0,-111.79166)\'%3E%3Cpath style=\'stroke-width:0.26458332\' d=\'m 193.73276,160.85774 c -2.18912,19.13718 1.01825,44.44182 -5.40836,61.68709 -11.05357,29.66133 -36.44712,40.24465 -69.26189,40.24465 -32.99899,0 -59.517829,-11.35826 -71.420154,-39.86899 C 40.61695,206.09189 43.561232,180.78114 40.650489,161.39228 34.395833,119.72916 13.31255,112.11048 0.18887997,111.99371 -26.162771,111.75924 80.167658,111.5781 118.79524,111.5781 c 38.49521,0 145.52217,0.21356 119.18346,0.249 -13.24447,0.0178 -39.5412,7.90206 -44.24594,49.03064 z\' id=\'path24\' inkscape:connector-curvature=\'0\' sodipodi:nodetypes=\'sssssssss\' /%3E%3C/g%3E%3C/svg%3E");';
           style += 'border-radius: 0 0 45% 45% ;';
@@ -807,6 +813,12 @@ export default {
           }
 
         } else if (this.currentDisplay.cameraBorder === 'cb2') {
+          try {
+          document.querySelector('#preview').style.marginTop = '-'+document.querySelector('#camera').clientHeight+'px';
+          } catch {
+            //
+          }
+
           style += 'padding:15px 0;';
           style += 'background-image: url("data:image/svg+xml,%3Csvg width=\'318pt\' height=\'49pt\' viewBox=\'0 0 318 49\' version=\'1.1\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg id=\'%23000000ff\'%3E%3Cpath fill=\'%23000000\' opacity=\'1.00\' d=\' M 0.00 0.00 L 318.00 0.00 L 318.00 0.99 C 312.34 1.22 306.09 -0.07 300.94 2.86 C 296.42 6.26 297.46 12.66 296.39 17.58 C 295.49 26.07 289.85 33.35 282.78 37.80 C 277.49 41.05 271.15 41.93 265.05 42.03 C 194.70 41.97 124.35 42.01 54.00 42.01 C 46.41 41.92 38.67 42.57 31.22 40.76 C 20.50 37.91 12.36 27.89 11.12 16.96 C 10.46 12.55 10.65 7.74 8.24 3.81 C 5.93 2.01 2.75 2.12 0.00 1.49 L 0.00 0.00 Z\' /%3E%3C/g%3E%3C/svg%3E");';
           style += 'padding:' + (5 * this.display.scale) + 'px ' + (0 * this.display.scale) + 'px;';
