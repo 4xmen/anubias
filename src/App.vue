@@ -142,6 +142,20 @@ export default {
       evt.preventDefault();
     });
 
+    document.addEventListener('keyup',function (e) {
+      if (e.key == 'Escape'){
+        try {
+          if (self.$router.history.current.name != 'home'){
+            self.$router.go(-1);
+          }
+        } catch(e) {
+          // console.log('');
+          console.log(e.message);
+        }
+
+      }
+    })
+
     window.api.send('storage-get', 'setting');
     // load opened file receive command
     window.api.receive('selected-file', (data) => {
