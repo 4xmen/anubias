@@ -57,7 +57,7 @@ export default {
 
   methods:{
     start:function (e) {
-        window.api.send("emulator", 'export QT_DEBUG_PLUGINS=1 && emulator -avd '+e);
+        window.api.send("emulator", 'emulator -avd '+e);
     },
     checkFlutter:function () {
         this.terminal.push('______________________________________________________________________\n');

@@ -327,6 +327,10 @@ ipc.on('emulator', async function (eventevent, data) {
         if (setting.env != undefined && setting.env.length > 0) {
             data = 'export PATH="$PATH:' + setting.env + '" && ' + data;
         }
+        let options = {
+            cwd: cwd,
+            maxBuffer: 1024 * 500,
+        };
         if (setting.pathFix != undefined && setting.pathFix) {
             if (await fs.existsSync(require('os').homedir() + '/.bash_profile')) {
                 data = '. ' + require('os').homedir() + '/.bash_profile && ' + data;
@@ -334,17 +338,14 @@ ipc.on('emulator', async function (eventevent, data) {
             if (await fs.existsSync(require('os').homedir() + '/.zprofile')) {
                 data = '. ' + require('os').homedir() + '/.zprofile && ' + data;
             }
+            options.env =  {
+                PATH: process.env.PATH
+            }
         }
 
         console.log('-----------------------emulator command--------------------');
         console.log(data);
-        let child = cp.exec(data, {
-            cwd: cwd,
-            maxBuffer: 1024 * 500,
-            env: {
-                PATH: process.env.PATH
-            }
-        }, function (error, stdout, stderr) {
+        let child = cp.exec(data, options, function (error, stdout, stderr) {
             if (!error) {
                 // win.webContents.send('terminal', stdout);
                 if (data.indexOf('list-avds') != -1) {
