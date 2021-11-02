@@ -74,12 +74,22 @@
             </router-link>
           </li>
           <li v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
-            <a @click="debug">
+            <a @click="debug(false)">
               <i class="fa fa-bug"></i>
               Debug
               <span class="shortcut">
               F9
             </span>
+            </a>
+          </li>
+          <li v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
+            <a @click="debug(true)">
+              <i class="fa fa-bug"></i>
+              <i class="fa fa-code"></i>
+              Hard Debug
+<!--              <span class="shortcut">-->
+<!--              F9-->
+<!--            </span>-->
             </a>
           </li>
           <li v-if="!isOnline" :class="(cantEditPrj?' disabled':'')">
@@ -414,16 +424,21 @@ export default {
       window.api.send("command", data);
     }
     ,
-    debug: function () {
+    debug: function (isHard = false) {
       if (this.cantEditPrj || this.isOnline) {
         return false;
+      }
+      let hardDbg = '';
+      console.log(isHard);
+      if (isHard){
+        hardDbg = ' hard';
       }
       this.$parent.TerminalShow();
       this.startDebug = true;
       window.ide.isDebuging = true;
       let data = {
         isDebug: true,
-        command: './' + this.engineName + ' -b ' + window.project.file + ' && cd ' + window.project.folder + '/src && flutter run',
+        command: './' + this.engineName + ' -d ' + window.project.file + hardDbg ,
       }
       window.api.send("command", data);
     }

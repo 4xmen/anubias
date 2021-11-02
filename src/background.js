@@ -340,6 +340,7 @@ ipc.on('emulator', async function (eventevent, data) {
         console.log(data);
         let child = cp.exec(data, {
             cwd: cwd,
+            maxBuffer: 1024 * 500,
             env: {
                 PATH: process.env.PATH
             }
@@ -402,6 +403,10 @@ ipc.on('command', async function (eventevent, data) {
     if (setting.env != undefined && setting.env.length > 0) {
         data = 'export PATH="$PATH:' + setting.env + '" && ' + data;
     }
+    let options = {
+        cwd: cwd,
+        maxBuffer: 1024 * 500,
+    };
     if (setting.pathFix != undefined && setting.pathFix) {
         if (await fs.existsSync(require('os').homedir() + '/.bash_profile')) {
             data = '. ' + require('os').homedir() + '/.bash_profile && ' + data;
@@ -409,16 +414,15 @@ ipc.on('command', async function (eventevent, data) {
         if (await fs.existsSync(require('os').homedir() + '/.zprofile')) {
             data = '. ' + require('os').homedir() + '/.zprofile && ' + data;
         }
+        options.env =  {
+            PATH: process.env.PATH
+        }
     }
+
 
     console.log('-----------------------other command--------------------');
     console.log(data.command);
-    let child = cp.exec(cmd, {
-        cwd: cwd,
-        env: {
-            PATH: process.env.PATH
-        }
-    }, function (error, stdout, stderr) {
+    let child = cp.exec(cmd, options, function (error, stdout, stderr) {
         if (!error) {
             // win.webContents.send('terminal', stdout);
             if (data.isUpdate !== undefined) {
@@ -434,7 +438,12 @@ ipc.on('command', async function (eventevent, data) {
         underDebug = child;
     }
     child.stdout.on('data', function (data) {
-        win.webContents.send('terminal', data);
+        var str = data.toString(), lines = str.split(/(\r?\n)/g);
+        for (var i=0; i<lines.length; i++) {
+            // Process the line, noting it might be incomplete.
+            win.webContents.send('terminal', lines[i]);
+
+        }
     });
 });
 /**
@@ -442,7 +451,7 @@ ipc.on('command', async function (eventevent, data) {
  */
 ipc.on('update-project', function (eventevent, data) {
     try {
-        underDebug.stdin.write("R");
+        underDebug.stdin.write("x");
         win.webContents.send('message', {type: 'success', 'msg': 'hot restart'});
 
     } catch (e) {
