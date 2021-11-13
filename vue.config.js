@@ -20,8 +20,9 @@ module.exports = {
                     "icon": "./public/256x256.png"
                 },
                 "linux": {
+
                     "category": "Development",
-                    "target": "AppImage",
+                    "target": ["AppImage","Snap"],
                     "desktop": "./public/anubias.desktop"
                 },
                 "directories": {

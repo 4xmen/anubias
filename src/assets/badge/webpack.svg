@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="87" height="20">
+    <linearGradient id="b" x2="0" y2="100%">
+        <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
+        <stop offset="1" stop-opacity=".1"/>
+    </linearGradient>
+
+    <clipPath id="a">
+        <rect width="87" height="20" rx="3" fill="#fff"/>
+    </clipPath>
+
+    <g clip-path="url(#a)">
+        <path fill="#555" d="M0 0h25v20H0z"/>
+        <path fill="#6f95db" d="M25 0h62v20H25z"/>
+        <path fill="url(#b)" d="M0 0h87v20H0z"/>
+    </g>
+    <g fill="#fff"
+        text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="12">
+        <image x="5" y="3" width="14" height="14" xlink:href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjE2MiIgaGVpZ2h0PSIyNTAwIiB2aWV3Qm94PSIwIDAgMjU2IDI5NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWluWU1pbiBtZWV0Ij48ZGVmcz48cmFkaWFsR3JhZGllbnQgZng9IjUwJSIgZnk9IjUwJSIgaWQ9ImEiPjxzdG9wIHN0b3AtY29sb3I9IiM5M0I0RTciIG9mZnNldD0iMCUiLz48c3RvcCBzdG9wLWNvbG9yPSIjQjlEMUY4IiBvZmZzZXQ9IjU5LjI3MyUiLz48c3RvcCBzdG9wLWNvbG9yPSIjOUNCNkUwIiBvZmZzZXQ9IjEwMCUiLz48L3JhZGlhbEdyYWRpZW50PjwvZGVmcz48cGF0aCBkPSJNMTI4LjAzMi40NTZMLjI5OCA3NC4yMDN2MTQ3LjQ5NWwxMjcuNzM0IDczLjc0OCAxMjcuNzM1LTczLjc0OFY3NC4yMDNMMTI4LjAzMi40NTZ6IiBmaWxsPSJ1cmwoI2EpIi8+PHBhdGggZD0iTTEyOC4wMzQgNzUuMjYzTDY0LjY5IDExMS44MzR2NzMuMTQ0bDYzLjM0NCAzNi41NzIgNjMuMzQ0LTM2LjU3MnYtNzMuMTQ0bC02My4zNDQtMzYuNTcxeiIgZmlsbD0iIzZGOTVEQiIvPjxwYXRoIGQ9Ik0xMjggMEwwIDc0LjI1bDEyOCA2OS42OTMgMTI4LTY5LjIzOEwxMjggMHpNMTI4IDE1My41MDlMMCAyMjEuMzhsMTI4IDczLjc5MyAxMjcuNTQ0LTc0LjI0OUwxMjggMTUzLjUxeiIgZmlsbD0iI0ZGRiIgZmlsbC1vcGFjaXR5PSIuMSIvPjwvc3ZnPg=="/>
+        <text x="55" y="14.6" fill="#010101" fill-opacity=".3">Webpack</text>
+        <text x="55" y="14">Webpack</text>
+    </g>
+</svg>

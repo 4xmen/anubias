@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="58" height="20">
+    <linearGradient id="b" x2="0" y2="100%">
+        <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
+        <stop offset="1" stop-opacity=".1"/>
+    </linearGradient>
+
+    <clipPath id="a">
+        <rect width="58" height="20" rx="3" fill="#fff"/>
+    </clipPath>
+
+    <g clip-path="url(#a)">
+        <path fill="#555" d="M0 0h25v20H0z"/>
+        <path fill="#3eaf7c" d="M25 0h33v20H25z"/>
+        <path fill="url(#b)" d="M0 0h58v20H0z"/>
+    </g>
+    <g fill="#fff"
+        text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="12">
+        <image x="5" y="3" width="14" height="14" xlink:href="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNy4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSINCgkgaWQ9InN2ZzIiIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIg0KCSB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjQwMHB4IiBoZWlnaHQ9IjQwMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNDAwIDQwMCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgNDAwIDQwMCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8ZyBpZD0iZzEwIiB0cmFuc2Zvcm09Im1hdHJpeCgxLjMzMzMzMzMsMCwwLC0xLjMzMzMzMzMsMCw0MDApIj4NCgk8ZyBpZD0iZzEyIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNzguMDYyNiwyMzUuMDA4NikiPg0KCQk8cGF0aCBpZD0icGF0aDE0IiBmaWxsPSIjNERCQTg3IiBkPSJNNi4wMDUsMzMuMjQzbC0zMy40NzgtNTcuOTg2bC0zMy40NzgsNTcuOTg2aC0xMTEuNDg2bDE0NC45NjQtMjUxLjA4NEwxMTcuNDkxLDMzLjI0M0g2LjAwNXoNCgkJCSIvPg0KCTwvZz4NCgk8ZyBpZD0iZzE2IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNzguMDYyNiwyMzUuMDA4NikiPg0KCQk8cGF0aCBpZD0icGF0aDE4IiBmaWxsPSIjNDM1NDY2IiBkPSJNNi4wMDUsMzMuMjQzbC0zMy40NzgtNTcuOTg2bC0zMy40NzgsNTcuOTg2aC01My41MDFsODYuOTc5LTE1MC42NWw4Ni45NzksMTUwLjY1SDYuMDA1eiIvPg0KCTwvZz4NCjwvZz4NCjwvc3ZnPg0K"/>
+        <text x="40.5" y="14.6" fill="#010101" fill-opacity=".3">Vue</text>
+        <text x="40.5" y="14">Vue</text>
+    </g>
+</svg>

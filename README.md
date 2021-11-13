@@ -4,6 +4,18 @@
 Anubias is project help you to make your
 mobile apps so easy and native. : )
 
+
+[![javascript](src/assets/badge/javascript.svg)](https://www.javascript.com/)
+[![vuejs](src/assets/badge/vue.svg)](https://vuejs.org/)
+[![webpack](src/assets/badge/webpack.svg)](https://webpack.js.org/)
+[![eslint](src/assets/badge/eslint.svg)](https://eslint.org/)
+[![electron-js](src/assets/badge/electron.svg)](https://www.electronjs.org/)
+
+
+[![anubias](https://snapcraft.io/anubias/badge.svg)](https://snapcraft.io/anubias)
+[![buymeacoffee](src/assets/badge/paypal.svg)](https://www.paypal.me/swepc)
+
+
 ## Requirment
  - vue cli ``npm install -g @vue/cli``
  - electron js cli ``npm install electron -g``

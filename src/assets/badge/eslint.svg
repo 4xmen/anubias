@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="74" height="20">
+    <linearGradient id="b" x2="0" y2="100%">
+        <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
+        <stop offset="1" stop-opacity=".1"/>
+    </linearGradient>
+
+    <clipPath id="a">
+        <rect width="74" height="20" rx="3" fill="#fff"/>
+    </clipPath>
+
+    <g clip-path="url(#a)">
+        <path fill="#555" d="M0 0h25v20H0z"/>
+        <path fill="#4b32c3" d="M25 0h49v20H25z"/>
+        <path fill="url(#b)" d="M0 0h74v20H0z"/>
+    </g>
+    <g fill="#fff"
+        text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="12">
+        <image x="5" y="3" width="14" height="14" xlink:href="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNy4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB3aWR0aD0iNTAwcHgiIGhlaWdodD0iNTAwcHgiIHZpZXdCb3g9IjAgMCA1MDAgNTAwIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA1MDAgNTAwIiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxwYXRoIGZpbGw9IiM4MDgwRjIiIGQ9Ik0xNTAuMzkxLDIwMS45NjJsOTUuMTgzLTU0Ljk1M2MyLjM4Mi0xLjM3Niw1LjMxOC0xLjM3Niw3LjcsMGw5NS4xODUsNTQuOTUzDQoJCWMyLjM4LDEuMzc2LDMuODUsMy45MTcsMy44NSw2LjY2OHYxMDkuOTA3YzAsMi43NDktMS40Nyw1LjI5My0zLjg1LDYuNjdsLTk1LjE4NSw1NC45NTNjLTIuMzgyLDEuMzc2LTUuMzE4LDEuMzc2LTcuNywwDQoJCWwtOTUuMTgzLTU0Ljk1M2MtMi4zODItMS4zNzYtMy44NS0zLjkxOS0zLjg1LTYuNjdWMjA4LjYzQzE0Ni41NDMsMjA1Ljg3OSwxNDguMDExLDIwMy4zMzgsMTUwLjM5MSwyMDEuOTYyIi8+DQoJPHBhdGggZmlsbD0iIzRCMzJDMyIgZD0iTTQ5Ni45MDEsMjUyLjAyMkwzODMuMTc1LDU0LjE3M2MtNC4xMzEtNy4xNTQtMTEuNzYyLTEyLjQzLTIwLjAyMi0xMi40M0gxMzUuNjk5DQoJCWMtOC4yNjIsMC0xNS44OTUsNS4yNzctMjAuMDI2LDEyLjQzTDEuOTQ4LDI1MS41ODZjLTQuMTMxLDcuMTU2LTQuMTMxLDE2LjE4NiwwLDIzLjM0MmwxMTMuNzI1LDE5Ni4yMjgNCgkJYzQuMTMxLDcuMTU0LDExLjc2NCwxMC44MTEsMjAuMDI2LDEwLjgxMWgyMjcuNDUyYzguMjYsMCwxNS44OTMtMy41NDcsMjAuMDIyLTEwLjcwM2wxMTMuNzI1LTE5Ni41NDgNCgkJQzUwMS4wMzQsMjY3LjU2Myw1MDEuMDM0LDI1OS4xNzYsNDk2LjkwMSwyNTIuMDIyIE00MDIuNzMsMzQ3LjE2MWMwLDIuOTA5LTEuNzUxLDUuNTk5LTQuMjczLDcuMDU1bC0xNDQuODYxLDgzLjU3OA0KCQljLTIuNTIsMS40NTQtNS42NzYsMS40NTQtOC4xOTUsMGwtMTQ0Ljk3My04My41NzhjLTIuNTE5LTEuNDU2LTQuMjgyLTQuMTQ1LTQuMjgyLTcuMDU1VjE4MC4wMDRjMC0yLjkxMSwxLjczNy01LjU5OSw0LjI1OS03LjA1NQ0KCQlMMjQ1LjI2LDg5LjM3MWMyLjUxOS0xLjQ1Niw1LjY3Mi0xLjQ1Niw4LjE5MSwwbDE0NC45ODMsODMuNTc4YzIuNTIxLDEuNDU2LDQuMjk2LDQuMTQ1LDQuMjk2LDcuMDU1VjM0Ny4xNjF6Ii8+DQo8L2c+DQo8L3N2Zz4NCg=="/>
+        <text x="48.5" y="14.6" fill="#010101" fill-opacity=".3">ESLint</text>
+        <text x="48.5" y="14">ESLint</text>
+    </g>
+</svg>
