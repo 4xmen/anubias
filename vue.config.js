@@ -15,15 +15,19 @@ module.exports = {
                 "win": {
                     "target": [
                         "msi",
-                        "portable"
+                        "portable",
+                        "appx"
                     ],
                     "icon": "./public/256x256.png"
                 },
                 "linux": {
-
                     "category": "Development",
                     "target": ["AppImage","Snap"],
                     "desktop": "./public/anubias.desktop"
+                },
+                "snap": {
+                    "confinement": "classic",
+                    "publish": ["github", "snapStore"]
                 },
                 "directories": {
                     "buildResources": "public",
