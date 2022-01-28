@@ -22,12 +22,13 @@ module.exports = {
                 },
                 "linux": {
                     "category": "Development",
-                    "target": ["AppImage","Snap"],
+                    "target": ["AppImage","Snap",'deb','rpm'],
                     "desktop": "./public/anubias.desktop"
                 },
                 "snap": {
                     "confinement": "classic",
-                    "publish": ["github", "snapStore"]
+                    "publish": "snapStore",
+                    "grade": "stable"
                 },
                 "directories": {
                     "buildResources": "public",

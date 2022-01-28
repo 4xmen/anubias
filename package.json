@@ -4,7 +4,8 @@
   "private": false,
   "description": "anubias desktop application",
   "author": {
-    "name": "xStack Team"
+    "name": "xStack Team",
+    "email": "a1gard@4xmen.ir"
   },
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -50,6 +51,7 @@
     "babel-eslint": "^10.1.0",
     "electron": "^13.0.0",
     "electron-devtools-installer": "^3.1.0",
+    "electron-installer-snap": "^5.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "script-loader": "^0.7.2",
