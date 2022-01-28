@@ -1,11 +1,11 @@
 {
   "name": "anubias",
-  "version": "1.0.0-beta",
+  "version": "1.0.0",
   "private": false,
   "description": "anubias desktop application",
   "author": {
     "name": "xStack Team",
-    "email": "a1gard@4xmen.ir"
+    "email": "contact@anubias.app"
   },
   "scripts": {
     "serve": "vue-cli-service serve",
