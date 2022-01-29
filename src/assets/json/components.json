@@ -120,77 +120,91 @@
       "data": "window.defaults.menu"
     },
     {
-      "title": "List",
+      "title": "Internet \uD83D\uDD1C",
+      "icon": "fa fa-globe",
+      "active": false,
+      "visual": false,
+      "data": "window.defaults.internet"
+    },
+    {
+      "title": "Storage \uD83D\uDD1C",
+      "icon": "fa fa-save",
+      "active": false,
+      "visual": false,
+      "data": "window.defaults.storage"
+    },
+    {
+      "title": "List \uD83D\uDD1C",
       "icon": "fa fa-list",
       "active": false,
       "visual": true,
       "data": "window.defaults.list"
     },
     {
-      "title": "Rate",
+      "title": "Rate \uD83D\uDD1C",
       "icon": "fa fa-star",
       "active": false,
       "visual": true,
       "data": "window.defaults.rate"
     },
     {
-      "title": "Calendar",
+      "title": "Calendar \uD83D\uDD1C",
       "icon": "fa fa-calendar-alt",
       "active": false,
       "visual": true,
       "data": "window.defaults.calendar"
     },
     {
-      "title": "DatePicker",
+      "title": "DatePicker \uD83D\uDD1C",
       "icon": "fa fa-calendar-check",
       "active": false,
       "visual": false,
       "data": "window.defaults.datepicker"
     },
     {
-      "title": "Image Picker",
+      "title": "Image Picker \uD83D\uDD1C",
       "icon": "fa fa-file-image",
       "active": false,
       "visual": false,
       "data": "window.defaults.imagepicker"
     },
     {
-      "title": "File Picker",
+      "title": "File Picker \uD83D\uDD1C",
       "icon": "fa fa-folder-open",
       "active": false,
       "visual": false,
       "data": "window.defaults.filepicker"
     },
     {
-      "title": "Map",
+      "title": "Map \uD83D\uDD1C",
       "icon": "fa fa-map",
       "active": false,
       "visual": true,
       "data": "window.defaults.map"
     },
     {
-      "title": "Location",
+      "title": "Location \uD83D\uDD1C",
       "icon": "fa fa-map-marker-alt",
       "active": false,
       "visual": false,
       "data": "window.defaults.location"
     },
     {
-      "title": "Slider",
+      "title": "Slider \uD83D\uDD1C",
       "icon": "fa fa-ellipsis-h",
       "active": false,
       "visual": true,
       "data": "window.defaults.slider"
     },
     {
-      "title": "Tab",
+      "title": "Tab \uD83D\uDD1C",
       "icon": "fas fa-window-restore",
       "active": false,
       "visual": true,
       "data": "window.defaults.tab"
     },
     {
-      "title": "Timer",
+      "title": "Timer \uD83D\uDD1C",
       "icon": "fa fa-stopwatch",
       "active": false,
       "visual": false,

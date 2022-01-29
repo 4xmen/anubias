@@ -416,6 +416,8 @@ export default {
       sly: null,
       nonVisualIcon: {
         menu: 'fa fa-list-alt',
+        internet: 'fa fa-globe',
+        storage: 'fa fa-save',
       },
       showTerminalModal: false,
       showRowModal: false,
@@ -1094,6 +1096,10 @@ export default {
       return true;
     },
     onVisualDrop(event) {
+      if (!event.active){
+        window.alertify.error('Comming soon component <br> so sorry :(', 15);
+        return false;
+      }
       // on add a viusal component to page
       // this.evenDropped.push(event.data);
       try {
@@ -1117,6 +1123,10 @@ export default {
     },
     onNonVisualDrop(event) {
       // this.oddDropped.push(event.data);
+      if (!event.active){
+        window.alertify.error('Comming soon component <br> so sorry :(', 15);
+        return false;
+      }
       // find component
       let component = window.components[event.data];
       // load default value

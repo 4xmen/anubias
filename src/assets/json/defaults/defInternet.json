@@ -1,0 +1,19 @@
+{
+  "type": "internet",
+  "name": "internet",
+  "multipart": false,
+  "method": "get",
+  "url": "https://jsonplaceholder.typicode.com/todos",
+  "body": {},
+  "files": [],
+  "timeOut": 60,
+  "startup": false,
+  "onConnect": "// this event execute when start connect",
+  "onSuccess": "// this event execute when start connect end successfully",
+  "onError": "// this event execute when start connect end faild",
+  "onDisconnect": "// this event execute when start disconnect",
+  "header": {
+    "Content-type": "application/json",
+    "Accept": "application/json"
+  }
+}

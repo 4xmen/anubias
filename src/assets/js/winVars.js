@@ -78,6 +78,8 @@ window.defaults.divider = require('../json/defaults/defDivider.json');
 window.defaults.toggle = require('../json/defaults/defToggle.json');
 window.defaults.nav = require('../json/defaults/defNav.json');
 window.defaults.menu = require('../json/defaults/defMenu.json');
+window.defaults.internet = require('../json/defaults/defInternet.json');
+window.defaults.storage = require('../json/defaults/defStorage.json');
 
 if (window.ide.isOnline){
     window.ide.settings.pages = true;

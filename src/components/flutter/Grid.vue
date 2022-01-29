@@ -82,6 +82,10 @@ export default {
     onVisualDrop(event) {
       try {
 
+        if (!event.active){
+          window.alertify.error('Comming soon component <br> so sorry :(', 15);
+          return false;
+        }
         // find component
         let component = window.components[event.data];
         // load default value
