@@ -82,7 +82,7 @@ export default {
     onVisualDrop(event) {
       try {
 
-        if (!event.active){
+        if (!window.components[event.data].active){
           window.alertify.error('Comming soon component <br> so sorry :(', 15);
           return false;
         }
