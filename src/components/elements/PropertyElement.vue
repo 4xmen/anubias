@@ -194,6 +194,12 @@
                 <div v-else-if="k === 'image' && properties.type === 'image' && properties.isOnline">
                   <input type="url" v-model="properties.image"/>
                 </div>
+                <div class="pos-relative" v-else-if="k === 'text' && properties.type === 'text'" >
+                  <input type="text" :id="k" v-model="properties[k]">
+                  <div class="square" @click="showTextEditorModal(properties.name+'.text',properties[k])">
+                    <i class="fa fa-edit"></i>
+                  </div>
+                </div>
                 <div v-else-if="k == 'maxLines'">
                   <input type="number" :id="k" min="1" max="999" v-model="properties[k]">
                 </div>
@@ -282,6 +288,11 @@ export default {
     },
     showActionControl: function () {
       this.$parent.showActionsModal = true;
+    },
+    showTextEditorModal: function (title, text) {
+      this.$parent.showTextEditorModal = true;
+      this.$parent.onEditText = text;
+      this.$parent.onEditTextTitle = title;
     },
     showOptionControl: function () {
       this.$parent.showOptionsModal = true;

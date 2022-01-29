@@ -760,3 +760,12 @@ img {
     top: 0;
 }
 
+.v-center{
+    vertical-align: middle;
+    display: flex;
+    align-content: center;
+    align-items: center;
+}
+.h-90vh{
+    min-height: 90vh;
+}
