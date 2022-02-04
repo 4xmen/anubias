@@ -119,16 +119,18 @@
                       <!--                <span v-for="(n, index) in oddDropped" :key="index">Dropped : {{ n }},&nbsp;</span>-->
                     </drop>
                   </div>
-                  <div v-if="isProjectValid">
-                    <div class="msg msg-success">
-                      <i class="fa fa-check-circle right"></i>
-                      Project is valid
+                  <div v-if="isProjectValid !== null">
+                    <div v-if="isProjectValid">
+                      <div class="msg msg-success">
+                        <i class="fa fa-check-circle right"></i>
+                        Project is valid
+                      </div>
                     </div>
-                  </div>
-                  <div v-else>
-                    <div class="msg msg-error">
-                      <i class="fa fa-times-circle right"></i>
-                      <div v-html="projectError"></div>
+                    <div v-else>
+                      <div class="msg msg-error">
+                        <i class="fa fa-times-circle right"></i>
+                        <div v-html="projectError"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -461,7 +463,7 @@ export default {
         internet: 'fa fa-globe',
         storage: 'fa fa-save',
       },
-      isProjectValid: true,
+      isProjectValid: null,
       projectError: '',
       showTerminalModal: false,
       showRowModal: false,
@@ -532,10 +534,10 @@ export default {
 
       var self = this;
 
-      // check project every 25 seconds
+      // check project every 60 seconds
       setInterval(function () {
         self.checkLiveProject();
-      }, 10000);
+      }, 60000);
 
       setTimeout(function () {
         self.changeScale(.3501);
