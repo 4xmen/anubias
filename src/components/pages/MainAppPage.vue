@@ -352,11 +352,11 @@
               Text editor ({{ onEditTextTitle }}):
             </h5>
             <div class="input-field">
-              <textarea id="textarea1" rows="7" class="materialize-textarea" v-model="onEditText"></textarea>
+              <textarea  :dir="isRTL?'rtl':'ltr'" id="textarea1" rows="7" class="materialize-textarea" v-model="onEditText"></textarea>
             </div>
             <div class="row">
               <div class="col s8">
-                <div class="btn btn-blue btn-block waves-effect waves-block ">
+                <div class="btn btn-blue btn-block waves-effect waves-block "  @click="saveText()">
                   Save
                 </div>
               </div>
@@ -492,10 +492,12 @@ export default {
       lastActiveTab: -1,
       tabs: [],
       tabKeeper: [],
+      isRTL: window.appData.project.isRTL,
     }
   },
   mounted() {
 
+    console.log(this.isRTL);
     try {
 
       window.project.isSave = true;
@@ -599,6 +601,11 @@ export default {
   },
   methods: {
     linkify: fnc.linkify,
+    saveText: function () {
+      let temp = this.onEditTextTitle.split('.');
+      this.currentProperties[temp[temp.length - 1]] = this.onEditText;
+      this.showTextEditorModal = false;
+    },
     closeAllModal() {
       this.showItemsModal = false;
       this.showTerminalModal = false;
