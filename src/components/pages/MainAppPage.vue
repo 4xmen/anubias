@@ -119,6 +119,18 @@
                       <!--                <span v-for="(n, index) in oddDropped" :key="index">Dropped : {{ n }},&nbsp;</span>-->
                     </drop>
                   </div>
+                  <div v-if="isProjectValid">
+                    <div class="msg msg-success">
+                      <i class="fa fa-check-circle right"></i>
+                      Project is valid
+                    </div>
+                  </div>
+                  <div v-else>
+                    <div class="msg msg-error">
+                      <i class="fa fa-times-circle right"></i>
+                      <div v-html="projectError"></div>
+                    </div>
+                  </div>
                 </div>
                 <!-- mobile drawing by project detail and user device selected -->
                 <!-- inactive when has not page -->
@@ -352,11 +364,12 @@
               Text editor ({{ onEditTextTitle }}):
             </h5>
             <div class="input-field">
-              <textarea  :dir="isRTL?'rtl':'ltr'" id="textarea1" rows="7" class="materialize-textarea" v-model="onEditText"></textarea>
+              <textarea :dir="isRTL?'rtl':'ltr'" id="textarea1" rows="7" class="materialize-textarea"
+                        v-model="onEditText"></textarea>
             </div>
             <div class="row">
               <div class="col s8">
-                <div class="btn btn-blue btn-block waves-effect waves-block "  @click="saveText()">
+                <div class="btn btn-blue btn-block waves-effect waves-block " @click="saveText()">
                   Save
                 </div>
               </div>
@@ -448,6 +461,8 @@ export default {
         internet: 'fa fa-globe',
         storage: 'fa fa-save',
       },
+      isProjectValid: true,
+      projectError: '',
       showTerminalModal: false,
       showRowModal: false,
       showOptionsModal: false,
@@ -497,7 +512,6 @@ export default {
   },
   mounted() {
 
-    console.log(this.isRTL);
     try {
 
       window.project.isSave = true;
@@ -517,6 +531,11 @@ export default {
       $('#main select').formSelect();
 
       var self = this;
+
+      // check project every 25 seconds
+      setInterval(function () {
+        self.checkLiveProject();
+      }, 10000);
 
       setTimeout(function () {
         self.changeScale(.3501);
@@ -600,7 +619,15 @@ export default {
     }
   },
   methods: {
+    checkLiveProject: function () {
+      let result = fnc.findProjectErrors();
+      this.isProjectValid = result.valid;
+      if (!result.valid) {
+        this.projectError = result.err;
+      }
+    },
     linkify: fnc.linkify,
+    // check is valid project or not
     saveText: function () {
       let temp = this.onEditTextTitle.split('.');
       this.currentProperties[temp[temp.length - 1]] = this.onEditText;

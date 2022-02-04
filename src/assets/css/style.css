@@ -445,13 +445,13 @@ img {
 
 /*dnd fix*/
 
-.non-visual-placeholder{
+.non-visual-placeholder {
     text-align: start;
     padding: 15px;
 }
 
-.non-visual-component{
-    background: rgba(0,0,0,.3);
+.non-visual-component {
+    background: rgba(0, 0, 0, .3);
     color: white;
     display: inline-block;
     text-align: center;
@@ -460,12 +460,14 @@ img {
     min-width: 40px;
     padding: 5px;
 }
-.non-visual-component span{
+
+.non-visual-component span {
     padding: 0 !important;
     font-size: 12px;
     font-weight: 100;
 }
-.non-visual-component i{
+
+.non-visual-component i {
     margin: 12px;
     display: inline-block;
     font-size: 24px;
@@ -529,7 +531,7 @@ img {
     opacity: 1;
 }
 
-.rowc .content{
+.rowc .content {
     white-space: nowrap;
 }
 
@@ -561,7 +563,56 @@ img {
 }
 
 
-/*.rowc .visual::before{*/
+.msg {
+    width: 100%;
+    border: 1px solid;
+    padding: 10px;
+    margin: 20px auto;
+    color: grey;
+    opacity: .6;
+    transition: 500ms;
+    text-align: start;
+}
+
+.msg:hover{
+    opacity: 1;
+}
+.msg-error {
+    border-color: #d32f2f;
+    background-color: #ef5350;
+    color: white;
+}
+
+.msg-alert {
+    border-color: orangered;
+    background-color: #ff9800;
+    color: white;
+}
+
+.msg-info {
+    border-color: #0288d1;
+    background-color: #29b6f6;
+    color: white;
+}
+
+.msg-success{
+    border-color: green;
+    background-color: teal;
+    color: white;
+}
+
+.msg .fa{
+    font-size: 23px;
+}
+
+.msg ul{
+    padding: 5px 15px;
+    list-style: square inside ;
+}
+.msg ul li:before{
+    content: '❗ ';
+}
+    /*.rowc .visual::before{*/
 /*    content: "Drop";*/
 /*}*/
 
@@ -752,7 +803,7 @@ img {
     opacity: 1 !important;
 }
 
-.grid-child .img-cover > div{
+.grid-child .img-cover > div {
     position: absolute;
     left: 0;
     right: 0;
@@ -760,12 +811,14 @@ img {
     top: 0;
 }
 
-.v-center{
+.v-center {
     vertical-align: middle;
     display: flex;
     align-content: center;
     align-items: center;
 }
-.h-90vh{
+
+.h-90vh {
     min-height: 90vh;
 }
+

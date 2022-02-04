@@ -424,6 +424,66 @@ let menuInit = function () {
 
     document.addEventListener("click", hideAllInactiveMenus);
 };
+
+let getDuplicates = function (arr) {
+    let obj = {}, dup = [];
+    for (let i = 0, l = arr.length; i < l; i++) {
+        let val = arr[i];
+        if (obj[val] /**[hasOwnProperty]*/) {
+            /**[is exists]*/
+            if (dup.find(a => a == val)) continue;
+            /**[put Unique One]*/
+            dup.push(val);
+            continue;
+        }
+        ;
+        /**[hold for further use]*/
+        obj[val] = true;
+    }
+    return dup;
+};
+
+let findChildNames = function (component) {
+    let names = [];
+    if (component.child !== undefined || component.children !== undefined) {
+        if (component.child !== undefined) {
+            names.push(component.child.name);
+            names = names.concat(findChildNames(component.child));
+        } else {
+            for (const comp of component.children) {
+                names.push(comp.name);
+                names = names.concat(findChildNames(comp));
+            }
+        }
+    }
+    return names;
+}
+
+let findProjectErrors = function () {
+    // check name
+    let pages = window.appData.pages;
+    let names;
+    let err = '';
+    let valid = true;
+    for (const page of pages) {
+        names = [];
+        for (const component of page.children.visual) {
+            names.push(component.name);
+            names = names.concat(findChildNames(component));
+        }
+        let result = getDuplicates(names);
+        if (result.length > 0) {
+            valid = false;
+            err += '<b><q>'+page.name + '</q></b> has duplicate names: <br> <ul> <li>' + result.join('</li><li>') +'</li></ul><hr>';
+        }
+    }
+    if (err !== ''){
+        valid = false;
+        err += 'Note: Name in one page must be unique.';
+    }
+    return {valid: valid, err: err}
+
+};
 /*eslint-enable */
 
 /**
@@ -442,7 +502,8 @@ let fnc = {
     findVarPath,
     downloadObjectAsJson,
     nameDuplicateFixer,
-    menuInit
+    menuInit,
+    findProjectErrors
 }
 export {
     fnc
