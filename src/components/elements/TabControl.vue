@@ -3,11 +3,15 @@
     <div v-if="type == 'code'">
       <code-editor :pointer="this.pointer"></code-editor>
     </div>
+    <div v-if="type == 'tie'">
+      <liveTie :data="this.data"></liveTie>
+    </div>
   </div>
 </template>
 
 <script>
 import codeEditor from '../elements/CodeEditor'
+import liveTie from '../elements/liveTie'
 export default {
   name: "TabControl",
   props:['data','type','pointer'],
@@ -15,7 +19,8 @@ export default {
     // this.content = this.value;
   },
   components:{
-    codeEditor
+    codeEditor,
+    liveTie
   },
   watch:{
     // content:function (v) {

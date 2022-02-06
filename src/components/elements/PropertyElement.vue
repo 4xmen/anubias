@@ -20,8 +20,9 @@
              (properties.type == 'internet' &&
              ( (k != 'files' && k != 'body' && properties.method == 'get') || properties.method == 'post' ))
             ">
+            <!-- fix hidden value -->
             <tr class="row-searchable"
-                v-if="k !== 'type' && k !== 'children' && !(k === 'image' && properties.type === 'page')" :key="k">
+                v-if="k !== 'type' && k !== 'children' && k !== 'tie' && !(k === 'image' && properties.type === 'page')" :key="k">
               <th class="pos-relative">
                 <i @click="showColorPicker(k)" v-if="k.toLowerCase().indexOf('color') !== -1 && properties[k] != 'null'"
                    class="square" :style="'background:'+color2web(properties[k],true)"></i>

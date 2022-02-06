@@ -1,0 +1,530 @@
+{
+  "appbar": {
+    "title": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "back": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    },
+    "hide": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    }
+  },
+  "button": {
+    "text": {
+      "type": {
+        "type": "string",
+        "status": "input",
+        "alternative": null
+      },
+      "status": "output",
+      "alternative": null
+    },
+    "padding": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "margin": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "size": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "width": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "height": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "noText": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    },
+    "noIcon": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    },
+    "hide": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    }
+  },
+  "circle_button": {
+    "padding": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "size": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "hide": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    }
+  },
+  "column": {
+    "width": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "height": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "border": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "padding": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "margin": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "borderRadius": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "hide": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    }
+  },
+  "container": {
+    "width": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "height": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "border": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "padding": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "margin": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "borderRadius": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "hide": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    }
+  },
+  "divider": {
+    "thickness": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "height": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "endIndent": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "indent": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "hide": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    }
+  },
+  "dropdown": {
+    "title": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "padding": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "width": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "modalTitle": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "trailingSize": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "placeholder": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "iconSize": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "isTwoLine": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    },
+    "searchable": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    },
+    "enabled": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    },
+    "multiple": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    },
+    "isLoading": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    },
+    "value": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "values": {
+      "type": "mixed",
+      "status": "input",
+      "alternative": null
+    },
+    "hide": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    }
+  },
+  "gird": {
+    "width": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "height": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "border": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "padding": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "margin": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "borderRadius": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "column": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "childAspectRatio": "float",
+    "hide": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    }
+  },
+  "icon": {
+    "padding": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "size": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "hide": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    }
+  },
+  "image": {
+    "width": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "height": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "padding": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "image": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "isOnline": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    },
+    "hide": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    }
+  },
+  "input": {
+    "text": {
+      "type": "string",
+      "status": "ouput",
+      "alternative": null
+    },
+    "margin": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "labelText": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "hintText": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "prefix": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "suffix": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "size": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "labelSize": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "prefixSize": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "suffixSize": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "outlined": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    },
+    "readOnly": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    },
+    "password": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    },
+    "autocorrect": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    },
+    "enabled": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    },
+    "maxLine": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "hide": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    }
+  },
+  "row": {
+    "width": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "height": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "border": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "padding": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "margin": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "borderRadius": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "hide": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    }
+  },
+  "text": {
+    "text": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "maxLine": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "softWrap": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    },
+    "hide": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    }
+  },
+  "toggle": {
+    "text": {
+      "type": "string",
+      "status": "input",
+      "alternative": null
+    },
+    "size": {
+      "type": "int",
+      "status": "input",
+      "alternative": null
+    },
+    "enabled": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    },
+    "state": {
+      "type": "bool",
+      "status": "output",
+      "alternative": null
+    },
+    "hide": {
+      "type": "bool",
+      "status": "input",
+      "alternative": null
+    }
+  }
+}

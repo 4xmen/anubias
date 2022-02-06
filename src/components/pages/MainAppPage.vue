@@ -34,8 +34,8 @@
           <i class="fa fa-angle-right"></i>
         </div>
       </div>
-
       <div id="tab-content-1">
+
         <div id="wrapper" :class="(!settings.pages?'page-collapse ':'')+(!settings.sidebar?'side-collapse ':'')">
 
           <div id="main" :class="(!settings.pages?'page-collapse ':'')+(!settings.sidebar?'side-collapse ':'')">
@@ -61,7 +61,6 @@
                   </div>
                   <!-- select scale size -->
                   <span>
-            Scale:
             </span>
                   <ul class="pagination">
                     <li @click="changeScale(1.25)"
@@ -263,12 +262,16 @@
           </div>
           <div id="pages" :class="'blurable '+(!settings.pages?'collapse ':'')">
             <div class="container">
+              <h6 id="page-hint">
+                Double click on page to live tie
+              </h6>
               <!-- if project init can pages -->
               <div v-if="isInitProject">
                 <!-- list of pages -->
                 <page v-for="(page,i) in data.pages" :image="page.image!= undefined? page.image: null"
                       :isMain="data.project.mainPage === i" @click.native="changePage(i)" :key="i" :title="page.name"
-                      :active="currentPage === i" :bg="(data.project.isDark?'#2e2e2e':data.project.bgColor)">
+                      :active="currentPage === i" :bg="(data.project.isDark?'#2e2e2e':data.project.bgColor)"
+                      @dblclick.native="openLiveTie(i)">
                   <i class="fa fa-times" @click="removePage(i)"></i>
                 </page>
                 <i class="fa fa-plus-circle" id="page-add" @click="newPage"></i>
@@ -732,6 +735,7 @@ export default {
       /*eslint-enable */
 
     },
+
     changeTab: function (i) {
       // check if active tab try to reactive
       // console.log(i);
@@ -766,6 +770,15 @@ export default {
       // this.activeTab = i;
       // this.$refs['tab-content'+i][0].style.display = 'block';
     },
+    /**
+     * add new tab to ide
+     * @param title title of tab - this index and debar duplicate tab
+     * @param type type of tab
+     * @param data data of tab
+     * @param icon tab icon with fa
+     * @param key key of the tab
+     * @param pointer pointer for save tab data
+     */
     addTab: function (title, type, data, icon, key, pointer = null) {
       // editable += '// ops \n ';
       // return;
@@ -844,6 +857,14 @@ export default {
         self.changeTab(-1);
         self.handleSly();
       }, 100);
+    },
+    openLiveTie: function (i) {
+      this.addTab(this.data.pages[i].name + '.liveTie',
+          'tie', {
+            title: 'liveTie ' + this.data.pages[i].name,
+            'components': this.data.pages[i].children.visual.concat(this.data.pages[i].children.nonvisual),
+          }, 'fa-random', i
+          , 'window.appData.pages[' + this.currentPage + '].tie');
     },
     openRecent: function (e) {
       window.api.send('open-project-direct', this.recents[e]);
@@ -1385,6 +1406,19 @@ export default {
   transition: 900ms;
 }
 
+#page-hint {
+  text-align: center;
+  height: 0;
+  overflow: hidden;
+  margin-top: 5px;
+  transition: 300ms;
+}
+
+#pages:hover #page-hint {
+  height: 20px;
+  color: yellowgreen;
+}
+
 .side-collapse #pages {
   right: 0;
 }
@@ -1566,5 +1600,6 @@ export default {
 .welcome {
   margin: 2rem auto;
 }
+
 
 </style>

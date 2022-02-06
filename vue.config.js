@@ -26,7 +26,7 @@ module.exports = {
                     "desktop": "./public/anubias.desktop"
                 },
                 "snap": {
-                    "confinement": "devmode",
+                    "confinement": "classic",
                     "publish": "snapStore",
                     "grade": "stable"
                 },
