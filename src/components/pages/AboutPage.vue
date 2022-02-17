@@ -117,8 +117,6 @@
       <ul class="collection">
         <li class="collection-item">
           SadeghPM
-          <span class="new badge" data-badge-caption="dev">Engine</span>
-          <span class="new badge" data-badge-caption="dev">Desktop</span>
           <span class="new badge" data-badge-caption="Manager">Project</span>
         </li>
         <li class="collection-item">
