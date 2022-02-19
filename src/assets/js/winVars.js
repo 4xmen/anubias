@@ -6,7 +6,7 @@ window.ide = {
     majorVersion: 1,
     minorVersion: 0,
     patchVersion: 0,
-    suffix: 'beta',
+    suffix: '',
     version: function () {
         return this.majorVersion + '.' + this.minorVersion + '.' + this.patchVersion + ' ' + this.suffix;
     },
@@ -80,6 +80,8 @@ window.defaults.nav = require('../json/defaults/defNav.json');
 window.defaults.menu = require('../json/defaults/defMenu.json');
 window.defaults.internet = require('../json/defaults/defInternet.json');
 window.defaults.storage = require('../json/defaults/defStorage.json');
+
+window.liveTie = require('../json/livetie.json');
 
 if (window.ide.isOnline){
     window.ide.settings.pages = true;
