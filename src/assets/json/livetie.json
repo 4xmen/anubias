@@ -18,12 +18,8 @@
   },
   "button": {
     "text": {
-      "type": {
-        "type": "string",
-        "status": "input",
-        "alternative": null
-      },
-      "status": "output",
+      "type": "string",
+      "status": "input",
       "alternative": null
     },
     "padding": {
@@ -248,13 +244,15 @@
     },
     "value": {
       "type": "string",
-      "status": "input",
-      "alternative": null
+      "status": "output",
+      "alternative": null,
+      "events": ["onChanged"]
     },
     "values": {
       "type": "mixed",
-      "status": "input",
-      "alternative": null
+      "status": "output",
+      "alternative": null,
+      "events": ["onChanged"]
     },
     "hide": {
       "type": "bool",
@@ -357,8 +355,9 @@
   "input": {
     "text": {
       "type": "string",
-      "status": "ouput",
-      "alternative": null
+      "status": "output",
+      "alternative": null,
+      "events": ["onTap","onBlur","onFocus","onChanged"]
     },
     "margin": {
       "type": "string",
@@ -519,7 +518,8 @@
     "state": {
       "type": "bool",
       "status": "output",
-      "alternative": null
+      "alternative": null,
+      "events": ["onChanged"]
     },
     "hide": {
       "type": "bool",

@@ -861,6 +861,7 @@ export default {
     openLiveTie: function (i) {
       this.addTab(this.data.pages[i].name + '.liveTie',
           'tie', {
+            pageIndex: i,
             title: 'liveTie ' + this.data.pages[i].name,
             'components': this.data.pages[i].children.visual.concat(this.data.pages[i].children.nonvisual),
           }, 'fa-random', i

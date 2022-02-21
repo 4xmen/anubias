@@ -822,3 +822,50 @@ img {
     min-height: 90vh;
 }
 
+#tie .fa-arrow-right{
+    float: right;
+    margin-top: 2px;
+    opacity: 0;
+    transition: .5s;
+    transform: translateX(25px);
+}
+
+
+.green-drop{
+    background: #7aaf00aa;
+}
+
+.export{
+    border-right: 30px solid green;
+    transform: translateX(-1px);
+    color: red;
+    text-align: center;
+    transition: 300ms;
+}
+
+
+.import{
+    background: #7aaf00aa;
+    cursor: pointer !important;
+    border-left: 30px green solid;
+}
+
+#tie  .import .fa-arrow-right{
+    opacity: 1 !important;
+    color: white;
+    float: left;
+    transform: translateX(-40px);
+}
+.no-entry{
+    cursor: not-allowed;
+}
+
+#exp{
+    border-left: 0 !important;
+}
+#exp .fa-arrow-right{
+    opacity: 1 !important ;
+    color: white;
+    float: right !important;
+    transform: translateX(25px) !important;
+}

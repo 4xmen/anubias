@@ -20,7 +20,7 @@
   },
   "main": "background.js",
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.3",
+    "@fortawesome/fontawesome-free": "^6.0.0",
     "@monaco-editor/loader": "^1.1.1",
     "alertifyjs": "^1.13.1",
     "axios": "^0.21.4",
@@ -30,7 +30,6 @@
     "fs": "0.0.1-security",
     "html2canvas": "^1.0.0-rc.7",
     "jquery": "^3.6.0",
-    "jquery.nicescroll": "github:tolc/jquery.nicescroll#master",
     "material-icons": "^0.6.3",
     "materialize-css": "^1.0.0-rc.2",
     "particles.vue": "^2.16.1",
@@ -77,7 +76,7 @@
     "last 2 versions",
     "not dead"
   ],
-  "_id": "anubias-desktop@0.0.1",
+  "_id": "anubias-desktop@1.0.0",
   "bugs": {
     "url": "https://github.com/4xmen/Anubias-Desktop/issues"
   },
