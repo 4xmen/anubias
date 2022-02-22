@@ -144,7 +144,6 @@ export default {
           return false;
         }
 
-
         let events = {};
         let inpName = this.selectedID.split('.')[0];
 
