@@ -129,7 +129,6 @@ export default {
       ctx.stroke();
     },
     selecting: function (e) {
-      console.log(JSON.parse(e.target.getAttribute('data-json')));
       // check if selected start or not
       if (this.startSelect) {
         let currentProp = JSON.parse(e.target.getAttribute('data-json'));
@@ -140,7 +139,7 @@ export default {
           return false;
         }
         // check type
-        if (this.selected.type != currentProp.type) {
+        if (this.selected.type != currentProp.type && this.selectedID != '' ) {
           window.alertify.warning('Type of them not same');
           return false;
         }
@@ -152,7 +151,7 @@ export default {
 
         // duplicare assign
         for (const tie of this.ties) {
-          if (tie.name == inpName) {
+          if (tie.src == inpName) {
             window.alertify.warning("Can't duplicate assign.");
             this.resetSel();
             return false;
@@ -209,6 +208,7 @@ export default {
       this.selectedID = '';
       this.selected = {};
       this.selectedType = '';
+      this.startSelect = false;
     },
     calcTop: function (i) {
       let top = 125;
