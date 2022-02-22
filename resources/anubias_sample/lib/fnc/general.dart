@@ -816,7 +816,7 @@ class InputProp with Alignator, Marginator {
   }
 
   String get text {
-    return this._text;
+    return this.controller.text;
   }
 
   getWeight() {
