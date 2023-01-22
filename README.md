@@ -17,7 +17,7 @@
 
 # Anubias-Desktop
 
-Anubias is project help you to make your mobile apps so easy and native. : )
+Anubias is project help you to make your mobile apps so easy and native with GUI : )
 
 
 # Demo
