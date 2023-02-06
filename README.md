@@ -43,17 +43,6 @@ The latest version is available for
 * [Linux](https://anubias.app/dl/linux)
 * [WebApp](https://anubias.app/demo)
 
-## Badges
-
-<div align="center">
-
-[![Anubias-App](https://img.shields.io/badge/Anubias-Desktop-green.svg)](https://anubias.app/)
-[![GitHub](https://img.shields.io/badge/Github-4xmen-blue.svg)](https://GitHub.com/4xmen)
-[![Xstack](https://img.shields.io/badge/Xstack-Team-red.svg)](https://xstack.ir)
-[![4xmen](https://img.shields.io/badge/4xmen-Team-black.svg)](https://4xmen.ir)
-[![Devefun](https://img.shields.io/badge/Devefun-Community-blue.svg)](https://Telegram.me/Devefun)
-
-</div>
 
 ## 🔗 Links
 https://anubias.app/
@@ -61,17 +50,7 @@ https://anubias.app/
 http://4xmen.ir/
 <br>
 https://xstack.ir
-## Developing Languages
 
-<div align="center">
-
-[![javascript](src/assets/badge/javascript.svg)](https://www.javascript.com/)
-[![vuejs](src/assets/badge/vue.svg)](https://vuejs.org/)
-[![webpack](src/assets/badge/webpack.svg)](https://webpack.js.org/)
-[![eslint](src/assets/badge/eslint.svg)](https://eslint.org/)
-[![electron-js](src/assets/badge/electron.svg)](https://www.electronjs.org/)
-
-</div>
 
 ## Features
 
@@ -103,7 +82,29 @@ Contribution are always welcome and recommended! Here is how:
 - Make your changes
 - Create a pull request
 
+## Badges
 
+<div align="center">
+
+[![Anubias-App](https://img.shields.io/badge/Anubias-Desktop-green.svg)](https://anubias.app/)
+[![GitHub](https://img.shields.io/badge/Github-4xmen-blue.svg)](https://GitHub.com/4xmen)
+[![Xstack](https://img.shields.io/badge/Xstack-Team-red.svg)](https://xstack.ir)
+[![4xmen](https://img.shields.io/badge/4xmen-Team-black.svg)](https://4xmen.ir)
+[![Devefun](https://img.shields.io/badge/Devefun-Community-blue.svg)](https://Telegram.me/Devefun)
+
+</div>
+
+## Developing Languages
+
+<div align="center">
+
+[![javascript](src/assets/badge/javascript.svg)](https://www.javascript.com/)
+[![vuejs](src/assets/badge/vue.svg)](https://vuejs.org/)
+[![webpack](src/assets/badge/webpack.svg)](https://webpack.js.org/)
+[![eslint](src/assets/badge/eslint.svg)](https://eslint.org/)
+[![electron-js](src/assets/badge/electron.svg)](https://www.electronjs.org/)
+
+</div>
 
 ## License
 
