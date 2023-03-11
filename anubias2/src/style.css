@@ -3,49 +3,102 @@
     line-height: 1.5;
     font-weight: 400;
 
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #282c34;
+    --text-color: rgba(255, 255, 255, 0.87);
+
+    --def-bg: #282c34;
+    --darker-bg: #21252b;
+    --lighter-bg: #353a45;
+
+    --transition-duration: 500ms;
+
+    background: var(--def-bg);
+    color: var(--text-color);
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
-    --darker-bg: #21252b;
 }
 
 *{
     padding: 0;
     margin: 0;
+    border-spacing: 0;
+    box-sizing: border-box;
 }
 
 #app {
     display: grid;
     height: 100vh;
-    grid-template-rows: 2em 5fr 5fr 3fr;
+    grid-template-rows: 2em 2em 5fr 5fr 165px;
+    grid-template-columns: repeat(18, 1fr) 30px;
 }
 
 #tabs {
     grid-column: 1 / 20;
     grid-row: 1;
+}
+#buttons {
+    grid-column: 1 / 20;
+    grid-row: 2;
     background: var(--darker-bg);
 }
 #components{
     background: var(--darker-bg);
     grid-column: 16 / 20;
-    grid-row: 2;
+    grid-row: 3;
+    border: 1px solid var(--lighter-bg);
+    overflow: hidden;
+    position: relative;
 }
 #properties{
     background: var(--darker-bg);
     grid-column: 16 / 20;
-    grid-row: 3;
+    grid-row: 4;
+    border: 1px solid var(--lighter-bg);
+    border-bottom: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+#properties.collapsed,#components.collapsed{
+    grid-column: 19 / 20;
+}
+#properties.collapsed h3,#components.collapsed h3{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background: var(--darker-bg);
+    cursor: pointer;
+}
+#properties.collapsed h3 span,#components.collapsed h3 span{
+    transform: rotateZ(90deg);
+    display: block;
+    padding: 2px 7px;
+}
+#properties.collapsed h3 i, #components.collapsed h3 i{
+    display: none;
 }
 #content{
     grid-column: 1 / 16;
-    grid-row: 2 / 3;
+    grid-row: 3 / 4;
 }
 #pages{
     background: var(--darker-bg);
     grid-column: 1 / 20;
-    grid-row: 4;
+    grid-row: 5;
+    border: 1px solid var(--lighter-bg);
+    border-bottom: 0;
+}
+#pages.collapsed {
+}
+#pages.collapsed h3{
+    background: var(--darker-bg);
+    cursor: pointer;
+}
+#pages.collapsed i{
+    display: none;
 }
