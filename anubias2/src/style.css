@@ -4,6 +4,7 @@
     font-weight: 400;
 
     --text-color: rgba(255, 255, 255, 0.87);
+    --text-hilight: yellowgreen;
 
     --def-bg: #282c34;
     --darker-bg: #21252b;
@@ -19,6 +20,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
+
 }
 
 *{
@@ -26,6 +28,20 @@
     margin: 0;
     border-spacing: 0;
     box-sizing: border-box;
+}
+
+
+select{
+    background: transparent;
+    color: var(--text-color);
+    border: transparent;
+    padding: 6px;
+    border-bottom: 1px solid var(--lighter-bg);
+    outline: none;
+}
+
+select:focus{
+    border-bottom: 1px solid var(--text-color);
 }
 
 #app {
