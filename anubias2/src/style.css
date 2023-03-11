@@ -1,15 +1,51 @@
 :root {
-  font-family: Vazirmatn, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+    font-family: Vazirmatn, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #282c34;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    --darker-bg: #21252b;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+}
+
+#app {
+    display: grid;
+    height: 100vh;
+    grid-template-rows: 2em 5fr 5fr 3fr;
+}
+
+#tabs {
+    grid-column: 1 / 20;
+    grid-row: 1;
+    background: var(--darker-bg);
+}
+#components{
+    background: var(--darker-bg);
+    grid-column: 16 / 20;
+    grid-row: 2;
+}
+#properties{
+    background: var(--darker-bg);
+    grid-column: 16 / 20;
+    grid-row: 3;
+}
+#content{
+    grid-column: 1 / 16;
+    grid-row: 2 / 3;
+}
+#pages{
+    background: var(--darker-bg);
+    grid-column: 1 / 20;
+    grid-row: 4;
 }

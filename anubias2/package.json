@@ -35,6 +35,7 @@
     "vue-tsc": "^1.1.7"
   },
   "dependencies": {
+    "remixicon": "^2.5.0",
     "vazirmatn": "^33.0.3",
     "vuex": "^4.0.2"
   }
