@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=Anubias
+Comment=Anubias app
+Exec=application
+Icon=application.png
+Categories=Development
