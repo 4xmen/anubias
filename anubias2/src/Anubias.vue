@@ -8,22 +8,28 @@
         <span>
           Device:
         </span>
-        <select>
-          <option value=""> Device</option>
+        <select v-model="activeDevice" style="width: 60%">
+          <option v-for="(device,i) in ide.devices" :value="i" :key="i" >
+            {{device.name}}
+          </option>
         </select>
       </div>
-      <div></div>
+      <div>
+        <icon-button id="orient" v-model="orient" :list="orients" :no-border-y="true"></icon-button>
+      </div>
+      <div>
+        <buttons id="zooms" v-model="zoom" :list="deviceZoom" :no-border-y="true"></buttons>
+      </div>
       <div>
         <i class="ri-play-line"></i>
         <i class="ri-bug-line"></i>
         <i class="ri-terminal-line"></i>
-      </div>
-      <div>
         <i class="ri-wifi-line"></i>
       </div>
     </div>
     <div id="content">
       content
+
     </div>
     <div id="components" :class="componentsClass" :style="componentsStyle">
       <h3 @click="expandComponents">
@@ -53,9 +59,18 @@
 <script>
 import {mapActions} from 'vuex';
 import {mapState} from 'vuex';
+import buttons from "./ide/components/buttons.vue";
+import iconButton from "./ide/components/iconButton.vue";
 
 export default {
   name: "Anubias",
+  components: {buttons,iconButton},
+  data: () => {
+    return {
+      deviceZoom: ['AUTO', '120%', '100%', '75%', '50%'],
+      orients: ['<i class="ri-smartphone-line"></i>', '<i class="ri-smartphone-line r90deg"></i>'],
+    };
+  },
   mounted() {
     this.setIdeTitle('AnubiasApp');
   }, methods: {
@@ -77,6 +92,30 @@ export default {
     },
   }, computed: {
     ...mapState(['ide']),
+    zoom: {
+      get() {
+        return this.$store.state.ide.device.zoom;
+      },
+      set(value) {
+        this.$store.commit('updateDeviceZoom', value)
+      }
+    },
+    activeDevice: {
+      get() {
+        return this.$store.state.ide.device.active;
+      },
+      set(value) {
+        this.$store.commit('updateDeviceActive', value)
+      }
+    },
+    orient: {
+      get() {
+        return this.$store.state.ide.device.orient;
+      },
+      set(value) {
+        this.$store.commit('updateDeviceOrient', value)
+      }
+    },
     componentsClass() {
       if (this.ide.components.collapsed) {
         return 'collapsed';
@@ -150,10 +189,13 @@ h3 i:hover {
   color: var(--text-hilight);
 }
 
+#app {
+  user-select: none;
+}
 
 #buttons {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 4fr 2fr 4fr 5fr;
 }
 
 #buttons i {
@@ -182,7 +224,16 @@ h3 i:hover {
   margin-right: 1em;
 }
 
-#device-selector select{
+#device-selector select {
   min-width: 50%;
+}
+
+#zooms {
+  text-align: end;
+  max-width: 20em;
+}
+
+#orient {
+  width: 6em;
 }
 </style>

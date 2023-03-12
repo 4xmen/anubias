@@ -47,6 +47,10 @@ async function createWindow() {
   win = new BrowserWindow({
     title: 'Anubias',
     icon: join(process.env.PUBLIC, 'favicon.ico'),
+    width: 1000,
+    height: 650,
+    minHeight: 650,
+    minWidth: 1000,
     webPreferences: {
       preload,
       // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
@@ -73,39 +77,39 @@ async function createWindow() {
 
   // Test actively push message to the Electron-Renderer
   win.webContents.on('did-finish-load', () => {
-    win?.webContents.send('main-process-message', new Date().toLocaleString())
-  })
+    win?.webContents.send('main-process-message', new Date().toLocaleString());
+  });
 
   // Make all links open with the browser, not with the application
   win.webContents.setWindowOpenHandler(({ url }) => {
-    if (url.startsWith('https:')) shell.openExternal(url)
-    return { action: 'deny' }
+    if (url.startsWith('https:')) shell.openExternal(url);
+    return { action: 'deny' };
   })
   // win.webContents.on('will-navigate', (event, url) => { }) #344
   win.setIcon( join(process.env.PUBLIC, '256x256.png') );
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
-  win = null
-  if (process.platform !== 'darwin') app.quit()
+  win = null;
+  if (process.platform !== 'darwin') app.quit();
 })
 
 app.on('second-instance', () => {
   if (win) {
     // Focus on the main window if the user tried to open another
-    if (win.isMinimized()) win.restore()
-    win.focus()
+    if (win.isMinimized()) win.restore();
+    win.focus();
   }
 })
 
 app.on('activate', () => {
-  const allWindows = BrowserWindow.getAllWindows()
+  const allWindows = BrowserWindow.getAllWindows();
   if (allWindows.length) {
-    allWindows[0].focus()
+    allWindows[0].focus();
   } else {
-    createWindow()
+    createWindow();
   }
 })
 
@@ -117,12 +121,12 @@ ipcMain.handle('open-win', (_, arg) => {
       nodeIntegration: true,
       contextIsolation: false,
     },
-  })
+  });
 
   if (process.env.VITE_DEV_SERVER_URL) {
-    childWindow.loadURL(`${url}#${arg}`)
+    childWindow.loadURL(`${url}#${arg}`);
   } else {
-    childWindow.loadFile(indexHtml, { hash: arg })
+    childWindow.loadFile(indexHtml, { hash: arg });
   }
 
 })

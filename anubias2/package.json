@@ -1,17 +1,31 @@
 {
-  "name": "electron-vue-vite",
+  "name": "anubias",
   "version": "2.0.0",
   "main": "dist-electron/main/index.js",
-  "description": "Really simple Electron + Vue + Vite boilerplate.",
-  "author": "草鞋没号 <308487730@qq.com>",
-  "license": "MIT",
+  "description": "anubias desktop application",
+  "author": {
+    "name": "xStack Team",
+    "email": "contact@anubias.app"
+  },
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/4xmen/anubias.git"
+  },
+  "_id": "anubias-desktop@1.0.0",
+  "bugs": {
+    "url": "https://github.com/4xmen/anubias/issues"
+  },
+  "homepage": "https://anubias.app",
   "private": true,
   "keywords": [
-    "electron",
-    "rollup",
-    "vite",
-    "vue3",
-    "vue"
+    "anubias",
+    "desktop",
+    "app",
+    "mobile",
+    "developing",
+    "ide",
+    "neative mobile application"
   ],
   "debug": {
     "env": {

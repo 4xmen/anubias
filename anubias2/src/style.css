@@ -38,10 +38,18 @@ select{
     padding: 6px;
     border-bottom: 1px solid var(--lighter-bg);
     outline: none;
+    -webkit-user-select: none;
+    cursor: pointer;
+    font-size: 16px;
 }
 
 select:focus{
     border-bottom: 1px solid var(--text-color);
+}
+
+select option{
+    background: var(--darker-bg);
+    font-size: 16px;
 }
 
 #app {
@@ -117,4 +125,19 @@ select:focus{
 }
 #pages.collapsed i{
     display: none;
+}
+
+.r90deg{
+    transform: rotateZ(90deg);
+}
+
+/*fix components*/
+.button.active {
+    box-shadow: inset 0 0 0 40px var(--text-hilight);
+    color: var(--darker-bg);
+}
+
+.button.no-border-y {
+    border-top: 0;
+    border-bottom: 0;
 }
