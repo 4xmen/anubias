@@ -9,6 +9,8 @@
     --def-bg: #282c34;
     --darker-bg: #21252b;
     --lighter-bg: #353a45;
+    --scrollbarbg:  #21252b80;
+    --scrollbar:  #353a4560;
 
     --transition-duration: 500ms;
 
@@ -21,6 +23,21 @@
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
 
+}
+
+::-webkit-scrollbar {
+    height: 12px;
+    width: 3px;
+    background: var(--scrollbarbg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar);
+    -webkit-border-radius: 1ex;
+}
+
+::-webkit-scrollbar-corner {
+    background: var(--darker-bg);
 }
 
 *{
@@ -106,9 +123,9 @@ select option{
 #properties.collapsed h3 i, #components.collapsed h3 i{
     display: none;
 }
-#content{
+#main{
     grid-column: 1 / 16;
-    grid-row: 3 / 4;
+    grid-row: 3 / 5;
 }
 #pages{
     background: var(--darker-bg);

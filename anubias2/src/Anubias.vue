@@ -9,8 +9,8 @@
           Device:
         </span>
         <select v-model="activeDevice" style="width: 60%">
-          <option v-for="(device,i) in ide.devices" :value="i" :key="i" >
-            {{device.name}}
+          <option v-for="(device,i) in ide.devices" :value="i" :key="i">
+            {{ device.name }}
           </option>
         </select>
       </div>
@@ -27,8 +27,16 @@
         <i class="ri-wifi-line"></i>
       </div>
     </div>
-    <div id="content">
-      content
+    <div id="main" :style="mainStyle">
+      <div class="grid">
+        <div class="side">
+          <div id="non-visual-component">
+          </div>
+        </div>
+        <div id="device-container">
+          <device></device>
+        </div>
+      </div>
 
     </div>
     <div id="components" :class="componentsClass" :style="componentsStyle">
@@ -61,10 +69,11 @@ import {mapActions} from 'vuex';
 import {mapState} from 'vuex';
 import buttons from "./ide/components/buttons.vue";
 import iconButton from "./ide/components/iconButton.vue";
+import device from "./ide/components/device.vue";
 
 export default {
   name: "Anubias",
-  components: {buttons,iconButton},
+  components: {buttons, iconButton, device},
   data: () => {
     return {
       deviceZoom: ['AUTO', '120%', '100%', '75%', '50%'],
@@ -136,8 +145,17 @@ export default {
     },
     appStyle() {
       let style = '';
+      // full height others panel when page closed
       if (this.ide.pages.collapsed) {
         style += 'grid-template-rows: 2em 2em 5fr 5fr 30px;';
+      }
+      return style;
+    },
+    mainStyle(){
+      let style = '';
+      // if right panels collapsed
+      if (this.ide.components.collapsed && this.ide.properties.collapsed) {
+        style += 'grid-column: 1 / 19;';
       }
       return style;
     },
@@ -147,6 +165,7 @@ export default {
       if (this.ide.components.collapsed ^ this.ide.properties.collapsed) {
         style += 'grid-row: 3 / 5;';
       }
+      // full height properties when component closed
       if (this.ide.components.collapsed && !this.ide.properties.collapsed) {
         style += 'grid-column: 16 / 19;';
       }
@@ -158,6 +177,8 @@ export default {
       if (this.ide.components.collapsed ^ this.ide.properties.collapsed) {
         style += 'grid-row: 3 / 5;';
       }
+
+      // full height component when properties closed
       if (this.ide.properties.collapsed && !this.ide.components.collapsed) {
         style += 'grid-column: 16 / 19;';
       }
@@ -235,5 +256,24 @@ h3 i:hover {
 
 #orient {
   width: 6em;
+}
+
+#main .grid {
+  display: grid;
+  grid-template-columns: 3fr 9fr;
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x:hidden;
+}
+
+#main .side {
+  padding: 5px;
+}
+
+#non-visual-component {
+  min-height: 5em;
+  background: var(--darker-bg);
+  margin-top: 0;
 }
 </style>

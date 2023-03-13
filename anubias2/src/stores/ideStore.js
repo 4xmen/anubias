@@ -1,8 +1,13 @@
-import devices from "./device/devices.json";
+/***
+ * ide store, storing ide information
+ * like: devices, tabs , panel states
+ */
+import devices from "./device/devices.json"; // import devices info
 const ideStore = {
     state: () => ({
         title: 'Anubias',
         tabs: {},
+        // panel states
         components: {
             collapsed: false,
         },
@@ -12,6 +17,7 @@ const ideStore = {
         pages: {
             collapsed: false,
         },
+        // active device preview
         device: {
             active: 0,
             orient: 0,
