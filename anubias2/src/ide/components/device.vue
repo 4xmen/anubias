@@ -48,6 +48,27 @@
             v-if="device.cameraBorder === 'cb4'"
             style="fill:#000;stroke:#00000f;stroke-width:5.29167;stroke-dashoffset:57.1465" width="74.083"
               height="12.347" x="108.479" y="11.758" rx="5.292" ry="11.465"/>
+        <circle
+            v-if="device.cameraBorder === 'cbc'"
+            style="fill:#000000;stroke:#00000f;stroke-width:5.29167;stroke-dashoffset:57.1465"
+            id="path837"
+            cx="145.48079"
+            cy="18.258026"
+            r="5.4284501" />
+        <circle
+            v-if="device.cameraBorder === 'cbr'"
+            style="fill:#000000;stroke:#00000f;stroke-width:5.29167;stroke-dashoffset:57.1465"
+            id="path837"
+            cx="258.221185"
+            cy="18.258026"
+            r="5.4284501" />
+        <circle
+            v-if="device.cameraBorder === 'cbl'"
+            style="fill:#000000;stroke:#00000f;stroke-width:5.29167;stroke-dashoffset:57.1465"
+            id="path837"
+            cx="32.740395"
+            cy="18.258026"
+            r="5.4284501" />
       </svg>
       <div>
 
