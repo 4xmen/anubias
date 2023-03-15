@@ -4,7 +4,6 @@
     "width": 1080,
     "height": 2340,
     "borderLess": true,
-    "camera": "type1",
     "cameraBorder": "cb1",
     "isDesktop": false
   },
@@ -13,8 +12,7 @@
     "width": 1170,
     "height": 2532,
     "borderLess": true,
-    "camera": "type1",
-    "cameraBorder": "cb3",
+    "cameraBorder": "cb4",
     "isDesktop": false
   },
   {
@@ -22,7 +20,6 @@
     "width": 1179,
     "height": 2556,
     "borderLess": true,
-    "camera": "type1",
     "cameraBorder": "cb4",
     "isDesktop": false
   },
@@ -31,7 +28,6 @@
     "width": 1290,
     "height": 2796,
     "borderLess": true,
-    "camera": "type1",
     "cameraBorder": "cb4",
     "isDesktop": false
   },
@@ -40,7 +36,6 @@
     "width": 1284,
     "height": 2778,
     "borderLess": true,
-    "camera": "type1",
     "cameraBorder": "cb3",
     "isDesktop": false
   },
@@ -49,7 +44,6 @@
     "width": 1170,
     "height": 2532,
     "borderLess": true,
-    "camera": "type1",
     "cameraBorder": "cb3",
     "isDesktop": false
   },
@@ -58,7 +52,6 @@
     "width": 1080,
     "height": 2340,
     "borderLess": true,
-    "camera": "type1",
     "cameraBorder": "cb3",
     "isDesktop": false
   },
@@ -67,7 +60,6 @@
     "width": 1284,
     "height": 2778,
     "borderLess": true,
-    "camera": "type1",
     "cameraBorder": "cb3",
     "isDesktop": false
   },
@@ -76,7 +68,6 @@
     "width": 1170,
     "height": 2532,
     "borderLess": true,
-    "camera": "type1",
     "cameraBorder": "cb3",
     "isDesktop": false
   },
@@ -85,7 +76,6 @@
     "width": 1170,
     "height": 2532,
     "borderLess": true,
-    "camera": "type1",
     "cameraBorder": "cb2",
     "isDesktop": false
   },
@@ -94,7 +84,6 @@
     "width": 1080,
     "height": 2340,
     "borderLess": true,
-    "camera": "type1",
     "cameraBorder": "cb2",
     "isDesktop": false
   },
@@ -103,7 +92,6 @@
     "width": 1284,
     "height": 2778,
     "borderLess": true,
-    "camera": "type1",
     "cameraBorder": "cb2",
     "isDesktop": false
   },
@@ -112,7 +100,6 @@
     "width": 1170,
     "height": 2532,
     "borderLess": true,
-    "camera": "type1",
     "cameraBorder": "cb2",
     "isDesktop": false
   },
@@ -121,7 +108,6 @@
     "width": 1242,
     "height": 2688,
     "borderLess": true,
-    "camera": "type1",
     "cameraBorder": "cb2",
     "isDesktop": false
   },
@@ -130,7 +116,6 @@
     "width": 1125,
     "height": 2436,
     "borderLess": true,
-    "camera": "type1",
     "cameraBorder": "cb2",
     "isDesktop": false
   },
@@ -139,7 +124,6 @@
     "width": 828,
     "height": 1792,
     "borderLess": true,
-    "camera": "type1",
     "cameraBorder": "cb2",
     "isDesktop": false
   },
@@ -148,7 +132,6 @@
     "width": 828,
     "height": 1792,
     "borderLess": true,
-    "camera": "type1",
     "cameraBorder": "cb2",
     "isDesktop": false
   },
@@ -157,7 +140,6 @@
     "width": 1125,
     "height": 2436,
     "borderLess": true,
-    "camera": "type1",
     "cameraBorder": "cb2",
     "isDesktop": false
   },
@@ -166,7 +148,6 @@
     "width": 1242,
     "height": 2688,
     "borderLess": true,
-    "camera": "type1",
     "cameraBorder": "cb2",
     "isDesktop": false
   },
@@ -175,7 +156,6 @@
     "width": 1125,
     "height": 2436,
     "borderLess": true,
-    "camera": "type1",
     "cameraBorder": "cb2",
     "isDesktop": false
   },
@@ -183,8 +163,7 @@
     "name": "iPhone 8 Plus",
     "width": 1080,
     "height": 1920,
-    "borderLess": false,
-    "camera": "type3",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -192,8 +171,7 @@
     "name": "iPhone 8",
     "width": 750,
     "height": 1334,
-    "borderLess": false,
-    "camera": "type3",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -201,8 +179,7 @@
     "name": "iPhone 7 Plus",
     "width": 1080,
     "height": 1920,
-    "borderLess": false,
-    "camera": "type3",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -210,8 +187,7 @@
     "name": "iPhone 7",
     "width": 750,
     "height": 1334,
-    "borderLess": false,
-    "camera": "type3",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -219,8 +195,7 @@
     "name": "iPhone 6 Plus/6S Plus",
     "width": 1080,
     "height": 1920,
-    "borderLess": false,
-    "camera": "type3",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -228,8 +203,7 @@
     "name": "iPhone 6/6S",
     "width": 750,
     "height": 1334,
-    "borderLess": false,
-    "camera": "type3",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -237,8 +211,7 @@
     "name": "iPhone 5",
     "width": 640,
     "height": 1136,
-    "borderLess": false,
-    "camera": "type1",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -247,7 +220,6 @@
     "width": 2048,
     "height": 2732,
     "borderLess": true,
-    "camera": "type1",
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -255,8 +227,7 @@
     "name": "iPad Air 1 & 2",
     "width": 1536,
     "height": 2048,
-    "borderLess": false,
-    "camera": "type1",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -264,8 +235,7 @@
     "name": "iPad Mini 2 & 3",
     "width": 1536,
     "height": 2048,
-    "borderLess": false,
-    "camera": "type1",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -273,8 +243,7 @@
     "name": "iPad Mini",
     "width": 768,
     "height": 1024,
-    "borderLess": false,
-    "camera": "type1",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -282,8 +251,7 @@
     "name": "Nexus 6P",
     "width": 1440,
     "height": 2560,
-    "borderLess": false,
-    "camera": "type3",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -291,8 +259,7 @@
     "name": "Nexus 5X",
     "width": 1080,
     "height": 1920,
-    "borderLess": false,
-    "camera": "type3",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -301,7 +268,6 @@
     "width": 869,
     "height": 1440,
     "borderLess": true,
-    "camera": "type3",
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -310,7 +276,6 @@
     "width": 1080,
     "height": 2280,
     "borderLess": true,
-    "camera": "type3",
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -318,8 +283,7 @@
     "name": "Google Pixel 3a XL",
     "width": 1080,
     "height": 2160,
-    "borderLess": false,
-    "camera": "type3",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -327,8 +291,7 @@
     "name": "Google Pixel 3a",
     "width": 1080,
     "height": 2220,
-    "borderLess": false,
-    "camera": "type3",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -336,17 +299,15 @@
     "name": "Google Pixel 3 XL",
     "width": 1440,
     "height": 2960,
-    "borderLess": true,
-    "camera": "type1",
-    "cameraBorder": "",
+    "borderLess": false,
+    "cameraBorder": "cb3",
     "isDesktop": false
   },
   {
     "name": "Google Pixel 3",
     "width": 1080,
     "height": 2160,
-    "borderLess": false,
-    "camera": "type3",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -354,8 +315,7 @@
     "name": "Google Pixel 2 XL",
     "width": 1440,
     "height": 2560,
-    "borderLess": false,
-    "camera": "type3",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -363,8 +323,7 @@
     "name": "Google Pixel XL",
     "width": 1440,
     "height": 2560,
-    "borderLess": false,
-    "camera": "type3",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -372,8 +331,7 @@
     "name": "Google Pixel",
     "width": 1080,
     "height": 1920,
-    "borderLess": false,
-    "camera": "type3",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -381,26 +339,23 @@
     "name": "Samsung Galaxy Note 10+",
     "width": 1440,
     "height": 3040,
-    "borderLess": true,
-    "camera": "type1",
-    "cameraBorder": "",
+    "borderLess": false,
+    "cameraBorder": "cbc",
     "isDesktop": false
   },
   {
     "name": "Samsung Galaxy Note 10",
     "width": 1080,
     "height": 2280,
-    "borderLess": true,
-    "camera": "type1",
-    "cameraBorder": "",
+    "borderLess": false,
+    "cameraBorder": "cbc",
     "isDesktop": false
   },
   {
     "name": "Samsung Galaxy Note 9",
     "width": 1440,
     "height": 2960,
-    "borderLess": false,
-    "camera": "type2",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -409,7 +364,6 @@
     "width": 1440,
     "height": 2560,
     "borderLess": true,
-    "camera": "type1",
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -417,8 +371,7 @@
     "name": "LG G5",
     "width": 1440,
     "height": 2560,
-    "borderLess": false,
-    "camera": "type2",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -427,69 +380,86 @@
     "width": 1080,
     "height": 1920,
     "borderLess": true,
-    "camera": "type2",
     "cameraBorder": ""
+    "isDesktop": false
+  },
+  {
+    "name": "Samsung Galaxy S23 Ultra",
+    "width": 1440,
+    "height": 3080,
+    "borderLess": false,
+    "cameraBorder": "cbc",
+    "isDesktop": false
+  },
+   {
+    "name": "Samsung Galaxy S23+",
+    "width": 1080,
+    "height": 2340,
+    "borderLess": false,
+    "cameraBorder": "cbc",
+    "isDesktop": false
+  },
+  {
+    "name": "Samsung Galaxy S23",
+    "width": 1080,
+    "height": 2340,
+    "borderLess": false,
+    "cameraBorder": "cbc",
+    "isDesktop": false
   },
   {
     "name": "Samsung Galaxy S21 Ultra",
     "width": 1440,
     "height": 3200,
-    "borderLess": true,
-    "camera": "type1",
-    "cameraBorder": "",
+    "borderLess": false,
+    "cameraBorder": "cbc",
     "isDesktop": false
   },
   {
     "name": "Samsung Galaxy S20+",
     "width": 1440,
     "height": 3200,
-    "borderLess": true,
-    "camera": "type1",
-    "cameraBorder": "",
+    "borderLess": false,
+    "cameraBorder": "cbc",
     "isDesktop": false
   },
   {
     "name": "Samsung Galaxy S20 Ultra",
     "width": 1440,
     "height": 3200,
-    "borderLess": true,
-    "camera": "type1",
-    "cameraBorder": "",
+    "borderLess": false,
+    "cameraBorder": "cbc",
     "isDesktop": false
   },
   {
     "name": "Samsung Galaxy S10e",
     "width": 1080,
     "height": 2280,
-    "borderLess": true,
-    "camera": "type2",
-    "cameraBorder": "",
+    "borderLess": false,
+    "cameraBorder": "cbr",
     "isDesktop": false
   },
   {
     "name": "Samsung Galaxy S10+",
     "width": 1440,
     "height": 3040,
-    "borderLess": true,
-    "camera": "type2",
-    "cameraBorder": "",
+    "borderLess": false,
+    "cameraBorder": "cbr",
     "isDesktop": false
   },
   {
     "name": "Samsung Galaxy S10",
     "width": 1440,
     "height": 3040,
-    "borderLess": true,
-    "camera": "type2",
-    "cameraBorder": "",
+    "borderLess": false,
+    "cameraBorder": "cbr",
     "isDesktop": false
   },
   {
     "name": "Samsung Galaxy S9+",
     "width": 1440,
     "height": 2960,
-    "borderLess": false,
-    "camera": "type1",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -497,8 +467,7 @@
     "name": "Samsung Galaxy S9",
     "width": 1440,
     "height": 2960,
-    "borderLess": false,
-    "camera": "type1",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -506,8 +475,7 @@
     "name": "Samsung Galaxy S8+",
     "width": 1440,
     "height": 2960,
-    "borderLess": false,
-    "camera": "type3",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -515,8 +483,7 @@
     "name": "Samsung Galaxy S8",
     "width": 1440,
     "height": 2960,
-    "borderLess": false,
-    "camera": "type3",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -524,8 +491,7 @@
     "name": "Samsung Galaxy S7 Edge",
     "width": 1440,
     "height": 2560,
-    "borderLess": false,
-    "camera": "type3",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -533,8 +499,7 @@
     "name": "Samsung Galaxy S7",
     "width": 1440,
     "height": 2560,
-    "borderLess": false,
-    "camera": "type3",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -542,8 +507,7 @@
     "name": "Nexus 9",
     "width": 1536,
     "height": 2048,
-    "borderLess": false,
-    "camera": "type1",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -551,8 +515,7 @@
     "name": "Nexus 7",
     "width": 1200,
     "height": 1920,
-    "borderLess": false,
-    "camera": "type1",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -560,8 +523,7 @@
     "name": "Pixel C",
     "width": 1800,
     "height": 2560,
-    "borderLess": false,
-    "camera": "type2",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -569,8 +531,7 @@
     "name": "Samsung Galaxy Tab 10",
     "width": 1280,
     "height": 800,
-    "borderLess": false,
-    "camera": "type2",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": false
   },
@@ -578,17 +539,15 @@
     "name": "Chromebook Pixel",
     "width": 2560,
     "height": 1700,
-    "borderLess": false,
-    "camera": "type1",
+    "borderLess": true,
     "cameraBorder": "",
-    "isDesktop": false
+    "isDesktop": true
   },
   {
     "name": "Asus Chromebook Flip 12.5 Inch",
     "width": 1920,
     "height": 1080,
-    "borderLess": false,
-    "camera": "type2",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": true
   },
@@ -596,8 +555,7 @@
     "name": "MacBook Air 13 Inch",
     "width": 2560,
     "height": 1600,
-    "borderLess": false,
-    "camera": "type2",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": true
   },
@@ -605,8 +563,7 @@
     "name": "MacBook Pro 15 Inch",
     "width": 2880,
     "height": 1800,
-    "borderLess": false,
-    "camera": "type2",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": true
   },
@@ -614,8 +571,7 @@
     "name": "Lenovo Legion Y540 17 Inch",
     "width": 1920,
     "height": 1080,
-    "borderLess": false,
-    "camera": "type2",
+    "borderLess": true,
     "cameraBorder": "",
     "isDesktop": true
   }
