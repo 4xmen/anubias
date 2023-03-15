@@ -260,7 +260,7 @@ h3 i:hover {
 
 #main .grid {
   display: grid;
-  grid-template-columns: 3fr 9fr;
+  grid-template-columns: 300px 9fr;
   height: 100%;
   width: 100%;
   overflow-y: auto;

@@ -49,10 +49,12 @@
             style="fill:#000;stroke:#00000f;stroke-width:5.29167;stroke-dashoffset:57.1465" width="74.083"
               height="12.347" x="108.479" y="11.758" rx="5.292" ry="11.465"/>
       </svg>
-      <div id="components-area">
+      <div>
 
+      </div>
+      <div id="components-area" :style="componentsAreaStyle">
         <div id="drop-area">
-          Drop your component here
+          Drop visual components here...
         </div>
       </div>
     </div>
@@ -79,7 +81,15 @@ export default {
   },
   computed: {
     ...mapState(['ide']),
-
+    componentsAreaStyle(){
+      let style = '';
+      if (!this.device.borderLess){
+        style += `border-top: ${this.device.height / 15}px solid black;
+        border-bottom: ${this.device.height / 15}px solid black;`;
+      }
+      console.log(style);
+      return style;
+    },
     frontCameraStyle() {
       let style = '';
       if (this.device.height < 2000) {
@@ -98,7 +108,8 @@ export default {
       style += 'transform: scale(' + (ratio) + ');';
       style += 'border-radius: ' + (deviceRatio * 2) + '%;'
       style += 'margin-bottom: -' + this.device.height * (1 - ratio) + 'px;';
-      // style += 'margin-left: -' + ((this.device.width * (1 - ratio) )  / 10) +'px;';
+      style += 'margin-left: -' + ((this.device.width * (1 - ratio) )  / 2) +'px;';
+      style += 'margin-right: -' + ((this.device.width * (1 - ratio) )  / 2) +'px;';
       this.resizeSvg();
       return style;
     },
@@ -141,6 +152,7 @@ export default {
   justify-content: center;
   align-items: center;
   padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 #device {
@@ -168,6 +180,7 @@ export default {
   overflow: hidden;
   overflow-y: auto;
   border-radius: inherit;
+  min-height: 101%;
 }
 
 #drop-area {
@@ -177,10 +190,11 @@ export default {
   border: 3px dashed gray;
   display: flex;
   color: black;
-  font-size: 35px;
+  font-size:45px;
   align-items: center;
   justify-content: center;
   border-radius: 35px;
+  font-weight: 200;
 }
 
 #front-camera {
