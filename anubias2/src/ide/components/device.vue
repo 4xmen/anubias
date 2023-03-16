@@ -20,7 +20,7 @@
       <svg xmlns="http://www.w3.org/2000/svg"
            id="front-camera"
            :style="frontCameraStyle"
-           :width="holderWidth - 40"
+           :width="this.device.width"
            height="100"
            viewBox="0 0 291.042 26.458">
         <path
@@ -47,28 +47,28 @@
         <rect
             v-if="device.cameraBorder === 'cb4'"
             style="fill:#000;stroke:#00000f;stroke-width:5.29167;stroke-dashoffset:57.1465" width="74.083"
-              height="12.347" x="108.479" y="11.758" rx="5.292" ry="11.465"/>
+            height="12.347" x="108.479" y="11.758" rx="5.292" ry="11.465"/>
         <circle
             v-if="device.cameraBorder === 'cbc'"
             style="fill:#000000;stroke:#00000f;stroke-width:5.29167;stroke-dashoffset:57.1465"
             id="path837"
             cx="145.48079"
             cy="18.258026"
-            r="5.4284501" />
+            r="5.4284501"/>
         <circle
             v-if="device.cameraBorder === 'cbr'"
             style="fill:#000000;stroke:#00000f;stroke-width:5.29167;stroke-dashoffset:57.1465"
             id="path837"
             cx="258.221185"
             cy="18.258026"
-            r="5.4284501" />
+            r="5.4284501"/>
         <circle
             v-if="device.cameraBorder === 'cbl'"
             style="fill:#000000;stroke:#00000f;stroke-width:5.29167;stroke-dashoffset:57.1465"
             id="path837"
             cx="32.740395"
             cy="18.258026"
-            r="5.4284501" />
+            r="5.4284501"/>
       </svg>
       <div>
 
@@ -102,35 +102,69 @@ export default {
   },
   computed: {
     ...mapState(['ide']),
-    componentsAreaStyle(){
+    componentsAreaStyle() {
       let style = '';
-      if (!this.device.borderLess){
-        style += `border-top: ${this.device.height / 15}px solid black;
+      // if landscape
+      if (this.isLandscape) {
+        if (!this.device.borderLess) {
+          style += `border-left: ${this.device.height / 15}px solid black;
+        border-right: ${this.device.height / 15}px solid black;`;
+        }
+      } else {
+        // otherwise add bordr top and bottom
+        if (!this.device.borderLess) {
+          style += `border-top: ${this.device.height / 15}px solid black;
         border-bottom: ${this.device.height / 15}px solid black;`;
+        }
       }
-      console.log(style);
+
       return style;
     },
     frontCameraStyle() {
       let style = '';
       if (this.device.height < 2000) {
-        style += 'top: -' + (Math.ceil((2000 - this.device.height) / 400)) * 1.1 + '%;'
+        style += 'top: -' + (Math.ceil((2000 - this.deviceWidth) / 400)) * 1.1 + '%;'
+      }
+      if (this.isLandscape){
+        style += 'transform: rotateZ(-90deg);';
+        style += 'transform-origin: 100% 50%;';
+        style += 'top:-4.5%;';
+        style += 'left:-44.5%;';
+        style += 'right:auto;';
+
+
+
       }
 
       return style;
+    },
+    isLandscape() {
+      return this.orient === 1;
+    },
+    deviceHeight() {
+      if (this.isLandscape) {
+        return this.device.width;
+      }
+      return this.device.height;
+    },
+    deviceWidth() {
+      if (this.isLandscape) {
+        return this.device.height;
+      }
+      return this.device.width;
     },
     deviceStyle() {
 
       let ratio = this.zooms[this.zoom];
       let style = '';
-      const deviceRatio = (this.device.height / this.device.width);
-      style += 'height:' + (this.device.height) + 'px;';
-      style += 'width:' + (this.device.width) + 'px;';
+      const deviceRatio = (this.deviceHeight / this.deviceWidth);
+      style += 'height:' + (this.deviceHeight) + 'px;';
+      style += 'width:' + (this.deviceWidth) + 'px;';
       style += 'transform: scale(' + (ratio) + ');';
       style += 'border-radius: ' + (deviceRatio * 2) + '%;'
-      style += 'margin-bottom: -' + this.device.height * (1 - ratio) + 'px;';
-      style += 'margin-left: -' + ((this.device.width * (1 - ratio) )  / 2) +'px;';
-      style += 'margin-right: -' + ((this.device.width * (1 - ratio) )  / 2) +'px;';
+      style += 'margin-bottom: -' + this.deviceHeight * (1 - ratio) + 'px;';
+      style += 'margin-left: -' + ((this.deviceWidth * (1 - ratio)) / 2) + 'px;';
+      style += 'margin-right: -' + ((this.deviceWidth * (1 - ratio)) / 2) + 'px;';
       this.resizeSvg();
       return style;
     },
@@ -147,11 +181,11 @@ export default {
   methods: {
     resizeSvg() {
       // new device ratio
-      const deviceRatio = (this.device.height / this.device.width)
+      const deviceRatio = (this.deviceHeight / this.deviceWidth)
       // add border to holder width
-      this.holderWidth = this.device.width + 40;
+      this.holderWidth = this.deviceWidth + 40;
       // add border to holder height
-      this.holderHeight = this.device.height + 40;
+      this.holderHeight = this.deviceHeight + 40;
       // new rect size
       this.rectWith = this.defRectWith * this.defRatio / deviceRatio;
       // new rect x
@@ -204,18 +238,23 @@ export default {
   min-height: 101%;
 }
 
+
 #drop-area {
-  min-height: 10rem;
-  background: rgba(192, 192, 192, 0.63);
+  min-height: 15rem;
+  background: rgba(192, 192, 192, 0.60);
   margin: 1rem 3rem;
   border: 3px dashed gray;
   display: flex;
   color: black;
-  font-size:45px;
+  font-size: 45px;
   align-items: center;
   justify-content: center;
   border-radius: 35px;
   font-weight: 200;
+}
+
+#drop-area:hover {
+  background: rgba(192, 192, 192, 0.85);
 }
 
 #front-camera {
