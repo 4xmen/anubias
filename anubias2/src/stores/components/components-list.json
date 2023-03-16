@@ -1,0 +1,212 @@
+[
+    {
+        "title": "Preloader",
+        "icon": "ri-loader-line",
+        "active": true,
+        "visual": true,
+        "data": "window.defaults.preloader"
+    },
+    {
+        "title": "Container",
+        "icon": "ri-shape-line",
+        "active": true,
+        "visual": true,
+        "data": "window.defaults.container"
+    },
+    {
+        "title": "AppBar",
+        "icon": "ri-window-line",
+        "active": true,
+        "visual": true,
+        "data": "window.defaults.appbar"
+    },
+    {
+        "title": "Image",
+        "icon": "ri-image-2-line",
+        "active": true,
+        "visual": true,
+        "data": "window.defaults.image"
+    },
+    {
+        "title": "Icon",
+        "icon": "ri-user-smile-line",
+        "active": true,
+        "visual": true,
+        "data": "window.defaults.icon"
+    },
+    {
+        "title": "Text",
+        "icon": "ri-text",
+        "active": true,
+        "visual": true,
+        "data": "window.defaults.text"
+    },
+    {
+        "title": "Button",
+        "icon": "ri-add-box-line",
+        "active": true,
+        "visual": true,
+        "data": "window.defaults.button"
+    },
+    {
+        "title": "CircleButton",
+        "icon": "ri-information-line",
+        "active": true,
+        "visual": true,
+        "data": "window.defaults.circleButton"
+    },
+    {
+        "title": "Row",
+        "icon": "ri-layout-column-line",
+        "active": true,
+        "visual": true,
+        "data": "window.defaults.row"
+    },
+    {
+        "title": "Input",
+        "icon": "ri-t-box-line",
+        "active": true,
+        "visual": true,
+        "data": "window.defaults.input"
+    },
+    {
+        "title": "Dropdown",
+        "icon": "ri-pages-line",
+        "active": true,
+        "visual": true,
+        "data": "window.defaults.dropdown"
+    },
+    {
+        "title": "Divider",
+        "icon": "ri-divide-line",
+        "active": true,
+        "visual": true,
+        "data": "window.defaults.divider"
+    },
+    {
+        "title": "Toggle",
+        "icon": "ri-toggle-line",
+        "active": true,
+        "visual": true,
+        "data": "window.defaults.toggle"
+    },
+    {
+        "title": "Column",
+        "icon": "ri-layout-row-line",
+        "active": true,
+        "visual": true,
+        "data": "window.defaults.column"
+    },
+    {
+        "title": "Grid",
+        "icon": "ri-layout-grid-line",
+        "active": true,
+        "visual": true,
+        "data": "window.defaults.grid"
+    },
+    {
+        "title": "Nav",
+        "icon": "ri-layout-bottom-2-line",
+        "active": true,
+        "visual": true,
+        "data": "window.defaults.nav"
+    },
+    {
+        "title": "Menu",
+        "icon": "ri-menu-line",
+        "active": true,
+        "visual": false,
+        "data": "window.defaults.menu"
+    },
+    {
+        "title": "Internet \uD83D\uDD1C",
+        "icon": "ri-global-line",
+        "active": false,
+        "visual": false,
+        "data": "window.defaults.internet"
+    },
+    {
+        "title": "Storage \uD83D\uDD1C",
+        "icon": "ri-save-3-line",
+        "active": false,
+        "visual": false,
+        "data": "window.defaults.storage"
+    },
+    {
+        "title": "List \uD83D\uDD1C",
+        "icon": "ri-list-check",
+        "active": false,
+        "visual": true,
+        "data": "window.defaults.list"
+    },
+    {
+        "title": "Rate \uD83D\uDD1C",
+        "icon": "ri-star-half-fill",
+        "active": false,
+        "visual": true,
+        "data": "window.defaults.rate"
+    },
+    {
+        "title": "Calendar \uD83D\uDD1C",
+        "icon": "ri-calendar-2-line",
+        "active": false,
+        "visual": true,
+        "data": "window.defaults.calendar"
+    },
+    {
+        "title": "DatePicker \uD83D\uDD1C",
+        "icon": "ri-calendar-check-line",
+        "active": false,
+        "visual": false,
+        "data": "window.defaults.datepicker"
+    },
+    {
+        "title": "Image Picker \uD83D\uDD1C",
+        "icon": "ri-image-add-line",
+        "active": false,
+        "visual": false,
+        "data": "window.defaults.imagepicker"
+    },
+    {
+        "title": "File Picker \uD83D\uDD1C",
+        "icon": "ri-file-add-line",
+        "active": false,
+        "visual": false,
+        "data": "window.defaults.filepicker"
+    },
+    {
+        "title": "Map \uD83D\uDD1C",
+        "icon": "ri-map-2-line",
+        "active": false,
+        "visual": true,
+        "data": "window.defaults.map"
+    },
+    {
+        "title": "Location \uD83D\uDD1C",
+        "icon": "ri-map-pin-line",
+        "active": false,
+        "visual": false,
+        "data": "window.defaults.location"
+    },
+    {
+        "title": "Slider \uD83D\uDD1C",
+        "icon": "ri-slideshow-line",
+        "active": false,
+        "visual": true,
+        "data": "window.defaults.slider"
+    },
+    {
+        "title": "Tab \uD83D\uDD1C",
+        "icon": "ri-table-alt-line",
+        "active": false,
+        "visual": true,
+        "data": "window.defaults.tab"
+    },
+    {
+        "title": "Timer \uD83D\uDD1C",
+        "icon": "ri-timer-line",
+        "active": false,
+        "visual": false,
+        "data": "window.defaults.timer"
+    }
+]

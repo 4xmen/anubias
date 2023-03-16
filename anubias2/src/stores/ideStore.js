@@ -3,13 +3,16 @@
  * like: devices, tabs , panel states
  */
 import devices from "./device/devices.json"; // import devices info
+import componentsList from "./components/components-list.json"; // import components info
 const ideStore = {
     state: () => ({
         title: 'Anubias',
         tabs: {},
         // panel states
         components: {
+            list: componentsList,
             collapsed: false,
+            mode: 'list',
         },
         properties: {
             collapsed: false,

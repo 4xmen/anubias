@@ -46,6 +46,12 @@
         </span>
         <i class="ri-checkbox-indeterminate-line" @click="toggleComponentsCollapse"></i>
       </h3>
+      <div id="components-available" :class="ide.components.mode">
+        <div class="component" v-for="(component,i) in ide.components.list" :key="i">
+          <i :class="component.icon"></i>
+          {{ component.title }}
+        </div>
+      </div>
     </div>
     <div id="properties" :class="propertiesClass" :style="propertiesStyle">
       <h3 @click="expandProperties">
@@ -151,7 +157,7 @@ export default {
       }
       return style;
     },
-    mainStyle(){
+    mainStyle() {
       let style = '';
       // if right panels collapsed
       if (this.ide.components.collapsed && this.ide.properties.collapsed) {
@@ -264,7 +270,7 @@ h3 i:hover {
   height: 100%;
   width: 100%;
   overflow-y: auto;
-  overflow-x:hidden;
+  overflow-x: hidden;
 }
 
 #main .side {
@@ -275,5 +281,52 @@ h3 i:hover {
   min-height: 5em;
   background: var(--darker-bg);
   margin-top: 0;
+
 }
+
+#components-available {
+  height: calc(100% - 1em);
+  overflow-y: auto;
+  padding-bottom: 2em;
+}
+
+#components-available.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  text-align: center;
+  font-size: 90%;
+  height: 95%;
+}
+
+#components-available .component {
+  font-weight: 100;
+  cursor: pointer;
+  padding: 3px;
+}
+
+#components-available .component:hover {
+  background: #00000033;
+}
+
+#components-available.list {
+  padding: 4px;
+}
+
+#components-available.grid .component i {
+  display: block;
+  font-size: 35px;
+  margin: auto;
+  width: 35px;
+}
+
+#components-available.list .component i {
+  position: relative;
+  top: 2px;
+}
+
+#components-available.list .component:last-child{
+  margin-bottom: 1em;
+}
+
+
 </style>
