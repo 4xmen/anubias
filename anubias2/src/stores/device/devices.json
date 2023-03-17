@@ -408,30 +408,6 @@
     "isDesktop": false
   },
   {
-    "name": "Samsung Galaxy S21 Ultra",
-    "width": 1440,
-    "height": 3200,
-    "borderLess": true,
-    "cameraBorder": "cbc",
-    "isDesktop": false
-  },
-  {
-    "name": "Samsung Galaxy S20+",
-    "width": 1440,
-    "height": 3200,
-    "borderLess": true,
-    "cameraBorder": "cbc",
-    "isDesktop": false
-  },
-  {
-    "name": "Samsung Galaxy S20 Ultra",
-    "width": 1440,
-    "height": 3200,
-    "borderLess": true,
-    "cameraBorder": "cbc",
-    "isDesktop": false
-  },
-  {
     "name": "Samsung Galaxy S10e",
     "width": 1080,
     "height": 2280,

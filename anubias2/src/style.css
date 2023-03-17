@@ -93,6 +93,9 @@ select option{
     overflow: hidden;
     position: relative;
 }
+#components #components-available.list {
+    padding: 4px;
+}
 #properties{
     background: var(--darker-bg);
     grid-column: 16 / 20;
@@ -157,4 +160,8 @@ select option{
 .button.no-border-y {
     border-top: 0;
     border-bottom: 0;
+}
+
+.collapsed .sub-panel{
+    display: none;
 }

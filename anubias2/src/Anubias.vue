@@ -46,7 +46,7 @@
         </span>
         <i class="ri-checkbox-indeterminate-line" @click="toggleComponentsCollapse"></i>
       </h3>
-      <div id="components-available" :class="ide.components.mode">
+      <div id="components-available" :class="ide.components.mode+ ' sub-panel'">
         <div class="component" v-for="(component,i) in ide.components.list" :key="i">
           <i :class="component.icon"></i>
           {{ component.title }}
@@ -308,9 +308,6 @@ h3 i:hover {
   background: #00000033;
 }
 
-#components-available.list {
-  padding: 4px;
-}
 
 #components-available.grid .component i {
   display: block;

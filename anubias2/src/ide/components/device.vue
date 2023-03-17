@@ -5,6 +5,7 @@
 
     <div id="device" :style="deviceStyle">
 
+
       <svg id="device-holder"
            xmlns="http://www.w3.org/2000/svg"
            :width="holderWidth"
@@ -21,7 +22,7 @@
            id="front-camera"
            :style="frontCameraStyle"
            :width="this.device.width"
-           height="100"
+           :height="borderLessCameraHeight"
            viewBox="0 0 291.042 26.458">
         <path
             v-if="device.cameraBorder === 'cb1'"
@@ -51,22 +52,20 @@
         <circle
             v-if="device.cameraBorder === 'cbc'"
             style="fill:#000000;stroke:#00000f;stroke-width:5.29167;stroke-dashoffset:57.1465"
-            id="path837"
             cx="145.48079"
             cy="18.258026"
             r="5.4284501"/>
         <circle
             v-if="device.cameraBorder === 'cbr'"
-            style="fill:#000000;stroke:#00000f;stroke-width:5.29167;stroke-dashoffset:57.1465"
-            id="path837"
-            cx="258.221185"
+            style="fill:#000000;stroke:#00000f;stroke-width:5.29167;
+            stroke-dashoffset:57.1465;"
             cy="18.258026"
+            cx="90%"
             r="5.4284501"/>
         <circle
             v-if="device.cameraBorder === 'cbl'"
             style="fill:#000000;stroke:#00000f;stroke-width:5.29167;stroke-dashoffset:57.1465"
-            id="path837"
-            cx="32.740395"
+            cx="10%"
             cy="18.258026"
             r="5.4284501"/>
       </svg>
@@ -103,18 +102,21 @@ export default {
   computed: {
     ...mapState(['ide']),
     componentsAreaStyle() {
+
       let style = '';
       // if landscape
       if (this.isLandscape) {
         if (!this.device.borderLess) {
           style += `border-left: ${this.device.height / 15}px solid black;
-        border-right: ${this.device.height / 15}px solid black;`;
+        border-right: ${this.device.height / 15}px solid black;
+        margin-right:-3px`;
         }
       } else {
         // otherwise add bordr top and bottom
         if (!this.device.borderLess) {
           style += `border-top: ${this.device.height / 15}px solid black;
-        border-bottom: ${this.device.height / 15}px solid black;`;
+        border-bottom: ${this.device.height / 15}px solid black;
+        margin-top:-3px`;
         }
       }
 
@@ -123,7 +125,8 @@ export default {
     frontCameraStyle() {
       let style = '';
       if (this.device.height < 2000) {
-        style += 'top: -' + (Math.ceil((2000 - this.deviceWidth) / 400)) * 1.1 + '%;'
+        style += 'top: -' + (Math.abs(Math.ceil((2000 - this.deviceWidth) / 400))) * 0.5 + '%;'
+        console.log(style);
       }
       if (this.isLandscape){
         style += 'transform: rotateZ(-90deg);';
@@ -142,14 +145,15 @@ export default {
       return this.orient === 1;
     },
     deviceHeight() {
+      console.log(this.device.height,this.device.width);
       if (this.isLandscape) {
-        return this.device.width;
+        return parseInt(this.device.width);
       }
       return this.device.height;
     },
     deviceWidth() {
       if (this.isLandscape) {
-        return this.device.height;
+        return parseInt(this.device.height);
       }
       return this.device.width;
     },
@@ -167,6 +171,10 @@ export default {
       style += 'margin-right: -' + ((this.deviceWidth * (1 - ratio)) / 2) + 'px;';
       this.resizeSvg();
       return style;
+    },
+    borderLessCameraHeight(){
+      let n = this.device.width / this.ide.devices[0].width;
+      return 100 + Math.round(n * 23);
     },
     zoom() {
       return this.ide.device.zoom;
@@ -259,7 +267,7 @@ export default {
 
 #front-camera {
   position: absolute;
-  top: -.7%;
+  top: -.95%;
   left: 0;
   right: 0;
   z-index: 9;
