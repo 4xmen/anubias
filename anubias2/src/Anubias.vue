@@ -1,7 +1,13 @@
 <template>
   <div id="app" :style="appStyle">
     <div id="tabs">
-      tabs
+      <div class="tab active">
+        Main
+      </div>
+      <div class="tab">
+        <i class="ri-close-line close"></i>
+        Other tab sample
+      </div>
     </div>
     <div id="buttons">
       <div id="device-selector">
@@ -321,9 +327,38 @@ h3 i:hover {
   top: 2px;
 }
 
-#components-available.list .component:last-child{
+#components-available.list .component:last-child {
   margin-bottom: 1em;
 }
+#tabs{
+}
+#tabs .tab {
+  position: relative;
+  padding: 5px 25px 3px 7px;
+  text-align: center;
+  border-right: 1px solid var(--lighter-bg);
+  display: inline-block;
+}
 
+#tabs .tab:first-child{
+  padding: 4px 7px 3px;
+  width: 7%;
+}
 
+#tabs .tab .close{
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  padding: 4px;
+  color: var(--lighter-bg);
+}
+
+#tabs .tab:hover .close{
+  color: darkred;
+}
+
+#tabs .tab.active {
+  color: var(--text-hilight);
+}
 </style>
