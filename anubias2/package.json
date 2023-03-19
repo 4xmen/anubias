@@ -51,6 +51,7 @@
   "dependencies": {
     "remixicon": "^2.5.0",
     "vazirmatn": "^33.0.3",
+    "vue-router": "^4.1.6",
     "vuex": "^4.0.2"
   }
 }

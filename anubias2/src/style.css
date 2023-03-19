@@ -9,8 +9,8 @@
     --def-bg: #282c34;
     --darker-bg: #21252b;
     --lighter-bg: #353a45;
-    --scrollbarbg:  #21252b80;
-    --scrollbar:  #353a4560;
+    --scrollbarbg: #21252b80;
+    --scrollbar: #353a4560;
 
     --transition-duration: 500ms;
 
@@ -40,7 +40,7 @@
     background: var(--darker-bg);
 }
 
-*{
+* {
     padding: 0;
     margin: 0;
     border-spacing: 0;
@@ -48,7 +48,7 @@
 }
 
 
-select{
+select {
     background: transparent;
     color: var(--text-color);
     border: transparent;
@@ -60,11 +60,11 @@ select{
     font-size: 16px;
 }
 
-select:focus{
+select:focus {
     border-bottom: 1px solid var(--text-color);
 }
 
-select option{
+select option {
     background: var(--darker-bg);
     font-size: 16px;
 }
@@ -80,12 +80,14 @@ select option{
     grid-column: 1 / 20;
     grid-row: 1;
 }
+
 #buttons {
     grid-column: 1 / 20;
     grid-row: 2;
     background: var(--darker-bg);
 }
-#components{
+
+#components {
     background: var(--darker-bg);
     grid-column: 16 / 20;
     grid-row: 3;
@@ -93,10 +95,12 @@ select option{
     overflow: hidden;
     position: relative;
 }
+
 #components #components-available.list {
     padding: 4px;
 }
-#properties{
+
+#properties {
     background: var(--darker-bg);
     grid-column: 16 / 20;
     grid-row: 4;
@@ -106,10 +110,11 @@ select option{
     position: relative;
 }
 
-#properties.collapsed,#components.collapsed{
+#properties.collapsed, #components.collapsed {
     grid-column: 19 / 20;
 }
-#properties.collapsed h3,#components.collapsed h3{
+
+#properties.collapsed h3, #components.collapsed h3 {
     position: absolute;
     left: 0;
     right: 0;
@@ -118,36 +123,43 @@ select option{
     background: var(--darker-bg);
     cursor: pointer;
 }
-#properties.collapsed h3 span,#components.collapsed h3 span{
+
+#properties.collapsed h3 span, #components.collapsed h3 span {
     transform: rotateZ(90deg);
     display: block;
     padding: 2px 7px;
 }
-#properties.collapsed h3 i, #components.collapsed h3 i{
+
+#properties.collapsed h3 i, #components.collapsed h3 i {
     display: none;
 }
-#main{
+
+#main {
     grid-column: 1 / 16;
     grid-row: 3 / 5;
 }
-#pages{
+
+#pages {
     background: var(--darker-bg);
     grid-column: 1 / 20;
     grid-row: 5;
     border: 1px solid var(--lighter-bg);
     border-bottom: 0;
 }
+
 #pages.collapsed {
 }
-#pages.collapsed h3{
+
+#pages.collapsed h3 {
     background: var(--darker-bg);
     cursor: pointer;
 }
-#pages.collapsed i{
+
+#pages.collapsed i {
     display: none;
 }
 
-.r90deg{
+.r90deg {
     transform: rotateZ(90deg);
 }
 
@@ -162,6 +174,15 @@ select option{
     border-bottom: 0;
 }
 
-.collapsed .sub-panel{
+.collapsed .sub-panel {
     display: none;
+}
+
+a, a:hover {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+a:hover, a:visited:hover {
+    color: var(--text-hilight);
 }

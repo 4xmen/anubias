@@ -7,6 +7,7 @@
       <div class="tab">
         <i class="ri-close-line close"></i>
         Other tab sample
+
       </div>
     </div>
     <div id="buttons">
@@ -37,6 +38,9 @@
       <div class="grid">
         <div class="side">
           <div id="non-visual-component">
+            <router-link to="/settings">
+              go setting test
+            </router-link>
           </div>
         </div>
         <div id="device-container">
@@ -79,12 +83,12 @@
 <script>
 import {mapActions} from 'vuex';
 import {mapState} from 'vuex';
-import buttons from "./ide/components/buttons.vue";
-import iconButton from "./ide/components/iconButton.vue";
-import device from "./ide/components/device.vue";
+import buttons from "../components/buttons.vue";
+import iconButton from "../components/iconButton.vue";
+import device from "../components/device.vue";
 
 export default {
-  name: "Anubias",
+  name: "anubias",
   components: {buttons, iconButton, device},
   data: () => {
     return {

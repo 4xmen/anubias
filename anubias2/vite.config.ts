@@ -4,7 +4,7 @@ import vue from '@vitejs/plugin-vue'
 import electron from 'vite-plugin-electron'
 import renderer from 'vite-plugin-electron-renderer'
 import pkg from './package.json'
-
+import path from 'path';
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
   rmSync('dist-electron', { recursive: true, force: true })
@@ -36,12 +36,20 @@ export default defineConfig(({ command }) => {
                 external: Object.keys('dependencies' in pkg ? pkg.dependencies : {}),
               },
             },
+            // Add the `resolve` field here
+            resolve: {
+              // Define your aliases here
+              alias: {
+                '@': path.resolve(__dirname, './src'),
+                '@views': path.resolve(__dirname, './src/ide/views')
+              }
+            }
           },
         },
         {
           entry: 'electron/preload/index.ts',
           onstart(options) {
-            // Notify the Renderer-Process to reload the page when the Preload-Scripts build is complete, 
+            // Notify the Renderer-Process to reload the page when the Preload-Scripts build is complete,
             // instead of restarting the entire Electron App.
             options.reload()
           },
@@ -54,6 +62,14 @@ export default defineConfig(({ command }) => {
                 external: Object.keys('dependencies' in pkg ? pkg.dependencies : {}),
               },
             },
+            // Add the `resolve` field here
+            resolve: {
+              // Define your aliases here
+              alias: {
+                '@': path.resolve(__dirname, './src'),
+                '@views': path.resolve(__dirname, './src/ide/views')
+              }
+            }
           },
         }
       ]),
@@ -69,6 +85,7 @@ export default defineConfig(({ command }) => {
         port: +url.port,
       }
     })(),
-    clearScreen: false,
+    clearScreen: false
   }
-})
+
+});
