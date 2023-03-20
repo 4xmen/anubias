@@ -7,6 +7,7 @@
  * - etc.
  */
 
+
 class IDE {
     // instance of electron js windows
     private _win: any;

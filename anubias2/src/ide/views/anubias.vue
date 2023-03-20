@@ -98,23 +98,6 @@ export default {
   },
   mounted() {
     this.setIdeTitle('AnubiasApp');
-  }, methods: {
-    ...mapActions(['setIdeTitle', 'toggleComponentsCollapse', 'togglePropertiesCollapse', 'togglePagesCollapse']),
-    expandComponents(e) {
-      if (this.ide.components.collapsed && e.target.tagName !== 'I') {
-        this.toggleComponentsCollapse();
-      }
-    },
-    expandProperties(e) {
-      if (this.ide.properties.collapsed && e.target.tagName !== 'I') {
-        this.togglePropertiesCollapse();
-      }
-    },
-    expandPages(e) {
-      if (this.ide.pages.collapsed && e.target.tagName !== 'I') {
-        this.togglePagesCollapse();
-      }
-    },
   }, computed: {
     ...mapState(['ide']),
     zoom: {
@@ -199,6 +182,24 @@ export default {
         style += 'grid-column: 16 / 19;';
       }
       return style;
+    }
+  },
+  methods: {
+    ...mapActions(['setIdeTitle', 'toggleComponentsCollapse', 'togglePropertiesCollapse', 'togglePagesCollapse']),
+    expandComponents(e) {
+      if (this.ide.components.collapsed && e.target.tagName !== 'I') {
+        this.toggleComponentsCollapse();
+      }
+    },
+    expandProperties(e) {
+      if (this.ide.properties.collapsed && e.target.tagName !== 'I') {
+        this.togglePropertiesCollapse();
+      }
+    },
+    expandPages(e) {
+      if (this.ide.pages.collapsed && e.target.tagName !== 'I') {
+        this.togglePagesCollapse();
+      }
     }
   }
 }

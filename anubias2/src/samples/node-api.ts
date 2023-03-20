@@ -13,4 +13,6 @@ lstat(cwd()).then(stats => {
   console.log('[fs.lstat]', stats)
 }).catch(err => {
   console.error(err)
-})
+});
+
+ipcRenderer.send('close',true);

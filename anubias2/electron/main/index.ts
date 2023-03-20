@@ -130,3 +130,5 @@ ipcMain.handle('open-win', (_, arg) => {
   }
 
 })
+
+import './main-api';
