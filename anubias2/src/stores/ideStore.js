@@ -26,6 +26,16 @@ const ideStore = {
             orient: 0,
             zoom: 0,
         },
+        // menu status depends on `app-menu.ts`
+        menu: {
+            canSave: false,
+            canUndo: false,
+            canRedo: false,
+            canPaste: false,
+            canCut: false,
+            canCopy: false,
+            canOnlineBuild: false,
+        },
         devices: devices,
     }),
     mutations: {
