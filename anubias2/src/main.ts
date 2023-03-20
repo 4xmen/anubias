@@ -3,7 +3,7 @@ import { createWebHistory, createRouter } from "vue-router";
 
 import "./css";
 import App from './app.vue';
-import './samples/node-api';
+import './ide/ide-api';
 import store from './stores/store';
 import routes from "./ide/router";
 
