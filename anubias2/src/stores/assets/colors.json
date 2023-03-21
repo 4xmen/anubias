@@ -1,0 +1,117 @@
+[
+  {
+    "name": "default",
+    "value": "null",
+    "color": "#ffffff"
+  },
+  {
+    "name": "transparent",
+    "value": "Colors.transparent",
+    "color": "transparent"
+  },
+  {
+    "name": "pink",
+    "value": "Colors.pink",
+    "color": "#e91e63"
+  },
+  {
+    "name": "red",
+    "value": "Colors.red",
+    "color": "#f44336"
+  },
+  {
+    "name": "deepOrange",
+    "value": "Colors.deepOrange",
+    "color": "#ff5722"
+  },
+  {
+    "name": "orange",
+    "value": "Colors.orange",
+    "color": "#ff9800"
+  },
+  {
+    "name": "amber",
+    "value": "Colors.amber",
+    "color": "#ffc107"
+  },
+  {
+    "name": "yellow",
+    "value": "Colors.yellow",
+    "color": "#ffeb3b"
+  },
+  {
+    "name": "lime",
+    "value": "Colors.lime",
+    "color": "#cddc39"
+  },
+  {
+    "name": "lightGreen",
+    "value": "Colors.lightGreen",
+    "color": "#8bc34a"
+  },
+  {
+    "name": "green",
+    "value": "Colors.green",
+    "color": "#4caf50"
+  },
+  {
+    "name": "teal",
+    "value": "Colors.teal",
+    "color": "#009688"
+  },
+  {
+    "name": "cyan",
+    "value": "Colors.cyan",
+    "color": "#00bcd4"
+  },
+  {
+    "name": "lightBlue",
+    "value": "Colors.lightBlue",
+    "color": "#03a9f4"
+  },
+  {
+    "name": "blue",
+    "value": "Colors.blue",
+    "color": "#2196f3"
+  },
+  {
+    "name": "indigo",
+    "value": "Colors.indigo",
+    "color": "#3f51b5"
+  },
+  {
+    "name": "purple",
+    "value": "Colors.purple",
+    "color": "#9c27b0"
+  },
+  {
+    "name": "deepPurple",
+    "value": "Colors.deepPurple",
+    "color": "#673ab7"
+  },
+  {
+    "name": "blueGrey",
+    "value": "Colors.blueGrey",
+    "color": "#607d8b"
+  },
+  {
+    "name": "brown",
+    "value": "Colors.brown",
+    "color": "#795548"
+  },
+  {
+    "name": "grey",
+    "value": "Colors.grey",
+    "color": "#9e9e9e"
+  },
+  {
+    "name": "black",
+    "value": "Colors.black",
+    "color": "#000000"
+  },
+  {
+    "name": "white",
+    "value": "Colors.white",
+    "color": "#ffffff"
+  }
+]

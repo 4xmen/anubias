@@ -2,7 +2,8 @@
  * ide store, storing ide information
  * like: devices, tabs , panel states
  */
-import devices from "./device/devices.json"; // import devices info
+import devices from "./assets/devices.json"; // import devices info
+import colors from './assets/colors.json'; // import material colors
 import componentsList from "./components/components-list.json"; // import components info
 const ideStore = {
     state: () => ({
@@ -37,6 +38,7 @@ const ideStore = {
             canOnlineBuild: false,
         },
         devices: devices,
+        colors: colors,
     }),
     mutations: {
         changeIdeTitle(state, title) {

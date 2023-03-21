@@ -21,9 +21,14 @@ const routes = [
         component: view('settings'),
     },
     {
+        path: '/new-project',
+        name: 'new-project',
+        component: view('new-project'),
+    },
+    {
         path: '/about',
         name: 'about',
-        component: view('settings'),
+        component: view('about'),
     },
     {
         path: '/welcome',

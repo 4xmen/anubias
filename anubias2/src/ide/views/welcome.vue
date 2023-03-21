@@ -9,7 +9,7 @@
     </h4>
     <br>
     <div id="welcome-grid">
-      <div id="new-project">
+      <div id="new-project" @click="goNewProject">
         <i class="ri-file-add-line"></i>
         New project
       </div>
@@ -59,7 +59,10 @@ export default {
     },
     goSetting(){
       this.$router.push('/settings');
-    }
+    },
+    goNewProject(){
+      this.$router.push('/new-project');
+    },
   }
 }
 </script>
@@ -68,8 +71,12 @@ export default {
 
 h4 {
   font-size: 110%;
+  padding-top: .3em;
 }
-
+img {
+  height: 5.5em;
+  float: right;
+}
 #welcome-grid {
   display: grid;
   grid-template-columns: repeat(21, 1fr);
@@ -85,6 +92,7 @@ h4 {
   font-weight: 300;
   font-size: 110%;
   cursor: pointer;
+  background: var(--darker-bg);
 }
 
 #welcome-grid > div:hover {
@@ -167,8 +175,7 @@ h4 {
   margin: -.4em -32px 0 .5em;
 }
 
-img {
-  height: 5em;
-  float: right;
+.container{
+  user-select: none;
 }
 </style>
