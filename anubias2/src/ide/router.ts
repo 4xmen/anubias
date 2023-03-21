@@ -1,4 +1,5 @@
-import anubias from './views/anubias.vue';
+// import anubias from './views/anubias.vue';
+import welcome from './views/welcome.vue';
 import { Component } from 'vue';
 
 // This function is used to create a lazy-loaded Vue component.
@@ -13,7 +14,7 @@ function view(name: string): Component {
 // The component information is obtained by calling the 'view()' function
 // which returns a lazy-loaded Vue component using the path name.
 const routes = [
-    { path: '/', component: anubias },
+    { path: '/', component: welcome },
     {
         path: '/settings',
         name: 'settings',

@@ -47,6 +47,9 @@
     box-sizing: border-box;
 }
 
+h1,h2,h3,h4,h5,h6{
+    font-weight: 100;
+}
 
 select {
     background: transparent;
@@ -176,6 +179,11 @@ select option {
 
 .collapsed .sub-panel {
     display: none;
+}
+
+.container{
+    max-width: 90%;
+    margin: 1em auto;
 }
 
 a, a:hover {
