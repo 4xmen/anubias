@@ -46,10 +46,10 @@
       </div>
       <div class="row-equal">
         <div>
-          <toggle label="Is RTL?" v-model="project.isRTL"></toggle>
+          <toggle label="Is RTL?" v-model="project.isRTL" :size=".8"></toggle>
         </div>
         <div>
-          <toggle label="Is dark?" v-model="project.isDark"></toggle>
+          <toggle label="Is dark?" v-model="project.isDark" :size=".8"></toggle>
         </div>
       </div>
       <div class="row-equal">

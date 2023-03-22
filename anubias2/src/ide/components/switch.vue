@@ -3,7 +3,7 @@
     <span>
       {{label}}
     </span>
-    <label class="switch">
+    <label class="switch" :style="switchStyle">
       <input type="checkbox" @change="update" v-model="val" :name="name">
       <span class="slider"></span>
     </label>
@@ -27,6 +27,10 @@ export default {
       default: '',
       type: String,
     },
+    size:{
+      default: 1,
+      type: Number,
+    },
     modelValue: {
       default: false,
       type: Boolean,
@@ -34,6 +38,11 @@ export default {
   },
   mounted() {
     this.val = this.modelValue;
+  },
+  computed:{
+    switchStyle:function () {
+      return 'transform: scale('+this.size+')';
+    },
   },
   methods:{
     update(){
@@ -57,6 +66,7 @@ export default {
   display: inline-block;
   width: 50px;
   height: 26px;
+  transform-origin: right center;
 }
 
 .switch input {
