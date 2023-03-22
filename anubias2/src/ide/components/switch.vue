@@ -1,9 +1,11 @@
 <template>
   <div class="switch-container">
     <span>
-      {{label}}
+      <i :class="icon"></i>
+      {{ label }}
     </span>
     <label class="switch" :style="switchStyle">
+
       <input type="checkbox" @change="update" v-model="val" :name="name">
       <span class="slider"></span>
     </label>
@@ -12,22 +14,22 @@
 
 <script>
 export default {
-  name: "switch",
-  data:()=>{
-    return{
+  name: "switch-toggle",
+  data: () => {
+    return {
       val: false,
     }
   },
-  props:{
-    name:{
+  props: {
+    name: {
       default: '',
       type: String,
     },
-    label:{
+    label: {
       default: '',
       type: String,
     },
-    size:{
+    size: {
       default: 1,
       type: Number,
     },
@@ -35,17 +37,21 @@ export default {
       default: false,
       type: Boolean,
     },
+    icon: {
+      default: '',
+      type: String,
+    }
   },
   mounted() {
     this.val = this.modelValue;
   },
-  computed:{
-    switchStyle:function () {
-      return 'transform: scale('+this.size+')';
+  computed: {
+    switchStyle: function () {
+      return 'transform: scale(' + this.size + ')';
     },
   },
-  methods:{
-    update(){
+  methods: {
+    update() {
       this.$emit('update:modelValue', this.val);
     }
   }
@@ -54,12 +60,18 @@ export default {
 
 <style scoped>
 
-.switch-container{
+.switch-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--lighter-bg);
   padding: 7px;
+}
+.switch-container i[class^="ri"]{
+  position: relative;
+  top: 2px;
+  font-size: 17px;
+  margin-right: 5px;
 }
 .switch {
   position: relative;

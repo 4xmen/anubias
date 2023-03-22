@@ -9,25 +9,25 @@
         <label for="name">
           Project name
         </label>
-        <input ref="name" type="text" id="name" v-model="project.name" placeholder="Project name here..."/>
+        <input ref="name" type="text" id="name" v-model="newProject.name" placeholder="Project name here..."/>
       </div>
       <div class="input-container">
         <label for="version">
           Project version
         </label>
-        <input type="text" id="version" v-model="project.version" placeholder="Project version here..."/>
+        <input type="text" id="version" v-model="newProject.version" placeholder="Project version here..."/>
       </div>
       <div class="input-container">
         <label for="package">
           Project version
         </label>
-        <input type="text" id="package" v-model="project.packageName" placeholder="Project package name here..."/>
+        <input type="text" id="package" v-model="newProject.packageName" placeholder="Project package name here..."/>
       </div>
       <div class="input-container">
         <label for="page-count">
           Initial page count
         </label>
-        <input type="number" min="1" max="10" id="page-count" v-model="project.pageCount"
+        <input type="number" min="1" max="10" id="page-count" v-model="newProject.pageCount"
                placeholder="Number of page you want to initial project..."/>
       </div>
     </div>
@@ -35,9 +35,9 @@
       Project color
       <div id="colors">
         <template v-for="(color,key) in ide.colors" :key="key">
-          <div :class="'color' + (color.value === project.appColor?' active':'')"
+          <div :class="'color' + (color.value === newProject.appColor?' active':'')"
                v-if="key > 1" :style="`background: ${color.color}`"
-               @click="project.appColor = color.value">
+               @click="newProject.appColor = color.value">
             <span>
               {{ color.name }}
             </span>
@@ -46,10 +46,10 @@
       </div>
       <div class="row-equal">
         <div>
-          <toggle label="Is RTL?" v-model="project.isRTL" :size=".8"></toggle>
+          <toggle label="Is RTL?" v-model="newProject.isRTL" :size=".8"></toggle>
         </div>
         <div>
-          <toggle label="Is dark?" v-model="project.isDark" :size=".8"></toggle>
+          <toggle label="Is dark?" v-model="newProject.isDark" :size=".8"></toggle>
         </div>
       </div>
       <div class="row-equal">
@@ -57,19 +57,100 @@
           <label for="lang">
             Project language
           </label>
-          <input type="text" id="lang" v-model="project.lang" placeholder="Project language..."/>
+          <input type="text" id="lang" v-model="newProject.lang" placeholder="Project language..."/>
         </div>
         <div class="input-container">
           <label for="country">
             Project country
           </label>
-          <input type="text" id="country" v-model="project.country" placeholder="Project county..."/>
+          <input type="text" id="country" v-model="newProject.country" placeholder="Project county..."/>
+        </div>
+      </div>
+
+      <!--     WIP: template here must be add here    -->
+    </div>
+    <div id="permission" v-if="stepIndex === 2">
+      <div class="row-equal">
+        <div>
+          <toggle icon="ri-wifi-line" label="Internet permission" v-model="newProject.permissions.internet"
+                  :size=".8"></toggle>
+        </div>
+        <div>
+          <toggle icon="ri-database-2-line" label="Storage  permission" v-model="newProject.permissions.storage"
+                  :size=".8"></toggle>
+        </div>
+      </div>
+      <div class="row-equal">
+        <div>
+          <toggle icon="ri-camera-line" label="Camera permission" v-model="newProject.permissions.camera"
+                  :size=".8"></toggle>
+        </div>
+        <div>
+          <toggle icon="ri-mic-line" label="Microphone permission" v-model="newProject.permissions.microphone"
+                  :size=".8"></toggle>
+        </div>
+      </div>
+      <div class="row-equal">
+        <div>
+          <toggle icon="ri-contacts-book-2-line" label="Contact permission" v-model="newProject.permissions.contact"
+                  :size=".8"></toggle>
+        </div>
+        <div>
+          <toggle icon="ri-phone-line" label="Call logs permission" v-model="newProject.permissions.callLog"
+                  :size=".8"></toggle>
+        </div>
+      </div>
+      <div class="row-equal">
+        <div>
+          <toggle icon="ri-message-2-line" label="SMS permission" v-model="newProject.permissions.sms"
+                  :size=".8"></toggle>
+        </div>
+        <div>
+          <toggle icon="ri-map-pin-line" label="Location permission" v-model="newProject.permissions.location"
+                  :size=".8"></toggle>
         </div>
       </div>
     </div>
-    <div id="permission" v-if="stepIndex === 2">
-    </div>
     <div id="compile" v-if="stepIndex === 3">
+      <div class="row-equal">
+        <div>
+          <toggle icon="ri-android-line" label="Andriod" v-model="newProject.platforms.andriod" :size=".8"></toggle>
+        </div>
+        <div>
+          <toggle icon="ri-apple-line" label="iOS" v-model="newProject.platforms.ios" :size=".8"></toggle>
+        </div>
+      </div>
+      <div class="row-equal">
+        <div>
+          <toggle icon="ri-global-line" label="Web" v-model="newProject.platforms.web" :size=".8"></toggle>
+        </div>
+        <div>
+          <toggle icon="ri-ubuntu-line" label="Linux" v-model="newProject.platforms.linux" :size=".8"></toggle>
+        </div>
+      </div>
+      <div class="row-equal">
+        <div>
+          <toggle icon="ri-finder-line" label="MacOS" v-model="newProject.platforms.macOS" :size=".8"></toggle>
+        </div>
+        <div>
+          <toggle icon="ri-windows-line" label="Windows" v-model="newProject.platforms.windows" :size=".8"></toggle>
+        </div>
+      </div>
+      <div class="input-container">
+        <label for="def">
+          Default platform
+        </label>
+        <select v-model="newProject.defaultPlatform" id="def" disabled>
+          <template v-for="(hasPlatform,i) in newProject.platforms" :key="i">
+            <option :value="i" v-if="hasPlatform">
+              {{ i }}
+            </option>
+          </template>
+        </select>
+        <p class="note">
+          The predefined platform in this version is Android.
+        </p>
+      </div>
     </div>
 
     <div id="next" title="Next" class="circle-btn" @click="nxt">
@@ -86,6 +167,9 @@ import steps from "../components/steps.vue";
 import toggle from "../components/switch.vue";
 import {btnWave} from '../js/ui-effects';
 import {mapState} from 'vuex';
+import {mapActions} from 'vuex';
+import prjTemplate from '../../stores/assets/projectTemplate.json';
+import defaultPage from '../../stores/components/defaultPage.json';
 
 export default {
   name: "new-project",
@@ -111,17 +195,7 @@ export default {
           title: 'Compile options',
         },
       ],
-      project: {
-        name: 'new project',
-        version: '1.0.0',
-        packageName: 'com.example.mynewproject',
-        pageCount: 1,
-        appColor: 'Colors.green',
-        lang: "en",
-        country: "US",
-        isDark: false,
-        isRTL: false,
-      }
+      newProject: prjTemplate,
     }
   },
   mounted() {
@@ -129,9 +203,10 @@ export default {
     btnWave();
   },
   computed: {
-    ...mapState(['ide'])
+    ...mapState(['ide', 'project'])
   },
   methods: {
+    ...mapActions(['createProject']),
     prv() {
       if (this.stepIndex === 0) {
         this.$router.back();
@@ -141,7 +216,17 @@ export default {
     },
     nxt() {
       if (this.stepIndex === this.projectSteps.length - 1) {
-        console.log('done!');
+
+        // create project and go to main page
+        this.newProject.pages = [];
+
+        // WIP add page by template
+        // if add template we must edit this loop
+        for (let i = 0; i < this.newProject.pageCount; i++) {
+          this.newProject.pages.push(defaultPage);
+        }
+        this.createProject(this.newProject);
+        this.$router.push('/main');
       } else {
         this.stepIndex++;
       }
@@ -192,10 +277,12 @@ export default {
   color: var(--def-bg);
   font-weight: 500;
 }
-.row-equal{
+
+.row-equal {
   padding-top: 1em;
 }
-.row-equal > div{
+
+.row-equal > div {
   padding: .5rem;
 }
 </style>

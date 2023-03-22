@@ -105,7 +105,7 @@ export default {
         return this.$store.state.ide.device.zoom;
       },
       set(value) {
-        this.$store.commit('updateDeviceZoom', value)
+        this.$store.commit('UPDATE_DEVICE_ZOOM', value)
       }
     },
     activeDevice: {
@@ -113,7 +113,7 @@ export default {
         return this.$store.state.ide.device.active;
       },
       set(value) {
-        this.$store.commit('updateDeviceActive', value)
+        this.$store.commit('UPDATE_DEVICE_ACTIVE', value)
       }
     },
     orient: {
@@ -121,7 +121,7 @@ export default {
         return this.$store.state.ide.device.orient;
       },
       set(value) {
-        this.$store.commit('updateDeviceOrient', value)
+        this.$store.commit('UPDATE_DEVICE_ORIENT', value)
       }
     },
     componentsClass() {

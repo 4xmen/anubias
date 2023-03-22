@@ -8,6 +8,12 @@ import componentsList from "./components/components-list.json"; // import compon
 const ideStore = {
     state: () => ({
         title: 'Anubias',
+        version: {
+            major: 2,
+            minor: 0,
+            patch: 0,
+            suffix: 'alpha'
+        },
         tabs: {},
         // panel states
         components: {
@@ -41,44 +47,51 @@ const ideStore = {
         colors: colors,
     }),
     mutations: {
-        changeIdeTitle(state, title) {
+        CHANGE_IDE_TITLE(state, title) {
             document.querySelector('title').innerText = title;
             state.title = title;
         },
-        toggleComponentsCollapse(state) {
+        TOGGLE_COMPONENTS_COLLAPSE(state) {
             state.components.collapsed = !state.components.collapsed;
         },
-        togglePropertiesCollapse(state) {
+        TOGGLE_PROPERTIES_COLLAPSE(state) {
             state.properties.collapsed = !state.properties.collapsed;
         },
-        togglePagesCollapse(state) {
+        TOGGLE_PAGES_COLLAPSE(state) {
             state.pages.collapsed = !state.pages.collapsed;
         },
-        updateDeviceZoom(state, zoom) {
+        UPDATE_DEVICE_ZOOM(state, zoom) {
             state.device.zoom = zoom;
         },
-        updateDeviceOrient(state, orient) {
+        UPDATE_DEVICE_ORIENT(state, orient) {
             state.device.orient = orient;
         },
-        updateDeviceActive(state, index) {
+        UPDATE_DEVICE_ACTIVE(state, index) {
             state.device.active = index;
         },
     },
     actions: {
         setIdeTitle(context, title) {
-            context.commit('changeIdeTitle', title);
+            context.commit('CHANGE_IDE_TITLE', title);
         },
         toggleComponentsCollapse(context) {
-            context.commit('toggleComponentsCollapse');
+            context.commit('TOGGLE_COMPONENTS_COLLAPSE');
         },
         togglePropertiesCollapse(context) {
-            context.commit('togglePropertiesCollapse');
+            context.commit('TOGGLE_PROPERTIES_COLLAPSE');
         },
         togglePagesCollapse(context) {
-            context.commit('togglePagesCollapse');
+            context.commit('TOGGLE_PAGES_COLLAPSE');
         },
     },
-    getters: {}
+    getters: {
+        version(state) {
+            return state.version.major + '.' +
+                state.version.minor + '.' +
+                state.version.patch + '-' +
+                state.version.suffix;
+        }
+    }
 };
 
 export default ideStore;

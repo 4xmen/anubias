@@ -1,0 +1,16 @@
+{
+  "type": "page",
+  "name": "page",
+  "scrollable": true,
+  "safeArea": false,
+  "padding": "15",
+  "align": "null",
+  "onShow": "// run when show page \n",
+  "preview": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
+  "children": {
+    "visual": [],
+    "nonvisual": []
+  },
+  "tie": [
+  ]
+}

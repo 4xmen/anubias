@@ -1,0 +1,38 @@
+{
+    "name": "new project",
+    "version": "1.0.0",
+    "packageName": "com.example.mynewproject",
+    "pageCount": 1,
+    "appColor": "Colors.green",
+    "lang": "en",
+    "country": "US",
+    "isDark": false,
+    "isRTL": false,
+    "permissions": {
+        "internet": true,
+        "storage": false,
+        "camera": false,
+        "microphone": false,
+        "contact": false,
+        "callLog": false,
+        "sms": false,
+        "calendar": false,
+        "location": false
+    },
+    "platforms": {
+        "andriod": true,
+        "ios": false,
+        "web": true,
+        "linux": false,
+        "macOS": false,
+        "windows": false
+    },
+    "defaultPlatform": "andriod",
+    "pages": [],
+    "anubias": [
+        2,
+        0,
+        0,
+        ""
+    ]
+}
