@@ -76,9 +76,13 @@
         pages
         <i class="ri-checkbox-indeterminate-line" @click="togglePagesCollapse"></i>
       </h3>
-      <div v-for="(page,i) in project.project.pages" class="page" :key="i">
-        <img :src="page.preview" alt="">
-        {{ page.name }}
+      <div id="page-container">
+        <div v-for="(page,i) in project.project.pages" class="page" :key="i">
+          <div class="img" :style="`background-image: url(${page.preview})`">
+
+          </div>
+          {{ page.name }}
+        </div>
       </div>
     </div>
   </div>
@@ -371,5 +375,31 @@ h3 i:hover {
 
 #tabs .tab.active {
   color: var(--text-hilight);
+}
+
+#pages #page-container{
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+#pages #page-container .page{
+  width: 7rem;
+  display: inline-block;
+  text-align: center;
+}
+
+#pages.collapsed #page-container{
+  display: none;
+}
+
+#pages #page-container .page .img{
+  display: block;
+  height: 65px;
+  width: 80%;
+  border: 1px solid var(--lighter-bg);
+  background-color: #fff;
+  margin:.5rem auto;
+  background-size: contain;
+  background-position: top center;
 }
 </style>
