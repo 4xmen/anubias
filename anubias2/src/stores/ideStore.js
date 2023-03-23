@@ -43,6 +43,7 @@ const ideStore = {
             canCopy: false,
             canOnlineBuild: false,
         },
+        activePage: 0,
         devices: devices,
         colors: colors,
     }),

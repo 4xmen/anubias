@@ -222,8 +222,10 @@ export default {
 
         // WIP add page by template
         // if add template we must edit this loop
+        let page = defaultPage;
         for (let i = 0; i < this.newProject.pageCount; i++) {
-          this.newProject.pages.push(defaultPage);
+          page.name = 'page'+(i+1);
+          this.newProject.pages.push({...page});
         }
         this.createProject(this.newProject);
         this.$router.push('/main');

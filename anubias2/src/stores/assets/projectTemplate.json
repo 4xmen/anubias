@@ -8,6 +8,7 @@
     "country": "US",
     "isDark": false,
     "isRTL": false,
+    "entryPoint": 0,
     "permissions": {
         "internet": true,
         "storage": false,

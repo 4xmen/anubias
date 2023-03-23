@@ -7,7 +7,6 @@
  * - etc.
  */
 
-
 class IDE {
     // instance of electron js windows
     private _win: any;
@@ -21,8 +20,7 @@ class IDE {
         return '';
     }
     public async createProject(){
-        this._win.send('hello-world');
-        return '';
+        this._win.send('redirect','/new-project')
     }
 }
 

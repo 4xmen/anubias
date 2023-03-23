@@ -76,6 +76,10 @@
         pages
         <i class="ri-checkbox-indeterminate-line" @click="togglePagesCollapse"></i>
       </h3>
+      <div v-for="(page,i) in project.project.pages" class="page" :key="i">
+        <img :src="page.preview" alt="">
+        {{ page.name }}
+      </div>
     </div>
   </div>
 </template>
@@ -99,7 +103,7 @@ export default {
   mounted() {
     this.setIdeTitle('AnubiasApp');
   }, computed: {
-    ...mapState(['ide']),
+    ...mapState(['ide', 'project']),
     zoom: {
       get() {
         return this.$store.state.ide.device.zoom;
@@ -335,8 +339,10 @@ h3 i:hover {
 #components-available.list .component:last-child {
   margin-bottom: 1em;
 }
-#tabs{
+
+#tabs {
 }
+
 #tabs .tab {
   position: relative;
   padding: 5px 25px 3px 7px;
@@ -345,12 +351,12 @@ h3 i:hover {
   display: inline-block;
 }
 
-#tabs .tab:first-child{
+#tabs .tab:first-child {
   padding: 4px 7px 3px;
   width: 7%;
 }
 
-#tabs .tab .close{
+#tabs .tab .close {
   position: absolute;
   right: 0;
   top: 0;
@@ -359,7 +365,7 @@ h3 i:hover {
   color: var(--lighter-bg);
 }
 
-#tabs .tab:hover .close{
+#tabs .tab:hover .close {
   color: darkred;
 }
 

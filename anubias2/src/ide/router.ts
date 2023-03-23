@@ -1,6 +1,7 @@
 import anubias from './views/anubias.vue';
 import welcome from './views/welcome.vue';
 import {Component} from 'vue';
+import { createWebHistory, createRouter } from "vue-router";
 
 // This function is used to create a lazy-loaded Vue component.
 // It takes a name parameter which is used to determine the path to the component Vue file.
@@ -16,7 +17,6 @@ function view(name: string): Component {
 const routes = [
     {
         path: '/',
-        name: 'welcome',
         component: welcome
     },
     {
@@ -56,5 +56,12 @@ const routes = [
     },
 ];
 
+
+const router = createRouter({
+    // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
+    history: createWebHistory(),
+    routes, // short for `routes: routes`
+});
+
 // Export the routes object as default to be used by other modules
-export default routes;
+export default router;
