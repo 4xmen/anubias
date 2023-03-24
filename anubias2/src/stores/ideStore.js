@@ -5,13 +5,15 @@
 import devices from "./assets/devices.json"; // import devices info
 import colors from './assets/colors.json'; // import material colors
 import componentsList from "./components/components-list.json"; // import components info
-import project from './projectStore';
 import Store from 'electron-store';
+
 const storage = new Store();
 
 const ideStore = {
+    namespaced: true,
     state: () => ({
         title: 'Anubias',
+        appName: 'Anubias',
         version: {
             major: 2,
             minor: 0,
@@ -26,11 +28,11 @@ const ideStore = {
             mode: 'list',
         },
         properties: {
-            collapsed:  storage.get('propertiesCollapsed'),
+            collapsed: storage.get('propertiesCollapsed'),
         },
         pages: {
-            collapsed:  storage.get('pagesCollapsed'),
-            currentPage:{},
+            collapsed: storage.get('pagesCollapsed'),
+            currentPage: {},
         },
         // active device preview
         device: {
@@ -59,15 +61,15 @@ const ideStore = {
         },
         TOGGLE_COMPONENTS_COLLAPSE(state) {
             state.components.collapsed = !state.components.collapsed;
-            storage.set('componentsCollapsed',state.components.collapsed);
+            storage.set('componentsCollapsed', state.components.collapsed);
         },
         TOGGLE_PROPERTIES_COLLAPSE(state) {
             state.properties.collapsed = !state.properties.collapsed;
-            storage.set('propertiesCollapsed',state.properties.collapsed);
+            storage.set('propertiesCollapsed', state.properties.collapsed);
         },
         TOGGLE_PAGES_COLLAPSE(state) {
             state.pages.collapsed = !state.pages.collapsed;
-            storage.set('pagesCollapsed',state.pages.collapsed);
+            storage.set('pagesCollapsed', state.pages.collapsed);
         },
         UPDATE_DEVICE_ZOOM(state, zoom) {
             state.device.zoom = zoom;
@@ -79,13 +81,19 @@ const ideStore = {
             state.device.active = index;
         },
         SET_ACTIVE_PAGE(state, pageIndex) {
-            state.pages.currentPage = project.getters.getPage(project.state(),pageIndex);
+            state.pages.currentPage = this.getters['project/getPage'](0);
             state.activePage = pageIndex;
         },
+        UPDATE_CURRENT_PAGE(state, info) {
+            state.pages.currentPage = info;
+        }
     },
     actions: {
-        setIdeTitle(context, title) {
-            context.commit('CHANGE_IDE_TITLE', title);
+        setIdeTitle: {
+            root: true,
+            handler(namespacedContext, title) {
+                namespacedContext.commit('CHANGE_IDE_TITLE', title);
+            }
         },
         toggleComponentsCollapse(context) {
             context.commit('TOGGLE_COMPONENTS_COLLAPSE');
@@ -97,7 +105,7 @@ const ideStore = {
             context.commit('TOGGLE_PAGES_COLLAPSE');
         },
         setActivePage(context, page) {
-            context.commit('SET_ACTIVE_PAGE',page);
+            context.commit('SET_ACTIVE_PAGE', page);
         },
     },
     getters: {
@@ -106,6 +114,9 @@ const ideStore = {
                 state.version.minor + '.' +
                 state.version.patch + '-' +
                 state.version.suffix;
+        },
+        currentPage(state) {
+            return state.pages.currentPage;
         }
     }
 };

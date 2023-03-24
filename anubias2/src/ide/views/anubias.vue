@@ -41,6 +41,10 @@
             <router-link to="/settings">
               go setting test
             </router-link>
+
+            <h1 id="test" @click="test">
+              test
+            </h1>
           </div>
         </div>
         <div id="device-container">
@@ -79,7 +83,7 @@
       <div id="page-container">
         <div v-for="(page,i) in project.project.pages"
              :class="`page `+(ide.activePage === i?'active':'')"
-             @click="setActivePage(i)" :key="i">
+             @click="changePage(i)" :key="i">
           <div class="img" :style="`background-image: url(${page.preview})`">
 
           </div>
@@ -91,11 +95,14 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex';
 import {mapState} from 'vuex';
+import {mapGetters} from 'vuex';
 import buttons from "../components/buttons.vue";
 import iconButton from "../components/iconButton.vue";
 import device from "../components/device.vue";
+import Store from 'electron-store';
+
+const storage = new Store();
 
 export default {
   name: "anubias",
@@ -107,15 +114,24 @@ export default {
     };
   },
   mounted() {
-    this.setIdeTitle('AnubiasApp');
+    // this.setIdeTitle('AnubiasApp');
+    this.$store.dispatch('setIdeTitle', 'AnubiasApp');
+    this.initialLoadProject();
+
   }, computed: {
     ...mapState(['ide', 'project']),
+    ...mapGetters(
+        'project', ['getPage']
+    ),
+    ...mapGetters(
+        'ide', ['currentPage']
+    ),
     zoom: {
       get() {
         return this.$store.state.ide.device.zoom;
       },
       set(value) {
-        this.$store.commit('UPDATE_DEVICE_ZOOM', value)
+        this.$store.commit('ide/UPDATE_DEVICE_ZOOM', value)
       }
     },
     activeDevice: {
@@ -123,7 +139,7 @@ export default {
         return this.$store.state.ide.device.active;
       },
       set(value) {
-        this.$store.commit('UPDATE_DEVICE_ACTIVE', value)
+        this.$store.commit('ide/UPDATE_DEVICE_ACTIVE', value)
       }
     },
     orient: {
@@ -131,7 +147,7 @@ export default {
         return this.$store.state.ide.device.orient;
       },
       set(value) {
-        this.$store.commit('UPDATE_DEVICE_ORIENT', value)
+        this.$store.commit('ide/UPDATE_DEVICE_ORIENT', value)
       }
     },
     componentsClass() {
@@ -195,8 +211,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setIdeTitle', 'toggleComponentsCollapse', 'togglePropertiesCollapse',
-      'togglePagesCollapse', 'setActivePage']),
     expandComponents(e) {
       if (this.ide.components.collapsed && e.target.tagName !== 'I') {
         this.toggleComponentsCollapse();
@@ -211,8 +225,33 @@ export default {
       if (this.ide.pages.collapsed && e.target.tagName !== 'I') {
         this.togglePagesCollapse();
       }
+    },
+    initialLoadProject() {
+      // check if project
+      try {
+        if (this.$store.state.project.pages.length === []) {
+          this.$store.dispatch('project/loadProject', storage.get('lastCreatedProject'));
+
+        } else {
+          // set entry point  to active
+          this.$store.dispatch('ide/setActivePage', this.$store.state.project.project.entryPoint);
+        }
+      } catch (e) {
+        console.log(e.message);
+        this.$store.dispatch('project/loadProject', storage.get('lastCreatedProject'));
+      }
+    },
+    changePage(i) {
+      this.$store.dispatch('ide/setActivePage', i);
+    },
+    test() {
+      let page = this.currentPage;
+      page.name = 'pageMain';
+      this.$store.commit('ide/UPDATE_CURRENT_PAGE', page);
+      console.log(this.getPage(0));
+      console.log(this.currentPage);
     }
-  }
+  },
 }
 </script>
 

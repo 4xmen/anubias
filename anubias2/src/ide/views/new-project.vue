@@ -206,7 +206,9 @@ export default {
     ...mapState(['ide', 'project'])
   },
   methods: {
-    ...mapActions(['createProject']),
+    ...mapActions({
+      'createProject': 'project/createProject'
+    }),
     prv() {
       if (this.stepIndex === 0) {
         this.$router.back();
@@ -224,11 +226,12 @@ export default {
         // if add template we must edit this loop
         let page = defaultPage;
         for (let i = 0; i < this.newProject.pageCount; i++) {
-          page.name = 'page'+(i+1);
+          page.name = 'page' + (i + 1);
           this.newProject.pages.push({...page});
         }
         this.createProject(this.newProject);
         this.$router.push('/main');
+
       } else {
         this.stepIndex++;
       }

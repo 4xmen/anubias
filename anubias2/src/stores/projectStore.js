@@ -1,11 +1,14 @@
 import projectTemplate from './assets/projectTemplate.json';
 import ide from './ideStore';
+import Store from 'electron-store';
 
+const storage = new Store();
 /***
  * project store to store all data about project
  * like: project info, components
  */
 const projectStore = {
+    namespaced: true,
     state: () => ({
         /**
          * If you update this state
@@ -17,20 +20,33 @@ const projectStore = {
         isSave: true,
     }),
     mutations: {
+
         CREATE_PROJECT(state, project) {
             project.anubias = ide.getters.version(ide.state());
-            state.project = project;
+            storage.set('lastCreatedProject', project);
+            this.commit('project/LOAD_PROJECT', project);
+
         },
+        LOAD_PROJECT(state, project) {
+            state.project = project;
+            // ide.actions.setIdeTitle(,ide.state().appName + ' - '+ project.name );
+            let title = ide.state().appName + ' - ' + project.name;
+            this.dispatch('setIdeTitle', title);
+            storage.set('lastLoadedProject', project);
+            this.dispatch('ide/setActivePage', project.entryPoint);
+        }
     },
     actions: {
         createProject(context, project) {
             context.commit('CREATE_PROJECT', project);
-        }
+        },
+        loadProject(context, project) {
+            context.commit('LOAD_PROJECT', project);
+        },
+
     },
     getters: {
-        getPage(state,i){
-            console.log('state project');
-            console.log(state.project);
+        getPage: (state) => (i) => {
             return state.project.pages[i];
         }
     }
