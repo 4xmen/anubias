@@ -27,7 +27,13 @@ const projectStore = {
             context.commit('CREATE_PROJECT', project);
         }
     },
-    getters: {}
+    getters: {
+        getPage(state,i){
+            console.log('state project');
+            console.log(state.project);
+            return state.project.pages[i];
+        }
+    }
 };
 
 export default projectStore;

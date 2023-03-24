@@ -5,6 +5,10 @@
 import devices from "./assets/devices.json"; // import devices info
 import colors from './assets/colors.json'; // import material colors
 import componentsList from "./components/components-list.json"; // import components info
+import project from './projectStore';
+import Store from 'electron-store';
+const storage = new Store();
+
 const ideStore = {
     state: () => ({
         title: 'Anubias',
@@ -18,14 +22,15 @@ const ideStore = {
         // panel states
         components: {
             list: componentsList,
-            collapsed: false,
+            collapsed: storage.get('componentsCollapsed'),
             mode: 'list',
         },
         properties: {
-            collapsed: false,
+            collapsed:  storage.get('propertiesCollapsed'),
         },
         pages: {
-            collapsed: false,
+            collapsed:  storage.get('pagesCollapsed'),
+            currentPage:{},
         },
         // active device preview
         device: {
@@ -54,12 +59,15 @@ const ideStore = {
         },
         TOGGLE_COMPONENTS_COLLAPSE(state) {
             state.components.collapsed = !state.components.collapsed;
+            storage.set('componentsCollapsed',state.components.collapsed);
         },
         TOGGLE_PROPERTIES_COLLAPSE(state) {
             state.properties.collapsed = !state.properties.collapsed;
+            storage.set('propertiesCollapsed',state.properties.collapsed);
         },
         TOGGLE_PAGES_COLLAPSE(state) {
             state.pages.collapsed = !state.pages.collapsed;
+            storage.set('pagesCollapsed',state.pages.collapsed);
         },
         UPDATE_DEVICE_ZOOM(state, zoom) {
             state.device.zoom = zoom;
@@ -69,6 +77,10 @@ const ideStore = {
         },
         UPDATE_DEVICE_ACTIVE(state, index) {
             state.device.active = index;
+        },
+        SET_ACTIVE_PAGE(state, pageIndex) {
+            state.pages.currentPage = project.getters.getPage(project.state(),pageIndex);
+            state.activePage = pageIndex;
         },
     },
     actions: {
@@ -83,6 +95,9 @@ const ideStore = {
         },
         togglePagesCollapse(context) {
             context.commit('TOGGLE_PAGES_COLLAPSE');
+        },
+        setActivePage(context, page) {
+            context.commit('SET_ACTIVE_PAGE',page);
         },
     },
     getters: {

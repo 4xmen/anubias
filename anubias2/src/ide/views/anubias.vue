@@ -77,7 +77,9 @@
         <i class="ri-checkbox-indeterminate-line" @click="togglePagesCollapse"></i>
       </h3>
       <div id="page-container">
-        <div v-for="(page,i) in project.project.pages" class="page" :key="i">
+        <div v-for="(page,i) in project.project.pages"
+             :class="`page `+(ide.activePage === i?'active':'')"
+             @click="setActivePage(i)" :key="i">
           <div class="img" :style="`background-image: url(${page.preview})`">
 
           </div>
@@ -193,7 +195,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setIdeTitle', 'toggleComponentsCollapse', 'togglePropertiesCollapse', 'togglePagesCollapse']),
+    ...mapActions(['setIdeTitle', 'toggleComponentsCollapse', 'togglePropertiesCollapse',
+      'togglePagesCollapse', 'setActivePage']),
     expandComponents(e) {
       if (this.ide.components.collapsed && e.target.tagName !== 'I') {
         this.toggleComponentsCollapse();
@@ -377,29 +380,62 @@ h3 i:hover {
   color: var(--text-hilight);
 }
 
-#pages #page-container{
+#pages #page-container {
   overflow: hidden;
   overflow-x: auto;
 }
 
-#pages #page-container .page{
+#pages #page-container .page {
   width: 7rem;
   display: inline-block;
   text-align: center;
+  margin-top: .5rem;
+  font-weight: 100;
+  transition: var(--transition-duration);
 }
 
-#pages.collapsed #page-container{
+#pages.collapsed #page-container {
   display: none;
 }
 
-#pages #page-container .page .img{
+#pages #page-container .page.active {
+  color: var(--text-hilight);
+  font-weight: 400;
+}
+
+#pages #page-container .page .img {
   display: block;
-  height: 65px;
-  width: 80%;
-  border: 1px solid var(--lighter-bg);
+  height: 110px;
+  width: 75%;
+  border: 1px solid var(--darker-bg);
   background-color: #fff;
-  margin:.5rem auto;
+  margin: .5rem auto;
   background-size: contain;
   background-position: top center;
+  border-radius: 5px;
+  transition: var(--transition-duration);
+}
+
+#pages #page-container .page.active .img {
+  box-shadow: 0 0 5px var(--text-hilight);
+  border: 1px solid var(--text-hilight);
+  border-radius: 0;
+  animation: linear .5s;
+  animation-name: choosePage;
+}
+
+@keyframes choosePage {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(.85);
+  }
+  65% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 </style>

@@ -90,7 +90,7 @@ select option {
 #app {
     display: grid;
     height: 100vh;
-    grid-template-rows: 2em 2em 5fr 5fr 165px;
+    grid-template-rows: 2em 2em 5fr 5fr 195px;
     grid-template-columns: repeat(18, 1fr) 30px;
 }
 
