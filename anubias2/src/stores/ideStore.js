@@ -81,7 +81,7 @@ const ideStore = {
             state.device.active = index;
         },
         SET_ACTIVE_PAGE(state, pageIndex) {
-            state.pages.currentPage = this.getters['project/getPage'](0);
+            state.pages.currentPage = this.getters['project/getPage'](pageIndex);
             state.activePage = pageIndex;
         },
         UPDATE_CURRENT_PAGE(state, info) {
