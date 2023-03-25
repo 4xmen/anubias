@@ -211,6 +211,15 @@ export default {
     }
   },
   methods: {
+    toggleComponentsCollapse(){
+      this.$store.dispatch('ide/toggleComponentsCollapse');
+    },
+    togglePropertiesCollapse(){
+      this.$store.dispatch('ide/togglePropertiesCollapse');
+    },
+    togglePagesCollapse(){
+      this.$store.dispatch('ide/togglePagesCollapse');
+    },
     expandComponents(e) {
       if (this.ide.components.collapsed && e.target.tagName !== 'I') {
         this.toggleComponentsCollapse();
