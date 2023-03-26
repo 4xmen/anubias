@@ -5,19 +5,19 @@ import router from "./router";
 import Store from 'electron-store';
 const storage = new Store();
 
-ipcRenderer.on('main-process-message', (_event, ...args) => {
-  console.log('[Receive Main-process message]:', ...args)
-})
-ipcRenderer.on('hello-world', (_event, ...args) => {
-  console.log('Hello world:', ...args)
-});
+// ipcRenderer.on('main-process-message', (_event, ...args) => {
+//   console.log('[Receive Main-process message]:', ...args)
+// })
+// ipcRenderer.on('hello-world', (_event, ...args) => {
+//   console.log('Hello world:', ...args)
+// });
 ipcRenderer.on('redirect', (_event, ...args) => {
   console.log('redirect:', ...args);
   router.push(args[0]);
 });
 
 //Listen for async message from main process to get data
-ipcRenderer.on('electron-store-get-data', (_event, key, data) => {
+ipcRenderer.on('electron-store-get-data', (_event, key) => {
   _event.sender.send('electron-store-send-data', storage.get(key));
 })
 

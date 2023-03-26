@@ -5,13 +5,21 @@
 import devices from "./assets/devices.json"; // import devices info
 import colors from './assets/colors.json'; // import material colors
 import componentsList from "./components/components-list.json"; // import components info
-import Store from 'electron-store';
+/**
+ * import default component lists
+ */
+import componentPreloaderDefault from './components/defaultPreloader.json';
 
+/**
+ * import other modules
+ */
+import Store from 'electron-store';
 const storage = new Store();
+
 
 const ideStore = {
     namespaced: true,
-    state: () => ({
+    state:  () => ({
         title: 'Anubias',
         appName: 'Anubias',
         version: {
@@ -26,6 +34,9 @@ const ideStore = {
             list: componentsList,
             collapsed: storage.get('componentsCollapsed'),
             mode: 'grid',
+        },
+        defaultComponents:{
+            preloader: componentPreloaderDefault,
         },
         properties: {
             collapsed: storage.get('propertiesCollapsed'),
@@ -118,6 +129,11 @@ const ideStore = {
         togglePagesCollapse(context) {
             context.commit('TOGGLE_PAGES_COLLAPSE');
         },
+        /**
+         * set active page index
+         * @param context
+         * @param page : Number
+         */
         setActivePage(context, page) {
             context.commit('SET_ACTIVE_PAGE', page);
         },
@@ -131,8 +147,13 @@ const ideStore = {
         },
         currentPage(state) {
             return state.pages.currentPage;
+        },
+        activePageIndex(state){
+            return state.activePage;
         }
     }
 };
+
+
 
 export default ideStore;

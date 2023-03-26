@@ -26,12 +26,11 @@ export default {
     getDroppableStyle() {
       let style = '';
       if (this.ide.dropArea.length > 0) {
+        // show valid or invalid to drop
         if (this.ide.dropArea === this.area) {
-          console.log('yes');
-          style += 'background:rgba(0,255,0,.25)';
+          style += 'background:rgba(0,255,0,.25);cursor: copy;';
         }else{
-          console.log('no');
-          style += 'background:rgba(255,0,0,.25)';
+          style += 'background:rgba(255,0,0,.25); cursor:  not-allowed';
         }
       }
       return style;
@@ -40,9 +39,10 @@ export default {
   methods: {
     droppingOver(e) {
       e.preventDefault();
-      let data = this.ide.draggedData;
-      console.log(data['area'] === this.area);
-      // console.log(data['data-mode'] === this.area);
+      // change cursor
+      if (this.ide.dropArea !== this.area) {
+        e.dataTransfer.dropEffect = 'move';
+      }
     },
     droppingNow(e) {
       e.preventDefault();

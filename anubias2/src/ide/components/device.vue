@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapGetters, mapState} from "vuex";
 import droppable from "./droppable.vue";
 
 export default {
@@ -103,6 +103,10 @@ export default {
   },
   computed: {
     ...mapState(['ide']),
+    ...mapState('ide', ['defaultComponents']),
+    ...mapGetters(
+        'ide', ['currentPage', 'activePageIndex']
+    ),
     componentsAreaStyle() {
 
       let style = '';
@@ -146,7 +150,7 @@ export default {
       return this.orient === 1;
     },
     deviceHeight() {
-      console.log(this.device.height, this.device.width);
+      // console.log(this.device.height, this.device.width);
       if (this.isLandscape) {
         return parseInt(this.device.width);
       }
@@ -202,8 +206,18 @@ export default {
       // this.holderViewBox = `0 0 ${originalWidth} ${originalWidth * scaleFactor + 40}`;
 
     },
-    dropped(data){
-      console.log(data);
+    dropped(data) {
+      // check is valid area or not
+      if ('visual' === data.area) {
+        // add component to active page
+        this.$store.dispatch('project/addComponentToPage', {
+          pageIndex: this.activePageIndex,
+          isVisual: true,
+          component: this.defaultComponents[data.name]
+        });
+      } else {
+        console.log('invalid area');
+      }
     }
   },
 }

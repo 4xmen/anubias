@@ -6,15 +6,29 @@
 
 <script>
 import droppable from "./droppable.vue";
+import {mapGetters, mapState} from "vuex";
 export default {
   name: "non-visual-panel",
   components:{droppable},
   computed:{
-
+    ...mapState('ide', ['defaultComponents']),
+    ...mapGetters(
+        'ide', ['currentPage', 'activePageIndex']
+    ),
   },
   methods:{
     dropping(data){
-      console.log(data);
+      // check is valid area or not
+      if ('non-visual' === data.area) {
+        // add component to active page
+        this.$store.dispatch('project/addComponentToPage', {
+          pageIndex: this.activePageIndex,
+          isVisual: false,
+          component: this.defaultComponents[data.name]
+        });
+      } else {
+        console.log('invalid area');
+      }
     }
   }
 }

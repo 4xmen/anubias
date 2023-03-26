@@ -1,0 +1,10 @@
+{
+  "type": "preloader",
+  "name": "preloader",
+  "padding": "10",
+  "align": "center",
+  "width": 50.0,
+  "height": 50.0,
+  "color": "null",
+  "visible": true
+}

@@ -246,7 +246,7 @@ export default {
           this.$store.dispatch('ide/setActivePage', this.$store.state.project.project.entryPoint);
         }
       } catch (e) {
-        console.log(e.message);
+        // console.log(e.message);
         this.$store.dispatch('project/loadProject', storage.get('lastCreatedProject'));
       }
     },
@@ -254,10 +254,12 @@ export default {
       this.$store.dispatch('ide/setActivePage', i);
     },
     test() {
-      let page = this.currentPage;
-      page.name = 'pageMain';
-      this.$store.commit('ide/UPDATE_CURRENT_PAGE', page);
-      console.log(this.getPage(0));
+      // let page = this.currentPage;
+      // page.name = 'pageMain';
+      // this.$store.commit('ide/UPDATE_CURRENT_PAGE', page);
+      // console.log(this.getPage(0));
+      // console.log(this.currentPage);
+      // this.$store.ide.state
       console.log(this.currentPage);
     }
   },
