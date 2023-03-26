@@ -25,7 +25,7 @@ const ideStore = {
         components: {
             list: componentsList,
             collapsed: storage.get('componentsCollapsed'),
-            mode: 'list',
+            mode: 'grid',
         },
         properties: {
             collapsed: storage.get('propertiesCollapsed'),
@@ -53,6 +53,8 @@ const ideStore = {
         activePage: 0,
         devices: devices,
         colors: colors,
+        draggedData: {},
+        dropArea:'',
     }),
     mutations: {
         CHANGE_IDE_TITLE(state, title) {
@@ -86,7 +88,13 @@ const ideStore = {
         },
         UPDATE_CURRENT_PAGE(state, info) {
             state.pages.currentPage = info;
-        }
+        },
+        SET_DRAG_DATA(state, data) {
+            state.draggedData = data;
+        },
+        SET_DROP_AREA(state, area) {
+            state.dropArea = area;
+        },
     },
     actions: {
         setIdeTitle: {
@@ -94,6 +102,12 @@ const ideStore = {
             handler(namespacedContext, title) {
                 namespacedContext.commit('CHANGE_IDE_TITLE', title);
             }
+        },
+        setDragData(context,data) {
+            context.commit('SET_DRAG_DATA',data);
+        },
+        setDropArea(context,area) {
+            context.commit('SET_DROP_AREA',area);
         },
         toggleComponentsCollapse(context) {
             context.commit('TOGGLE_COMPONENTS_COLLAPSE');

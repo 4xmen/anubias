@@ -73,9 +73,9 @@
 
       </div>
       <div id="components-area" :style="componentsAreaStyle">
-        <div id="drop-area">
+        <droppable id="drop-area" area="visual" :dropping="dropped">
           Drop visual components here...
-        </div>
+        </droppable>
       </div>
     </div>
   </div>
@@ -83,9 +83,11 @@
 
 <script>
 import {mapState} from "vuex";
+import droppable from "./droppable.vue";
 
 export default {
   name: "device",
+  components: {droppable},
   data: () => {
     return {
       zooms: [.25, 1.25, 1, .75, .50],
@@ -128,13 +130,12 @@ export default {
         style += 'top: -' + (Math.abs(Math.ceil((2000 - this.deviceWidth) / 400))) * 0.5 + '%;'
         console.log(style);
       }
-      if (this.isLandscape){
+      if (this.isLandscape) {
         style += 'transform: rotateZ(-90deg);';
         style += 'transform-origin: 100% 50%;';
         style += 'top:-4.5%;';
         style += 'left:-44.5%;';
         style += 'right:auto;';
-
 
 
       }
@@ -145,7 +146,7 @@ export default {
       return this.orient === 1;
     },
     deviceHeight() {
-      console.log(this.device.height,this.device.width);
+      console.log(this.device.height, this.device.width);
       if (this.isLandscape) {
         return parseInt(this.device.width);
       }
@@ -172,7 +173,7 @@ export default {
       this.resizeSvg();
       return style;
     },
-    borderLessCameraHeight(){
+    borderLessCameraHeight() {
       let n = this.device.width / this.ide.devices[0].width;
       return 100 + Math.round(n * 23);
     },
@@ -200,8 +201,11 @@ export default {
       this.rectX = ((this.defRectWith - this.rectWith) / 2) + 2;
       // this.holderViewBox = `0 0 ${originalWidth} ${originalWidth * scaleFactor + 40}`;
 
+    },
+    dropped(data){
+      console.log(data);
     }
-  }
+  },
 }
 </script>
 

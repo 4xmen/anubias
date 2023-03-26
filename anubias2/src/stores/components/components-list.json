@@ -4,209 +4,209 @@
         "icon": "ri-loader-line",
         "active": true,
         "visual": true,
-        "data": "window.defaults.preloader"
+        "name": "preloader"
     },
     {
         "title": "Container",
         "icon": "ri-shape-line",
         "active": true,
         "visual": true,
-        "data": "window.defaults.container"
+        "name": "container"
     },
     {
         "title": "AppBar",
         "icon": "ri-window-line",
         "active": true,
         "visual": true,
-        "data": "window.defaults.appbar"
+        "name": "appbar"
     },
     {
         "title": "Image",
         "icon": "ri-image-2-line",
         "active": true,
         "visual": true,
-        "data": "window.defaults.image"
+        "name": "image"
     },
     {
         "title": "Icon",
         "icon": "ri-user-smile-line",
         "active": true,
         "visual": true,
-        "data": "window.defaults.icon"
+        "name": "icon"
     },
     {
         "title": "Text",
         "icon": "ri-text",
         "active": true,
         "visual": true,
-        "data": "window.defaults.text"
+        "name": "text"
     },
     {
         "title": "Button",
         "icon": "ri-add-box-line",
         "active": true,
         "visual": true,
-        "data": "window.defaults.button"
+        "name": "button"
     },
     {
         "title": "CircleButton",
         "icon": "ri-information-line",
         "active": true,
         "visual": true,
-        "data": "window.defaults.circleButton"
+        "name": "circleButton"
     },
     {
         "title": "Row",
         "icon": "ri-layout-column-line",
         "active": true,
         "visual": true,
-        "data": "window.defaults.row"
+        "name": "row"
     },
     {
         "title": "Input",
         "icon": "ri-t-box-line",
         "active": true,
         "visual": true,
-        "data": "window.defaults.input"
+        "name": "input"
     },
     {
         "title": "Dropdown",
         "icon": "ri-pages-line",
         "active": true,
         "visual": true,
-        "data": "window.defaults.dropdown"
+        "name": "dropdown"
     },
     {
         "title": "Divider",
         "icon": "ri-divide-line",
         "active": true,
         "visual": true,
-        "data": "window.defaults.divider"
+        "name": "divider"
     },
     {
         "title": "Toggle",
         "icon": "ri-toggle-line",
         "active": true,
         "visual": true,
-        "data": "window.defaults.toggle"
+        "name": "toggle"
     },
     {
         "title": "Column",
         "icon": "ri-layout-row-line",
         "active": true,
         "visual": true,
-        "data": "window.defaults.column"
+        "name": "column"
     },
     {
         "title": "Grid",
         "icon": "ri-layout-grid-line",
         "active": true,
         "visual": true,
-        "data": "window.defaults.grid"
+        "name": "grid"
     },
     {
         "title": "Nav",
         "icon": "ri-layout-bottom-2-line",
         "active": true,
         "visual": true,
-        "data": "window.defaults.nav"
+        "name": "nav"
     },
     {
         "title": "Menu",
         "icon": "ri-menu-line",
         "active": true,
         "visual": false,
-        "data": "window.defaults.menu"
+        "name": "menu"
     },
     {
         "title": "Internet \uD83D\uDD1C",
         "icon": "ri-global-line",
         "active": false,
         "visual": false,
-        "data": "window.defaults.internet"
+        "name": "internet"
     },
     {
         "title": "Storage \uD83D\uDD1C",
         "icon": "ri-save-3-line",
         "active": false,
         "visual": false,
-        "data": "window.defaults.storage"
+        "name": "storage"
     },
     {
         "title": "List \uD83D\uDD1C",
         "icon": "ri-list-check",
         "active": false,
         "visual": true,
-        "data": "window.defaults.list"
+        "name": "list"
     },
     {
         "title": "Rate \uD83D\uDD1C",
         "icon": "ri-star-half-fill",
         "active": false,
         "visual": true,
-        "data": "window.defaults.rate"
+        "name": "rate"
     },
     {
         "title": "Calendar \uD83D\uDD1C",
         "icon": "ri-calendar-2-line",
         "active": false,
         "visual": true,
-        "data": "window.defaults.calendar"
+        "name": "calendar"
     },
     {
         "title": "DatePicker \uD83D\uDD1C",
         "icon": "ri-calendar-check-line",
         "active": false,
         "visual": false,
-        "data": "window.defaults.datepicker"
+        "name": "datepicker"
     },
     {
         "title": "Image Picker \uD83D\uDD1C",
         "icon": "ri-image-add-line",
         "active": false,
         "visual": false,
-        "data": "window.defaults.imagepicker"
+        "name": "imagepicker"
     },
     {
         "title": "File Picker \uD83D\uDD1C",
         "icon": "ri-file-add-line",
         "active": false,
         "visual": false,
-        "data": "window.defaults.filepicker"
+        "name": "filepicker"
     },
     {
         "title": "Map \uD83D\uDD1C",
         "icon": "ri-map-2-line",
         "active": false,
         "visual": true,
-        "data": "window.defaults.map"
+        "name": "map"
     },
     {
         "title": "Location \uD83D\uDD1C",
         "icon": "ri-map-pin-line",
         "active": false,
         "visual": false,
-        "data": "window.defaults.location"
+        "name": "location"
     },
     {
         "title": "Slider \uD83D\uDD1C",
         "icon": "ri-slideshow-line",
         "active": false,
         "visual": true,
-        "data": "window.defaults.slider"
+        "name": "slider"
     },
     {
         "title": "Tab \uD83D\uDD1C",
         "icon": "ri-table-alt-line",
         "active": false,
         "visual": true,
-        "data": "window.defaults.tab"
+        "name": "tab"
     },
     {
         "title": "Timer \uD83D\uDD1C",
         "icon": "ri-timer-line",
         "active": false,
         "visual": false,
-        "data": "window.defaults.timer"
+        "name": "timer"
     }
 ]

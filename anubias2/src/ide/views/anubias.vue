@@ -37,7 +37,9 @@
     <div id="main" :style="mainStyle">
       <div class="grid">
         <div class="side">
+          <div class="clearfix"></div>
           <div id="non-visual-component">
+            <non-visual></non-visual>
             <router-link to="/settings">
               go setting test
             </router-link>
@@ -60,12 +62,8 @@
         </span>
         <i class="ri-checkbox-indeterminate-line" @click="toggleComponentsCollapse"></i>
       </h3>
-      <div id="components-available" :class="ide.components.mode+ ' sub-panel'">
-        <div class="component" v-for="(component,i) in ide.components.list" :key="i">
-          <i :class="component.icon"></i>
-          {{ component.title }}
-        </div>
-      </div>
+        <components></components>
+
     </div>
     <div id="properties" :class="propertiesClass" :style="propertiesStyle">
       <h3 @click="expandProperties">
@@ -101,12 +99,14 @@ import buttons from "../components/buttons.vue";
 import iconButton from "../components/iconButton.vue";
 import device from "../components/device.vue";
 import Store from 'electron-store';
+import components from "../components/components-panel.vue";
+import nonVisual from "../components/non-visual-panel.vue";
 
 const storage = new Store();
 
 export default {
   name: "anubias",
-  components: {buttons, iconButton, device},
+  components: {buttons, iconButton, device, components,nonVisual},
   data: () => {
     return {
       deviceZoom: ['AUTO', '120%', '100%', '75%', '50%'],
@@ -350,50 +350,10 @@ h3 i:hover {
 #non-visual-component {
   min-height: 5em;
   background: var(--darker-bg);
-  margin-top: 0;
-
-}
-
-#components-available {
-  height: calc(100% - 1em);
-  overflow-y: auto;
-  padding-bottom: 2em;
-}
-
-#components-available.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  text-align: center;
-  font-size: 90%;
-  height: 95%;
-}
-
-#components-available .component {
-  font-weight: 100;
-  cursor: pointer;
-  padding: 3px;
-}
-
-#components-available .component:hover {
-  background: #00000033;
+  overflow-x: hidden;
 }
 
 
-#components-available.grid .component i {
-  display: block;
-  font-size: 35px;
-  margin: auto;
-  width: 35px;
-}
-
-#components-available.list .component i {
-  position: relative;
-  top: 2px;
-}
-
-#components-available.list .component:last-child {
-  margin-bottom: 1em;
-}
 
 #tabs {
 }
