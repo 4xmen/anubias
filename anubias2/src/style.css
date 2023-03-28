@@ -228,6 +228,22 @@ select option {
     clear: both;
 }
 
+.spinner{
+    animation-name: spin;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-duration: 10s;
+}
+
+@keyframes spin {
+    0%{
+        transform: rotateZ(0);
+    }
+    100%{
+        transform: rotateZ(359deg);
+    }
+}
+
 /* material components*/
 
 .input-container {

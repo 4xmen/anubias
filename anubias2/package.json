@@ -50,6 +50,7 @@
   },
   "dependencies": {
     "electron-store": "^8.1.0",
+    "material-icons": "^1.13.3",
     "remixicon": "^2.5.0",
     "vazirmatn": "^33.0.3",
     "vue-router": "^4.1.6",

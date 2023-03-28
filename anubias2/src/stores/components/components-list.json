@@ -1,7 +1,7 @@
 [
     {
         "title": "Preloader",
-        "icon": "ri-loader-line",
+        "icon": "ri-loader-line spinner",
         "active": true,
         "visual": true,
         "name": "preloader"
