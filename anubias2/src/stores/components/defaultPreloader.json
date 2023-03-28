@@ -6,5 +6,48 @@
   "width": 50.0,
   "height": 50.0,
   "color": "null",
-  "visible": true
+  "visible": true,
+  "validator": {
+    "version": 2,
+    "type" : {
+      "type": "String",
+      "regex": "^preloader$",
+      "state": ""
+    },
+    "name" : {
+      "type": "String",
+      "regex": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+      "state": ""
+    },
+    "padding" : {
+      "type": "String|Number",
+      "regex": "^(\\d+\\s+){1,4}$",
+      "state": "input"
+    },
+    "align" : {
+      "type": "String",
+      "regex": "",
+      "state": "input"
+    },
+    "width" : {
+      "type": "String|Number",
+      "regex":  "^(?:\\d+(?:\\.\\d+)?|\\d*\\.\\d+)%?$",
+      "state": "input"
+    },
+    "height" : {
+      "type": "String|Number",
+      "regex":  "^(?:\\d+(?:\\.\\d+)?|\\d*\\.\\d+)%?$",
+      "state": "input"
+    },
+    "color":{
+      "type": "String|Color",
+      "regex": "^Colors\\.[a-z]*$",
+      "state": "input"
+    },
+    "visible":{
+      "type":  "Boolean",
+      "regex": "/^(true|false)$/",
+      "state": "input"
+    }
+  }
 }
