@@ -69,13 +69,25 @@
             cy="18.258026"
             r="5.4284501"/>
       </svg>
-      <div>
-
-      </div>
-      <div id="components-area" :style="componentsAreaStyle">
-        <droppable id="drop-area" area="visual" :dropping="dropped">
-          Drop visual components here...
-        </droppable>
+      <div id="scroller">
+        <div id="component-holder" :style="componentHolderStyle">
+          <!--    c is component  in v-for  -->
+          <template  v-if="pages.currentPage.children !== undefined" v-for="(c,componentIndex) in pages.currentPage.children.visual" :key="componentIndex">
+            <div class="component" v-if="c.type === 'preloader'" @click="setOnEditComponent(c)">
+              <anubias-preloader :properties="c"></anubias-preloader>
+            </div>
+            <template v-else-if="c.type === 'appbar'">
+            </template>
+            <template v-else>
+              {{c.type}}
+            </template>
+          </template>
+        </div>
+        <div id="components-area" :style="componentsAreaStyle">
+          <droppable id="drop-area" area="visual" :dropping="dropped">
+            Drop visual components here...
+          </droppable>
+        </div>
       </div>
     </div>
   </div>
@@ -85,9 +97,15 @@
 import {mapGetters, mapState} from "vuex";
 import droppable from "./droppable.vue";
 
+// anubias component to make falutter
+import anubiasPreloader from "./anubias/anubiasPreloader.vue";
+
 export default {
   name: "device",
-  components: {droppable},
+  components: {
+    droppable,
+    anubiasPreloader,
+  },
   data: () => {
     return {
       zooms: [.25, 1.25, 1, .75, .50],
@@ -103,6 +121,12 @@ export default {
   },
   computed: {
     ...mapState(['ide']),
+    ...mapState('ide',{
+      pages: 'pages'
+    }),
+    ...mapState('project',{
+      project: 'project'
+    }),
     ...mapState('ide', ['defaultComponents']),
     ...mapGetters(
         'ide', ['currentPage', 'activePageIndex']
@@ -174,8 +198,21 @@ export default {
       style += 'margin-bottom: -' + this.deviceHeight * (1 - ratio) + 'px;';
       style += 'margin-left: -' + ((this.deviceWidth * (1 - ratio)) / 2) + 'px;';
       style += 'margin-right: -' + ((this.deviceWidth * (1 - ratio)) / 2) + 'px;';
+      if (!this.project.isDark){
+        style += 'color: black;';
+      }else{
+        style += 'background: #2e2e2e;';
+      }
+      if (!this.project.isRTL){
+        style += 'direction: rtl;';
+      }
       this.resizeSvg();
       return style;
+    },
+    componentHolderStyle(){
+      const deviceRatio = (this.deviceHeight / this.deviceWidth);
+      let style = '';
+      style += 'border-radius: ' + (deviceRatio * 2) + '%;'
     },
     borderLessCameraHeight() {
       let n = this.device.width / this.ide.devices[0].width;
@@ -192,6 +229,13 @@ export default {
     }
   },
   methods: {
+    test(){
+      console.log('test');
+    },
+    setOnEditComponent(component){
+      console.log('ddd',component);
+      this.$store.dispatch('setOnEditComponent',component);
+    },
     resizeSvg() {
       // new device ratio
       const deviceRatio = (this.deviceHeight / this.deviceWidth)
@@ -243,6 +287,11 @@ export default {
   position: relative;
 }
 
+#device:hover #front-camera{
+  pointer-events: none;
+  opacity: .5;
+}
+
 #device-holder {
   z-index: 1;
   position: absolute;
@@ -267,7 +316,7 @@ export default {
 
 #drop-area {
   min-height: 15rem;
-  background: rgba(192, 192, 192, 0.60);
+  background: rgba(192, 192, 192, 0.35);
   margin: 1rem 3rem;
   border: 3px dashed gray;
   display: flex;
@@ -289,5 +338,28 @@ export default {
   left: 0;
   right: 0;
   z-index: 9;
+}
+
+#component-holder{
+  overflow: hidden;
+  padding-bottom: 50px;
+  margin: 0 .5rem;
+  z-index: 1;
+  position: relative;
+  border-radius: 4rem;
+}
+#component-holder .component{
+  transition: var(--transition-duration);
+  border: 1px dashed transparent ;
+}
+#component-holder .component:hover{
+  border-color: #77777766;
+  background: linear-gradient(90deg, #77777700 0%, #77777733  25%, #77777733 75%, #77777700 100%);
+}
+
+#scroller{
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 </style>

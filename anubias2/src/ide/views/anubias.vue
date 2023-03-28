@@ -72,6 +72,9 @@
         </span>
         <i class="ri-checkbox-indeterminate-line" @click="togglePropertiesCollapse"></i>
       </h3>
+      <div class="properties">
+      <properties ></properties>
+      </div>
     </div>
     <div id="pages" :class="pagesClass">
       <h3 @click="expandPages">
@@ -101,12 +104,13 @@ import device from "../components/device.vue";
 import Store from 'electron-store';
 import components from "../components/components-panel.vue";
 import nonVisual from "../components/non-visual-panel.vue";
+import properties from "../components/properties-panel.vue";
 
 const storage = new Store();
 
 export default {
   name: "anubias",
-  components: {buttons, iconButton, device, components,nonVisual},
+  components: {buttons, iconButton, device, components,nonVisual,properties},
   data: () => {
     return {
       deviceZoom: ['AUTO', '120%', '100%', '75%', '50%'],
@@ -252,6 +256,7 @@ export default {
     },
     changePage(i) {
       this.$store.dispatch('ide/setActivePage', i);
+      this.$store.dispatch('setOnEditComponent', this.project.project.pages[i]);
     },
     test() {
       // let page = this.currentPage;
@@ -260,7 +265,9 @@ export default {
       // console.log(this.getPage(0));
       // console.log(this.currentPage);
       // this.$store.ide.state
-      console.log(this.currentPage);
+      // console.log(this.currentPage);
+      // console.log(this.);
+      // console.log(this.);
     }
   },
 }

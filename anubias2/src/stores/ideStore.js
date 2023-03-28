@@ -66,11 +66,15 @@ const ideStore = {
         colors: colors,
         draggedData: {},
         dropArea:'',
+        onEditComponent:{},
     }),
     mutations: {
         CHANGE_IDE_TITLE(state, title) {
             document.querySelector('title').innerText = title;
             state.title = title;
+        },
+        SET_ON_EDIT_COMPONENT(state, component) {
+            state.onEditComponent = component;
         },
         TOGGLE_COMPONENTS_COLLAPSE(state) {
             state.components.collapsed = !state.components.collapsed;
@@ -112,6 +116,12 @@ const ideStore = {
             root: true,
             handler(namespacedContext, title) {
                 namespacedContext.commit('CHANGE_IDE_TITLE', title);
+            }
+        },
+        setOnEditComponent: {
+            root: true,
+            handler(namespacedContext, component) {
+                namespacedContext.commit('SET_ON_EDIT_COMPONENT', component);
             }
         },
         setDragData(context,data) {

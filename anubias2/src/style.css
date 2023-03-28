@@ -114,6 +114,9 @@ select option {
     position: relative;
 }
 
+#components.collapsed #components-available{
+    display: none;
+}
 #components #components-available.list {
     padding: 4px;
 }
@@ -128,6 +131,9 @@ select option {
     position: relative;
 }
 
+#properties.collapsed .properties{
+    display: none;
+}
 #properties.collapsed, #components.collapsed {
     grid-column: 19 / 20;
 }
