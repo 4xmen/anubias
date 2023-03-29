@@ -9,11 +9,6 @@
   "visible": true,
   "validator": {
     "version": 2,
-    "type" : {
-      "type": "String",
-      "regex": "^preloader$",
-      "state": ""
-    },
     "name" : {
       "type": "String",
       "regex": "^[a-zA-Z_][a-zA-Z0-9_]*$",
@@ -26,7 +21,7 @@
     },
     "align" : {
       "type": "String",
-      "regex": "",
+      "regex": "^(null|left|right|center)$",
       "state": "input"
     },
     "width" : {
@@ -41,12 +36,12 @@
     },
     "color":{
       "type": "String|Color",
-      "regex": "^Colors\\.[a-z]*$",
+      "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
       "state": "input"
     },
     "visible":{
       "type":  "Boolean",
-      "regex": "/^(true|false)$/",
+      "regex": "^(true|false)$",
       "state": "input"
     }
   }
