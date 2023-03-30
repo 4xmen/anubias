@@ -1,0 +1,43 @@
+{
+  "type": "menu",
+  "name": "menu",
+  "title": "Menu title",
+  "textColor": "null",
+  "color": "null",
+  "image": "",
+  "items": [
+    {
+      "label": "Setting",
+      "icon": "settings",
+      "onTap": "// on this menu item click \n"
+    }
+  ],
+  "validator": {
+    "version": 2,
+    "name": {
+      "type": "String",
+      "regex": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+      "state": ""
+    },
+    "title": {
+      "type": "String",
+      "regex": "^.*$",
+      "state": "output"
+    },
+    "textColor": {
+      "type": "String|Color",
+      "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
+      "state": "input"
+    },
+    "color": {
+      "type": "String|Color",
+      "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
+      "state": "input"
+    },
+    "image": {
+      "type": "String",
+      "regex": ".*",
+      "state": "output"
+    }
+  }
+}

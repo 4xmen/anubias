@@ -80,7 +80,7 @@
     },
     "fontSize": {
       "type":  "Number",
-      "regex": "^[0-9]{1,3}$",
+      "regex": "^\\d+(?:\\.\\d+)?$",
       "state": "input"
     },
     "visible":{
