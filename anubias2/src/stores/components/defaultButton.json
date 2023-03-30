@@ -1,0 +1,92 @@
+{
+  "type": "button",
+  "name": "button",
+  "icon": "home",
+  "text": "Click me",
+  "textColor": "null",
+  "padding": "0",
+  "margin": "0",
+  "width": "120",
+  "height": "null",
+  "color": "null",
+  "borderRadius": "5",
+  "noText": false,
+  "noIcon": false,
+  "fontSize": 15,
+  "onPressed": "// run when press on this button\n",
+  "onLongPress": "// run when long press on this button\n",
+  "visible": true,
+  "validator": {
+    "version": 2,
+    "name": {
+      "type": "String",
+      "regex": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+      "state": ""
+    },
+    "icon": {
+      "type": "String",
+      "regex": "^.*$",
+      "state": "input"
+    },
+    "text": {
+      "type": "String",
+      "regex": "^.*$",
+      "state": "input"
+    },
+    "textColor":{
+      "type": "String|Color",
+      "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
+      "state": "input"
+    },
+    "padding" : {
+      "type": "String|Number",
+      "regex": "^\\d+(,\\d+){0,3}$",
+      "state": "input"
+    },
+    "margin" : {
+      "type": "String|Number",
+      "regex": "^\\d+(,\\d+){0,3}$",
+      "state": "input"
+    },
+    "width" : {
+      "type": "String|Number",
+      "regex":  "^\\d*\\.?\\d+%?$",
+      "state": "input"
+    },
+    "height" : {
+      "type": "String|Number",
+      "regex":  "^\\d*\\.?\\d+%?$",
+      "state": "input"
+    },
+    "color":{
+      "type": "String|Color",
+      "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
+      "state": "input"
+    },
+    "borderRadius" : {
+      "type": "String|Number",
+      "regex": "^\\d+(,\\d+){0,3}$",
+      "state": "input"
+    },
+    "noText":{
+      "type":  "Boolean",
+      "regex": "^(true|false)$",
+      "state": "input"
+    },
+    "noIcon":{
+      "type":  "Boolean",
+      "regex": "^(true|false)$",
+      "state": "input"
+    },
+    "fontSize": {
+      "type":  "Number",
+      "regex": "^[0-9]{1,3}$",
+      "state": "input"
+    },
+    "visible":{
+      "type":  "Boolean",
+      "regex": "^(true|false)$",
+      "state": "input"
+    }
+  }
+}

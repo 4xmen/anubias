@@ -16,7 +16,7 @@
     },
     "padding" : {
       "type": "String|Number",
-      "regex": "^(\\d+\\s+){1,4}$",
+      "regex": "^\\d+(,\\d+){0,3}$",
       "state": "input"
     },
     "align" : {
@@ -26,12 +26,12 @@
     },
     "width" : {
       "type": "String|Number",
-      "regex":  "^(?:\\d+(?:\\.\\d+)?|\\d*\\.\\d+)%?$",
+      "regex":  "^\\d*\\.?\\d+%?$",
       "state": "input"
     },
     "height" : {
       "type": "String|Number",
-      "regex":  "^(?:\\d+(?:\\.\\d+)?|\\d*\\.\\d+)%?$",
+      "regex":  "^\\d*\\.?\\d+%?$",
       "state": "input"
     },
     "color":{

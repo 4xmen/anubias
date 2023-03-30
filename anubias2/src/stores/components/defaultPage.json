@@ -32,7 +32,7 @@
     },
     "padding" : {
       "type": "String|Number",
-      "regex": "^(\\d+\\s+){1,4}$",
+      "regex": "^\\d+(,\\d+){0,3}$",
       "state": "input"
     },
     "align" : {

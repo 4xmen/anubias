@@ -1,7 +1,4 @@
 <template>
-  <h1>
-    properties
-  </h1>
   {{properties}}
 </template>
 
