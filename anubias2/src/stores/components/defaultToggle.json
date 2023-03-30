@@ -52,7 +52,7 @@
     "checked": {
       "type": "Boolean",
       "regex": "^(true|false)$",
-      "state": "input"
+      "state": "output"
     },
     "enabled": {
       "type": "Boolean",
