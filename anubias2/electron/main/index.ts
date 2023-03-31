@@ -1,7 +1,6 @@
 import { app, BrowserWindow, shell, ipcMain, Menu } from 'electron';
 import { release } from 'node:os';
 import { join } from 'node:path';
-import {AppMenu} from './app-menu';
 import {config} from './config';
 // console.log('menu',menuTemplate);
 
@@ -61,9 +60,8 @@ async function createWindow() {
     },
   });
 
-  let menuapp = new AppMenu(win);
-  let menu = Menu.buildFromTemplate(menuapp.menu());
-  Menu.setApplicationMenu(menu);
+  Menu.setApplicationMenu(Menu.buildFromTemplate([]));
+
   win.maximize();
   if (process.env.VITE_DEV_SERVER_URL) { // electron-vite-vue#298
     win.loadURL(url);

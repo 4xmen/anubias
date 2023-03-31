@@ -14,6 +14,7 @@ import componentPreloaderDefault from './components/defaultPreloader.json';
  * import other modules
  */
 import Store from 'electron-store';
+import {ipcRenderer} from "electron";
 const storage = new Store();
 
 
@@ -110,6 +111,9 @@ const ideStore = {
         SET_DROP_AREA(state, area) {
             state.dropArea = area;
         },
+        SET_MENU_CAN_UNDO(state, data){
+            state.menu.canUndo = data;
+        },
     },
     actions: {
         setIdeTitle: {
@@ -138,6 +142,11 @@ const ideStore = {
         },
         togglePagesCollapse(context) {
             context.commit('TOGGLE_PAGES_COLLAPSE');
+        },
+        setMenuCanUndo(context,data) {
+            console.log(data,'undo');
+            context.commit('SET_MENU_CAN_UNDO',data);
+            ipcRenderer.send('set-menu-state','canUndo',data);
         },
         /**
          * set active page index

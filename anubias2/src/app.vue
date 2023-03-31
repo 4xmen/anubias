@@ -5,8 +5,12 @@
 </template>
 
 <script>
+import {ipcRenderer} from 'electron';
 export default {
-  name: "app"
+  name: "app",
+  mounted() {
+    ipcRenderer.send('app-started')
+  }
 }
 </script>
 

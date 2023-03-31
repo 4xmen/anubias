@@ -1,6 +1,7 @@
 import projectTemplate from './assets/projectTemplate.json';
 import ide from './ideStore';
 import Store from 'electron-store';
+import {ipcRenderer} from 'electron';
 
 const storage = new Store();
 /***
@@ -34,6 +35,7 @@ const projectStore = {
             this.dispatch('setIdeTitle', title);
             storage.set('lastLoadedProject', project);
             this.dispatch('ide/setActivePage', project.entryPoint);
+            ipcRenderer.send('set-has-project',true);
         },
         ADD_COMPONENT_TO_PAGE(state, {pageIndex, isVisual, component}) {
             // console.log(state.project.pages[pageIndex],component);
@@ -42,6 +44,7 @@ const projectStore = {
             }else{
                 state.project.pages[pageIndex].children.nonVisual.push(component);
             }
+            this.dispatch('ide/setMenuCanUndo',true);
         },
     },
     actions: {
