@@ -41,6 +41,7 @@ const ideStore = {
         },
         properties: {
             collapsed: storage.get('propertiesCollapsed'),
+            classic: false,
         },
         pages: {
             collapsed: storage.get('pagesCollapsed'),
