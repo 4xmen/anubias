@@ -2,6 +2,7 @@ import projectTemplate from './assets/projectTemplate.json';
 import ide from './ideStore';
 import Store from 'electron-store';
 import {ipcRenderer} from 'electron';
+import {getUniqueName} from "../ide/js/component-control";
 
 const storage = new Store();
 /***
@@ -38,11 +39,13 @@ const projectStore = {
             ipcRenderer.send('set-has-project',true);
         },
         ADD_COMPONENT_TO_PAGE(state, {pageIndex, isVisual, component}) {
-            // console.log(state.project.pages[pageIndex],component);
+            // console.log;
+            let c = {...component};
+            c.name = getUniqueName(state.project.pages[pageIndex],component.name);
             if (isVisual){
-                state.project.pages[pageIndex].children.visual.push(component);
+                state.project.pages[pageIndex].children.visual.push(c);
             }else{
-                state.project.pages[pageIndex].children.nonVisual.push(component);
+                state.project.pages[pageIndex].children.nonVisual.push(c);
             }
             this.dispatch('ide/setMenuCanUndo',true);
         },

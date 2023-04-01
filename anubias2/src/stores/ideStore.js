@@ -145,7 +145,7 @@ const ideStore = {
             context.commit('TOGGLE_PAGES_COLLAPSE');
         },
         setMenuCanUndo(context,data) {
-            console.log(data,'undo');
+            // console.log(data,'undo');
             context.commit('SET_MENU_CAN_UNDO',data);
             ipcRenderer.send('set-menu-state','canUndo',data);
         },
