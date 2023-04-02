@@ -107,7 +107,7 @@ select option {
 
 #components {
     background: var(--darker-bg);
-    grid-column: 16 / 20;
+    grid-column: 15 / 20;
     grid-row: 3;
     border: 1px solid var(--lighter-bg);
     overflow: hidden;
@@ -123,7 +123,7 @@ select option {
 
 #properties {
     background: var(--darker-bg);
-    grid-column: 16 / 20;
+    grid-column: 15 / 20;
     grid-row: 4;
     border: 1px solid var(--lighter-bg);
     border-bottom: 0;
@@ -159,7 +159,7 @@ select option {
 }
 
 #main {
-    grid-column: 1 / 16;
+    grid-column: 1 / 15;
     grid-row: 3 / 5;
 }
 

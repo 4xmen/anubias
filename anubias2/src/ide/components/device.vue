@@ -233,7 +233,6 @@ export default {
       console.log('test');
     },
     setOnEditComponent(component){
-      console.log('ddd',component);
       this.$store.dispatch('setOnEditComponent',component);
     },
     resizeSvg() {

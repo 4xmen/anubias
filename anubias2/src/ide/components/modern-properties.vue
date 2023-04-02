@@ -1,27 +1,31 @@
 <template>
-  {{properties}}
+  <div>
+    <collapsible title="Name" icon="ri-codepen-line">
+      <input type="text">
+    </collapsible>
+  </div>
 </template>
 
 <script>
 import {mapState} from 'vuex';
+import collapsible from "./collapsible.vue";
+
 export default {
   name: "modern-properties",
-  components:{},
-  data(){
-    return{
-
-    }
+  components: {
+    collapsible
+  },
+  data() {
+    return {}
   },
   mounted() {
   },
-  computed:{
-    ...mapState('ide',{
-      properties:'onEditComponent',
+  computed: {
+    ...mapState('ide', {
+      properties: 'onEditComponent',
     })
   },
-  methods:{
-
-  }
+  methods: {}
 }
 </script>
 

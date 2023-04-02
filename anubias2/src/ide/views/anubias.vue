@@ -196,7 +196,7 @@ export default {
       }
       // full height properties when component closed
       if (this.ide.components.collapsed && !this.ide.properties.collapsed) {
-        style += 'grid-column: 16 / 19;';
+        style += 'grid-column: 15 / 19;';
       }
       return style;
     },
@@ -209,7 +209,7 @@ export default {
 
       // full height component when properties closed
       if (this.ide.properties.collapsed && !this.ide.components.collapsed) {
-        style += 'grid-column: 16 / 19;';
+        style += 'grid-column: 15 / 19;';
       }
       return style;
     }
