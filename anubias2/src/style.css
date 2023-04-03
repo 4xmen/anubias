@@ -87,6 +87,10 @@ select option {
     font-size: 16px;
 }
 
+input{
+    outline: none;
+}
+
 #app {
     display: grid;
     height: 100vh;
