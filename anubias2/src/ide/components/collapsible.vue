@@ -50,9 +50,9 @@ export default {
   border-top: 1px solid var(--lighter-bg);
 }
 h4{
-  font-size: 15px;
-  border-bottom:  1px solid var(--lighter-bg);
-  background: var(--darker-bg);
+  font-size: 17px;
+  box-shadow: 0 1px 1px var(--lighter-bg);
+  background: var(--lighter-bg);
   text-align: center;
   overflow: hidden;
   padding: 3px;

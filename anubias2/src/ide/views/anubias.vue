@@ -36,19 +36,7 @@
     </div>
     <div id="main" :style="mainStyle">
       <div class="grid">
-        <div class="side">
-          <div class="clearfix"></div>
-          <div id="non-visual-component">
-            <non-visual></non-visual>
-            <router-link to="/settings">
-              go setting test
-            </router-link>
-
-            <h1 id="test" @click="test">
-              test
-            </h1>
-          </div>
-        </div>
+        <sidebar></sidebar>
         <div id="device-container">
           <device></device>
         </div>
@@ -73,7 +61,7 @@
         <i class="ri-checkbox-indeterminate-line" @click="togglePropertiesCollapse"></i>
       </h3>
       <div class="properties">
-      <properties ></properties>
+
       </div>
     </div>
     <div id="pages" :class="pagesClass">
@@ -99,18 +87,17 @@
 import {mapState} from 'vuex';
 import {mapGetters} from 'vuex';
 import buttons from "../components/buttons.vue";
-import iconButton from "../components/iconButton.vue";
+import iconButtons from "../components/iconButtons.vue";
 import device from "../components/device.vue";
 import Store from 'electron-store';
 import components from "../components/components-panel.vue";
-import nonVisual from "../components/non-visual-panel.vue";
-import properties from "../components/properties-panel.vue";
+import sidebar from "../components/sidebar.vue";
 
 const storage = new Store();
 
 export default {
   name: "anubias",
-  components: {buttons, iconButton, device, components,nonVisual,properties},
+  components: {buttons, iconButton: iconButtons, device, components,sidebar},
   data: () => {
     return {
       deviceZoom: ['AUTO', '120%', '100%', '75%', '50%'],
@@ -258,17 +245,6 @@ export default {
       this.$store.dispatch('ide/setActivePage', i);
       this.$store.dispatch('setOnEditComponent', this.project.project.pages[i]);
     },
-    test() {
-      // let page = this.currentPage;
-      // page.name = 'pageMain';
-      // this.$store.commit('ide/UPDATE_CURRENT_PAGE', page);
-      // console.log(this.getPage(0));
-      // console.log(this.currentPage);
-      // this.$store.ide.state
-      // console.log(this.currentPage);
-      // console.log(this.);
-      // console.log(this.);
-    }
   },
 }
 </script>
@@ -349,16 +325,6 @@ h3 i:hover {
   height: 100%;
   width: 100%;
   overflow-y: auto;
-  overflow-x: hidden;
-}
-
-#main .side {
-  padding: 5px;
-}
-
-#non-visual-component {
-  min-height: 5em;
-  background: var(--darker-bg);
   overflow-x: hidden;
 }
 
