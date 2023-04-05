@@ -42,7 +42,7 @@
 import {mapState} from 'vuex';
 import collapsible from "./collapsible.vue";
 import  toggle from './switch.vue';
-import around from './around-viewer.vue'
+import around from './around-controller.vue'
 export default {
   name: "modern-properties",
   components: {

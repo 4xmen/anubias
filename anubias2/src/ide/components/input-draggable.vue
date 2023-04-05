@@ -1,5 +1,9 @@
 <template>
-  <input type="text" :value="computedValue" @Input="updateValue" @mousedown="startDragging"/>
+  <input type="text" :value="computedValue"
+         @input="updateValue"
+         @keydown.up="incUp"
+         @keydown.down="decDown"
+         @mousedown="startDragging"/>
 </template>
 
 <script>
@@ -22,24 +26,34 @@ export default {
       default: 1
     }
   },
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue','input-val'],
   data() {
     return {
       dragging: false,
-      value: this.modelValue,
     }
   },
   computed: {
     computedValue: {
       get() {
-        return this.modelValue
+        return this.modelValue;
       },
       set(value) {
-        this.$emit('update:modelValue', value)
+        this.$emit('update:modelValue', value);
+        this.$emit('input-val', value);
       }
     }
   },
   methods: {
+    incUp(){
+      let val = parseInt(this.modelValue) + this.increment <= this.maxValue ? parseInt(this.modelValue) + this.increment : this.maxValue;
+      this.$emit('update:modelValue', val);
+      this.$emit('input-val', this.modelValue);
+    },
+    decDown(){
+      let val =  this.modelValue - this.increment >= this.minValue ? this.modelValue - this.increment : this.minValue;
+      this.$emit('update:modelValue',val);
+      this.$emit('input-val', this.modelValue);
+    },
     startDragging() {
       this.dragging = true
       window.addEventListener('mousemove', this.updateValue)
@@ -51,17 +65,13 @@ export default {
       window.removeEventListener('mouseup', this.stopDragging)
     },
     updateValue(event) {
-      this.value = this.modelValue;
       if (this.dragging) {
         if (event.movementX > 0) {
-          let val = this.modelValue + this.increment <= this.maxValue ? this.modelValue + this.increment : this.maxValue;
-          this.$emit('update:modelValue', val);
-          // this.value = val;
+          this.incUp();
         } else {
-          let val =  this.modelValue - this.increment >= this.minValue ? this.modelValue - this.increment : this.minValue;
-          this.$emit('update:modelValue',val);
-          // this.value = val;
+          this.decDown();
         }
+        this.$emit('input-val', this.modelValue);
       }
     }
   }
