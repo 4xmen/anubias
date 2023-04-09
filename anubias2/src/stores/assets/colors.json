@@ -2,12 +2,12 @@
   {
     "name": "default",
     "value": "null",
-    "color": "#ffffff"
+    "color": "url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAACdJREFUKFNjPHP19n8GJGCspYLMZWCkg4L///+juOHstTuobqC9AgCYGinl3vgvfQAAAABJRU5ErkJggg==\")"
   },
   {
     "name": "transparent",
     "value": "Colors.transparent",
-    "color": "transparent"
+    "color": "rgba(0,0,0,0)"
   },
   {
     "name": "pink",

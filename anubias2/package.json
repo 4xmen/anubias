@@ -53,6 +53,7 @@
     "material-icons": "^1.13.3",
     "remixicon": "^2.5.0",
     "vazirmatn": "^33.0.3",
+    "vue-color-kit": "^1.0.5",
     "vue-router": "^4.1.6",
     "vuex": "^4.0.2"
   }
