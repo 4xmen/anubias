@@ -24,6 +24,15 @@
         </div>
       </div>
     </collapsible>
+
+    <collapsible title="Colors properties" icon="ri-palette-line">
+      <template v-for="(p,index) in properties"  :key="index">
+        <div  v-if="properties.validator[index] !== undefined
+                && properties.validator[index].type === 'String|Color'">
+          <color-picker v-model="properties[index]" :label="index"></color-picker>
+        </div>
+      </template>
+    </collapsible>
     <collapsible v-if="properties.padding !== undefined" title="Padding">
       <around v-model="properties.padding"></around>
     </collapsible>
@@ -35,20 +44,23 @@
         </div>
       </template>
     </collapsible>
+
   </div>
 </template>
 
 <script>
-import {mapState} from 'vuex';
+import {mapGetters, mapState} from 'vuex';
 import collapsible from "./collapsible.vue";
 import  toggle from './switch.vue';
 import around from './around-controller.vue'
+import colorPicker from './color-picker.vue'
 export default {
   name: "modern-properties",
   components: {
     collapsible,
     toggle,
     around,
+    colorPicker,
   },
   data() {
     return {
@@ -61,7 +73,8 @@ export default {
   computed: {
     ...mapState('ide', {
       properties: 'onEditComponent',
-    })
+    }),
+    ...mapGetters('project',['appColor'])
   },
   methods: {
     /**

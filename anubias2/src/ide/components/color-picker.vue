@@ -108,7 +108,6 @@ export default {
     getColor: getColor,
     setDefault() {
       this.$emit('update:modelValue', "null");
-      console.log(this.modelValue);
       this.modal = false;
     },
     closeModal(e) {

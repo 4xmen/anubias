@@ -170,7 +170,19 @@ const ideStore = {
         },
         activePageIndex(state){
             return state.activePage;
-        }
+        },
+        defaultColors(state){
+            let colors = {};
+            for( const color of state.colors) {
+              colors[color.value] = color.color ;
+            }
+            return colors;
+        },
+        defaultColorsArray(state){
+            return  state.colors.map((color)=>{
+                return color.color;
+            })
+        },
     }
 };
 

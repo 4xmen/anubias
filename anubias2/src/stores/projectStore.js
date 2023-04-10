@@ -83,6 +83,9 @@ const projectStore = {
     getters: {
         getPage: (state) => (i) => {
             return state.project.pages[i];
+        },
+        appColor: (state) =>{
+            return state.project.appColor;
         }
     }
 };

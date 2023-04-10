@@ -10,6 +10,7 @@
     --def-bg: #282c34;
     --darker-bg: #21252b;
     --lighter-bg: #353a45;
+    --invert-bg: #cac5ba;
     --scrollbarbg: #21252b80;
     --scrollbar: #353a4560;
 
@@ -328,6 +329,45 @@ input{
     color: #fff;
 }
 
+
+.material-button {
+    display: inline-block;
+    background-color: var(--text-hilight);
+    color: #ffffff;
+    padding: 7px 10px;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    line-height: 1.5;
+    border-radius: 4px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),0 3px 1px -2px rgba(0, 0, 0, 0.2),0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    transition: box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1),background-color 200ms cubic-bezier(0.4, 0, 0, 1);
+}
+.material-button:hover {
+    background-color: var(--text-hilight-darker);
+    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2),0 5px 8px 0 rgba(0, 0, 0, 0.14),0 1px 14px 0 rgba(0, 0, 0, 0.12);
+}
+.material-button:focus {
+    background-color: var(--text-hilight-darker);
+    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2),0 5px 8px 0 rgba(0, 0, 0, 0.14),0 1px 14px 0 rgba(0, 0, 0, 0.12);
+    outline: none;
+}
+.material-button:active {
+    background-color: var(--text-hilight-darker);
+    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2),0 2px 4px -1px rgba(0, 0, 0, 0.14),0 1px 10px 0 rgba(0, 0, 0, 0.12);
+}
+/*general class*/
+.w-100{
+    display: block;
+    width: 100%;
+}
+.grid-equal{
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+}
 /* ripple animation */
 @keyframes rippleEffect {
     to {
