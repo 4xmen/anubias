@@ -28,11 +28,15 @@
             :colors-default="fixedColor"
         />
         <div class="grid-equal">
-          <div class="material-button" @click="modal = false" title="ok">
-            <i class="ri-check-line"></i>
+          <div>
+            <div class="circle-btn" @click="modal = false" title="ok">
+              <i class="ri-check-line"></i>
+            </div>
           </div>
-          <div class="material-button" @click="setDefault" title="default">
-            <i class="ri-eraser-line"></i>
+          <div>
+            <div class="circle-btn" @click="setDefault" title="default">
+              <i class="ri-eraser-line"></i>
+            </div>
           </div>
         </div>
       </div>
@@ -88,8 +92,8 @@ export default {
     },
     fixedColor() {
       let n = this.defaultColorsArray;
-      n.splice(0,1);
-      n[0] = this.appColor;
+      n.splice(0, 1);
+      // n[0] = this.appColor;
       return n;
     },
     colorPickerModalStyle() {
@@ -102,8 +106,9 @@ export default {
   },
   methods: {
     getColor: getColor,
-    setDefault(){
-      this.$emit('update:modelValue', this.fixColor('null'));
+    setDefault() {
+      this.$emit('update:modelValue', "null");
+      console.log(this.modelValue);
       this.modal = false;
     },
     closeModal(e) {
@@ -115,7 +120,8 @@ export default {
       this.color = color.hex;
       // console.log(this.defaultColors);
 
-      this.$emit('update:modelValue', 'null');
+      // need review
+      this.$emit('update:modelValue', this.fixColor(color));
     },
     // fix color for fultter find reserved color;
 
@@ -209,8 +215,14 @@ h4 {
   border-radius: 4px;
 }
 
-.grid-equal{
+.grid-equal {
   padding: 0 10px 10px;
   grid-gap: 10px;
+  text-align: center;
+  margin-bottom: -35px;
+}
+
+.grid-equal .circle-btn{
+  margin: auto;
 }
 </style>
