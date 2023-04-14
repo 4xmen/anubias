@@ -1,6 +1,7 @@
 <template>
   <input type="text" :value="computedValue"
          @input="updateValue"
+         @keyup="updating"
          @keydown.up="incUp"
          @keydown.down="decDown"
          @mousedown="startDragging"/>
@@ -14,12 +15,12 @@ export default {
       required: true,
     },
     minValue: {
-      type: Number,
-      default: 0
+      type: String,
+      default: "0"
     },
     maxValue: {
-      type: Number,
-      default: 100
+      type: String,
+      default: "100"
     },
     increment: {
       type: Number,
@@ -44,6 +45,10 @@ export default {
     }
   },
   methods: {
+    updating(e){
+      this.$emit('update:modelValue', e.target.value );
+      this.$emit('input-val', this.modelValue);
+    },
     incUp(){
       let val = parseInt(this.modelValue) + this.increment <= this.maxValue ? parseInt(this.modelValue) + this.increment : this.maxValue;
       this.$emit('update:modelValue', val);
