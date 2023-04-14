@@ -25,6 +25,10 @@ export default {
     increment: {
       type: Number,
       default: 1
+    },
+    percentable:{
+      type: Boolean,
+      default: false,
     }
   },
   emits: ['update:modelValue','input-val'],
@@ -50,13 +54,29 @@ export default {
       this.$emit('input-val', this.modelValue);
     },
     incUp(){
+      let percent = false;
+      if (this.percentable && this.modelValue.substr(this.modelValue.length-1,1) === '%'){
+        percent = true;
+      }
       let val = parseInt(this.modelValue) + this.increment <= this.maxValue ? parseInt(this.modelValue) + this.increment : this.maxValue;
-      this.$emit('update:modelValue', val);
+      if (percent){
+        this.$emit('update:modelValue', val+'%');
+      }else{
+        this.$emit('update:modelValue', val);
+      }
       this.$emit('input-val', this.modelValue);
     },
     decDown(){
-      let val =  this.modelValue - this.increment >= this.minValue ? this.modelValue - this.increment : this.minValue;
-      this.$emit('update:modelValue',val);
+      let percent = false;
+      if (this.percentable && this.modelValue.substr(this.modelValue.length-1,1) === '%'){
+        percent = true;
+      }
+      let val =  parseInt( this.modelValue ) - this.increment >= this.minValue ? parseInt( this.modelValue) - this.increment : this.minValue;
+      if (percent){
+        this.$emit('update:modelValue', val+'%');
+      }else{
+        this.$emit('update:modelValue', val);
+      }
       this.$emit('input-val', this.modelValue);
     },
     startDragging() {

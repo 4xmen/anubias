@@ -25,6 +25,16 @@
       </div>
     </collapsible>
 
+    <collapsible v-if="properties.width !== undefined || properties.height !== undefined"  title="Size control" icon="ri-palette-line">
+      <label class="input-container" v-if="properties.width !== undefined">
+        Width:
+        <dinput  v-model="properties.width" min-value="0" max-value="999" :percentable="true" />
+      </label>
+      <label class="input-container" v-if="properties.height !== undefined" >
+        Height:
+        <dinput  v-model="properties.height" min-value="0" max-value="999" :percentable="true" />
+      </label>
+    </collapsible>
     <collapsible title="Colors properties" icon="ri-palette-line">
       <template v-for="(p,index) in properties"  :key="index">
         <div  v-if="properties.validator[index] !== undefined
@@ -54,6 +64,7 @@ import collapsible from "./collapsible.vue";
 import  toggle from './switch.vue';
 import around from './around-controller.vue'
 import colorPicker from './color-picker.vue'
+import dinput from './input-draggable.vue';
 export default {
   name: "modern-properties",
   components: {
@@ -61,6 +72,7 @@ export default {
     toggle,
     around,
     colorPicker,
+    dinput,
   },
   data() {
     return {
