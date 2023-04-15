@@ -1,5 +1,5 @@
 <template>
-  <div v-if="properties.type !== undefined">
+  <div v-if="properties.type !== undefined" class="prop-container">
     <collapsible title="Name" icon="ri-codepen-line">
       <!--  change name -->
       <div class="input-container">
@@ -10,7 +10,7 @@
         Name is invalid...
       </div>
     </collapsible>
-    <collapsible v-if="properties.align !== undefined" :title="'Align ('+showValue(properties.align)+')'">
+    <collapsible v-if="properties.align !== undefined" :title="'Align ('+showValue(properties.align)+')'" icon="ri-layout-right-2-line">
       <div class="btn-group">
         <div  v-for="(v,i) in extractItems(properties.validator.align.regex)"
               :class="'btn '+(v === properties.align?'active':'')"
@@ -24,16 +24,18 @@
         </div>
       </div>
     </collapsible>
-
-    <collapsible v-if="properties.width !== undefined || properties.height !== undefined"  title="Size control" icon="ri-palette-line">
+    <collapsible v-if="properties.width !== undefined || properties.height !== undefined"  title="Size control" icon="ri-pencil-ruler-2-line">
       <label class="input-container" v-if="properties.width !== undefined">
-        Width:
-        <dinput  v-model="properties.width" min-value="0" max-value="999" :percentable="true" />
+        Width <template v-if="isLinkedWidthHeight"> & height </template> :
+        <dinput  :on-update="widthUpdate" v-model="properties.width" min-value="0" max-value="999" :percentable="true" />
       </label>
-      <label class="input-container" v-if="properties.height !== undefined" >
+      <label class="input-container" v-if="properties.height !== undefined && !isLinkedWidthHeight" >
         Height:
-        <dinput  v-model="properties.height" min-value="0" max-value="999" :percentable="true" />
+        <dinput v-model="properties.height" min-value="0" max-value="999" :percentable="true" />
       </label>
+      <div v-if="properties.width !== undefined && properties.height !== undefined">
+        <toggle icon="ri-links-line" label="Link width & height" v-model="isLinkedWidthHeight" :size=".6"></toggle>
+      </div>
     </collapsible>
     <collapsible title="Colors properties" icon="ri-palette-line">
       <template v-for="(p,index) in properties"  :key="index">
@@ -77,10 +79,12 @@ export default {
   data() {
     return {
       isNameValid: true,
+      isLinkedWidthHeight: false,
     }
   },
   mounted() {
     // this.properties.name += '_';
+    this.isLinkedWidthHeight = false;
   },
   computed: {
     ...mapState('ide', {
@@ -119,6 +123,11 @@ export default {
       if (e.target.getAttribute('data-blur') === 'false'){
         e.target.focus();
       }
+    },
+    widthUpdate(){
+      if (this.isLinkedWidthHeight){
+        this.properties.height = this.properties.width;
+      }
     }
   }
 }
@@ -127,6 +136,9 @@ export default {
 <style scoped>
   input{
     padding: 4px;
+  }
+  .prop-container{
+    overflow-y: auto;
   }
   .err{
     background: #8B000066;
