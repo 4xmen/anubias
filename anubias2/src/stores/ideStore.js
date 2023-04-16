@@ -8,7 +8,24 @@ import componentsList from "./components/components-list.json"; // import compon
 /**
  * import default component lists
  */
+import componentAppbarDefault from './components/defaultAppbar.json';
+import componentButtonDefault from './components/defaultButton.json';
+import componentCircleButtonDefault from './components/defaultCircleButton.json';
+import componentColumnDefault from './components/defaultColumn.json';
+import componentContainerDefault from './components/defaultContainer.json';
+import componentDividerDefault from './components/defaultDivider.json';
+import componentDropdownDefault from './components/defaultDropdown.json';
+import componentGridDefault from './components/defaultGrid.json';
+import componentIconDefault from './components/defaultIcon.json';
+import componentImageDefault from './components/defaultImage.json';
+import componentInputDefault from './components/defaultInput.json';
+import componentMenuDefault from './components/defaultMenu.json';
+import componentNavbarDefault from './components/defaultNavbar.json';
+import componentPageDefault from './components/defaultPage.json';
 import componentPreloaderDefault from './components/defaultPreloader.json';
+import componentRowDefault from './components/defaultRow.json';
+import componentTextDefault from './components/defaultText.json';
+import componentToggleDefault from './components/defaultToggle.json';
 
 /**
  * import other modules
@@ -37,7 +54,24 @@ const ideStore = {
             mode: 'grid',
         },
         defaultComponents:{
+            appbar: componentAppbarDefault,
+            button: componentButtonDefault,
+            circleButton: componentCircleButtonDefault,
+            column: componentColumnDefault,
+            container: componentContainerDefault,
+            divider: componentDividerDefault,
+            dropdown: componentDropdownDefault,
+            grid: componentGridDefault,
+            icon: componentIconDefault,
+            image: componentImageDefault,
+            input: componentInputDefault,
+            menu: componentMenuDefault,
+            navbar: componentNavbarDefault,
+            page: componentPageDefault,
             preloader: componentPreloaderDefault,
+            row: componentRowDefault,
+            text: componentTextDefault,
+            toggle: componentToggleDefault,
         },
         properties: {
             collapsed: storage.get('propertiesCollapsed'),

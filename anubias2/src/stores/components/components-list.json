@@ -105,11 +105,11 @@
         "name": "grid"
     },
     {
-        "title": "Nav",
+        "title": "Navbar",
         "icon": "ri-layout-bottom-2-line",
         "active": true,
         "visual": true,
-        "name": "nav"
+        "name": "navbar"
     },
     {
         "title": "Menu",
