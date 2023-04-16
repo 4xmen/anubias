@@ -71,16 +71,60 @@
       </svg>
       <div id="scroller">
         <div id="component-holder" :style="componentHolderStyle">
+
           <!--    c is component  in v-for  -->
           <template  v-if="pages.currentPage.children !== undefined" v-for="(c,componentIndex) in pages.currentPage.children.visual" :key="componentIndex">
             <div class="component" v-if="c.type === 'preloader'" @click="setOnEditComponent(c)">
-              <anubias-preloader :properties="c"></anubias-preloader>
+              <anubias-preloader :properties="c" @click="setOnEditComponent(c)"></anubias-preloader>
             </div>
-            <template v-else-if="c.type === 'appbar'">
-            </template>
-            <template v-else>
+            <div v-else-if="c.type === 'appbar'" @click="setOnEditComponent(c)">
+              <anubias-appbar :properties="c"></anubias-appbar>
+            </div>
+            <div v-else-if="c.type === 'button'" @click="setOnEditComponent(c)">
+              <anubias-button :properties="c"></anubias-button>
+            </div>
+            <div v-else-if="c.type === 'circleButton'" @click="setOnEditComponent(c)">
+              <anubias-circle-button :properties="c"></anubias-circle-button>
+            </div>
+            <div v-else-if="c.type === 'container'" @click="setOnEditComponent(c)">
+              <anubias-container :properties="c"></anubias-container>
+            </div>
+            <div v-else-if="c.type === 'column'" @click="setOnEditComponent(c)">
+              <anubias-column :properties="c"></anubias-column>
+            </div>
+            <div v-else-if="c.type === 'divider'" @click="setOnEditComponent(c)">
+              <anubias-divider :properties="c"></anubias-divider>
+            </div>
+            <div v-else-if="c.type === 'dropdown'" @click="setOnEditComponent(c)">
+              <anubias-dropdown :properties="c"></anubias-dropdown>
+            </div>
+            <div v-else-if="c.type === 'grid'" @click="setOnEditComponent(c)">
+              <anubias-grid :properties="c"></anubias-grid>
+            </div>
+            <div v-else-if="c.type === 'icon'" @click="setOnEditComponent(c)">
+              <anubias-icon :properties="c"></anubias-icon>
+            </div>
+            <div v-else-if="c.type === 'image'" @click="setOnEditComponent(c)">
+              <anubias-image :properties="c"></anubias-image>
+            </div>
+            <div v-else-if="c.type === 'input'" @click="setOnEditComponent(c)">
+              <anubias-input :properties="c"></anubias-input>
+            </div>
+            <div v-else-if="c.type === 'navbar'" @click="setOnEditComponent(c)">
+              <anubias-navbar :properties="c"></anubias-navbar>
+            </div>
+            <div v-else-if="c.type === 'row'" @click="setOnEditComponent(c)">
+              <anubias-row :properties="c"></anubias-row>
+            </div>
+            <div v-else-if="c.type === 'text'" @click="setOnEditComponent(c)">
+              <anubias-text :properties="c"></anubias-text>
+            </div>
+            <div v-else-if="c.type === 'toggle'" @click="setOnEditComponent(c)">
+              <anubias-toggle :properties="c"></anubias-toggle>
+            </div>
+            <div v-else>
               {{c.type}}
-            </template>
+            </div>
           </template>
         </div>
         <div id="components-area" :style="componentsAreaStyle">
@@ -98,13 +142,45 @@ import {mapGetters, mapState} from "vuex";
 import droppable from "./droppable.vue";
 
 // anubias component to make falutter
+import anubiasAppbar from "./anubias/abubiasAppbar.vue";
+import anubiasButton from "./anubias/abubiasButton.vue";
+import anubiasCircleButton from "./anubias/abubiasCircleButton.vue";
+import anubiasColumn from "./anubias/abubiasColumn.vue";
+import anubiasContainer from "./anubias/anubiasContainer.vue";
+import anubiasDivider from "./anubias/abubiasDivider.vue";
+import anubiasDropdown from "./anubias/abubiasDropdown.vue";
+import anubiasGrid from "./anubias/abubiasGrid.vue";
+import anubiasIcon from "./anubias/abubiasIcon.vue";
+import anubiasImage from "./anubias/abubiasImage.vue";
+import anubiasInput from "./anubias/abubiasInput.vue";
+import anubiasMenu from "./anubias/abubiasMenu.vue";
+import anubiasNavbar from "./anubias/abubiasNavbar.vue";
 import anubiasPreloader from "./anubias/anubiasPreloader.vue";
+import anubiasRow from "./anubias/abubiasRow.vue";
+import anubiasText from "./anubias/abubiasText.vue";
+import anubiasToggle from "./anubias/abubiasToggle.vue";
 
 export default {
   name: "device",
   components: {
     droppable,
+    anubiasAppbar,
+    anubiasButton,
+    anubiasCircleButton,
+    anubiasColumn,
+    anubiasContainer,
+    anubiasDivider,
+    anubiasDropdown,
+    anubiasGrid,
+    anubiasIcon,
+    anubiasImage,
+    anubiasInput,
+    anubiasMenu,
+    anubiasNavbar,
     anubiasPreloader,
+    anubiasRow,
+    anubiasText,
+    anubiasToggle,
   },
   data: () => {
     return {
