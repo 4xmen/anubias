@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="test-large">
     AppBar
   </div>
 </template>

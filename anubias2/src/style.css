@@ -246,6 +246,9 @@ input{
     animation-duration: 10s;
 }
 
+.test-large{
+    font-size: 100px;
+}
 @keyframes spin {
     0%{
         transform: rotateZ(0);
