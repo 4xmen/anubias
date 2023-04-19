@@ -26,6 +26,9 @@ export default {
     preloaderStyle(){
       let style = '';
       style += 'padding:'+this.calcPadding(this.properties.padding)+';';
+      if (this.properties.align !== undefined){
+        style += 'text-align:'+(this.properties.align)+';';
+      }
       return style;
     }
   },

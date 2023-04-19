@@ -30,7 +30,7 @@ const projectStore = {
             project.anubias = ide.getters.version(ide.state());
             storage.set('lastCreatedProject', project);
             this.commit('project/LOAD_PROJECT', project);
-
+            toast.success("Project initialized...");
         },
         LOAD_PROJECT(state, project) {
             state.project = project;
@@ -40,6 +40,7 @@ const projectStore = {
             storage.set('lastLoadedProject', project);
             this.dispatch('ide/setActivePage', project.entryPoint);
             ipcRenderer.send('set-has-project', true);
+            toast.success("Project loaded...");
         },
         ADD_COMPONENT_TO_PAGE(state, {pageIndex, isVisual, component}) {
             // console.log;

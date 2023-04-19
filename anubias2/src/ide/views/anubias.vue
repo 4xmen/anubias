@@ -237,7 +237,7 @@ export default {
           this.$store.dispatch('ide/setActivePage', this.$store.state.project.project.entryPoint);
         }
       } catch (e) {
-        // console.log(e.message);
+        console.log(e.message);
         this.$store.dispatch('project/loadProject', storage.get('lastCreatedProject'));
       }
     },
