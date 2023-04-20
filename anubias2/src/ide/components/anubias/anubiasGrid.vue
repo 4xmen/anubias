@@ -1,12 +1,12 @@
 <template>
   <div>
-    Menu
+    Grid
   </div>
 </template>
 
 <script>
 export default {
-  name: "abubiasMenu"
+  name: "anubiasGrid"
 }
 </script>
 

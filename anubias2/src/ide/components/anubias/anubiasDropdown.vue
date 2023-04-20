@@ -1,12 +1,12 @@
 <template>
   <div>
-    Icon
+    DropDown
   </div>
 </template>
 
 <script>
 export default {
-  name: "abubiasIcon"
+  name: "anubiasDropdown"
 }
 </script>
 

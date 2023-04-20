@@ -1,12 +1,12 @@
 <template>
   <div>
-    Input
+    Icon
   </div>
 </template>
 
 <script>
 export default {
-  name: "abubiasInput"
+  name: "anubiasIcon"
 }
 </script>
 

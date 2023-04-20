@@ -1,12 +1,12 @@
 <template>
   <div>
-    Circle button
+    Image
   </div>
 </template>
 
 <script>
 export default {
-  name: "abubiasCircleButton"
+  name: "anubiasImage"
 }
 </script>
 

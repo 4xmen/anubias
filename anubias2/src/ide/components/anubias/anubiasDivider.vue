@@ -1,12 +1,12 @@
 <template>
   <div>
-    Toggle
+    Divider
   </div>
 </template>
 
 <script>
 export default {
-  name: "abubiasToggle"
+  name: "anubiasDivider"
 }
 </script>
 

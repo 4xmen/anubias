@@ -1,12 +1,12 @@
 <template>
   <div>
-    Grid
+    Column
   </div>
 </template>
 
 <script>
 export default {
-  name: "abubiasGrid"
+  name: "anubiasColumn"
 }
 </script>
 

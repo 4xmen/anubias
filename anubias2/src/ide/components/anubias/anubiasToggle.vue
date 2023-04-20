@@ -1,12 +1,12 @@
 <template>
   <div>
-    Image
+    Toggle
   </div>
 </template>
 
 <script>
 export default {
-  name: "abubiasImage"
+  name: "anubiasToggle"
 }
 </script>
 

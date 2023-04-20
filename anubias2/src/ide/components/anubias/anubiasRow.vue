@@ -1,12 +1,12 @@
 <template>
   <div>
-    Divider
+    Row
   </div>
 </template>
 
 <script>
 export default {
-  name: "abubiasDivider"
+  name: "anubiasRow"
 }
 </script>
 

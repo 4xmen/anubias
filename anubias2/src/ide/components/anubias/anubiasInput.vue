@@ -1,12 +1,12 @@
 <template>
   <div>
-    Row
+    Input
   </div>
 </template>
 
 <script>
 export default {
-  name: "abubiasRow"
+  name: "anubiasInput"
 }
 </script>
 

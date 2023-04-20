@@ -1,12 +1,12 @@
 <template>
-  <div>
-    Column
+  <div class="test-large">
+    AppBar
   </div>
 </template>
 
 <script>
 export default {
-  name: "abubiasColumn"
+  name: "anubiasAppbar"
 }
 </script>
 

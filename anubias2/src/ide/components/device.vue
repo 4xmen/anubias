@@ -142,23 +142,23 @@ import {mapGetters, mapState} from "vuex";
 import droppable from "./droppable.vue";
 
 // anubias component to make falutter
-import anubiasAppbar from "./anubias/abubiasAppbar.vue";
-import anubiasButton from "./anubias/abubiasButton.vue";
-import anubiasCircleButton from "./anubias/abubiasCircleButton.vue";
-import anubiasColumn from "./anubias/abubiasColumn.vue";
+import anubiasAppbar from "./anubias/anubiasAppbar.vue";
+import anubiasButton from "./anubias/anubiasButton.vue";
+import anubiasCircleButton from "./anubias/anubiasCircleButton.vue";
+import anubiasColumn from "./anubias/anubiasColumn.vue";
 import anubiasContainer from "./anubias/anubiasContainer.vue";
-import anubiasDivider from "./anubias/abubiasDivider.vue";
-import anubiasDropdown from "./anubias/abubiasDropdown.vue";
-import anubiasGrid from "./anubias/abubiasGrid.vue";
-import anubiasIcon from "./anubias/abubiasIcon.vue";
-import anubiasImage from "./anubias/abubiasImage.vue";
-import anubiasInput from "./anubias/abubiasInput.vue";
-import anubiasMenu from "./anubias/abubiasMenu.vue";
-import anubiasNavbar from "./anubias/abubiasNavbar.vue";
+import anubiasDivider from "./anubias/anubiasDivider.vue";
+import anubiasDropdown from "./anubias/anubiasDropdown.vue";
+import anubiasGrid from "./anubias/anubiasGrid.vue";
+import anubiasIcon from "./anubias/anubiasIcon.vue";
+import anubiasImage from "./anubias/anubiasImage.vue";
+import anubiasInput from "./anubias/anubiasInput.vue";
+import anubiasMenu from "./anubias/anubiasMenu.vue";
+import anubiasNavbar from "./anubias/anubiasNavbar.vue";
 import anubiasPreloader from "./anubias/anubiasPreloader.vue";
-import anubiasRow from "./anubias/abubiasRow.vue";
-import anubiasText from "./anubias/abubiasText.vue";
-import anubiasToggle from "./anubias/abubiasToggle.vue";
+import anubiasRow from "./anubias/anubiasRow.vue";
+import anubiasText from "./anubias/anubiasText.vue";
+import anubiasToggle from "./anubias/anubiasToggle.vue";
 
 export default {
   name: "device",

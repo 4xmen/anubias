@@ -1,12 +1,12 @@
 <template>
-  <div class="test-large">
-    AppBar
+  <div>
+    Navbar
   </div>
 </template>
 
 <script>
 export default {
-  name: "abubiasAppbar"
+  name: "anubiasNavbar"
 }
 </script>
 

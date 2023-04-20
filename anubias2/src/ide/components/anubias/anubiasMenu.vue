@@ -1,12 +1,12 @@
 <template>
   <div>
-    Navbar
+    Menu
   </div>
 </template>
 
 <script>
 export default {
-  name: "abubiasNavbar"
+  name: "anubiasMenu"
 }
 </script>
 
