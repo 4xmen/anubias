@@ -33,9 +33,7 @@ export default {
     }
   },
   methods: {
-    color2web(clr) {
-      return color2web(clr);
-    },
+    color2web:color2web,
     getSize: getSize,
     calcPadding: calcPaddingOrMargin,
   }

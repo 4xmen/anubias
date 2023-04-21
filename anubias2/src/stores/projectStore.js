@@ -109,7 +109,13 @@ const projectStore = {
             },
             appColor: (state) => {
                 return state.project.appColor;
-            }
+            },
+            isRTL:(state) =>{
+                return state.project.isRTL;
+            },
+            isDark:(state) =>{
+                return state.project.isDark;
+            },
         }
     };
 
