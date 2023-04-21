@@ -221,6 +221,7 @@ export default {
         this.togglePropertiesCollapse();
       }
     },
+    // expand page panel
     expandPages(e) {
       if (this.ide.pages.collapsed && e.target.tagName !== 'I') {
         this.togglePagesCollapse();
@@ -393,7 +394,8 @@ h3 i:hover {
   border: 1px solid var(--darker-bg);
   background-color: #fff;
   margin: .5rem auto;
-  background-size: contain;
+  background-size: 100% auto;
+  background-repeat: no-repeat;
   background-position: top center;
   border-radius: 5px;
   transition: var(--transition-duration);

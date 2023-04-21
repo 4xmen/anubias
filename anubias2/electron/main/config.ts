@@ -1,5 +1,5 @@
 const config = {
-    isDebug: false,
+    isDebug: true,
 }
 
 export {config};
