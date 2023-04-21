@@ -74,52 +74,52 @@
 
           <!--    c is component  in v-for  -->
           <template  v-if="pages.currentPage.children !== undefined" v-for="(c,componentIndex) in pages.currentPage.children.visual" :key="componentIndex">
-            <div class="component" v-if="c.type === 'preloader'" @click="setOnEditComponent(c)">
-              <anubias-preloader :properties="c" @click="setOnEditComponent(c)"></anubias-preloader>
+            <div class="component" v-if="c.type === 'preloader'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
+              <anubias-preloader :properties="c"></anubias-preloader>
             </div>
-            <div v-else-if="c.type === 'appbar'" @click="setOnEditComponent(c)">
+            <div v-else-if="c.type === 'appbar'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
               <anubias-appbar :properties="c"></anubias-appbar>
             </div>
-            <div v-else-if="c.type === 'button'" @click="setOnEditComponent(c)">
+            <div v-else-if="c.type === 'button'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
               <anubias-button :properties="c"></anubias-button>
             </div>
-            <div v-else-if="c.type === 'circleButton'" @click="setOnEditComponent(c)">
+            <div v-else-if="c.type === 'circleButton'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
               <anubias-circle-button :properties="c"></anubias-circle-button>
             </div>
-            <div v-else-if="c.type === 'container'" @click="setOnEditComponent(c)">
+            <div v-else-if="c.type === 'container'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
               <anubias-container :properties="c"></anubias-container>
             </div>
-            <div v-else-if="c.type === 'column'" @click="setOnEditComponent(c)">
+            <div v-else-if="c.type === 'column'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
               <anubias-column :properties="c"></anubias-column>
             </div>
-            <div v-else-if="c.type === 'divider'" @click="setOnEditComponent(c)">
+            <div v-else-if="c.type === 'divider'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
               <anubias-divider :properties="c"></anubias-divider>
             </div>
-            <div v-else-if="c.type === 'dropdown'" @click="setOnEditComponent(c)">
+            <div v-else-if="c.type === 'dropdown'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
               <anubias-dropdown :properties="c"></anubias-dropdown>
             </div>
-            <div v-else-if="c.type === 'grid'" @click="setOnEditComponent(c)">
+            <div v-else-if="c.type === 'grid'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
               <anubias-grid :properties="c"></anubias-grid>
             </div>
-            <div v-else-if="c.type === 'icon'" @click="setOnEditComponent(c)">
+            <div v-else-if="c.type === 'icon'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
               <anubias-icon :properties="c"></anubias-icon>
             </div>
-            <div v-else-if="c.type === 'image'" @click="setOnEditComponent(c)">
+            <div v-else-if="c.type === 'image'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
               <anubias-image :properties="c"></anubias-image>
             </div>
-            <div v-else-if="c.type === 'input'" @click="setOnEditComponent(c)">
+            <div v-else-if="c.type === 'input'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
               <anubias-input :properties="c"></anubias-input>
             </div>
-            <div v-else-if="c.type === 'navbar'" @click="setOnEditComponent(c)">
+            <div v-else-if="c.type === 'navbar'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
               <anubias-navbar :properties="c"></anubias-navbar>
             </div>
-            <div v-else-if="c.type === 'row'" @click="setOnEditComponent(c)">
+            <div v-else-if="c.type === 'row'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
               <anubias-row :properties="c"></anubias-row>
             </div>
-            <div v-else-if="c.type === 'text'" @click="setOnEditComponent(c)">
+            <div v-else-if="c.type === 'text'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
               <anubias-text :properties="c"></anubias-text>
             </div>
-            <div v-else-if="c.type === 'toggle'" @click="setOnEditComponent(c)">
+            <div v-else-if="c.type === 'toggle'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
               <anubias-toggle :properties="c"></anubias-toggle>
             </div>
             <div v-else>
@@ -324,6 +324,14 @@ export default {
   methods: {
     test(){
       console.log('test');
+    },
+    getGeneralStyle(props){
+      let style = '';
+      // check visibility
+      if (props.visible !== undefined && !props.visible){
+        style += 'opacity: .4;';
+      }
+      return style;
     },
     setOnEditComponent(component){
       this.$store.dispatch('setOnEditComponent',component);
