@@ -1,5 +1,5 @@
 import store from "../../stores/store";
-
+import { documentToSVG, elementToSVG, inlineResources } from 'dom-to-svg';
 let project = store.state.project;
 let ide = store.state.ide;
 /**
@@ -70,9 +70,20 @@ let calcPaddingOrMargin = (value) => {
     }
 }
 
+let createScreenShot= (selector) =>{
+
+// Capture specific element
+    const svgDocument = elementToSVG(document.querySelector(selector))
+
+// Get SVG string
+    const svgString = new XMLSerializer().serializeToString(svgDocument);
+    return 'data:image/svg+xml;base64,'+(btoa(svgString));
+}
+
 export {
     color2web,
     getColor,
     getSize,
     calcPaddingOrMargin,
+    createScreenShot,
 };

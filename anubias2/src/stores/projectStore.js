@@ -52,71 +52,79 @@ const projectStore = {
                     // show warning
                     let msg = `You can't add ${c.type} more!`;
                     toast.warning(msg);
-                }else
-                    {
-                        state.project.pages[pageIndex].children.visual.unshift(c);
-                    }
                 } else {
-                    // usual components
-                    c.name = getUniqueName(state.project.pages[pageIndex], component.name);
-                    if (isVisual) {
-                        state.project.pages[pageIndex].children.visual.push(c);
-                    } else {
-                        state.project.pages[pageIndex].children.nonVisual.push(c);
-                    }
+                    state.project.pages[pageIndex].children.visual.unshift(c);
                 }
-                this.dispatch('ide/setMenuCanUndo', true);
+            } else {
+                // usual components
+                c.name = getUniqueName(state.project.pages[pageIndex], component.name);
+                if (isVisual) {
+                    state.project.pages[pageIndex].children.visual.push(c);
+                } else {
+                    state.project.pages[pageIndex].children.nonVisual.push(c);
+                }
             }
-        ,
+            this.dispatch('ide/setMenuCanUndo', true);
         },
-        actions: {
-            /**
-             *
-             * @param context
-             * @param project : Object anubias project object
-             */
-            createProject(context, project) {
-                context.commit('CREATE_PROJECT', project);
-            },
-            /**
-             *
-             * @param context
-             * @param project : Object anubias project object
-             */
-            loadProject(context, project) {
-                context.commit('LOAD_PROJECT', project);
-            },
-            /**
-             * add component to page
-             * @param context
-             * @param pageIndex : Number
-             * @param isVisual : Boolean
-             * @param component : Object anubias component object
-             */
-            addComponentToPage(context, {pageIndex, isVisual, component}) {
-                // const currentPageIndex = this.
-                context.commit('ADD_COMPONENT_TO_PAGE', {
-                    pageIndex: pageIndex,
-                    isVisual: isVisual,
-                    component: component
-                });
-            },
-
+        SET_PAGE_PREVIEW(state,{pageIndex, image}) {
+          state.project.pages[pageIndex].preview = image;
         },
-        getters: {
-            getPage: (state) => (i) => {
-                return state.project.pages[i];
-            },
-            appColor: (state) => {
-                return state.project.appColor;
-            },
-            isRTL:(state) =>{
-                return state.project.isRTL;
-            },
-            isDark:(state) =>{
-                return state.project.isDark;
-            },
+    }
+    ,
+    actions: {
+        /**
+         *
+         * @param context
+         * @param project : Object anubias project object
+         */
+        createProject(context, project) {
+            context.commit('CREATE_PROJECT', project);
+        },
+        /**
+         *
+         * @param context
+         * @param project : Object anubias project object
+         */
+        loadProject(context, project) {
+            context.commit('LOAD_PROJECT', project);
+        },
+        /**
+         * add component to page
+         * @param context
+         * @param pageIndex : Number
+         * @param isVisual : Boolean
+         * @param component : Object anubias component object
+         */
+        addComponentToPage(context, {pageIndex, isVisual, component}) {
+            // const currentPageIndex = this.
+            context.commit('ADD_COMPONENT_TO_PAGE', {
+                pageIndex: pageIndex,
+                isVisual: isVisual,
+                component: component
+            });
+        },
+        updatePagePreview(context,{pageIndex, image}){
+            context.commit('SET_PAGE_PREVIEW',{
+                pageIndex: pageIndex,
+                image: image,
+            });
         }
-    };
 
-    export default projectStore;
+    },
+    getters: {
+        getPage: (state) => (i) => {
+            return state.project.pages[i];
+        },
+        appColor: (state) => {
+            return state.project.appColor;
+        },
+        isRTL: (state) => {
+            return state.project.isRTL;
+        },
+        isDark: (state) => {
+            return state.project.isDark;
+        },
+    }
+};
+
+export default projectStore;

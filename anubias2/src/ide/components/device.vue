@@ -159,6 +159,8 @@ import anubiasPreloader from "./anubias/anubiasPreloader.vue";
 import anubiasRow from "./anubias/anubiasRow.vue";
 import anubiasText from "./anubias/anubiasText.vue";
 import anubiasToggle from "./anubias/anubiasToggle.vue";
+// import fuctions
+import {createScreenShot} from "../js/general-functions";
 
 export default {
   name: "device",
@@ -194,6 +196,14 @@ export default {
       rectX: 3,
       defRatio: 2.137931034,
     };
+  },
+  mounted() {
+    setInterval( async() => {
+      await  this.$store.dispatch('project/updatePagePreview',{
+        pageIndex: this.activePageIndex,
+        image: await createScreenShot('#component-holder'),
+      });
+    },10000,this);
   },
   computed: {
     ...mapState(['ide']),
@@ -288,7 +298,14 @@ export default {
     componentHolderStyle(){
       const deviceRatio = (this.deviceHeight / this.deviceWidth);
       let style = '';
-      style += 'border-radius: ' + (deviceRatio * 2) + '%;'
+      style += 'border-radius: ' + (deviceRatio * 2) + '%;';
+      if (!this.project.isDark){
+        style += 'color: black;';
+      }else{
+        style += 'background: #2e2e2e;';
+      }
+      return style;
+
     },
     borderLessCameraHeight() {
       let n = this.device.width / this.ide.devices[0].width;
