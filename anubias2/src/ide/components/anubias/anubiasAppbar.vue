@@ -119,9 +119,9 @@ export default {
 
 .title {
   display: block;
-  font-size: 100px;
+  font-size: 75px;
   font-weight: normal;
-  padding: 15px;
+  padding: 35px;
 }
 
 .waves-light .material-icons {

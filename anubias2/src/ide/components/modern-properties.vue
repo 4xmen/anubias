@@ -24,6 +24,17 @@
         </div>
       </div>
     </collapsible>
+    <collapsible title="Text properties" icon="ri-text">
+      <template v-for="(p,index) in properties"  :key="index">
+        <div  v-if="properties.validator[index] !== undefined
+                && properties.validator[index].type === 'String' && index !== 'name'">
+          <label class="input-container">
+            {{index}}
+            <input type="text" v-model="properties[index]" :pattern="properties.validator[index].regex">
+          </label>
+        </div>
+      </template>
+    </collapsible>
     <collapsible v-if="properties.width !== undefined || properties.height !== undefined"  title="Size control" icon="ri-pencil-ruler-2-line">
       <label class="input-container" v-if="properties.width !== undefined">
         Width <template v-if="isLinkedWidthHeight"> & height </template> :
