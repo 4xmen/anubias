@@ -1,5 +1,7 @@
 import store from "../../stores/store";
-import { documentToSVG, elementToSVG, inlineResources } from 'dom-to-svg';
+import * as htmlToImage from 'html-to-image';
+import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
+
 let project = store.state.project;
 let ide = store.state.ide;
 /**
@@ -70,14 +72,13 @@ let calcPaddingOrMargin = (value) => {
     }
 }
 
-let createScreenShot= (selector) =>{
-
-// Capture specific element
-    const svgDocument = elementToSVG(document.querySelector(selector))
-
-// Get SVG string
-    const svgString = new XMLSerializer().serializeToString(svgDocument);
-    return 'data:image/svg+xml;base64,'+(btoa(svgString));
+/**
+ * make screenshot of element
+ * @param selector css selector
+ * @returns {Promise<string>} base64 string
+ */
+let createScreenShot= async (selector) =>{
+    return  await htmlToImage.toPng(document.querySelector(selector));
 }
 
 export {

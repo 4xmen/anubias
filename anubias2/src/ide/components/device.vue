@@ -289,7 +289,7 @@ export default {
       }else{
         style += 'background: #2e2e2e;';
       }
-      if (!this.project.isRTL){
+      if (this.project.isRTL){
         style += 'direction: rtl;';
       }
       this.resizeSvg();
@@ -298,7 +298,7 @@ export default {
     componentHolderStyle(){
       const deviceRatio = (this.deviceHeight / this.deviceWidth);
       let style = '';
-      style += 'border-radius: ' + (deviceRatio * 2) + '%;';
+      // style += 'border-radius: ' + (deviceRatio * ) + '%;';
       if (!this.project.isDark){
         style += 'color: black;';
       }else{
@@ -385,7 +385,7 @@ export default {
 }
 
 #device-holder {
-  z-index: 1;
+  z-index: 2;
   position: absolute;
   left: -20px;
   top: -1%;
@@ -393,6 +393,7 @@ export default {
   bottom: -1%;
   height: 102%;
   width: calc(100% + 40px);
+  pointer-events: none;
 }
 
 
@@ -434,11 +435,11 @@ export default {
 
 #component-holder{
   overflow: hidden;
-  padding-bottom: 50px;
   margin: 0 .5rem;
   z-index: 1;
   position: relative;
-  border-radius: 4rem;
+  /*border-radius: 5rem 5rem 0 0;*/
+  width: 100%;
 }
 #component-holder .component{
   transition: var(--transition-duration);

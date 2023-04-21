@@ -6,7 +6,7 @@
     <div id="appBar" :style="getAppStyle">
       <i :class="'fa '+(isRTL?'fa-arrow-right':'fa-arrow-left')" v-if="properties.back"></i>
       <i v-if="hasMenu" class="ri-menu-line" :style="getIconMenuStyle+';margin: 4px 10px 0 10px;'"></i>
-      <b>
+      <b class="title">
         {{ properties.title }}
       </b>
       <template v-if="properties.actions.length > 0">
@@ -117,7 +117,7 @@ export default {
   height: 170px;
 }
 
-#appBar b {
+.title {
   display: block;
   font-size: 100px;
   font-weight: normal;
