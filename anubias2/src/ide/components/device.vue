@@ -69,57 +69,57 @@
             cy="18.258026"
             r="5.4284501"/>
       </svg>
-      <div id="scroller">
+      <div id="scroller" :style="scrollerStyle">
         <div id="component-holder" :style="componentHolderStyle">
 
           <!--    c is component  in v-for  -->
           <template  v-if="pages.currentPage.children !== undefined" v-for="(c,componentIndex) in pages.currentPage.children.visual" :key="componentIndex">
-            <div class="component" v-if="c.type === 'preloader'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
+            <div class="component" v-if="c.type === 'preloader'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
               <anubias-preloader :properties="c"></anubias-preloader>
             </div>
-            <div v-else-if="c.type === 'appbar'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
+            <div v-else-if="c.type === 'appbar'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
               <anubias-appbar :properties="c"></anubias-appbar>
             </div>
-            <div v-else-if="c.type === 'button'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
+            <div v-else-if="c.type === 'button'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
               <anubias-button :properties="c"></anubias-button>
             </div>
-            <div v-else-if="c.type === 'circleButton'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
+            <div v-else-if="c.type === 'circleButton'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
               <anubias-circle-button :properties="c"></anubias-circle-button>
             </div>
-            <div v-else-if="c.type === 'container'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
+            <div v-else-if="c.type === 'container'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
               <anubias-container :properties="c"></anubias-container>
             </div>
-            <div v-else-if="c.type === 'column'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
+            <div v-else-if="c.type === 'column'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
               <anubias-column :properties="c"></anubias-column>
             </div>
-            <div v-else-if="c.type === 'divider'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
+            <div v-else-if="c.type === 'divider'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
               <anubias-divider :properties="c"></anubias-divider>
             </div>
-            <div v-else-if="c.type === 'dropdown'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
+            <div v-else-if="c.type === 'dropdown'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
               <anubias-dropdown :properties="c"></anubias-dropdown>
             </div>
-            <div v-else-if="c.type === 'grid'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
+            <div v-else-if="c.type === 'grid'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
               <anubias-grid :properties="c"></anubias-grid>
             </div>
-            <div v-else-if="c.type === 'icon'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
+            <div v-else-if="c.type === 'icon'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
               <anubias-icon :properties="c"></anubias-icon>
             </div>
-            <div v-else-if="c.type === 'image'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
+            <div v-else-if="c.type === 'image'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
               <anubias-image :properties="c"></anubias-image>
             </div>
-            <div v-else-if="c.type === 'input'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
+            <div v-else-if="c.type === 'input'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
               <anubias-input :properties="c"></anubias-input>
             </div>
-            <div v-else-if="c.type === 'navbar'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
+            <div v-else-if="c.type === 'navbar'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
               <anubias-navbar :properties="c"></anubias-navbar>
             </div>
-            <div v-else-if="c.type === 'row'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
+            <div v-else-if="c.type === 'row'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
               <anubias-row :properties="c"></anubias-row>
             </div>
-            <div v-else-if="c.type === 'text'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
+            <div v-else-if="c.type === 'text'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
               <anubias-text :properties="c"></anubias-text>
             </div>
-            <div v-else-if="c.type === 'toggle'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c)">
+            <div v-else-if="c.type === 'toggle'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
               <anubias-toggle :properties="c"></anubias-toggle>
             </div>
             <div v-else>
@@ -127,7 +127,7 @@
             </div>
           </template>
         </div>
-        <div id="components-area" :style="componentsAreaStyle">
+        <div id="components-area">
           <droppable id="drop-area" area="visual" :dropping="dropped">
             Drop visual components here...
           </droppable>
@@ -217,7 +217,7 @@ export default {
     ...mapGetters(
         'ide', ['currentPage', 'activePageIndex']
     ),
-    componentsAreaStyle() {
+    scrollerStyle() {
 
       let style = '';
       // if landscape
@@ -325,8 +325,12 @@ export default {
     test(){
       console.log('test');
     },
-    getGeneralStyle(props){
+    getGeneralStyle(props,index){
       let style = '';
+      // added border radius to first component
+      if (index === 0 && this.device.borderLess){
+        style += 'border-radius: 4rem 4rem  0 0; overflow:hidden; ';
+      }
       // check visibility
       if (props.visible !== undefined && !props.visible){
         style += 'opacity: .4;';
@@ -459,8 +463,9 @@ export default {
 }
 
 #scroller{
-  height: 100%;
+  height: calc(100% + 10px);
   overflow-x: hidden;
   overflow-y: auto;
+  border-radius: 4rem;
 }
 </style>
