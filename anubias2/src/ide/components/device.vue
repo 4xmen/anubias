@@ -447,7 +447,7 @@ export default {
 
 #component-holder{
   overflow: hidden;
-  margin: 0 .5rem;
+  margin: 0 ;
   z-index: 1;
   position: relative;
   /*border-radius: 5rem 5rem 0 0;*/
