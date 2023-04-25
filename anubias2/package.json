@@ -52,7 +52,7 @@
   "dependencies": {
     "electron-store": "^8.1.0",
     "html-to-image": "^1.11.11",
-    "material-icons": "^1.13.3",
+    "material-icons": "^1.13.5",
     "remixicon": "^2.5.0",
     "vazirmatn": "^33.0.3",
     "vue-color-kit": "^1.0.5",
