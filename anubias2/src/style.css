@@ -250,6 +250,23 @@ input{
     animation-duration: 10s;
 }
 
+.modal{
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 99;
+    background: #00000099;
+}
+
+.text-center{
+    text-align: center;
+}
+
 .test-large{
     font-size: 100px;
 }
@@ -382,4 +399,3 @@ input{
         opacity: 0;
     }
 }
-

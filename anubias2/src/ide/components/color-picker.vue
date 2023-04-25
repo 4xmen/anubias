@@ -2,7 +2,7 @@
   <div class="color-picker">
 
     <div class="grid">
-      <b>{{ label }}</b>
+      <div class="title">{{ label }}</div>
       <span v-if="modelValue !== 'null'">
         {{ modelValue }}
       </span>
@@ -11,7 +11,7 @@
       </span>
       <div id="squire" @click="modal = true;" :style="'background:'+computedColor+';'"></div>
     </div>
-    <div id="color-picker" :style="colorPickerModalStyle" @click="closeModal">
+    <div class="modal" :style="colorPickerModalStyle" @click="closeModal">
       <div class="color-container">
         <h4>
           {{ colorName }}
@@ -111,7 +111,7 @@ export default {
       this.modal = false;
     },
     closeModal(e) {
-      if (e.target.getAttribute('id') === 'color-picker') {
+      if (e.target.getAttribute('class').indexOf('modal') !== -1) {
         this.modal = false;
       }
     },
@@ -169,18 +169,6 @@ h4 {
   padding-top: 5px;
 }
 
-#color-picker {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 99;
-  background: #00000099;
-}
 
 #squire {
   width: 22px;
@@ -223,5 +211,9 @@ h4 {
 
 .grid-equal .circle-btn{
   margin: auto;
+}
+
+.title{
+  margin-top: 5px;
 }
 </style>
