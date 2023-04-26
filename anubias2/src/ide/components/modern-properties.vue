@@ -67,6 +67,11 @@
         </div>
       </template>
     </collapsible>
+    <collapsible v-if="properties.actions !== undefined" title="Actions" icon="ri-stack-line">
+        <div>
+          <icon-picker label="Icon" v-model="test"></icon-picker>
+        </div>
+    </collapsible>
 
   </div>
 </template>
@@ -78,6 +83,7 @@ import  toggle from './switch.vue';
 import around from './around-controller.vue'
 import colorPicker from './color-picker.vue'
 import dinput from './input-draggable.vue';
+import iconPicker from './icon-picker.vue';
 export default {
   name: "modern-properties",
   components: {
@@ -86,11 +92,13 @@ export default {
     around,
     colorPicker,
     dinput,
+    iconPicker,
   },
   data() {
     return {
       isNameValid: true,
       isLinkedWidthHeight: false,
+      test:'',
     }
   },
   mounted() {
