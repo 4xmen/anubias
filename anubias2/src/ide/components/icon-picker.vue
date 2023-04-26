@@ -54,9 +54,14 @@ export default {
       this.modal = true;
     },
     closeModal(e) {
-      if (e.target.getAttribute('class').indexOf('modal') !== -1) {
-        this.modal = false;
+      try {
+        if (e.target.getAttribute('class').indexOf('modal') !== -1) {
+          this.modal = false;
+        }
+      } catch {
+
       }
+
     },
     setModel(icon) {
       this.$emit('update:modelValue', icon);

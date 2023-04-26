@@ -111,8 +111,11 @@ export default {
       this.modal = false;
     },
     closeModal(e) {
-      if (e.target.getAttribute('class').indexOf('modal') !== -1) {
-        this.modal = false;
+      try {
+        if (e.target.getAttribute('class').indexOf('modal') !== -1) {
+          this.modal = false;
+        }
+      } catch {
       }
     },
     changeColor(color) {
@@ -209,11 +212,11 @@ h4 {
   margin-bottom: -35px;
 }
 
-.grid-equal .circle-btn{
+.grid-equal .circle-btn {
   margin: auto;
 }
 
-.title{
+.title {
   margin-top: 5px;
 }
 </style>
