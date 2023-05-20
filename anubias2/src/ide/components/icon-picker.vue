@@ -2,6 +2,7 @@
   <div>
     <div class="grid">
       <div class="title">{{ label }}</div>
+      <div><slot></slot></div>
       <span class="material-icons" id="icon" @click="openModal">{{modelValue}}</span>
     </div>
     <div class="modal" :style="modal?'display:flex;':''" @click="closeModal">
@@ -80,7 +81,9 @@ h2{
 #icon-picker {
   background: var(--darker-bg);
   width: 85%;
+
 }
+
 
 #icon-container {
   margin: 1rem;
@@ -126,12 +129,17 @@ h2{
   display: block;
   padding: 5px;
   text-align: center;
+  cursor: pointer;
+  transition: var(--transition-duration);
+}
+#icon:hover{
+  background: var(--text-hilight);
 }
 
 .grid {
   display: grid;
-  grid-template-columns: 3fr 1fr;
-  cursor: pointer;
+  grid-template-columns: 3fr 3fr 1fr;
+  margin-bottom: 2px;
 }
 
 .header{
