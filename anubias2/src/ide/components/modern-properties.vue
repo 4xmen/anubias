@@ -76,8 +76,13 @@
       <ul>
         <li v-for="(act,i) in properties.actions" :key="i">
           <icon-picker :label="act.tooltip" v-model="properties.actions[i].icon">
-            <div class="code-editor">
-              <i class="ri-code-s-slash-line"></i>
+            <div class="grid-equal">
+              <div class="rem" @click="remAction(i)">
+                <i class="ri-close-line"></i>
+              </div>
+              <div class="code-editor">
+                <i class="ri-code-s-slash-line"></i>
+              </div>
             </div>
           </icon-picker>
         </li>
@@ -180,7 +185,6 @@ export default {
       }
     },
     addAction() {
-      console.log('action add');
       if (this.tooltip === '') {
         this.$refs.tooltip.focus();
         return false;
@@ -195,6 +199,9 @@ export default {
         tooltip: this.tooltip,
       });
       this.tooltip = '';
+    },
+    remAction(i){
+      this.properties.actions.splice(i,1);
     }
   }
 }
@@ -240,8 +247,25 @@ input {
   align-items: center;
   justify-content: center;
   transition: var(--transition-duration);
+  margin-top: 2px;
 }
-.code-editor:hover{
+
+.code-editor:hover {
   background: var(--text-hilight);
+}
+
+.rem {
+  margin-top: 2px;
+  background: var(--def-bg);
+  display: flex;
+  width: 2em;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-duration);
+}
+
+.rem:hover {
+  background: #ff000044;
 }
 </style>

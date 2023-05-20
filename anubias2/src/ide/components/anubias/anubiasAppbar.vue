@@ -6,14 +6,15 @@
     <div id="appBar" :style="getAppStyle">
       <i :class="'fa '+(isRTL?'fa-arrow-right':'fa-arrow-left')" v-if="properties.back"></i>
       <i v-if="hasMenu" class="ri-menu-line" :style="getIconMenuStyle+';margin: 4px 10px 0 10px;'"></i>
-      <b class="title">
-        {{ properties.title }}
-      </b>
       <template v-if="properties.actions.length > 0">
-        <div v-for="(act,i) in properties.actions" :key="i" class="waves-effect waves-light" :style="getIconStyle">
+        <div  v-for="(act,i) in properties.actions" :key="i" class="waves-effect waves-light icons" :style="getIconStyle">
           <i class="material-icons">{{ act.icon }}</i>
         </div>
       </template>
+      <b class="title">
+        {{ properties.title }}
+      </b>
+
     </div>
   </div>
 </template>
@@ -124,7 +125,10 @@ export default {
   padding: 35px;
 }
 
-.waves-light .material-icons {
-  margin: 0 4px;
+
+.icons .material-icons{
+  font-size: 85px;
+  margin: 42px 25px 42px 0;
+
 }
 </style>
