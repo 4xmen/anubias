@@ -81,10 +81,23 @@ let createScreenShot= async (selector) =>{
     return  await htmlToImage.toPng(document.querySelector(selector));
 }
 
+
+/**
+ * move index in array
+ * @param arr
+ * @param fromIndex
+ * @param toIndex
+ */
+let arrayMove = function (arr, fromIndex, toIndex) {
+    let element = arr[fromIndex];
+    arr.splice(fromIndex, 1);
+    arr.splice(toIndex, 0, element);
+}
 export {
     color2web,
     getColor,
     getSize,
     calcPaddingOrMargin,
     createScreenShot,
+    arrayMove,
 };

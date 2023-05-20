@@ -54,6 +54,8 @@
     "html-to-image": "^1.11.11",
     "material-icons": "^1.13.5",
     "remixicon": "^2.5.0",
+    "sortablejs": "^1.15.0",
+    "sortablejs-vue3": "^1.2.9",
     "vazirmatn": "^33.0.3",
     "vue-color-kit": "^1.0.5",
     "vue-router": "^4.1.6",

@@ -73,19 +73,31 @@
     </collapsible>
     <collapsible v-if="properties.actions !== undefined" title="Actions" icon="ri-stack-line">
 
-      <ul>
-        <li v-for="(act,i) in properties.actions" :key="i">
-          <icon-picker :label="act.tooltip" v-model="properties.actions[i].icon">
-            <div class="grid-equal">
-              <div class="rem" @click="remAction(i)">
-                <i class="ri-close-line"></i>
-              </div>
-              <div class="code-editor">
-                <i class="ri-code-s-slash-line"></i>
-              </div>
+      <div title="You can drag and drop to change sort of action's button">
+        <Sortable
+            :list="properties.actions"
+            item-key="icon"
+            tag="div"
+            @update="updateActionsSort"
+        >
+          <template #item="{element, index}">
+            <div class="draggable" :key="element.icon">
+              <icon-picker :label="element.tooltip" v-model="properties.actions[index].icon">
+                <div class="grid-equal">
+                  <div class="rem" @click="remAction(index)">
+                    <i class="ri-close-line"></i>
+                  </div>
+                  <div class="code-editor">
+                    <i class="ri-code-s-slash-line"></i>
+                  </div>
+                </div>
+              </icon-picker>
             </div>
-          </icon-picker>
-        </li>
+          </template>
+        </Sortable>
+      </div>
+      <ul>
+
       </ul>
       <hr>
       New action:
@@ -114,7 +126,12 @@ import around from './around-controller.vue'
 import colorPicker from './color-picker.vue'
 import dinput from './input-draggable.vue';
 import iconPicker from './icon-picker.vue';
+
+import {arrayMove} from "../js/general-functions";
+
 import {useToast} from "vue-toastification";
+import {Sortable} from "sortablejs-vue3";
+
 
 let toast;
 export default {
@@ -126,6 +143,7 @@ export default {
     colorPicker,
     dinput,
     iconPicker,
+    Sortable,
   },
   data() {
     return {
@@ -186,6 +204,7 @@ export default {
     },
     addAction() {
       if (this.tooltip === '') {
+        toast.warning('Tooltip is necessary!');
         this.$refs.tooltip.focus();
         return false;
       }
@@ -193,6 +212,13 @@ export default {
         toast.warning('Icon is necessary!');
         return false;
       }
+      for (const act of this.properties.actions) {
+        if (act.icon === this.actIcon) {
+          toast.warning('Icons is duplicate!');
+          return false;
+        }
+      }
+
       this.properties.actions.push({
         icon: this.actIcon,
         onPressed: "// run when press on action ",
@@ -200,8 +226,11 @@ export default {
       });
       this.tooltip = '';
     },
-    remAction(i){
-      this.properties.actions.splice(i,1);
+    remAction(i) {
+      this.properties.actions.splice(i, 1);
+    },
+    updateActionsSort(e) {
+      arrayMove(this.properties.actions, e.oldIndex, e.newIndex);
     }
   }
 }
