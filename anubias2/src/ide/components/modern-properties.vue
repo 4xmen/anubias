@@ -68,8 +68,21 @@
       </template>
     </collapsible>
     <collapsible v-if="properties.actions !== undefined" title="Actions" icon="ri-stack-line">
+        <div v-for="(act,i) in properties.actions" :key="i">
+            {{act}}
+        </div>
+        New action:
         <div>
-          <icon-picker label="Icon" v-model="test"></icon-picker>
+          <div class="input-container">
+            <input type="text" ref="tooltip" v-model="tooltip" placeholder="Tool tip">
+          </div>
+          <icon-picker label="Action icon" v-model="actIcon"></icon-picker>
+
+          <div class="text-center">
+            <button class="circle-btn small m-auto" @click="addAction">
+              <i class="ri-add-line"></i>
+            </button>
+          </div>
         </div>
     </collapsible>
 
@@ -84,6 +97,8 @@ import around from './around-controller.vue'
 import colorPicker from './color-picker.vue'
 import dinput from './input-draggable.vue';
 import iconPicker from './icon-picker.vue';
+import {useToast} from "vue-toastification";
+let toast ;
 export default {
   name: "modern-properties",
   components: {
@@ -99,11 +114,14 @@ export default {
       isNameValid: true,
       isLinkedWidthHeight: false,
       test:'',
+      tooltip: '',
+      actIcon: '',
     }
   },
   mounted() {
     // this.properties.name += '_';
     this.isLinkedWidthHeight = false;
+    toast = useToast();
   },
   computed: {
     ...mapState('ide', {
@@ -147,6 +165,22 @@ export default {
       if (this.isLinkedWidthHeight){
         this.properties.height = this.properties.width;
       }
+    },
+    addAction(){
+      console.log('action add');
+      if (this.tooltip === ''){
+        this.$refs.tooltip.focus();
+        return false;
+      }
+      if (this.actIcon === ''){
+        toast.warning('Icon is necessary!');
+        return false;
+      }
+      this.properties.actions.push({
+        icon: this.icon,
+        onPressed: "// run when press on action ",
+        tooltip: this.tooltip,
+      });
     }
   }
 }
