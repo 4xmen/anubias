@@ -53,6 +53,13 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 100;
 }
 
+hr{
+    margin-top: 3px;
+    margin-bottom: 3px;
+    border: 0;
+    border-bottom: 1px solid var(--lighter-bg);
+}
+
 h1 {
     border-image-source: linear-gradient(to right, var(--lighter-bg), transparent);
     border-image-slice: 1;
@@ -410,6 +417,7 @@ input {
 .m-auto {
     margin: auto;
 }
+
 
 /* ripple animation */
 @keyframes rippleEffect {
