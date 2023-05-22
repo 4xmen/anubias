@@ -30,7 +30,7 @@
         <div v-if="properties.validator[index] !== undefined
                 && properties.validator[index].type === 'String' && index !== 'name'">
           <label class="input-container">
-            {{ index }}
+            {{ index }}:
             <div v-if="properties.validator[index].regex === '.*'">
               <textarea  v-model="properties[index]" :pattern="properties.validator[index].regex" rows="2"></textarea>
             </div>
@@ -41,8 +41,20 @@
         </div>
       </template>
     </collapsible>
-    <collapsible v-if="properties.width !== undefined || properties.height !== undefined" title="Size control"
+    <collapsible v-if="properties.width !== undefined || properties.height !== undefined" title="Number control"
                  icon="ri-pencil-ruler-2-line">
+      <template v-for="(p,index) in properties" :key="index">
+        <div v-if="properties.validator[index] !== undefined
+                && properties.validator[index].type === 'Number' && index !== 'width' && index !== 'height'">
+          <label v-if="properties.height !== undefined && !isLinkedWidthHeight" class="input-container">
+            {{ index }}:
+            <dinput v-model="properties[index]" :percentable="true" max-value="9999999" min-value="0"/>
+          </label>
+        </div>
+      </template>
+    </collapsible>
+    <collapsible v-if="properties.width !== undefined || properties.height !== undefined" icon="ri-pencil-ruler-2-line"
+                 title="Size control">
       <label class="input-container" v-if="properties.width !== undefined">
         Width
         <template v-if="isLinkedWidthHeight"> & height</template>
