@@ -4,7 +4,7 @@
 
     </div>
     <div id="appBar" :style="getAppStyle">
-      <i :class="'fa '+(isRTL?'fa-arrow-right':'fa-arrow-left')" v-if="properties.back"></i>
+      <i class="back material-icons" :style="getBackStyle" v-if="properties.back">{{isRTL?'arrow_forward':'arrow_back'}}</i>
       <i v-if="hasMenu" class="ri-menu-line" :style="getIconMenuStyle+';margin: 4px 10px 0 10px;'"></i>
       <template v-if="properties.actions.length > 0">
         <div  v-for="(act,i) in properties.actions" :key="i" class="waves-effect waves-light icons" :style="getIconStyle">
@@ -40,6 +40,13 @@ export default {
     ),
     getIconStyle() {
       if (this.isRTL) {
+        return 'float:left';
+      } else {
+        return 'float:right';
+      }
+    },
+    getBackStyle() {
+      if (!this.isRTL) {
         return 'float:left';
       } else {
         return 'float:right';
@@ -116,6 +123,7 @@ export default {
 #appBar {
   margin-bottom: 5px !important;
   height: 170px;
+  display: block;
 }
 
 .title {
@@ -130,5 +138,10 @@ export default {
   font-size: 85px;
   margin: 42px 25px 42px 0;
 
+}
+
+.back{
+  font-size: 85px;
+  padding: 40px;
 }
 </style>
