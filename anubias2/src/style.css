@@ -303,7 +303,7 @@ input {
     margin-bottom: 8px;
 }
 
-.input-container input {
+.input-container input,.input-container textarea {
     padding: 12px 16px;
     background-color: transparent;
     font-size: 16px;
@@ -312,16 +312,17 @@ input {
     transition: all 0.2s ease-in-out;
     border: 0;
     border-bottom: 1px solid var(--lighter-bg);
+    max-width: 100%;
 }
 
-.input-container input:focus {
+.input-container input:focus,.input-container textarea:focus {
     outline: none;
     background-color: var(--lighter-bg);
     color: var(--text-hilight);
     border-bottom: 1px solid var(--darker-bg);
 }
 
-.input-container input::placeholder {
+.input-container input::placeholder,.input-container textarea::placeholder {
     color: #bfbfbf;
 }
 

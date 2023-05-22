@@ -31,7 +31,12 @@
                 && properties.validator[index].type === 'String' && index !== 'name'">
           <label class="input-container">
             {{ index }}
-            <input type="text" v-model="properties[index]" :pattern="properties.validator[index].regex">
+            <div v-if="properties.validator[index].regex === '.*'">
+              <textarea  v-model="properties[index]" :pattern="properties.validator[index].regex" rows="2"></textarea>
+            </div>
+            <div v-else>
+              <input type="text" v-model="properties[index]" :pattern="properties.validator[index].regex">
+            </div>
           </label>
         </div>
       </template>
