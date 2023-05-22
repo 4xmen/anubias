@@ -20,7 +20,7 @@
       "state": "input"
     },
     "align" : {
-      "type": "String",
+      "type": "String|Align",
       "regex": "^(null|left|right|center)$",
       "state": "input"
     },
