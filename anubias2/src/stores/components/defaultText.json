@@ -44,7 +44,7 @@
       "state": "input"
     },
     "overflow": {
-      "type": "String",
+      "type": "String|Select",
       "regex": "^(null|ellipsis|fade|visible|clip)$",
       "state": "input"
     },
@@ -54,8 +54,8 @@
       "state": "input"
     },
     "weight": {
-      "type": "String",
-      "regex": "^FontWeight\\.w[0-9]{3}$",
+      "type": "String|Select",
+      "regex": "^(null|FontWeight\\.w100|FontWeight\\.w200|FontWeight\\.w300|FontWeight\\.w400|FontWeight\\.w500|FontWeight\\.w600|FontWeight\\.w700|FontWeight\\.w800|FontWeight\\.w900)$",
       "state": "input"
     },
     "softWrap": {
