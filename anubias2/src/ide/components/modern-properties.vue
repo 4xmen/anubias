@@ -32,11 +32,25 @@
           <label class="input-container">
             {{ index }}:
             <div v-if="properties.validator[index].regex === '.*'">
-              <textarea  v-model="properties[index]" :pattern="properties.validator[index].regex" rows="2"></textarea>
+              <textarea v-model="properties[index]" :pattern="properties.validator[index].regex" rows="2"></textarea>
             </div>
             <div v-else>
               <input type="text" v-model="properties[index]" :pattern="properties.validator[index].regex">
             </div>
+          </label>
+        </div>
+      </template>
+    </collapsible>
+    <collapsible icon="ri-bank-card-line" title="Choose properties">
+      <template v-for="(p,index) in properties" :key="index">
+        <div v-if="properties.validator[index] !== undefined
+                && properties.validator[index].type === 'String|Select'">
+          <label class="input-container">
+            {{ index }}:
+            <select>
+              <option v-for="(v,i) in extractItems(properties.validator[index].regex)" :key="i" :value="v"> {{ v }}
+              </option>
+            </select>
           </label>
         </div>
       </template>

@@ -90,4 +90,19 @@ export default {
   opacity: 0.7;
 }
 
+.txt.ellipsis:after {
+  content: '...';
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+}
+
+.txt.fade:after {
+  content: '...';
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  opacity: .5;
+}
+
 </style>
