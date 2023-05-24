@@ -73,57 +73,74 @@
         <div id="component-holder" :style="componentHolderStyle">
 
           <!--    c is component  in v-for  -->
-          <template  v-if="pages.currentPage.children !== undefined" v-for="(c,componentIndex) in pages.currentPage.children.visual" :key="componentIndex">
-            <div class="component" v-if="c.type === 'preloader'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
+          <template v-for="(c,componentIndex) in pages.currentPage.children.visual"
+                    v-if="pages.currentPage.children !== undefined" :key="componentIndex">
+            <div v-if="c.type === 'preloader'" :style="getGeneralStyle(c, componentIndex)" class="component"
+                 @click="setOnEditComponent(c)">
               <anubias-preloader :properties="c"></anubias-preloader>
             </div>
-            <div v-else-if="c.type === 'appbar'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
+            <div v-else-if="c.type === 'appbar'" :style="getGeneralStyle(c, componentIndex)" class="component"
+                 @click="setOnEditComponent(c)">
               <anubias-appbar :properties="c"></anubias-appbar>
             </div>
-            <div v-else-if="c.type === 'button'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
+            <div v-else-if="c.type === 'button'" :style="getGeneralStyle(c, componentIndex)" class="component"
+                 @click="setOnEditComponent(c)">
               <anubias-button :properties="c"></anubias-button>
             </div>
-            <div v-else-if="c.type === 'circleButton'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
+            <div v-else-if="c.type === 'circleButton'" :style="getGeneralStyle(c, componentIndex)" class="component"
+                 @click="setOnEditComponent(c)">
               <anubias-circle-button :properties="c"></anubias-circle-button>
             </div>
-            <div v-else-if="c.type === 'container'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
+            <div v-else-if="c.type === 'container'" :style="getGeneralStyle(c, componentIndex)" class="component"
+                 @click="setOnEditComponent(c)">
               <anubias-container :properties="c"></anubias-container>
             </div>
-            <div v-else-if="c.type === 'column'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
+            <div v-else-if="c.type === 'column'" :style="getGeneralStyle(c, componentIndex)" class="component"
+                 @click="setOnEditComponent(c)">
               <anubias-column :properties="c"></anubias-column>
             </div>
-            <div v-else-if="c.type === 'divider'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
+            <div v-else-if="c.type === 'divider'" :style="getGeneralStyle(c, componentIndex)" class="component"
+                 @click="setOnEditComponent(c)">
               <anubias-divider :properties="c"></anubias-divider>
             </div>
-            <div v-else-if="c.type === 'dropdown'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
+            <div v-else-if="c.type === 'dropdown'" :style="getGeneralStyle(c, componentIndex)" class="component"
+                 @click="setOnEditComponent(c)">
               <anubias-dropdown :properties="c"></anubias-dropdown>
             </div>
-            <div v-else-if="c.type === 'grid'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
+            <div v-else-if="c.type === 'grid'" :style="getGeneralStyle(c, componentIndex)" class="component"
+                 @click="setOnEditComponent(c)">
               <anubias-grid :properties="c"></anubias-grid>
             </div>
-            <div v-else-if="c.type === 'icon'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
+            <div v-else-if="c.type === 'icon'" :style="getGeneralStyle(c, componentIndex)" class="component"
+                 @click="setOnEditComponent(c)">
               <anubias-icon :properties="c"></anubias-icon>
             </div>
-            <div v-else-if="c.type === 'image'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
+            <div v-else-if="c.type === 'image'" :style="getGeneralStyle(c, componentIndex)" class="component"
+                 @click="setOnEditComponent(c)">
               <anubias-image :properties="c"></anubias-image>
             </div>
-            <div v-else-if="c.type === 'input'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
+            <div v-else-if="c.type === 'input'" :style="getGeneralStyle(c, componentIndex)" class="component"
+                 @click="setOnEditComponent(c)">
               <anubias-input :properties="c"></anubias-input>
             </div>
-            <div v-else-if="c.type === 'navbar'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
+            <div v-else-if="c.type === 'navbar'" :style="getGeneralStyle(c, componentIndex)" class="component"
+                 @click="setOnEditComponent(c)">
               <anubias-navbar :properties="c"></anubias-navbar>
             </div>
-            <div v-else-if="c.type === 'row'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
+            <div v-else-if="c.type === 'row'" :style="getGeneralStyle(c, componentIndex)" class="component"
+                 @click="setOnEditComponent(c)">
               <anubias-row :properties="c"></anubias-row>
             </div>
-            <div v-else-if="c.type === 'text'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
+            <div v-else-if="c.type === 'text'" :style="getGeneralStyle(c, componentIndex)" class="component"
+                 @click="setOnEditComponent(c)">
               <anubias-text :properties="c"></anubias-text>
             </div>
-            <div v-else-if="c.type === 'toggle'" @click="setOnEditComponent(c)" :style="getGeneralStyle(c, componentIndex)">
+            <div v-else-if="c.type === 'toggle'" :style="getGeneralStyle(c, componentIndex)" class="component"
+                 @click="setOnEditComponent(c)">
               <anubias-toggle :properties="c"></anubias-toggle>
             </div>
-            <div v-else>
-              {{c.type}}
+            <div v-else class="component">
+              {{ c.type }}
             </div>
           </template>
         </div>
@@ -198,19 +215,19 @@ export default {
     };
   },
   mounted() {
-    setInterval( async() => {
-      await  this.$store.dispatch('project/updatePagePreview',{
+    setInterval(async () => {
+      await this.$store.dispatch('project/updatePagePreview', {
         pageIndex: this.activePageIndex,
         image: await createScreenShot('#component-holder'),
       });
-    },10000,this);
+    }, 10000, this);
   },
   computed: {
     ...mapState(['ide']),
-    ...mapState('ide',{
+    ...mapState('ide', {
       pages: 'pages'
     }),
-    ...mapState('project',{
+    ...mapState('project', {
       project: 'project'
     }),
     ...mapState('ide', ['defaultComponents']),
@@ -284,24 +301,24 @@ export default {
       style += 'margin-bottom: -' + this.deviceHeight * (1 - ratio) + 'px;';
       style += 'margin-left: -' + ((this.deviceWidth * (1 - ratio)) / 2) + 'px;';
       style += 'margin-right: -' + ((this.deviceWidth * (1 - ratio)) / 2) + 'px;';
-      if (!this.project.isDark){
+      if (!this.project.isDark) {
         style += 'color: black;';
-      }else{
+      } else {
         style += 'background: #2e2e2e;';
       }
-      if (this.project.isRTL){
+      if (this.project.isRTL) {
         style += 'direction: rtl;';
       }
       this.resizeSvg();
       return style;
     },
-    componentHolderStyle(){
+    componentHolderStyle() {
       const deviceRatio = (this.deviceHeight / this.deviceWidth);
       let style = '';
       // style += 'border-radius: ' + (deviceRatio * ) + '%;';
-      if (!this.project.isDark){
+      if (!this.project.isDark) {
         style += 'color: black;';
-      }else{
+      } else {
         style += 'background: #2e2e2e;';
       }
       return style;
@@ -322,23 +339,23 @@ export default {
     }
   },
   methods: {
-    test(){
+    test() {
       console.log('test');
     },
-    getGeneralStyle(props,index){
+    getGeneralStyle(props, index) {
       let style = '';
       // added border radius to first component
-      if (index === 0 && this.device.borderLess){
+      if (index === 0 && this.device.borderLess) {
         style += 'border-radius: 4rem 4rem  0 0; overflow:hidden; ';
       }
       // check visibility
-      if (props.visible !== undefined && !props.visible){
+      if (props.visible !== undefined && !props.visible) {
         style += 'opacity: .4;';
       }
       return style;
     },
-    setOnEditComponent(component){
-      this.$store.dispatch('setOnEditComponent',component);
+    setOnEditComponent(component) {
+      this.$store.dispatch('setOnEditComponent', component);
     },
     resizeSvg() {
       // new device ratio
@@ -391,7 +408,7 @@ export default {
   position: relative;
 }
 
-#device:hover #front-camera{
+#device:hover #front-camera {
   pointer-events: none;
   opacity: .5;
 }
@@ -445,24 +462,26 @@ export default {
   z-index: 9;
 }
 
-#component-holder{
+#component-holder {
   overflow: hidden;
-  margin: 0 ;
+  margin: 0;
   z-index: 1;
   position: relative;
   /*border-radius: 5rem 5rem 0 0;*/
   width: 100%;
 }
-#component-holder .component{
+
+#component-holder .component {
   transition: var(--transition-duration);
-  border: 1px dashed transparent ;
-}
-#component-holder .component:hover{
-  border-color: #77777766;
-  background: linear-gradient(90deg, #77777700 0%, #77777733  25%, #77777733 75%, #77777700 100%);
+  border: 1px dashed transparent;
 }
 
-#scroller{
+#component-holder .component:hover {
+  border-color: #77777766;
+  background: linear-gradient(90deg, #77777700 0%, #77777733 25%, #77777733 75%, #77777700 100%);
+}
+
+#scroller {
   height: calc(100% + 10px);
   overflow-x: hidden;
   overflow-y: auto;
