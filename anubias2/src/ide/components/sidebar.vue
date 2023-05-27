@@ -26,14 +26,30 @@
       </div>
       <div v-else-if="activeIndex === 2" id="pages">
         <div id="page-container">
-          <div v-for="(page,i) in project.project.pages"
-               :key="i"
-               :class="`page `+(ide.activePage === i?'active':'')" @click="changePage(i)">
-            <div :style="`background-image: url(${page.preview})`" class="img">
 
-            </div>
-            {{ page.name }}
-          </div>
+          <Sortable
+              :list="project.project.pages"
+              item-key="icon"
+              tag="div"
+              @update="updatePageSort"
+          >
+            <template #item="{element, index}">
+              <div :class="`draggable page `+(ide.activePage === index?'active':'')" @click="changePage(index)">
+                <div :style="`background-image: url(${element.preview})`" class="img">
+
+                </div>
+                {{ element.name }}
+              </div>
+            </template>
+          </Sortable>
+          <!--          <div v-for="(page,i) in project.project.pages"-->
+          <!--               :key="i"-->
+          <!--               :class="`page `+(ide.activePage === i?'active':'')" @click="changePage(i)">-->
+          <!--            <div :style="`background-image: url(${page.preview})`" class="img">-->
+
+          <!--            </div>-->
+          <!--            {{ page.name }}-->
+          <!--          </div>-->
         </div>
       </div>
     </div>
@@ -44,11 +60,18 @@
 import nonVisual from "../components/non-visual-panel.vue";
 import properties from "../components/properties-panel.vue";
 import {mapState} from "vuex";
+import {arrayMove} from "../js/general-functions";
+
+import {Sortable} from "sortablejs-vue3";
 
 export default {
   name: "sidebar",
-  components:{nonVisual,properties},
-  data(){
+  components: {
+    nonVisual,
+    properties,
+    Sortable
+  },
+  data() {
     return {
       activeIndex: 0,
     }
@@ -69,6 +92,9 @@ export default {
         return 'active';
       }
       return '';
+    },
+    updateActionsSort(e) {
+      arrayMove(this.project.project.pages, e.oldIndex, e.newIndex);
     }
   }
 }
@@ -76,7 +102,7 @@ export default {
 
 <style scoped>
 
-#content{
+#content {
   background: var(--darker-bg);
 }
 
@@ -85,16 +111,17 @@ export default {
   overflow-x: hidden;
 }
 
-.side{
+.side {
   display: grid;
   grid-template-columns: 50px 1fr;
 }
 
-.icons{
+.icons {
   height: 100%;
   background: var(--def-bg);
 }
-.icons .item{
+
+.icons .item {
   text-align: center;
   font-size: 30px;
   padding: 0 5px;
@@ -121,7 +148,7 @@ export default {
 }
 
 #pages #page-container .page {
-  width: 7rem;
+  width: 7.81rem;
   display: inline-block;
   text-align: center;
   margin-top: .5rem;
