@@ -4,6 +4,7 @@ import Store from 'electron-store';
 import {ipcRenderer} from 'electron';
 import {getUniqueName} from "../ide/js/component-control";
 import {useToast} from "vue-toastification";
+import {state} from "vue-tsc/out/shared";
 
 const storage = new Store();
 const toast = useToast();
@@ -66,8 +67,12 @@ const projectStore = {
             }
             this.dispatch('ide/setMenuCanUndo', true);
         },
-        SET_PAGE_PREVIEW(state,{pageIndex, image}) {
-          state.project.pages[pageIndex].preview = image;
+        SET_PAGE_PREVIEW(state, {pageIndex, image}) {
+            state.project.pages[pageIndex].preview = image;
+        },
+        UPDATE_PAGES(state, pages) {
+            console.log('update pages', pages);
+            state.project.pages = pages;
         },
     }
     ,
@@ -103,11 +108,14 @@ const projectStore = {
                 component: component
             });
         },
-        updatePagePreview(context,{pageIndex, image}){
-            context.commit('SET_PAGE_PREVIEW',{
+        updatePagePreview(context, {pageIndex, image}) {
+            context.commit('SET_PAGE_PREVIEW', {
                 pageIndex: pageIndex,
                 image: image,
             });
+        },
+        updatePages(context, pages) {
+            context.commit('SET_PAGE_PREVIEW', pages);
         }
 
     },
@@ -123,6 +131,9 @@ const projectStore = {
         },
         isDark: (state) => {
             return state.project.isDark;
+        },
+        pages: () => {
+            return state.project.pages;
         },
     }
 };

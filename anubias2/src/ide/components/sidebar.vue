@@ -29,12 +29,13 @@
 
           <Sortable
               :list="project.project.pages"
-              item-key="icon"
+              item-key="name"
               tag="div"
               @update="updatePageSort"
           >
             <template #item="{element, index}">
-              <div :class="`draggable page `+(ide.activePage === index?'active':'')" @click="changePage(index)">
+              <div :key="element.name" :class="`draggable page `+(ide.activePage === index?'active':'')"
+                   @click="changePage(index)">
                 <div :style="`background-image: url(${element.preview})`" class="img">
 
                 </div>
@@ -59,10 +60,11 @@
 <script>
 import nonVisual from "../components/non-visual-panel.vue";
 import properties from "../components/properties-panel.vue";
-import {mapState} from "vuex";
+import {mapState, mapGetters} from "vuex";
 import {arrayMove} from "../js/general-functions";
 
 import {Sortable} from "sortablejs-vue3";
+
 
 export default {
   name: "sidebar",
@@ -74,10 +76,16 @@ export default {
   data() {
     return {
       activeIndex: 0,
+      activePageName: '',
     }
+  },
+  mounted() {
   },
   computed: {
     ...mapState(['ide', 'project']),
+    ...mapGetters(
+        'project', ['pages']
+    ),
   },
   methods: {
     changePage(i) {
@@ -93,8 +101,23 @@ export default {
       }
       return '';
     },
-    updateActionsSort(e) {
+    fixActivePage() {
+      let pages = this.project.project.pages;
+      for (let i in pages) {
+        if (pages[parseInt(i)].name === this.activePageName) {
+          // console.log('e', this.activePageName);
+          this.changePage(parseInt(i));
+          break;
+        }
+      }
+    },
+    updatePageSort(e) {
+
+      this.activePageName = this.project.project.pages[this.ide.activePage].name;
+      // console.log('s', this.activePageName);
       arrayMove(this.project.project.pages, e.oldIndex, e.newIndex);
+      setTimeout(this.fixActivePage, 100);
+
     }
   }
 }
