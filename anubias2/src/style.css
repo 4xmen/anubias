@@ -178,7 +178,7 @@ input {
     grid-row: 3 / 5;
 }
 
-#pages {
+#logs {
     background: var(--darker-bg);
     grid-column: 1 / 20;
     grid-row: 5;
@@ -186,15 +186,15 @@ input {
     border-bottom: 0;
 }
 
-#pages.collapsed {
+#logs.collapsed {
 }
 
-#pages.collapsed h3 {
+#logs.collapsed h3 {
     background: var(--darker-bg);
     cursor: pointer;
 }
 
-#pages.collapsed i {
+#logs.collapsed i {
     display: none;
 }
 

@@ -19,6 +19,12 @@ import {getColor} from "../../js/general-functions";
 
 export default {
   name: "anubiasImage",
+  props: {
+    properties: {
+      type: Object,
+      required: true,
+    }
+  },
   computed: {
     ...mapGetters(
         'ide', ['currentPage']

@@ -77,8 +77,10 @@ const ideStore = {
             collapsed: storage.get('propertiesCollapsed'),
             classic: false,
         },
+        logs: {
+            collapsed: storage.get('logsCollapsed'),
+        },
         pages: {
-            collapsed: storage.get('pagesCollapsed'),
             currentPage: {},
         },
         // active device preview
@@ -120,9 +122,9 @@ const ideStore = {
             state.properties.collapsed = !state.properties.collapsed;
             storage.set('propertiesCollapsed', state.properties.collapsed);
         },
-        TOGGLE_PAGES_COLLAPSE(state) {
-            state.pages.collapsed = !state.pages.collapsed;
-            storage.set('pagesCollapsed', state.pages.collapsed);
+        TOGGLE_LOGS_COLLAPSE(state) {
+            state.logs.collapsed = !state.logs.collapsed;
+            storage.set('logsCollapsed', state.logs.collapsed);
         },
         UPDATE_DEVICE_ZOOM(state, zoom) {
             state.device.zoom = zoom;
@@ -166,8 +168,8 @@ const ideStore = {
         setDragData(context,data) {
             context.commit('SET_DRAG_DATA',data);
         },
-        setDropArea(context,area) {
-            context.commit('SET_DROP_AREA',area);
+        setDropArea(context, area) {
+            context.commit('SET_DROP_AREA', area);
         },
         toggleComponentsCollapse(context) {
             context.commit('TOGGLE_COMPONENTS_COLLAPSE');
@@ -175,13 +177,13 @@ const ideStore = {
         togglePropertiesCollapse(context) {
             context.commit('TOGGLE_PROPERTIES_COLLAPSE');
         },
-        togglePagesCollapse(context) {
-            context.commit('TOGGLE_PAGES_COLLAPSE');
+        toggleLogsCollapse(context) {
+            context.commit('TOGGLE_LOGS_COLLAPSE');
         },
-        setMenuCanUndo(context,data) {
+        setMenuCanUndo(context, data) {
             // console.log(data,'undo');
-            context.commit('SET_MENU_CAN_UNDO',data);
-            ipcRenderer.send('set-menu-state','canUndo',data);
+            context.commit('SET_MENU_CAN_UNDO', data);
+            ipcRenderer.send('set-menu-state', 'canUndo', data);
         },
         /**
          * set active page index

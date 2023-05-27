@@ -1,11 +1,14 @@
 <template>
   <div class="side">
     <div class="icons">
-      <div class="item" :class="getItemClass(0)" @click="setActiveIndex(0)">
+      <div :class="getItemClass(0)" class="item" title="non-visual components" @click="setActiveIndex(0)">
         <i class="ri-eye-off-line"></i>
       </div>
-      <div class="item" :class="getItemClass(1)" @click="setActiveIndex(1)">
+      <div :class="getItemClass(1)" class="item" title="properties" @click="setActiveIndex(1)">
         <i class="ri-pen-nib-line"></i>
+      </div>
+      <div :class="getItemClass(2)" class="item" title="pages" @click="setActiveIndex(2)">
+        <i class="ri-file-copy-line"></i>
       </div>
     </div>
     <div id="content">
@@ -18,8 +21,20 @@
         <h1 id="test">
         </h1>
       </div>
-      <div v-else-if="activeIndex === 1" >
-        <properties ></properties>
+      <div v-else-if="activeIndex === 1">
+        <properties></properties>
+      </div>
+      <div v-else-if="activeIndex === 2" id="pages">
+        <div id="page-container">
+          <div v-for="(page,i) in project.project.pages"
+               :key="i"
+               :class="`page `+(ide.activePage === i?'active':'')" @click="changePage(i)">
+            <div :style="`background-image: url(${page.preview})`" class="img">
+
+            </div>
+            {{ page.name }}
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -28,6 +43,7 @@
 <script>
 import nonVisual from "../components/non-visual-panel.vue";
 import properties from "../components/properties-panel.vue";
+import {mapState} from "vuex";
 
 export default {
   name: "sidebar",
@@ -37,15 +53,19 @@ export default {
       activeIndex: 0,
     }
   },
-  computed:{
-
+  computed: {
+    ...mapState(['ide', 'project']),
   },
-  methods:{
-    setActiveIndex(i){
+  methods: {
+    changePage(i) {
+      this.$store.dispatch('ide/setActivePage', i);
+      this.$store.dispatch('setOnEditComponent', this.project.project.pages[i]);
+    },
+    setActiveIndex(i) {
       this.activeIndex = i;
     },
-    getItemClass(i){
-      if (i === this.activeIndex){
+    getItemClass(i) {
+      if (i === this.activeIndex) {
         return 'active';
       }
       return '';
@@ -84,11 +104,59 @@ export default {
   justify-content: center;
   align-items: center;
 }
-.icons .item.active{
+
+.icons .item.active {
   border-color: var(--text-hilight);
   background: var(--darker-bg);
 }
-.icons .item:hover{
+
+.icons .item:hover {
   background: var(--darker-bg);
+}
+
+
+#pages #page-container {
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+#pages #page-container .page {
+  width: 7rem;
+  display: inline-block;
+  text-align: center;
+  margin-top: .5rem;
+  font-weight: 100;
+  transition: var(--transition-duration);
+}
+
+#pages.collapsed #page-container {
+  display: none;
+}
+
+#pages #page-container .page.active {
+  color: var(--text-hilight);
+  font-weight: 400;
+}
+
+#pages #page-container .page .img {
+  display: block;
+  height: 110px;
+  width: 75%;
+  border: 1px solid var(--darker-bg);
+  background-color: #fff;
+  margin: .5rem auto;
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+  background-position: top center;
+  border-radius: 5px;
+  transition: var(--transition-duration);
+}
+
+#pages #page-container .page.active .img {
+  box-shadow: 0 0 5px var(--text-hilight);
+  border: 1px solid var(--text-hilight);
+  border-radius: 0;
+  animation: linear .5s;
+  animation-name: choosePage;
 }
 </style>

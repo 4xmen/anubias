@@ -64,21 +64,12 @@
 
       </div>
     </div>
-    <div id="pages" :class="pagesClass">
-      <h3 @click="expandPages">
-        pages
-        <i class="ri-checkbox-indeterminate-line" @click="togglePagesCollapse"></i>
+    <div id="logs" :class="pagesClass">
+      <h3 @click="expandLogs">
+        Logs
+        <i class="ri-checkbox-indeterminate-line" @click="toggleLogsCollapse"></i>
       </h3>
-      <div id="page-container">
-        <div v-for="(page,i) in project.project.pages"
-             :class="`page `+(ide.activePage === i?'active':'')"
-             @click="changePage(i)" :key="i">
-          <div class="img" :style="`background-image: url(${page.preview})`">
-
-          </div>
-          {{ page.name }}
-        </div>
-      </div>
+      logs here
     </div>
   </div>
 </template>
@@ -154,7 +145,7 @@ export default {
       return '';
     },
     pagesClass() {
-      if (this.ide.pages.collapsed) {
+      if (this.ide.logs.collapsed) {
         return 'collapsed';
       }
       return '';
@@ -162,7 +153,7 @@ export default {
     appStyle() {
       let style = '';
       // full height others panel when page closed
-      if (this.ide.pages.collapsed) {
+      if (this.ide.logs.collapsed) {
         style += 'grid-template-rows: 2em 2em 5fr 5fr 30px;';
       }
       return style;
@@ -202,14 +193,14 @@ export default {
     }
   },
   methods: {
-    toggleComponentsCollapse(){
+    toggleComponentsCollapse() {
       this.$store.dispatch('ide/toggleComponentsCollapse');
     },
-    togglePropertiesCollapse(){
+    togglePropertiesCollapse() {
       this.$store.dispatch('ide/togglePropertiesCollapse');
     },
-    togglePagesCollapse(){
-      this.$store.dispatch('ide/togglePagesCollapse');
+    toggleLogsCollapse() {
+      this.$store.dispatch('ide/toggleLogsCollapse');
     },
     expandComponents(e) {
       if (this.ide.components.collapsed && e.target.tagName !== 'I') {
@@ -222,9 +213,9 @@ export default {
       }
     },
     // expand page panel
-    expandPages(e) {
-      if (this.ide.pages.collapsed && e.target.tagName !== 'I') {
-        this.togglePagesCollapse();
+    expandLogs(e) {
+      if (this.ide.logs.collapsed && e.target.tagName !== 'I') {
+        this.toggleLogsCollapse();
       }
     },
     initialLoadProject() {
@@ -241,10 +232,6 @@ export default {
         console.log(e.message);
         this.$store.dispatch('project/loadProject', storage.get('lastCreatedProject'));
       }
-    },
-    changePage(i) {
-      this.$store.dispatch('ide/setActivePage', i);
-      this.$store.dispatch('setOnEditComponent', this.project.project.pages[i]);
     },
   },
 }
@@ -364,50 +351,6 @@ h3 i:hover {
   color: var(--text-hilight);
 }
 
-#pages #page-container {
-  overflow: hidden;
-  overflow-x: auto;
-}
-
-#pages #page-container .page {
-  width: 7rem;
-  display: inline-block;
-  text-align: center;
-  margin-top: .5rem;
-  font-weight: 100;
-  transition: var(--transition-duration);
-}
-
-#pages.collapsed #page-container {
-  display: none;
-}
-
-#pages #page-container .page.active {
-  color: var(--text-hilight);
-  font-weight: 400;
-}
-
-#pages #page-container .page .img {
-  display: block;
-  height: 110px;
-  width: 75%;
-  border: 1px solid var(--darker-bg);
-  background-color: #fff;
-  margin: .5rem auto;
-  background-size: 100% auto;
-  background-repeat: no-repeat;
-  background-position: top center;
-  border-radius: 5px;
-  transition: var(--transition-duration);
-}
-
-#pages #page-container .page.active .img {
-  box-shadow: 0 0 5px var(--text-hilight);
-  border: 1px solid var(--text-hilight);
-  border-radius: 0;
-  animation: linear .5s;
-  animation-name: choosePage;
-}
 
 @keyframes choosePage {
   0% {
