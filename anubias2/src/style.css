@@ -313,6 +313,7 @@ input {
     border: 0;
     border-bottom: 1px solid var(--lighter-bg);
     max-width: 100%;
+    width: 100%;
 }
 
 .input-container input:focus,.input-container textarea:focus {
