@@ -69,7 +69,9 @@
         Logs
         <i class="ri-checkbox-indeterminate-line" @click="toggleLogsCollapse"></i>
       </h3>
-      logs here
+      <div id="logs-content">
+        logs here
+      </div>
     </div>
   </div>
 </template>

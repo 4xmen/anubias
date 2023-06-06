@@ -186,7 +186,8 @@ input {
     border-bottom: 0;
 }
 
-#logs.collapsed {
+#logs.collapsed #logs-content {
+    display: none;
 }
 
 #logs.collapsed h3 {
