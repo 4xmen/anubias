@@ -2,7 +2,7 @@ import { app, BrowserWindow, shell, ipcMain, Menu } from 'electron';
 import { release } from 'node:os';
 import { join } from 'node:path';
 import {config} from './config';
-import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
+// import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
 // console.log('menu',menuTemplate);
 
 // The built directory structure
@@ -39,7 +39,7 @@ if (!app.requestSingleInstanceLock()) {
 
 let win: BrowserWindow | null = null;
 // Here, you can also use other preload
-const preload = join(__dirname, '../preload/index.js');
+// const preload = join(__dirname, '../preload/index.ts');
 const url = process.env.VITE_DEV_SERVER_URL;
 const indexHtml = join(process.env.DIST, 'index.html');
 
@@ -47,10 +47,10 @@ async function createWindow() {
 
   if (config.isDebug) {// replace with whatever you use to check for dev env
     console.log('debug');
-    console.log(installExtension);
-    installExtension(VUEJS3_DEVTOOLS)
-        .then((name) => console.log(`Added Extension:  ${name}`))
-        .catch((err) => console.log('An error occurred: ', err));
+    // console.log(installExtension);
+    // installExtension(VUEJS3_DEVTOOLS)
+    //     .then((name) => console.log(`Added Extension:  ${name}`))
+    //     .catch((err) => console.log('An error occurred: ', err));
   }
   win = new BrowserWindow({
     title: 'Anubias',
@@ -60,7 +60,7 @@ async function createWindow() {
     minHeight: 650,
     minWidth: 1000,
     webPreferences: {
-      preload,
+      // preload,
       // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
       // Consider using contextBridge.exposeInMainWorld
       // Read more on https://www.electronjs.org/docs/latest/tutorial/context-isolation
@@ -124,7 +124,7 @@ app.on('activate', () => {
 ipcMain.handle('open-win', (_, arg) => {
   const childWindow = new BrowserWindow({
     webPreferences: {
-      preload,
+      // preload,
       nodeIntegration: true,
       contextIsolation: false,
     },
