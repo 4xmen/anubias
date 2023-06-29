@@ -5,6 +5,8 @@ import {ipcRenderer} from 'electron';
 import {getUniqueName} from "../ide/js/component-control";
 import {useToast} from "vue-toastification";
 import {state} from "vue-tsc/out/shared";
+import defaultPage from './components/defaultPage.json';
+
 
 const storage = new Store();
 const toast = useToast();
@@ -71,9 +73,27 @@ const projectStore = {
             state.project.pages[pageIndex].preview = image;
         },
         UPDATE_PAGES(state, pages) {
-            console.log('update pages', pages);
             state.project.pages = pages;
         },
+        ADD_NEW_PAGE(state){
+
+            // create new page
+            let newPage = {...defaultPage};
+            // store names to check duplicate name
+            let names = [];
+            for( const page of state.project.pages) {
+                names.push(page.name);
+            }
+            //
+            let i = (parseInt(state.project.pages.length));
+            // check for unique name
+            do{
+                i++;
+                newPage.name =  'page'+ i;
+            }while (names.indexOf(newPage.name) !== -1)
+            // add page finaly
+            state.project.pages.push(newPage);
+        }
     }
     ,
     actions: {
@@ -116,7 +136,10 @@ const projectStore = {
         },
         updatePages(context, pages) {
             context.commit('SET_PAGE_PREVIEW', pages);
-        }
+        },
+        addNewPageProject(context){
+          context.commit('ADD_NEW_PAGE');
+        },
 
     },
     getters: {

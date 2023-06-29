@@ -43,6 +43,10 @@
               </div>
             </template>
           </Sortable>
+          <br>
+          <div class="circle-btn m-auto" @click="addNewPage" title="Add new page">
+            <i class="ri-file-add-line"></i>
+          </div>
           <!--          <div v-for="(page,i) in project.project.pages"-->
           <!--               :key="i"-->
           <!--               :class="`page `+(ide.activePage === i?'active':'')" @click="changePage(i)">-->
@@ -88,6 +92,9 @@ export default {
     ),
   },
   methods: {
+    addNewPage(){
+      this.$store.dispatch('project/addNewPageProject');
+    },
     changePage(i) {
       this.$store.dispatch('ide/setActivePage', i);
       this.$store.dispatch('setOnEditComponent', this.project.project.pages[i]);
