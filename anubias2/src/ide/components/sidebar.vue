@@ -37,7 +37,7 @@
               <div :key="element.name" :class="`draggable page `+(ide.activePage === index?'active':'')"
                    @click="changePage(index)">
                 <div :style="`background-image: url(${element.preview})`" class="img">
-
+                  <i class="ri-close-line rem-page" @click="remPage(index)"></i>
                 </div>
                 {{ element.name }}
               </div>
@@ -92,12 +92,20 @@ export default {
     ),
   },
   methods: {
-    addNewPage(){
+    addNewPage() {
       this.$store.dispatch('project/addNewPageProject');
     },
     changePage(i) {
       this.$store.dispatch('ide/setActivePage', i);
       this.$store.dispatch('setOnEditComponent', this.project.project.pages[i]);
+    },
+    remPage(i) {
+      if (confirm("Are you sure to remove page?")) {
+        this.$store.dispatch('project/removePage', i);
+        setTimeout( () => {
+          this.changePage(0);
+        },100,this)
+      }
     },
     setActiveIndex(i) {
       this.activeIndex = i;
@@ -207,6 +215,7 @@ export default {
   background-position: top center;
   border-radius: 5px;
   transition: var(--transition-duration);
+  position: relative;
 }
 
 #pages #page-container .page.active .img {
@@ -215,5 +224,14 @@ export default {
   border-radius: 0;
   animation: linear .5s;
   animation-name: choosePage;
+}
+
+#pages .rem-page {
+  color: red;
+  position: absolute;
+  font-size: 22px;
+  left: 0;
+  top: -5px;
+  cursor: pointer;
 }
 </style>

@@ -75,25 +75,32 @@ const projectStore = {
         UPDATE_PAGES(state, pages) {
             state.project.pages = pages;
         },
-        ADD_NEW_PAGE(state){
+        ADD_NEW_PAGE(state) {
 
             // create new page
             let newPage = {...defaultPage};
             // store names to check duplicate name
             let names = [];
-            for( const page of state.project.pages) {
+            for (const page of state.project.pages) {
                 names.push(page.name);
             }
             //
             let i = (parseInt(state.project.pages.length));
             // check for unique name
-            do{
+            do {
                 i++;
-                newPage.name =  'page'+ i;
-            }while (names.indexOf(newPage.name) !== -1)
+                newPage.name = 'page' + i;
+            } while (names.indexOf(newPage.name) !== -1)
             // add page finaly
             state.project.pages.push(newPage);
-        }
+        },
+        REMOVE_PAGE(state, index) {
+            if (state.project.pages.length > 1) {
+                state.project.pages.splice(index, 1);
+            } else {
+                toast.warning("You can't remove the last page of project");
+            }
+        },
     }
     ,
     actions: {
@@ -137,10 +144,12 @@ const projectStore = {
         updatePages(context, pages) {
             context.commit('SET_PAGE_PREVIEW', pages);
         },
-        addNewPageProject(context){
-          context.commit('ADD_NEW_PAGE');
+        addNewPageProject(context) {
+            context.commit('ADD_NEW_PAGE');
         },
-
+        removePage(context, i) {
+            context.commit('REMOVE_PAGE', i);
+        },
     },
     getters: {
         getPage: (state) => (i) => {

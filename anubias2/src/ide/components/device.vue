@@ -73,8 +73,8 @@
         <div id="component-holder" :style="componentHolderStyle">
 
           <!--    c is component  in v-for  -->
-          <template v-for="(c,componentIndex) in pages.currentPage.children.visual"
-                    v-if="pages.currentPage.children !== undefined" :key="componentIndex">
+          <template v-for="(c,componentIndex) in pages.currentPage?.children.visual"
+                    v-if="pages.currentPage?.children !== undefined" :key="componentIndex">
             <div v-if="c.type === 'preloader'" :style="getGeneralStyle(c, componentIndex)" class="component"
                  @click="setOnEditComponent(c)">
               <anubias-preloader :properties="c"></anubias-preloader>
