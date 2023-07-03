@@ -212,15 +212,20 @@ export default {
       rectWith: 286,
       rectX: 3,
       defRatio: 2.137931034,
+
+      timerPic: null,
     };
   },
   mounted() {
-    setInterval(async () => {
+    this.timerPic = setInterval(async () => {
       await this.$store.dispatch('project/updatePagePreview', {
         pageIndex: this.activePageIndex,
         image: await createScreenShot('#component-holder'),
       });
     }, 10000, this);
+  },
+  unmounted() {
+    clearInterval(this.timerPic);
   },
   computed: {
     ...mapState(['ide']),
