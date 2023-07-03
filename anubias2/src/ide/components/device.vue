@@ -401,7 +401,7 @@ export default {
   overflow: auto;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: start;
   padding-top: 20px;
   padding-bottom: 20px;
 }
@@ -409,7 +409,7 @@ export default {
 #device {
   background: #fff;
   transform-origin: center top;
-  margin: 0 auto;
+  margin: .5rem auto;
   position: relative;
 }
 
