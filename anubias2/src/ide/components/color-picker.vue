@@ -214,9 +214,17 @@ h4 {
 
 .grid-equal .circle-btn {
   margin: auto;
+  width: 45px;
+  height: 45px;
+  margin-top: .5rem;
 }
 
 .title {
   margin-top: 5px;
 }
+
+.circle-btn i{
+  font-size: 25px;
+}
+
 </style>

@@ -272,6 +272,7 @@ input {
     justify-content: center;
     z-index: 99;
     background: #00000099;
+    backdrop-filter: blur(4px);
 }
 
 .text-center {
