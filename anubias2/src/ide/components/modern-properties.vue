@@ -34,6 +34,14 @@
             <div v-if="properties.validator[index].regex === '.*'">
               <textarea v-model="properties[index]" :pattern="properties.validator[index].regex" rows="2"></textarea>
             </div>
+            <div v-if="index === 'image'">
+              <div v-if="properties.online">
+                <input type="file" accept="image/*" @change="selectimage">
+              </div>
+              <div v-else>
+                <input type="text" v-model="properties[index]" :pattern="properties.validator[index].regex">
+              </div>
+            </div>
             <div v-else>
               <input type="text" v-model="properties[index]" :pattern="properties.validator[index].regex">
             </div>
@@ -299,6 +307,24 @@ export default {
     },
     updateActionsSort(e) {
       arrayMove(this.properties.actions, e.oldIndex, e.newIndex);
+    },
+    selectimage(e){
+      let self = this;
+      if (!e.target.files) return;
+
+      let files = e.target.files;
+      for (let i = 0; i < files.length; i++) {
+
+        let base64;
+        let fileToLoad = e.target.files[i]
+        let fileReader = new FileReader();
+        fileReader.onload = function (fileLoadedEvent) {
+          base64 = fileLoadedEvent.target.result;
+          self.properties.image = base64;
+          console.log(self.properties);
+        };
+        fileReader.readAsDataURL(fileToLoad);
+      }
     }
   }
 }
