@@ -3,7 +3,7 @@
   "name": "image",
   "image": "",
   "padding": "0",
-  "width": "null",
+  "width": "100",
   "height": "null",
   "fit": "none",
   "align": "null",
@@ -37,12 +37,13 @@
       "state": "input"
     },
     "fit" : {
-      "type": "String",
+      "type": "String|Select",
       "regex": "^BoxFit\\.[a-zA-Z_]*$",
-      "state": "input"
+      "state": "input",
+      "Items": ["BoxFit.fill", "BoxFit.contain", "BoxFit.cover", "fitWidth", "fitHeight", "none", "scaleDown"]
     },
     "align" : {
-      "type": "String",
+      "type": "String|Align",
       "regex": "^(null|left|right|center)$",
       "state": "input"
     },

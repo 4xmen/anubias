@@ -35,8 +35,8 @@
               <textarea v-model="properties[index]" :pattern="properties.validator[index].regex" rows="2"></textarea>
             </div>
             <div v-if="index === 'image'">
-              <div v-if="properties.online">
-                <input type="file" accept="image/*" @change="selectimage">
+              <div v-if="!properties.online">
+                <input type="file" accept="image/*" @change="selectImage">
               </div>
               <div v-else>
                 <input type="text" v-model="properties[index]" :pattern="properties.validator[index].regex">
@@ -209,6 +209,19 @@ export default {
     }),
     ...mapGetters('project', ['appColor'])
   },
+  watch: {
+    properties: {
+      handler: function (val, oldVal) {
+        // Return the object that changed
+        if (val.online !== undefined) {
+          if (val.online && val.image.substring(0, 5) === 'data:') {
+            this.properties.image = '';
+          }
+        }
+      },
+      deep: true
+    }
+  },
   methods: {
     /**
      * extract items form regex
@@ -308,7 +321,7 @@ export default {
     updateActionsSort(e) {
       arrayMove(this.properties.actions, e.oldIndex, e.newIndex);
     },
-    selectimage(e){
+    selectImage(e) {
       let self = this;
       if (!e.target.files) return;
 
