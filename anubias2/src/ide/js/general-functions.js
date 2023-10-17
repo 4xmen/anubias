@@ -50,7 +50,10 @@ let color2web = (color, isActiveWidget = true) => {
  */
 let getSize = (value, isHeight = false) => {
     // WIP: need complete later
-    return value;
+    if (value.toString().indexOf('%') != -1){
+        return value;
+    }
+    return  value+'px';
 }
 
 /**

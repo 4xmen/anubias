@@ -54,7 +54,14 @@ export default {
       //   style += 'background-size: contain;'
       // }
 
-      style = 'object-fit:'+this.properties.fit+';';
+      let tmp = this.properties.fit.split('.');
+      if (tmp.length === 2){
+        tmp = tmp[1];
+        if (tmp == 'scaleDown'){
+          tmp = 'scale-down';
+        }
+        style = 'object-fit:'+tmp+';';
+      }
 
 
       // style += 'background-color:' + this.color2web(this.properties.color, false) + ';';
@@ -66,6 +73,7 @@ export default {
       if (this.properties.height != 'null') {
         style += 'height:' + this.getSize(this.properties.height) + ';';
       }
+      console.log(style);
       return style;
     }
   },

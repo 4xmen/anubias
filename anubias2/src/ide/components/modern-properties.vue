@@ -25,6 +25,14 @@
         </div>
       </div>
     </collapsible>
+    <collapsible v-if="properties.fit !== undefined" :title="'Fit ('+showValue(properties.fit)+')'"
+                 icon="ri-layout-right-2-line">
+      <select v-model="properties.fit ">
+        <option v-for="(v,i) in properties.validator.fit.Items"
+                :class="'btn '+(v === properties.fit?'active':'')"
+                :key="i" :value="v" > {{v}} </option>
+      </select>
+    </collapsible>
     <collapsible v-if="propTypeCount('String') > 0" icon="ri-text" title="Text properties">
       <template v-for="(p,index) in properties" :key="index">
         <div v-if="properties.validator[index] !== undefined
