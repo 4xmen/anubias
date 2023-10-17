@@ -10,13 +10,13 @@
               opacity="1.00"/>
       </g>
     </svg>
-    <img :src="properties.image" alt="image" v-else>
+    <img :src="properties.image" :style="getStyle" alt="image" v-else>
   </div>
 </template>
 
 <script>
 import {mapGetters} from "vuex";
-import {getColor} from "../../js/general-functions";
+import {getColor, getSize} from "../../js/general-functions";
 
 export default {
   name: "anubiasImage",
@@ -35,7 +35,42 @@ export default {
     ),
     appColorHex() {
       return getColor(this.appColor);
+    },
+    getStyle(){
+      let style = '';
+      // style += 'background-image: url("' + this.getImage() + '");'
+      //
+      // if (this.properties.fit == 'contain') {
+      //   style += 'background-size: contain;'
+      // } else if (this.properties.fit == 'fill') {
+      //   style += 'background-size: 100% 100%;'
+      // } else if (this.properties.fit == 'fitWidth') {
+      //   style += 'background-size: 100% auto;'
+      // } else if (this.properties.fit == 'fitHeight') {
+      //   style += 'background-size: auto 100%;'
+      // } else if (this.properties.fit == 'cover') {
+      //   style += 'background-size: cover;'
+      // } else {
+      //   style += 'background-size: contain;'
+      // }
+
+      style = 'object-fit:'+this.properties.fit+';';
+
+
+      // style += 'background-color:' + this.color2web(this.properties.color, false) + ';';
+
+      // style += 'margin:' + fnc.calcPadding(this.page.padding, this.scale, true) + ';';
+      if (this.properties.width != 'null') {
+        style += 'width:' + this.getSize(this.properties.width) + ';';
+      }
+      if (this.properties.height != 'null') {
+        style += 'height:' + this.getSize(this.properties.height) + ';';
+      }
+      return style;
     }
+  },
+  methods:{
+    getSize: getSize,
   }
 }
 </script>
