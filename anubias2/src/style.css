@@ -430,3 +430,9 @@ input {
         opacity: 0;
     }
 }
+
+/*fix components*/
+
+.collapsible-content select{
+    width: 100%;
+}

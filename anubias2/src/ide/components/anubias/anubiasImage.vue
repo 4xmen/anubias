@@ -73,7 +73,6 @@ export default {
       if (this.properties.height != 'null') {
         style += 'height:' + this.getSize(this.properties.height) + ';';
       }
-      console.log(style);
       return style;
     }
   },

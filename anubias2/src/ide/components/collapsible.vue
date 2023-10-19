@@ -8,7 +8,7 @@
         <i class="ri-arrow-drop-down-line" v-else></i>
       </span>
     </h4>
-    <div class="content" v-if="expanded">
+    <div class="collapsible-content" v-if="expanded">
       <slot></slot>
     </div>
   </div>
@@ -72,7 +72,8 @@ h4 .icon{
   right: 5px;
   top: -2px;
 }
-.content{
+.collapsible-content{
   padding: 5px;
 }
+
 </style>

@@ -223,7 +223,7 @@ export default {
     initialLoadProject() {
       // check if project
       try {
-        if (this.$store.state.project.pages?.length === []) {
+        if (this.$store.state.project.pages.length === []) {
           this.$store.dispatch('project/loadProject', storage.get('lastCreatedProject'));
 
         } else {

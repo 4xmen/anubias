@@ -99,9 +99,26 @@ let arrayMove = function (arr, fromIndex, toIndex) {
     return arr;
 };
 
-
+/**
+ * get unix timestamp
+ * @returns {number}
+ */
 let unixTimestamp = function () {
     return Math.round(+new Date() / 1000);
+};
+
+
+/**
+ * flutter object to usual string
+ * @param title
+ * @returns {string}
+ */
+let fixFlutterObjectTitle = function (title) {
+    if (title === 'null') {
+        return 'Default';
+    }
+    let tmp = title.toString().split('.');
+    return tmp[tmp.length - 1];
 };
 
 export {
@@ -112,4 +129,5 @@ export {
     createScreenShot,
     arrayMove,
     unixTimestamp,
+    fixFlutterObjectTitle
 };

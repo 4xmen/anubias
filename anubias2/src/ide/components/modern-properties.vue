@@ -25,12 +25,12 @@
         </div>
       </div>
     </collapsible>
-    <collapsible v-if="properties.fit !== undefined" :title="'Fit ('+showValue(properties.fit)+')'"
+    <collapsible v-if="properties.fit !== undefined" :title="'Fit ('+titleFixer(properties.fit)+')'"
                  icon="ri-layout-right-2-line">
       <select v-model="properties.fit ">
         <option v-for="(v,i) in properties.validator.fit.Items"
                 :class="'btn '+(v === properties.fit?'active':'')"
-                :key="i" :value="v" > {{v}} </option>
+                :key="i" :value="v" > {{titleFixer(v)}} </option>
       </select>
     </collapsible>
     <collapsible v-if="propTypeCount('String') > 0" icon="ri-text" title="Text properties">
@@ -179,7 +179,7 @@ import colorPicker from './color-picker.vue'
 import dinput from './input-draggable.vue';
 import iconPicker from './icon-picker.vue';
 
-import {arrayMove} from "../js/general-functions";
+import {arrayMove, fixFlutterObjectTitle} from "../js/general-functions";
 
 import {useToast} from "vue-toastification";
 import {Sortable} from "sortablejs-vue3";
@@ -346,6 +346,9 @@ export default {
         };
         fileReader.readAsDataURL(fileToLoad);
       }
+    },
+    titleFixer(title){
+      return fixFlutterObjectTitle(title);
     }
   }
 }
