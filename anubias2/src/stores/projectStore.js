@@ -8,6 +8,7 @@ import {state} from "vue-tsc/out/shared";
 import defaultPage from './components/defaultPage.json';
 
 
+
 const storage = new Store();
 const toast = useToast();
 
@@ -26,6 +27,7 @@ const projectStore = {
         projectFile: '',
         projectPath: '',
         isSave: true,
+        lastLoadProjectNotify: 0,
     }),
     mutations: {
 
@@ -43,7 +45,11 @@ const projectStore = {
             storage.set('lastLoadedProject', project);
             this.dispatch('ide/setActivePage', project.entryPoint);
             ipcRenderer.send('set-has-project', true);
-            toast.success("Project loaded...");
+            // check duplicate notify
+            if (Math.round(+new Date() / 1000) > state.lastLoadProjectNotify + 2){
+                toast.success("Project loaded...");
+                state.lastLoadProjectNotify = Math.round(+new Date() / 1000);
+            }
         },
         ADD_COMPONENT_TO_PAGE(state, {pageIndex, isVisual, component}) {
             // console.log;
@@ -70,7 +76,15 @@ const projectStore = {
             this.dispatch('ide/setMenuCanUndo', true);
         },
         SET_PAGE_PREVIEW(state, {pageIndex, image}) {
-            state.project.pages[pageIndex].preview = image;
+
+            try {
+                if (image !== undefined){
+                    state.project.pages[pageIndex].preview = image;
+                }
+            } catch(e) {
+                console.log(`Update preview problem: ${e.message}`);
+            }
+
         },
         UPDATE_PAGES(state, pages) {
             state.project.pages = pages;
