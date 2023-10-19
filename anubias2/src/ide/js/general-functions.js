@@ -1,6 +1,6 @@
 import store from "../../stores/store";
 import * as htmlToImage from 'html-to-image';
-import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
+import {toPng, toJpeg, toBlob, toPixelData, toSvg} from 'html-to-image';
 
 let project = store.state.project;
 let ide = store.state.ide;
@@ -21,6 +21,7 @@ let getColor = (color) => {
     return '#000000';
 
 };
+
 /**
  * convert flutter color to web color
  * @param color
@@ -50,11 +51,11 @@ let color2web = (color, isActiveWidget = true) => {
  */
 let getSize = (value, isHeight = false) => {
     // WIP: need complete later
-    if (value.toString().indexOf('%') != -1){
+    if (value.toString().indexOf('%') != -1) {
         return value;
     }
-    return  value+'px';
-}
+    return value + 'px';
+};
 
 /**
  * padding or margin to web usage
@@ -73,16 +74,16 @@ let calcPaddingOrMargin = (value) => {
     } catch (e) {
         return '0';
     }
-}
+};
 
 /**
  * make screenshot of element
  * @param selector css selector
  * @returns {Promise<string>} base64 string
  */
-let createScreenShot= async (selector) =>{
-    return  await htmlToImage.toPng(document.querySelector(selector));
-}
+let createScreenShot = async (selector) => {
+    return await htmlToImage.toPng(document.querySelector(selector));
+};
 
 
 /**
@@ -96,7 +97,13 @@ let arrayMove = function (arr, fromIndex, toIndex) {
     arr.splice(fromIndex, 1);
     arr.splice(toIndex, 0, element);
     return arr;
-}
+};
+
+
+let unixTimestamp = function () {
+    return Math.round(+new Date() / 1000);
+};
+
 export {
     color2web,
     getColor,
@@ -104,4 +111,5 @@ export {
     calcPaddingOrMargin,
     createScreenShot,
     arrayMove,
+    unixTimestamp,
 };
