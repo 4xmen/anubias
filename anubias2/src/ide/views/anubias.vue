@@ -234,6 +234,15 @@ export default {
         console.log(e.message);
         this.$store.dispatch('project/loadProject', storage.get('lastCreatedProject'));
       }
+      // check backup
+      if (storage.get('backupProject') != null){
+        console.log(storage.get('backupProject'));
+        setTimeout(function () {
+          if (confirm('We have unsaved backup, Do you want to restore it?')){
+            this.$store.dispatch('project/restoreProject');
+          }
+        }.bind(this),1000);
+      }
     },
   },
 }

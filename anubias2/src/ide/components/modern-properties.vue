@@ -342,7 +342,6 @@ export default {
         fileReader.onload = function (fileLoadedEvent) {
           base64 = fileLoadedEvent.target.result;
           self.properties.image = base64;
-          console.log(self.properties);
         };
         fileReader.readAsDataURL(fileToLoad);
       }

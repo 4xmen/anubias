@@ -51,6 +51,17 @@ const projectStore = {
                 state.lastLoadProjectNotify = Math.round(+new Date() / 1000);
             }
         },
+        BACKUP_PROJECT(state){
+            // console.log(JSON.stringify(state.project).length);
+            // console.log(JSON.stringify(storage.get('lastLoadedProject')).length);
+            if (JSON.stringify(state.project) !== JSON.stringify(storage.get('lastLoadedProject' )) ){
+                storage.set('backupProject', state.project);
+            }
+        },
+        RESTORE_PROJECT(state){
+            // console.log(storage.get('backupProject'));
+            this.commit('project/LOAD_PROJECT', storage.get('backupProject'));
+        },
         ADD_COMPONENT_TO_PAGE(state, {pageIndex, isVisual, component}) {
             // console.log;
             let c = {...component};
@@ -133,6 +144,12 @@ const projectStore = {
          */
         loadProject(context, project) {
             context.commit('LOAD_PROJECT', project);
+        },
+        backupProject(context) {
+            context.commit('BACKUP_PROJECT');
+        },
+        restoreProject(context) {
+            context.commit('RESTORE_PROJECT');
         },
         /**
          * add component to page
