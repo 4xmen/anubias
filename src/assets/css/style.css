@@ -503,7 +503,7 @@ img {
 }
 
 .drop.visual::before {
-    content: "viual component";
+    content: "visual component";
 }
 
 
