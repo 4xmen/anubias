@@ -32,12 +32,13 @@ import componentToggleDefault from './components/defaultToggle.json';
  */
 import Store from 'electron-store';
 import {ipcRenderer} from "electron";
+
 const storage = new Store();
 
 
 const ideStore = {
     namespaced: true,
-    state:  () => ({
+    state: () => ({
         title: 'Anubias',
         appName: 'Anubias',
         version: {
@@ -53,7 +54,7 @@ const ideStore = {
             collapsed: storage.get('componentsCollapsed'),
             mode: 'grid',
         },
-        defaultComponents:{
+        defaultComponents: {
             appbar: componentAppbarDefault,
             button: componentButtonDefault,
             circleButton: componentCircleButtonDefault,
@@ -99,12 +100,21 @@ const ideStore = {
             canCopy: false,
             canOnlineBuild: false,
         },
+        confirm: {
+            title: "Confirm",
+            text: "Are you sure?",
+            onConfirm() {
+            },
+            onCancel() {
+            },
+            enabled: false,
+        },
         activePage: 0,
         devices: devices,
         colors: colors,
         draggedData: {},
-        dropArea:'',
-        onEditComponent:{},
+        dropArea: '',
+        onEditComponent: {},
     }),
     mutations: {
         CHANGE_IDE_TITLE(state, title) {
@@ -148,9 +158,21 @@ const ideStore = {
         SET_DROP_AREA(state, area) {
             state.dropArea = area;
         },
-        SET_MENU_CAN_UNDO(state, data){
+        SET_MENU_CAN_UNDO(state, data) {
             state.menu.canUndo = data;
         },
+        SHOW_CONFIRM(state, data) {
+            // console.log('fire confirm!',data);
+            state.confirm.onConfirm = data.onConfirm;
+            state.confirm.onCancel = data.onCancel;
+            state.confirm.text = data.text;
+            state.confirm.title = data.title;
+            state.confirm.enabled = true;
+
+        },
+        HIDE_CONFIRM(state) {
+            state.confirm.enabled = false;
+        }
     },
     actions: {
         setIdeTitle: {
@@ -165,8 +187,8 @@ const ideStore = {
                 namespacedContext.commit('SET_ON_EDIT_COMPONENT', component);
             }
         },
-        setDragData(context,data) {
-            context.commit('SET_DRAG_DATA',data);
+        setDragData(context, data) {
+            context.commit('SET_DRAG_DATA', data);
         },
         setDropArea(context, area) {
             context.commit('SET_DROP_AREA', area);
@@ -179,6 +201,34 @@ const ideStore = {
         },
         toggleLogsCollapse(context) {
             context.commit('TOGGLE_LOGS_COLLAPSE');
+        },
+        /**
+         *
+         * @param context
+         * @param payload {onConfirm: Function, onCancel: Function, text: String, title: String}
+         */
+        showConfirm(context, payload) {
+            if (payload.onConfirm === undefined) {
+                console.warn('Confirm function nessesary');
+                return;
+            }
+            if (payload.onCancel === undefined) {
+                payload.onCancel = () => {
+                };
+            }
+            if (payload.text === undefined) {
+                payload.text = 'Are you sure?';
+            }
+            if (payload.title === undefined) {
+                payload.title = 'Confirm';
+            }
+
+            context.commit('SHOW_CONFIRM', {
+                onConfirm: payload.onConfirm,
+                onCancel: payload.onCancel,
+                text: payload.text,
+                title: payload.title,
+            });
         },
         setMenuCanUndo(context, data) {
             // console.log(data,'undo');
@@ -204,24 +254,23 @@ const ideStore = {
         currentPage(state) {
             return state.pages.currentPage;
         },
-        activePageIndex(state){
+        activePageIndex(state) {
             return state.activePage;
         },
-        defaultColors(state){
+        defaultColors(state) {
             let colors = {};
-            for( const color of state.colors) {
-              colors[color.value] = color.color ;
+            for (const color of state.colors) {
+                colors[color.value] = color.color;
             }
             return colors;
         },
-        defaultColorsArray(state){
-            return  state.colors.map((color)=>{
+        defaultColorsArray(state) {
+            return state.colors.map((color) => {
                 return color.color;
             })
         },
     }
 };
-
 
 
 export default ideStore;

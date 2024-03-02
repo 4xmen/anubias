@@ -169,9 +169,12 @@
     </collapsible>
 
   </div>
+
+  // ------------- this for debug : most remove production begin ------------
   <div class="test" v-for="(v,k) in properties.validator" :key="k">
     {{k}}:{{v.type}}
   </div>
+  // --------- this for debug : most remove production end -------------
 </template>
 
 <script>

@@ -50,7 +50,7 @@
         </span>
         <i class="ri-checkbox-indeterminate-line" @click="toggleComponentsCollapse"></i>
       </h3>
-        <components></components>
+      <components></components>
 
     </div>
     <div id="properties" :class="propertiesClass" :style="propertiesStyle">
@@ -64,6 +64,13 @@
 
       </div>
     </div>
+    <anubias-confirm
+        :confirm-text="ide.confirm.text"
+        :confirm-title="ide.confirm.title"
+        :on-confirm="ide.confirm.onConfirm"
+        :on-cancel="ide.confirm.onCancel"
+        :enabled="ide.confirm.enabled"
+    ></anubias-confirm>
     <div id="logs" :class="pagesClass">
       <h3 @click="expandLogs">
         Logs
@@ -85,12 +92,13 @@ import device from "../components/device.vue";
 import Store from 'electron-store';
 import components from "../components/components-panel.vue";
 import sidebar from "../components/sidebar.vue";
+import anubiasConfirm from "../components/anubias-confirm.vue";
 
 const storage = new Store();
 
 export default {
   name: "anubias",
-  components: {buttons, iconButton: iconButtons, device, components,sidebar},
+  components: {buttons, iconButton: iconButtons, device, components, sidebar, anubiasConfirm},
   data: () => {
     return {
       deviceZoom: ['AUTO', '120%', '100%', '75%', '50%'],
@@ -235,13 +243,24 @@ export default {
         this.$store.dispatch('project/loadProject', storage.get('lastCreatedProject'));
       }
       // check backup
-      if (storage.get('backupProject') != null){
+      if (storage.get('backupProject') != null) {
         console.log(storage.get('backupProject'));
         setTimeout(function () {
-          if (confirm('We have unsaved backup, Do you want to restore it?')){
-            this.$store.dispatch('project/restoreProject');
-          }
-        }.bind(this),1000);
+          // if (confirm('We have unsaved backup, Do you want to restore it?')){
+          //   this.$store.dispatch('project/restoreProject');
+          // }
+          this.$store.dispatch('ide/showConfirm', {
+            onConfirm() {
+
+              this.$store.dispatch('project/restoreProject');
+            },
+            onCancel() {
+
+            },
+            text: 'We have unsaved backup, Do you want to restore it?',
+            title: 'Project restore confirm',
+          });
+        }.bind(this), 1000);
       }
     },
   },
@@ -326,7 +345,6 @@ h3 i:hover {
   overflow-y: auto;
   overflow-x: hidden;
 }
-
 
 
 #tabs {

@@ -100,12 +100,20 @@ export default {
       this.$store.dispatch('setOnEditComponent', this.project.project.pages[i]);
     },
     remPage(i) {
-      if (confirm("Are you sure to remove page?")) {
-        this.$store.dispatch('project/removePage', i);
-        setTimeout( () => {
-          this.changePage(0);
-        },100,this)
-      }
+      this.$store.dispatch('ide/showConfirm', {
+        onConfirm() {
+
+          this.$store.dispatch('project/removePage', i);
+          setTimeout( () => {
+            this.changePage(0);
+          },100,this)
+        },
+        onCancel() {
+
+        },
+        text: "Are you sure to remove page?",
+        title: 'Remove page confirm',
+      });
     },
     setActiveIndex(i) {
       this.activeIndex = i;
