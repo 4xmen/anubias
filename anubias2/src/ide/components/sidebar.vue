@@ -123,6 +123,7 @@ export default {
         return 'active';
       }
       return '';
+
     },
     fixActivePage() {
       let pages = this.project.project.pages;
@@ -241,5 +242,10 @@ export default {
   left: 0;
   top: -5px;
   cursor: pointer;
+}
+
+.side .item i{
+  -webkit-text-stroke-color: var(--def-bg);
+  -webkit-text-stroke-width: 1px;
 }
 </style>

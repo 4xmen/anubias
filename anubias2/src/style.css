@@ -50,7 +50,7 @@
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-weight: 100;
+    font-weight: 200;
 }
 
 hr{
@@ -367,6 +367,13 @@ input {
     transform: translate(-50%, -50%);
     font-size: 36px;
     color: #fff;
+    -webkit-text-stroke-color: var(--text-hilight-darker);
+    -webkit-text-stroke-width: 1px;
+    transition: var(--transition-duration);
+}
+
+.circle-btn:hover i{
+    -webkit-text-stroke-color: var(--text-hilight);
 }
 
 .circle-btn.small {

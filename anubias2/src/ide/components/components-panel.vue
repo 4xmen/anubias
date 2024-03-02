@@ -37,7 +37,7 @@ export default {
 }
 
 #components-available .component {
-  font-weight: 100;
+  font-weight: 200;
   cursor: pointer;
   padding: 3px;
 }
@@ -61,5 +61,11 @@ export default {
 
 #components-available.list .component:last-child {
   margin-bottom: 1em;
+}
+
+
+.component i{
+  -webkit-text-stroke-color: var(--darker-bg);
+  -webkit-text-stroke-width: 1px;
 }
 </style>
