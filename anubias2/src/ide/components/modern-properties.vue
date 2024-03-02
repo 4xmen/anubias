@@ -30,7 +30,8 @@
       <select v-model="properties.fit ">
         <option v-for="(v,i) in properties.validator.fit.Items"
                 :class="'btn '+(v === properties.fit?'active':'')"
-                :key="i" :value="v" > {{titleFixer(v)}} </option>
+                :key="i" :value="v"> {{ titleFixer(v) }}
+        </option>
       </select>
     </collapsible>
     <collapsible v-if="propTypeCount('String') > 0" icon="ri-text" title="Text properties">
@@ -168,6 +169,9 @@
     </collapsible>
 
   </div>
+  <div class="test" v-for="(v,k) in properties.validator" :key="k">
+    {{k}}:{{v.type}}
+  </div>
 </template>
 
 <script>
@@ -258,15 +262,21 @@ export default {
       ];
 
       try {
+        // console.log(Object.entries(this.properties));
         for (let [i] of Object.entries(this.properties)) {
 
           if (except.indexOf(i) !== -1) {
             continue;
           }
-          let p = this.properties.validator[i];
-          if (p.type === type) {
-            count++;
+          try {
+            let p = this.properties.validator[i];
+            if (p.type === type) {
+              count++;
+            }
+          } catch(e) {
+              console.log(e.message,i);
           }
+
         }
       } catch (e) {
         console.log(e.message);
@@ -346,7 +356,7 @@ export default {
         fileReader.readAsDataURL(fileToLoad);
       }
     },
-    titleFixer(title){
+    titleFixer(title) {
       return fixFlutterObjectTitle(title);
     }
   }
