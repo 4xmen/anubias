@@ -19,9 +19,15 @@
       </div>
       <div class="input-container">
         <label for="package">
-          Project version
+          Project package name
         </label>
         <input type="text" id="package" v-model="newProject.packageName" placeholder="Project package name here..."/>
+      </div>
+      <div class="input-container">
+        <label for="description">
+          Project description
+        </label>
+        <textarea id="description" v-model="newProject.description" placeholder="Project description here..."></textarea>
       </div>
       <div class="input-container">
         <label for="page-count">
