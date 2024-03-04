@@ -10,11 +10,11 @@
     <br>
     <div id="welcome-grid">
       <div id="new-project" @click="goNewProject">
-        <i class="ri-file-add-line"></i>
+        <i class="ri-file-add-line big-icon"></i>
         New project
       </div>
       <div id="open-project">
-        <i class="ri-folder-open-line"></i>
+        <i class="ri-folder-open-line  big-icon"></i>
         Open project
       </div>
       <div id="recent-project">
@@ -24,19 +24,19 @@
         </h2>
       </div>
       <div id="document" @click="openWebsite('https://anubias.app/doc/#/')">
-        <i class="ri-book-open-line"></i>
+        <i class="ri-book-open-line  big-icon"></i>
         Online documents
       </div>
       <div id="setting" @click="goSetting">
-        <i class="ri-settings-3-line"></i>
+        <i class="ri-settings-3-line  big-icon"></i>
         IDE settings
       </div>
       <div id="website" @click="openWebsite('https://anubias.app/')">
-        <i class="ri-cloudy-line"></i>
+        <i class="ri-cloudy-line  big-icon"></i>
         Anubias website
       </div>
       <div id="update">
-        <i class="ri-refresh-line"></i>
+        <i class="ri-refresh-line  big-icon"></i>
         Check update
       </div>
     </div>
@@ -82,6 +82,15 @@ img {
   grid-template-columns: repeat(21, 1fr);
   grid-template-rows: 8fr;
   grid-gap: 1rem;
+}
+
+#welcome-grid i{
+  -webkit-text-stroke-color: var(--darker-bg);
+  -webkit-text-stroke-width: 1px;
+}
+#welcome-grid .big-icon{
+  -webkit-text-stroke-color: var(--darker-bg);
+  -webkit-text-stroke-width: 2px;
 }
 
 #welcome-grid > div {
