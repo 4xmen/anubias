@@ -42,7 +42,7 @@ store.subscribe((mutation, state) => {
     ipcRenderer.send('update-store-data', JSON.stringify(state));
 
     let projectName = state.project.project.name;
-    const isSaved = state.project.isSaved;
+    const isSaved = state.project.isSave;
     // if (state.project.isSave){
     //         projectName += '*'
     // }

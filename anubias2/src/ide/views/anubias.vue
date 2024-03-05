@@ -79,6 +79,7 @@
       <div id="logs-content">
         logs here
         {{project.projectFile}}
+        {{project.isSave?'save':'not save'}}
       </div>
     </div>
   </div>

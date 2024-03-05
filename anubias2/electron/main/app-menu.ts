@@ -257,7 +257,32 @@ class AppMenu {
                 {
                     label: "&Open project",
                     enabled: true,
-                    accelerator: 'CommandOrControl+O'
+                    accelerator: 'CommandOrControl+O',
+                    click: async () => {
+                        let result = await dialog.showOpenDialog(this._win, {
+                            title: 'Open project',
+                            defaultPath: '~/',
+                            filters: [
+                                {name: 'Anubias project', extensions: ['anb']},
+                                {name: 'All Files', extensions: ['*']}
+                            ],
+                        });
+
+                        if (!result.canceled) {
+
+                            try {
+
+                                const fileName = result.filePaths[0];
+                                const projectContent = fs.readFileSync(fileName, 'utf-8');
+                                const projectData = JSON.parse(projectContent);
+                                this._win.webContents.send('load-project-data',projectData);
+                            } catch (e) {
+                                console.log(e.message);
+                                this._win.webContents.send('toast', 'error', 'file load error: '+e.message);
+                            }
+                        }
+
+                    }
                 }
             ]
         };
@@ -270,10 +295,16 @@ class AppMenu {
                     enabled: this._hasProject && this.getMenuState('canSave'),
                     click: async () => {
                         // await this.ide.createProject();
-                        if (this._win.vuexStore.project.projectFile != ''){
-                            await fs.writeFileSync(this._win.vuexStore.project.projectFile, JSON.stringify(this._win.vuexStore.project.project), 'utf-8');
-                            this._win.webContents.send('update-project-data','isSave', true);
-                            this._win.webContents.send('toast', 'success', 'Project saved!');
+                        if (this._win.vuexStore.project.projectFile != '') {
+                            try {
+                                await fs.writeFileSync(this._win.vuexStore.project.projectFile, JSON.stringify(this._win.vuexStore.project.project), 'utf-8');
+                                this._win.webContents.send('toast', 'success', 'Project saved!');
+                                this._win.webContents.send('update-project-data', 'isSave', true);
+                                this._menuStats['canSave'] = false;
+                            } catch (e) {
+                                this._win.webContents.send('toast', 'error', 'Save error: ' + e.message);
+                                console.log(e.message);
+                            }
                         }
                     }
                 },
@@ -305,14 +336,19 @@ class AppMenu {
                         // save project
                         if (!result.canceled) {
                             // write on file
-                            await fs.writeFileSync(result.filePath, JSON.stringify(this._win.vuexStore.project.project), 'utf-8');
-                            this._win.webContents.send('toast', 'success', 'Project saved as: ' + result.filePath);
-                            // update ide data after save
-                            this._menuStats['canSave'] = false;
-                            this._hasProject = true;
-                            this._win.webContents.send('update-project-data','isSave', true);
-                            this._win.webContents.send('update-project-data','projectFile', result.filePath);
-                            this._win.webContents.send('update-project-data','projectPath', path.dirname(result.filePath));
+                            try {
+                                await fs.writeFileSync(result.filePath, JSON.stringify(this._win.vuexStore.project.project), 'utf-8');
+                                this._win.webContents.send('toast', 'success', 'Project saved as: ' + result.filePath);
+                                // update ide data after save
+                                this._menuStats['canSave'] = false;
+                                this._hasProject = true;
+                                this._win.webContents.send('update-project-data', 'isSave', true);
+                                this._win.webContents.send('update-project-data', 'projectFile', result.filePath);
+                                this._win.webContents.send('update-project-data', 'projectPath', path.dirname(result.filePath));
+                            } catch (e) {
+                                console.log(e.message);
+                                this._win.webContents.send('toast', 'error', 'Save error: ' + e.message);
+                            }
 
 
                             // WIP: need added to recent files

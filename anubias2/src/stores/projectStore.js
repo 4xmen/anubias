@@ -129,7 +129,6 @@ const projectStore = {
             }
         },
         UPDATE_PROJECT_DATA(state, payload) {
-            console.log('upprj', payload);
             state[payload.key] = payload.value;
         },
     }

@@ -33,6 +33,11 @@ ipcRenderer.on('update-project-data', (e, key, data) => {
     // console.log('project update',e,key, data,store.state.project);
     store.commit('project/UPDATE_PROJECT_DATA',{key: key, value: data});
 });
+ipcRenderer.on('load-project-data', (e, data) => {
+    // WIP need update store
+    // console.log('project update',e,key, data,store.state.project);
+    store.commit('project/LOAD_PROJECT',data);
+});
 
 lstat(cwd()).then(stats => {
     console.log('[fs.lstat]', stats)
