@@ -1,9 +1,10 @@
 import {ipcMain, shell, BrowserWindow, Menu} from 'electron';
 import {AppMenu} from './app-menu';
 const Store = require('electron-store');
-const store = new Store();
-let win = null;
-let menuapp = null;
+const store : any = new Store();
+let win :any = null;
+let menuapp : any = null;
+let lastProject : string = '';
 // api receive by main
 
 ipcMain.on('close',(_event, ...args) => {
@@ -51,5 +52,13 @@ ipcMain.on ("set-menu-state", (event, ...args) => {
  */
 ipcMain.on('update-store-data', async (event,args) => {
     win.vuexStore = JSON.parse(args);
+    if (lastProject !==  JSON.stringify(win.vuexStore.project)){
+        lastProject = JSON.stringify(win.vuexStore.project);
+        if (win.vuexStore.project.projectFile != ''){
+            menuapp.setMenuState('canSave',true);
+            let menu = Menu.buildFromTemplate(menuapp.menu());
+            Menu.setApplicationMenu(menu);
+        }
+    }
 })
 
