@@ -60,6 +60,15 @@ export default {
   },
   computed: {},
   methods: {
+    handleKeyup(event) {
+      if (event.key === 'Enter') {
+        this.confirming();
+        // Do something when Enter is pressed
+      } else if (event.key === 'Escape') {
+        this.canceling();
+        // Do something when ESC is pressed
+      }
+    },
     canceling(){
       this.$store.commit('ide/HIDE_CONFIRM');
       this.onCancel();
@@ -68,6 +77,16 @@ export default {
       this.$store.commit('ide/HIDE_CONFIRM');
       this.onConfirm();
     }
+  },
+  watch:{
+    enabled(newval){
+      if (newval){
+        document.addEventListener('keyup', this.handleKeyup)
+      }else{
+        document.removeEventListener('keyup', this.handleKeyup)
+      }
+    }
+
   }
 }
 </script>

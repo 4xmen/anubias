@@ -1,7 +1,7 @@
 <template>
   <div id="steps">
     <div class="step" v-for="(step,i) in steps" :key="i" :class="i <= modelValue?'done':''">
-      <i :class="step.icon" @click="setIndex(i)"></i>
+      <i :class="'step-icon ' +step.icon" @click="setIndex(i)"></i>
       <h3 @click="setIndex(i)">
         {{ step.title }}
       </h3>
@@ -104,5 +104,10 @@ export default {
 
 .step.done i {
   border: 2px solid var(--text-hilight);
+}
+
+.step-icon{
+  -webkit-text-stroke-color: var(--def-bg);
+  -webkit-text-stroke-width: 1px;
 }
 </style>
