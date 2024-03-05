@@ -26,11 +26,15 @@ ipcRenderer.on('electron-store-set-data', (_event, key, data) => {
   _event.sender.send('electron-store-send-data', storage.set(key, data));
 })
 
+ipcRenderer.on('update-project-data',(args) => {
+  // WIP need update store
+});
 
 lstat(cwd()).then(stats => {
   console.log('[fs.lstat]', stats)
 }).catch(err => {
   console.error(err)
 });
+
 
 // ipcRenderer.send('close',true);

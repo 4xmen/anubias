@@ -1,5 +1,7 @@
-import {MenuItemConstructorOptions, shell} from 'electron';
+import {MenuItemConstructorOptions, shell, dialog, ipcRenderer, ipcMain} from 'electron';
 import ide from './ide';
+import * as fs from "fs";
+// import project from '../../src/stores/projectStore.js';
 
 class AppMenu {
     // instance of electorn win
@@ -28,6 +30,7 @@ class AppMenu {
         this._ide = new ide(win);
         this._hasProject = false;
     }
+
 
     /**
      * set menu status
@@ -273,6 +276,35 @@ class AppMenu {
                     enabled: this._hasProject,
                     click: async () => {
                         // await this.ide.createProject();
+                        // console.log();
+                        // // const storeData = await  ipcMain.
+                        // console.log(storeData);
+
+
+
+                        // const storeData = ipcMain.emit('get-store-data',function (e) {
+                        //     console.log(e);
+                        // });
+                        // console.log(storeData);
+
+                        let result = await dialog.showSaveDialog(this._win, {
+                            title:  'Save project as',
+                            defaultPath: '~/'+this._win.vuexStore.project.project.name.split(' ').join('-')+'.anb',
+                            filters: [
+                                {name: 'Anubias project', extensions: ['anb']},
+                                {name: 'All Files', extensions: ['*']}
+                            ],
+                        });
+
+                        if (!result.canceled){
+                           await fs.writeFileSync(result.filePath,JSON.stringify(this._win.vuexStore.project.project), 'utf-8');
+                           this._win.webContents.send('toast','success','Project saved: '+result.filePath);
+                           this._win.webContents.send('update-project-data','a','b');
+                           this._menuStats['canSave'] = false;
+                           this._hasProject = true;
+
+                        }
+
                     }
                 },
                 {
@@ -281,6 +313,8 @@ class AppMenu {
                     enabled: this._hasProject,
                     click: async () => {
                         // await this.ide.createProject();
+                        console.log('close project');
+
                     }
                 }
             );

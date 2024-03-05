@@ -106,8 +106,9 @@ export default {
     };
   },
   mounted() {
+    // if this not need must remove
     // this.setIdeTitle('AnubiasApp');
-    this.$store.dispatch('setIdeTitle', 'AnubiasApp');
+    // this.$store.dispatch('setIdeTitle', 'AnubiasApp');
     this.initialLoadProject();
 
   }, computed: {

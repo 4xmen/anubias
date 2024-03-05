@@ -37,3 +37,9 @@ ipcMain.on ("set-menu-state", (event, ...args) => {
     Menu.setApplicationMenu(menu);
 });
 
+
+ipcMain.on('update-store-data', async (event,args) => {
+    // console.log(event);
+    win.vuexStore = JSON.parse(args);
+})
+

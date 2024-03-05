@@ -118,7 +118,7 @@ const ideStore = {
     }),
     mutations: {
         CHANGE_IDE_TITLE(state, title) {
-            document.querySelector('title').innerText = title;
+            document.querySelector('title').innerText = state.appName + ' - ' + title;
             state.title = title;
         },
         SET_ON_EDIT_COMPONENT(state, component) {

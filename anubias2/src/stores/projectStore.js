@@ -39,9 +39,12 @@ const projectStore = {
         },
         LOAD_PROJECT(state, project) {
             state.project = project;
+
+            // if this comment not need again must remove
             // ide.actions.setIdeTitle(,ide.state().appName + ' - '+ project.name );
-            let title = ide.state().appName + ' - ' + project.name;
-            this.dispatch('setIdeTitle', title);
+            // let title = ide.state().appName + ' - ' + project.name;
+            // this.dispatch('setIdeTitle', title);
+
             storage.set('lastLoadedProject', project);
             this.dispatch('ide/setActivePage', project.entryPoint);
             ipcRenderer.send('set-has-project', true);
