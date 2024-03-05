@@ -5,6 +5,7 @@ const store = new Store();
 let win = null;
 let menuapp = null;
 // api receive by main
+
 ipcMain.on('close',(_event, ...args) => {
     console.log('close',args);
 });
@@ -25,21 +26,30 @@ ipcMain.on ("app-started", (event, args) => {
     let menu = Menu.buildFromTemplate(menuapp.menu());
     Menu.setApplicationMenu(menu);
 });
+
+/**
+ * set has project for menu build
+ */
 ipcMain.on ("set-has-project", (event, ...args) => {
     menuapp.setHasProject(args[0]);
     let menu = Menu.buildFromTemplate(menuapp.menu());
     Menu.setApplicationMenu(menu);
 });
 
+/**
+ * update menu states like has project
+ */
 ipcMain.on ("set-menu-state", (event, ...args) => {
     menuapp.setMenuState(args[0],args[2]);
     let menu = Menu.buildFromTemplate(menuapp.menu());
     Menu.setApplicationMenu(menu);
 });
 
-
+/**
+ * update store data main side
+ * need for back-end actions
+ */
 ipcMain.on('update-store-data', async (event,args) => {
-    // console.log(event);
     win.vuexStore = JSON.parse(args);
 })
 

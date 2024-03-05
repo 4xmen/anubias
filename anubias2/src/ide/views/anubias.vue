@@ -78,6 +78,7 @@
       </h3>
       <div id="logs-content">
         logs here
+        {{project.projectFile}}
       </div>
     </div>
   </div>

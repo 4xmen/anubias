@@ -40,6 +40,7 @@ vueApp.use(toast, toastOption);
 store.subscribe((mutation, state) => {
     // console.log(state);
     ipcRenderer.send('update-store-data', JSON.stringify(state));
+
     let projectName = state.project.project.name;
     const isSaved = state.project.isSaved;
     // if (state.project.isSave){

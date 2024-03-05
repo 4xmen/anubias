@@ -1,6 +1,8 @@
 import {MenuItemConstructorOptions, shell, dialog, ipcRenderer, ipcMain} from 'electron';
 import ide from './ide';
 import * as fs from "fs";
+import path from "path";
+
 // import project from '../../src/stores/projectStore.js';
 
 class AppMenu {
@@ -53,7 +55,7 @@ class AppMenu {
      * change has project state
      * @param status
      */
-    setHasProject(status: boolean):void{
+    setHasProject(status: boolean): void {
         this._hasProject = status;
     }
 
@@ -281,27 +283,33 @@ class AppMenu {
                         // console.log(storeData);
 
 
-
                         // const storeData = ipcMain.emit('get-store-data',function (e) {
                         //     console.log(e);
                         // });
                         // console.log(storeData);
 
                         let result = await dialog.showSaveDialog(this._win, {
-                            title:  'Save project as',
-                            defaultPath: '~/'+this._win.vuexStore.project.project.name.split(' ').join('-')+'.anb',
+                            title: 'Save project as',
+                            defaultPath: '~/' + this._win.vuexStore.project.project.name.split(' ').join('-') + '.anb',
                             filters: [
                                 {name: 'Anubias project', extensions: ['anb']},
                                 {name: 'All Files', extensions: ['*']}
                             ],
                         });
 
-                        if (!result.canceled){
-                           await fs.writeFileSync(result.filePath,JSON.stringify(this._win.vuexStore.project.project), 'utf-8');
-                           this._win.webContents.send('toast','success','Project saved: '+result.filePath);
-                           this._win.webContents.send('update-project-data','a','b');
-                           this._menuStats['canSave'] = false;
-                           this._hasProject = true;
+                        // save project
+                        if (!result.canceled) {
+                            // write on file
+                            await fs.writeFileSync(result.filePath, JSON.stringify(this._win.vuexStore.project.project), 'utf-8');
+                            this._win.webContents.send('toast', 'success', 'Project saved: ' + result.filePath);
+                            // update ide data after save
+                            this._menuStats['canSave'] = false;
+                            this._hasProject = true;
+                            this._win.webContents.send('update-project-data','isSave', true);
+                            this._win.webContents.send('update-project-data','projectFile', result.filePath);
+                            this._win.webContents.send('update-project-data','projectPath', path.dirname(result.filePath));
+
+
 
                         }
 

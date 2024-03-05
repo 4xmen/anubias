@@ -8,7 +8,6 @@ import {state} from "vue-tsc/out/shared";
 import defaultPage from './components/defaultPage.json';
 
 
-
 const storage = new Store();
 const toast = useToast();
 
@@ -49,19 +48,19 @@ const projectStore = {
             this.dispatch('ide/setActivePage', project.entryPoint);
             ipcRenderer.send('set-has-project', true);
             // check duplicate notify
-            if (Math.round(+new Date() / 1000) > state.lastLoadProjectNotify + 2){
+            if (Math.round(+new Date() / 1000) > state.lastLoadProjectNotify + 2) {
                 toast.success("Project loaded...");
                 state.lastLoadProjectNotify = Math.round(+new Date() / 1000);
             }
         },
-        BACKUP_PROJECT(state){
+        BACKUP_PROJECT(state) {
             // console.log(JSON.stringify(state.project).length);
             // console.log(JSON.stringify(storage.get('lastLoadedProject')).length);
-            if (JSON.stringify(state.project) !== JSON.stringify(storage.get('lastLoadedProject' )) ){
+            if (JSON.stringify(state.project) !== JSON.stringify(storage.get('lastLoadedProject'))) {
                 storage.set('backupProject', state.project);
             }
         },
-        RESTORE_PROJECT(state){
+        RESTORE_PROJECT(state) {
             // console.log(storage.get('backupProject'));
             this.commit('project/LOAD_PROJECT', storage.get('backupProject'));
         },
@@ -92,10 +91,10 @@ const projectStore = {
         SET_PAGE_PREVIEW(state, {pageIndex, image}) {
 
             try {
-                if (image !== undefined){
+                if (image !== undefined) {
                     state.project.pages[pageIndex].preview = image;
                 }
-            } catch(e) {
+            } catch (e) {
                 console.log(`Update preview problem: ${e.message}`);
             }
 
@@ -128,6 +127,10 @@ const projectStore = {
             } else {
                 toast.warning("You can't remove the last page of project");
             }
+        },
+        UPDATE_PROJECT_DATA(state, payload) {
+            console.log('upprj', payload);
+            state[payload.key] = payload.value;
         },
     }
     ,

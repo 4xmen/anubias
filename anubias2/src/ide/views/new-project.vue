@@ -5,29 +5,33 @@
     </h1>
     <steps :steps="projectSteps" v-model="stepIndex"></steps>
     <div id="basic" v-if="stepIndex === 0">
-      <div class="input-container">
-        <label for="name">
-          Project name
-        </label>
-        <input ref="name" type="text" id="name" v-model="newProject.name" placeholder="Project name here..."/>
-      </div>
-      <div class="input-container">
-        <label for="version">
-          Project version
-        </label>
-        <input type="text" id="version" v-model="newProject.version" placeholder="Project version here..."/>
-      </div>
-      <div class="input-container">
-        <label for="package">
-          Project package name
-        </label>
-        <input type="text" id="package" v-model="newProject.packageName" placeholder="Project package name here..."/>
+      <div class="row-equal">
+
+        <div class="input-container">
+          <label for="name">
+            Project name
+          </label>
+          <input ref="name" type="text" id="name" v-model="newProject.name" placeholder="Project name here..."/>
+        </div>
+        <div class="input-container">
+          <label for="version">
+            Project version
+          </label>
+          <input type="text" id="version" v-model="newProject.version" placeholder="Project version here..."/>
+        </div>
+        <div class="input-container">
+          <label for="package">
+            Project package name
+          </label>
+          <input type="text" id="package" v-model="newProject.packageName" placeholder="Project package name here..."/>
+        </div>
       </div>
       <div class="input-container">
         <label for="description">
           Project description
         </label>
-        <textarea id="description" v-model="newProject.description" placeholder="Project description here..."></textarea>
+        <textarea id="description" v-model="newProject.description"
+                  placeholder="Project description here..."></textarea>
       </div>
       <div class="input-container">
         <label for="page-count">
