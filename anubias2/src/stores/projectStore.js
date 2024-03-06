@@ -186,6 +186,9 @@ const projectStore = {
         removePage(context, i) {
             context.commit('REMOVE_PAGE', i);
         },
+        changeSaveState(context,isSave){
+          context.commit('UPDATE_PROJECT_DATA',{key: 'isSave',value: isSave});
+        },
     },
     getters: {
         getPage: (state) => (i) => {

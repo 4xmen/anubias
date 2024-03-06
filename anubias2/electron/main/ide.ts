@@ -16,11 +16,11 @@ class IDE {
     }
 
     public async openProject(){
-        this._win.send('hello-world');
+        this._win.webContents.send('hello-world');
         return '';
     }
     public async createProject(){
-        this._win.send('redirect','/new-project')
+        this._win.webContents.send('redirect','/new-project')
     }
 }
 

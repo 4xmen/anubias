@@ -1,13 +1,13 @@
 <template>
   <div class="side">
     <div class="icons">
-      <div :class="getItemClass(0)" class="item" title="non-visual components" @click="setActiveIndex(0)">
+      <div :class="getItemClass(0) + ' item'" title="non-visual components" @click="setActiveIndex(0)">
         <i class="ri-eye-off-line"></i>
       </div>
-      <div :class="getItemClass(1)" class="item" title="properties" @click="setActiveIndex(1)">
+      <div :class="getItemClass(1) + ' item'"  title="properties" @click="setActiveIndex(1)">
         <i class="ri-pen-nib-line"></i>
       </div>
-      <div :class="getItemClass(2)" class="item" title="pages" @click="setActiveIndex(2)">
+      <div :class="getItemClass(2)  + ' item'" title="pages" @click="setActiveIndex(2)">
         <i class="ri-file-copy-line"></i>
       </div>
     </div>
@@ -79,7 +79,6 @@ export default {
   },
   data() {
     return {
-      activeIndex: 0,
       activePageName: '',
     }
   },
@@ -90,6 +89,14 @@ export default {
     ...mapGetters(
         'project', ['pages']
     ),
+    activeIndex: {
+      get() {
+        return this.$store.state.ide.sideBar.activeIndex;
+      },
+      set(value) {
+        this.$store.commit('ide/SET_SIDEBAR_INDEX', value)
+      }
+    },
   },
   methods: {
     addNewPage() {
@@ -116,6 +123,7 @@ export default {
       });
     },
     setActiveIndex(i) {
+      this.index = i;
       this.activeIndex = i;
     },
     getItemClass(i) {

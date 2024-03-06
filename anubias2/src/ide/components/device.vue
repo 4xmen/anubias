@@ -76,67 +76,67 @@
           <template v-for="(c,componentIndex) in pages.currentPage?.children.visual"
                     v-if="pages.currentPage?.children !== undefined" :key="componentIndex">
             <div v-if="c.type === 'preloader'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)">
+                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
               <anubias-preloader :properties="c"></anubias-preloader>
             </div>
             <div v-else-if="c.type === 'appbar'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)">
+                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
               <anubias-appbar :properties="c"></anubias-appbar>
             </div>
             <div v-else-if="c.type === 'button'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)">
+                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
               <anubias-button :properties="c"></anubias-button>
             </div>
             <div v-else-if="c.type === 'circleButton'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)">
+                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
               <anubias-circle-button :properties="c"></anubias-circle-button>
             </div>
             <div v-else-if="c.type === 'container'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)">
+                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
               <anubias-container :properties="c"></anubias-container>
             </div>
             <div v-else-if="c.type === 'column'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)">
+                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
               <anubias-column :properties="c"></anubias-column>
             </div>
             <div v-else-if="c.type === 'divider'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)">
+                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
               <anubias-divider :properties="c"></anubias-divider>
             </div>
             <div v-else-if="c.type === 'dropdown'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)">
+                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
               <anubias-dropdown :properties="c"></anubias-dropdown>
             </div>
             <div v-else-if="c.type === 'grid'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)">
+                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
               <anubias-grid :properties="c"></anubias-grid>
             </div>
             <div v-else-if="c.type === 'icon'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)">
+                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
               <anubias-icon :properties="c"></anubias-icon>
             </div>
             <div v-else-if="c.type === 'image'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)">
+                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
               <anubias-image :properties="c"></anubias-image>
             </div>
             <div v-else-if="c.type === 'input'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)">
+                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
               <anubias-input :properties="c"></anubias-input>
             </div>
             <div v-else-if="c.type === 'navbar'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)">
+                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
               <anubias-navbar :properties="c"></anubias-navbar>
             </div>
             <div v-else-if="c.type === 'row'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)">
+                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
               <anubias-row :properties="c"></anubias-row>
             </div>
             <div v-else-if="c.type === 'text'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)">
+                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
               <anubias-text :properties="c"></anubias-text>
             </div>
             <div v-else-if="c.type === 'toggle'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)">
+                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
               <anubias-toggle :properties="c"></anubias-toggle>
             </div>
             <div v-else class="component">
@@ -219,13 +219,15 @@ export default {
   mounted() {
     this.timerPic = setInterval(async () => {
       // update previwe image
-      if (!this.isSave){
+      if (!this.isSave && this.canScreen) {
         await this.$store.dispatch('project/updatePagePreview', {
           pageIndex: this.activePageIndex,
           image: await createScreenShot('#component-holder'),
         });
         // create project backup
         this.$store.dispatch('project/backupProject');
+        this.$store.dispatch('ide/setCanScreenshot', false);
+        console.log('screenshoting...');
       }
     }, 10000, this);
   },
@@ -235,11 +237,12 @@ export default {
   computed: {
     ...mapState(['ide']),
     ...mapState('ide', {
-      pages: 'pages'
+      pages: 'pages',
+      canScreen: 'canScreenshot',
     }),
     ...mapState('project', {
       project: 'project',
-      isSave:'isSave'
+      isSave: 'isSave',
     }),
     ...mapState('ide', ['defaultComponents']),
     ...mapGetters(
@@ -367,6 +370,11 @@ export default {
     },
     setOnEditComponent(component) {
       this.$store.dispatch('setOnEditComponent', component);
+    },
+    setOnEditComponentAndOpenProps(component) {
+      this.$store.dispatch('setOnEditComponent', component);
+      this.$store.commit('ide/SET_SIDEBAR_INDEX', 1);
+      // this.$store.dispatch('')
     },
     resizeSvg() {
       // new device ratio

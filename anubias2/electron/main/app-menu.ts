@@ -147,7 +147,7 @@ class AppMenu {
                         label: '&Emulators',
                         accelerator: 'CommandOrControl+Alt+E',
                         click: () => {
-                            this._win.webContents.toggleDevTools();
+                            this._win.toggleDevTools();
                         },
                     },
                 ]
@@ -388,7 +388,7 @@ class AppMenu {
                     enabled: this._hasProject,
                     click: async () => {
                         // await this.ide.createProject();
-                        console.log('close project');
+                        this._win.send("redirect", "/welcome");
 
                     }
                 }

@@ -84,6 +84,9 @@ const ideStore = {
         pages: {
             currentPage: {},
         },
+        sideBar:{
+          activeIndex: 0,
+        },
         // active device preview
         device: {
             active: 0,
@@ -115,6 +118,7 @@ const ideStore = {
         draggedData: {},
         dropArea: '',
         onEditComponent: {},
+        canScreenshot: false,
     }),
     mutations: {
         CHANGE_IDE_TITLE(state, title) {
@@ -160,6 +164,15 @@ const ideStore = {
         },
         SET_MENU_CAN_UNDO(state, data) {
             state.menu.canUndo = data;
+        },
+        SET_MENU_CAN_SAVE(state, data) {
+            state.menu.canSave = data;
+        },
+        SET_CAN_SCREENSHOT(state, data) {
+            state.canScreenshot = data;
+        },
+        SET_SIDEBAR_INDEX(state, index) {
+            state.sideBar.activeIndex = index;
         },
         SHOW_CONFIRM(state, data) {
             // console.log('fire confirm!',data);
@@ -234,6 +247,15 @@ const ideStore = {
             // console.log(data,'undo');
             context.commit('SET_MENU_CAN_UNDO', data);
             ipcRenderer.send('set-menu-state', 'canUndo', data);
+        },
+        setCanScreenshot(context, data) {
+            // console.log(data,'undo');
+            context.commit('SET_CAN_SCREENSHOT', data);
+        },
+        setMenuCanSave(context, data) {
+            // console.log(data,'undo');
+            context.commit('SET_MENU_CAN_SAVE', data);
+            ipcRenderer.send('set-menu-state', 'canSave', data);
         },
         /**
          * set active page index
