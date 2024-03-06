@@ -62,3 +62,31 @@ ipcMain.on('update-store-data', async (event,args) => {
     }
 })
 
+ipcMain.handle('run-menu-event', async (event, menuItemLabel) => {
+    const menu = Menu.getApplicationMenu();
+    let menuItem = null;
+
+    // Find the menu item by its label
+    menu.items.forEach(item => {
+        if (item.label === menuItemLabel) {
+            menuItem = item;
+        } else if (item.submenu) {
+            item.submenu.items.forEach(subItem => {
+                if (subItem.label === menuItemLabel) {
+                    menuItem = subItem;
+                }
+            });
+        }
+    });
+
+    // If the menu item exists, trigger its click event
+    if (menuItem) {
+        await menuItem.click();
+        return  true;
+    } else {
+        return  false;
+    }
+});
+
+
+

@@ -13,7 +13,7 @@
         <i class="ri-file-add-line big-icon"></i>
         New project
       </div>
-      <div id="open-project">
+      <div id="open-project" @click="openProject">
         <i class="ri-folder-open-line  big-icon"></i>
         Open project
       </div>
@@ -63,6 +63,9 @@ export default {
     goNewProject(){
       this.$router.push('/new-project');
     },
+    async openProject(){
+      const result = await ipcRenderer.invoke('run-menu-event','&Open project');
+    }
   }
 }
 </script>

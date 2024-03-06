@@ -39,6 +39,13 @@ ipcRenderer.on('load-project-data', (e, data) => {
     store.commit('project/LOAD_PROJECT',data);
 });
 
+
+ipcRenderer.on('go-to-main-page',(e, args)=>{
+    if (router.currentRoute.value.path !== '/main'){
+        router.push('/main');
+    }
+});
+
 lstat(cwd()).then(stats => {
     console.log('[fs.lstat]', stats)
 }).catch(err => {

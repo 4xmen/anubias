@@ -31,8 +31,51 @@ class AppMenu {
         this._win = win;
         this._ide = new ide(win);
         this._hasProject = false;
+        this.addMenuEvents();
     }
 
+
+
+    addMenuEvents(){
+
+        /**
+         * open project events
+         */
+        try {
+            this._win.openProject = async (): Promise<boolean> =>{
+                let result = await dialog.showOpenDialog(this._win, {
+                    title: 'Open project',
+                    defaultPath: '~/',
+                    filters: [
+                        {name: 'Anubias project', extensions: ['anb']},
+                        {name: 'All Files', extensions: ['*']}
+                    ],
+                });
+
+                if (!result.canceled) {
+
+                    try {
+
+                        const fileName = result.filePaths[0];
+                        const projectContent = fs.readFileSync(fileName, 'utf-8');
+                        const projectData = JSON.parse(projectContent);
+                        this._win.webContents.send('load-project-data',projectData);
+                        return  true
+                    } catch (e) {
+                        console.log(e.message);
+                        this._win.webContents.send('toast', 'error', 'file load error: '+e.message);
+                        return  false;
+                    }
+                }else{
+                    return false;
+                }
+
+            }
+        } catch(e) {
+            console.log(e.message);
+        }
+
+    }
 
     /**
      * set menu status
@@ -259,29 +302,10 @@ class AppMenu {
                     enabled: true,
                     accelerator: 'CommandOrControl+O',
                     click: async () => {
-                        let result = await dialog.showOpenDialog(this._win, {
-                            title: 'Open project',
-                            defaultPath: '~/',
-                            filters: [
-                                {name: 'Anubias project', extensions: ['anb']},
-                                {name: 'All Files', extensions: ['*']}
-                            ],
-                        });
-
-                        if (!result.canceled) {
-
-                            try {
-
-                                const fileName = result.filePaths[0];
-                                const projectContent = fs.readFileSync(fileName, 'utf-8');
-                                const projectData = JSON.parse(projectContent);
-                                this._win.webContents.send('load-project-data',projectData);
-                            } catch (e) {
-                                console.log(e.message);
-                                this._win.webContents.send('toast', 'error', 'file load error: '+e.message);
-                            }
+                        const opened = await this._win.openProject();
+                        if (opened){
+                            this._win.webContents.send('go-to-main-page');
                         }
-
                     }
                 }
             ]
