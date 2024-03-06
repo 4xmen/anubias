@@ -53,6 +53,8 @@ ipcMain.on("set-menu-state", (event, ...args) => {
  */
 ipcMain.on('update-store-data', async (event, args) => {
     win.vuexStore = JSON.parse(args);
+    menuapp.setMenuStore(JSON.parse(args));
+
     if (lastProject !== JSON.stringify(win.vuexStore.project)) {
         lastProject = JSON.stringify(win.vuexStore.project);
         // if (win.vuexStore.project.projectFile != ''){

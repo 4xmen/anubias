@@ -13,6 +13,9 @@ class AppMenu {
     // keep project
     private _hasProject: boolean;
 
+    // project store
+    private _store: any;
+
     /**
      * menu states
      * @private
@@ -35,7 +38,9 @@ class AppMenu {
     }
 
 
-
+    /**
+     * add events to win for use in menu
+     */
     addMenuEvents(){
 
         /**
@@ -60,6 +65,8 @@ class AppMenu {
                         const projectContent = fs.readFileSync(fileName, 'utf-8');
                         const projectData = JSON.parse(projectContent);
                         this._win.webContents.send('load-project-data',projectData);
+                        this._win.webContents.send('update-project-data', 'projectFile', fileName);
+                        this._win.webContents.send('update-project-data', 'projectPath', path.dirname(fileName));
                         return  true
                     } catch (e) {
                         console.log(e.message);
@@ -84,6 +91,15 @@ class AppMenu {
      */
     setMenuState(name: string, status: boolean): void {
         this._menuStats[name] = status;
+    }
+
+
+    /**
+     * vuex store in menu set
+     * @param store
+     */
+    setMenuStore(store): void {
+        this._store = store;
     }
 
     /**
@@ -321,6 +337,7 @@ class AppMenu {
                         // await this.ide.createProject();
                         if (this._win.vuexStore.project.projectFile != '') {
                             try {
+
                                 await fs.writeFileSync(this._win.vuexStore.project.projectFile, JSON.stringify(this._win.vuexStore.project.project), 'utf-8');
                                 this._win.webContents.send('toast', 'success', 'Project saved!');
                                 this._win.webContents.send('update-project-data', 'isSave', true);
