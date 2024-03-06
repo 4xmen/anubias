@@ -78,8 +78,8 @@
       </h3>
       <div id="logs-content">
         logs here
-        {{project.projectFile}}
-        {{project.isSave?'save':'not save'}}
+        {{ project.projectFile }}
+        {{ project.isSave ? 'save' : 'not save' }}
       </div>
     </div>
   </div>
@@ -233,37 +233,43 @@ export default {
     },
     initialLoadProject() {
       // check if project
-      try {
-        if (this.$store.state.project.pages.length === []) {
-          this.$store.dispatch('project/loadProject', storage.get('lastCreatedProject'));
 
-        } else {
-          // set entry point  to active
-          this.$store.dispatch('ide/setActivePage', this.$store.state.project.project.entryPoint);
+      if (this.$store.state.project.projectFile == '') {
+
+        try {
+          if (this.$store.state.project.pages.length === []) {
+            this.$store.dispatch('project/loadProject', storage.get('lastCreatedProject'));
+
+          } else {
+            // set entry point  to active
+            this.$store.dispatch('ide/setActivePage', this.$store.state.project.project.entryPoint);
+          }
+        } catch (e) {
+          console.log(e.message);
+          this.$store.dispatch('project/loadProject', storage.get('lastLoadedProject'));
         }
-      } catch (e) {
-        console.log(e.message);
-        this.$store.dispatch('project/loadProject', storage.get('lastCreatedProject'));
       }
+
       // check backup
-      if (storage.get('backupProject') != null) {
-        console.log(storage.get('backupProject'));
-        setTimeout(function () {
-          // if (confirm('We have unsaved backup, Do you want to restore it?')){
-          //   this.$store.dispatch('project/restoreProject');
-          // }
-          this.$store.dispatch('ide/showConfirm', {
-            onConfirm() {
+      if (!this.$store.state.ide.disableRestoreProject) {
+        if (storage.get('backupProject') != null) {
+          // console.log(storage.get('backupProject'));
 
-              this.$store.dispatch('project/restoreProject');
-            },
-            onCancel() {
+          setTimeout(function () {
+            this.$store.dispatch('ide/showConfirm', {
+              onConfirm() {
 
-            },
-            text: 'We have unsaved backup, Do you want to restore it?',
-            title: 'Project restore confirm',
-          });
-        }.bind(this), 1000);
+                this.$store.dispatch('project/restoreProject');
+              },
+              onCancel() {
+
+              },
+              text: 'We have unsaved backup, Do you want to restore it?',
+              title: 'Project restore confirm',
+            });
+          }.bind(this), 1000);
+        }
+
       }
     },
   },

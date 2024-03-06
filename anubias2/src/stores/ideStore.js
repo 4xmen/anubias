@@ -119,6 +119,7 @@ const ideStore = {
         dropArea: '',
         onEditComponent: {},
         canScreenshot: false,
+        disableRestoreProject: true,
     }),
     mutations: {
         CHANGE_IDE_TITLE(state, title) {
@@ -173,6 +174,9 @@ const ideStore = {
         },
         SET_SIDEBAR_INDEX(state, index) {
             state.sideBar.activeIndex = index;
+        },
+        SET_PROJECT_LOADING(state, payload) {
+            state.projectLoading = payload;
         },
         SHOW_CONFIRM(state, data) {
             // console.log('fire confirm!',data);

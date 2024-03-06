@@ -37,6 +37,8 @@ const projectStore = {
             toast.success("Project initialized...");
         },
         LOAD_PROJECT(state, project) {
+
+            console.log('prjj',project.pages.length);
             state.project = project;
 
             // if this comment not need again must remove

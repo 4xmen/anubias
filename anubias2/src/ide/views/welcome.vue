@@ -64,7 +64,7 @@ export default {
       this.$router.push('/new-project');
     },
     async openProject(){
-      const result = await ipcRenderer.invoke('run-menu-event','&Open project');
+      await ipcRenderer.invoke('run-menu-event','&Open project');
     }
   }
 }
