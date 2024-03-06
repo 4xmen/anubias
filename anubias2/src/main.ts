@@ -44,7 +44,7 @@ store.subscribe((mutation, state) => {
         let projectName = state.project.project.name;
         let  project = JSON.stringify(state.project.project);
         const isSaved = state.project.isSave;
-        console.log('savee', isSaved);
+        // console.log('savee', isSaved);
         // check if project changed then:
         // update menu
         // promise to screenshot

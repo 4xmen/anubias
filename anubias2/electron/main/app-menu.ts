@@ -65,7 +65,7 @@ class AppMenu {
                         const projectContent = fs.readFileSync(fileName, 'utf-8');
                         const projectData = JSON.parse(projectContent);
                         this._win.webContents.send('load-project-data',projectData);
-                        console.log(projectData.pages.length);
+                        // console.log(projectData.pages.length);
                         this._win.webContents.send('update-project-data', 'projectFile', fileName);
                         this._win.webContents.send('update-project-data', 'projectPath', path.dirname(fileName));
                         return  true
