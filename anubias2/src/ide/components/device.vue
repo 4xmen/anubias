@@ -218,13 +218,15 @@ export default {
   },
   mounted() {
     this.timerPic = setInterval(async () => {
-      // update previw image
-      await this.$store.dispatch('project/updatePagePreview', {
-        pageIndex: this.activePageIndex,
-        image: await createScreenShot('#component-holder'),
-      });
-      // create project backup
-      this.$store.dispatch('project/backupProject');
+      // update previwe image
+      if (!this.isSave){
+        await this.$store.dispatch('project/updatePagePreview', {
+          pageIndex: this.activePageIndex,
+          image: await createScreenShot('#component-holder'),
+        });
+        // create project backup
+        this.$store.dispatch('project/backupProject');
+      }
     }, 10000, this);
   },
   unmounted() {
@@ -236,7 +238,8 @@ export default {
       pages: 'pages'
     }),
     ...mapState('project', {
-      project: 'project'
+      project: 'project',
+      isSave:'isSave'
     }),
     ...mapState('ide', ['defaultComponents']),
     ...mapGetters(
