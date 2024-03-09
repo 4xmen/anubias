@@ -1,0 +1,75 @@
+{
+  "type": "container",
+  "name": "container",
+  "align": "center",
+  "width": "120",
+  "height": "120",
+  "padding": "0",
+  "margin": "0",
+  "color": "null",
+  "border": "1",
+  "borderColor": "Colors.green",
+  "borderRadius": "5",
+  "onPressed": "// run when press on this button\n",
+  "onLongPress": "// run when long press on this button\n",
+  "child": "null",
+  "visible": true,
+  "validator": {
+    "version": 2,
+    "name": {
+      "type": "String",
+      "regex": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+      "state": ""
+    },
+    "align" : {
+      "type": "String",
+      "regex": "^(null|left|right|center)$",
+      "state": "input"
+    },
+    "width" : {
+      "type": "String|Number",
+      "regex":  "^\\d*\\.?\\d+%?$",
+      "state": "input"
+    },
+    "height" : {
+      "type": "String|Number",
+      "regex":  "^\\d*\\.?\\d+%?$",
+      "state": "input"
+    },
+    "padding" : {
+      "type": "String|Number",
+      "regex": "^\\d+(,\\d+){0,3}$",
+      "state": "input"
+    },
+    "margin" : {
+      "type": "String|Number",
+      "regex": "^\\d+(,\\d+){0,3}$",
+      "state": "input"
+    },
+    "color":{
+      "type": "String|Color",
+      "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
+      "state": "input"
+    },
+    "border" : {
+      "type": "String|Number",
+      "regex": "^\\d+(,\\d+){0,3}$",
+      "state": "input"
+    },
+    "borderColor":{
+      "type": "String|Color",
+      "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
+      "state": "input"
+    },
+    "borderRadius" : {
+      "type": "String|Number",
+      "regex": "^\\d+(,\\d+){0,3}$",
+      "state": "input"
+    },
+    "visible": {
+      "type": "Boolean",
+      "regex": "^(true|false)$",
+      "state": "input"
+    }
+  }
+}

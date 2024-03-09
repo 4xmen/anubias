@@ -1,35 +1,30 @@
-.DS_Store
-node_modules
-/dist
-/build
-
-
-# local env files
-.env.local
-.env.*.local
-
-# Log files
+# Logs
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+dist-electron
+release
+*.local
 
 # Editor directories and files
+.vscode/.debug.env
 .idea
-.vscode
+.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
-#other resource
-/resources/*.json
-/resources/*.xz
-/resources/flutter
-
-#Electron-builder output
-/dist_electron
-
+# lockfile
 package-lock.json
+pnpm-lock.yaml
 yarn.lock

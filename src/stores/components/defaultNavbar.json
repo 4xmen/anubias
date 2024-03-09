@@ -1,0 +1,48 @@
+{
+  "type": "nav",
+  "name": "nav",
+  "color": "null",
+  "textColor": "null",
+  "unselectedItemColor": "null",
+  "index": 0,
+  "items": [
+    {
+      "label": "Setting",
+      "icon": "settings"
+    },
+    {
+      "label": "Help",
+      "icon": "help"
+    }
+  ],
+  "onTap": "// when tab and item `index` new is selected \n ",
+  "visible": true,
+  "validator": {
+    "version": 2,
+    "name": {
+      "type": "String",
+      "regex": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+      "state": ""
+    },
+    "color": {
+      "type": "String|Color",
+      "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
+      "state": "input"
+    },
+    "textColor": {
+      "type": "String|Color",
+      "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
+      "state": "input"
+    },
+    "unselectedItemColor": {
+      "type": "String|Color",
+      "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
+      "state": "input"
+    },
+    "index" : {
+      "type": "String",
+      "regex": "^[0-9]{1,2}$",
+      "state": "input"
+    }
+  }
+}

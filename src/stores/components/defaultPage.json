@@ -1,0 +1,44 @@
+{
+  "type": "page",
+  "name": "page",
+  "scrollable": true,
+  "safeArea": false,
+  "padding": "15",
+  "align": "null",
+  "onShow": "// run when show page \n",
+  "preview": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAMgAQMAAACj7s1kAAABhGlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw0AcxV9bpSIVEQuKOGSonSyKijhqFYpQIdQKrTqYXPoFTRqSFBdHwbXg4Mdi1cHFWVcHV0EQ/ABxdXFSdJES/5cUWsR4cNyPd/ced+8Af73MVLNjHFA1y0gl4kImuyoEXxHAAPowhqjETH1OFJPwHF/38PH1LsazvM/9OXqUnMkAn0A8y3TDIt4gnt60dM77xGFWlBTic+JRgy5I/Mh12eU3zgWH/TwzbKRT88RhYqHQxnIbs6KhEk8RRxRVo3x/xmWF8xZntVxlzXvyF4Zy2soy12kOI4FFLEGEABlVlFCGhRitGikmUrQf9/APOX6RXDK5SmDkWEAFKiTHD/4Hv7s185MTblIoDnS+2PbHCBDcBRo12/4+tu3GCRB4Bq60lr9SB2Y+Sa+1tMgR0LsNXFy3NHkPuNwBBp90yZAcKUDTn88D72f0TVmg/xboXnN7a+7j9AFIU1fJG+DgEIgWKHvd491d7b39e6bZ3w+xeHLAzIRe2AAAAANQTFRF////p8QbyAAAAAlwSFlzAAAuIwAALiMBeKU/dgAAAAd0SU1FB+cDFxExFIyYjuQAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAANElEQVR42u3BAQEAAACCIP+vbkhAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfBl54AABZGVj/QAAAABJRU5ErkJggg==",
+  "children": {
+    "visual": [],
+    "nonVisual": []
+  },
+  "tie": [
+  ],
+  "validator": {
+    "version": 2,
+    "name": {
+      "type": "String",
+      "regex": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+      "state": ""
+    },
+    "scrollable": {
+      "type": "Boolean",
+      "regex": "^(true|false)$",
+      "state": "input"
+    },
+    "safeArea": {
+      "type": "Boolean",
+      "regex": "^(true|false)$",
+      "state": "input"
+    },
+    "padding": {
+      "type": "String|Number",
+      "regex": "^\\d+(,\\d+){0,3}$",
+      "state": "input"
+    },
+    "align": {
+      "type": "String",
+      "regex": "^(null|left|right|center)$",
+      "state": "input"
+    }
+  }
+}
