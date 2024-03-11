@@ -11,7 +11,8 @@
           <label for="name">
             Project name
           </label>
-          <input ref="name" type="text" id="name" @blur="updatePackage" v-model="newProject.name" placeholder="Project name here..."/>
+          <input ref="name" type="text" id="name" @blur="updatePackage" v-model="newProject.name"
+                 placeholder="Project name here..."/>
         </div>
         <div class="input-container">
           <label for="version">
@@ -34,13 +35,13 @@
                   placeholder="Project description here..."></textarea>
       </div>
       <div class="row-equal">
-      <div class="input-container">
-        <label for="page-count">
-          Initial page count
-        </label>
-        <input type="number" min="1" max="10" id="page-count" v-model="newProject.pageCount"
-               placeholder="Number of page you want to initial project..."/>
-      </div>
+        <div class="input-container">
+          <label for="page-count">
+            Initial page count
+          </label>
+          <input type="number" min="1" max="10" id="page-count" v-model="newProject.pageCount"
+                 placeholder="Number of page you want to initial project..."/>
+        </div>
         <div class="input-container">
           <label for="icon">
             Icon
@@ -196,6 +197,7 @@ import {mapActions} from 'vuex';
 import prjTemplate from '../../stores/assets/projectTemplate.json';
 import defaultPage from '../../stores/components/defaultPage.json';
 import {useToast} from "vue-toastification";
+
 export default {
   name: "new-project",
   components: {steps, toggle},
@@ -229,11 +231,11 @@ export default {
   },
   computed: {
     ...mapState(['ide', 'project']),
-    getIcon(){
+    getIcon() {
       console.log(this.newProject.icon);
-      if (this.newProject.icon == null){
+      if (this.newProject.icon == null) {
         return "./src/ide/assets/svg/logo/anubias-logo.svg";
-      }else{
+      } else {
         return this.newProject.icon;
       }
     }
@@ -269,14 +271,14 @@ export default {
         this.stepIndex++;
       }
     },
-    updatePackage(){
+    updatePackage() {
       let packageName = this.newProject.packageName.split(".");
-      packageName[packageName.length -1 ] = this.newProject.name.split(' ').join('');
+      packageName[packageName.length - 1] = this.newProject.name.split(' ').join('');
       this.newProject.packageName = packageName.join('.');
       // this.$forceUpdate();
     },
-    selectIcon(){
-        document.querySelector('#change-icon').click();
+    selectIcon() {
+      document.querySelector('#change-icon').click();
     },
     selectImage(e) {
       const toast = useToast();
@@ -292,12 +294,14 @@ export default {
         fileReader.onload = function (fileLoadedEvent) {
           let img = new Image();
           base64 = fileLoadedEvent.target.result;
-          img.onload = function() {
-            if (img.width === 512 && img.height === 512){
+          img.onload = function () {
+            if (base64.split(';')[0] !== "data:image/png") {
+              toast.error("Image is not png!");
+            } else if (img.width === 512 && img.height === 512) {
               self.newProject.icon = base64;
               toast.info("Icon changed");
-            }else{
-              toast.warning("You need select image (512x512), Your image is: ("+ img.width + 'x'+ img.height+")");
+            } else {
+              toast.warning("You need select image (512x512), Your image is: (" + img.width + 'x' + img.height + ")");
             }
           };
 
@@ -362,18 +366,18 @@ export default {
 }
 
 
-#select-icon{
+#select-icon {
   margin-top: 4px;
   //width: 150px;
 }
 
-#app-logo{
+#app-logo {
   width: 110px;
   margin: auto;
   display: block;
 }
 
-#change-icon{
+#change-icon {
   display: none;
 }
 
