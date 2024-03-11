@@ -11,7 +11,7 @@
           <label for="name">
             Project name
           </label>
-          <input ref="name" type="text" id="name" v-model="newProject.name" placeholder="Project name here..."/>
+          <input ref="name" type="text" id="name" @blur="updatePackage" v-model="newProject.name" placeholder="Project name here..."/>
         </div>
         <div class="input-container">
           <label for="version">
@@ -33,12 +33,27 @@
         <textarea id="description" v-model="newProject.description"
                   placeholder="Project description here..."></textarea>
       </div>
+      <div class="row-equal">
       <div class="input-container">
         <label for="page-count">
           Initial page count
         </label>
         <input type="number" min="1" max="10" id="page-count" v-model="newProject.pageCount"
                placeholder="Number of page you want to initial project..."/>
+      </div>
+        <div class="input-container">
+          <label for="icon">
+            Icon
+          </label>
+          <div class="material-button" id="select-icon" @click="selectIcon">
+            <i class="ri-leaf-line"></i>
+            Change Icon
+          </div>
+          <input type="file" id="change-icon" accept="image/png" @change="selectImage">
+        </div>
+        <div>
+          <img :src="getIcon" id="app-logo" alt="[app icon]">
+        </div>
       </div>
     </div>
     <div id="theme" v-if="stepIndex === 1">
@@ -180,7 +195,7 @@ import {mapState} from 'vuex';
 import {mapActions} from 'vuex';
 import prjTemplate from '../../stores/assets/projectTemplate.json';
 import defaultPage from '../../stores/components/defaultPage.json';
-
+import {useToast} from "vue-toastification";
 export default {
   name: "new-project",
   components: {steps, toggle},
@@ -213,7 +228,15 @@ export default {
     btnWave();
   },
   computed: {
-    ...mapState(['ide', 'project'])
+    ...mapState(['ide', 'project']),
+    getIcon(){
+      console.log(this.newProject.icon);
+      if (this.newProject.icon == null){
+        return "./src/ide/assets/svg/logo/anubias-logo.svg";
+      }else{
+        return this.newProject.icon;
+      }
+    }
   },
   methods: {
     ...mapActions({
@@ -245,7 +268,44 @@ export default {
       } else {
         this.stepIndex++;
       }
-    }
+    },
+    updatePackage(){
+      let packageName = this.newProject.packageName.split(".");
+      packageName[packageName.length -1 ] = this.newProject.name.split(' ').join('');
+      this.newProject.packageName = packageName.join('.');
+      // this.$forceUpdate();
+    },
+    selectIcon(){
+        document.querySelector('#change-icon').click();
+    },
+    selectImage(e) {
+      const toast = useToast();
+      let self = this;
+      if (!e.target.files) return;
+
+      let files = e.target.files;
+      for (let i = 0; i < files.length; i++) {
+
+        let base64;
+        let fileToLoad = e.target.files[i]
+        let fileReader = new FileReader();
+        fileReader.onload = function (fileLoadedEvent) {
+          let img = new Image();
+          base64 = fileLoadedEvent.target.result;
+          img.onload = function() {
+            if (img.width === 512 && img.height === 512){
+              self.newProject.icon = base64;
+              toast.info("Icon changed");
+            }else{
+              toast.warning("You need select image (512x512), Your image is: ("+ img.width + 'x'+ img.height+")");
+            }
+          };
+
+          img.src = base64;
+        };
+        fileReader.readAsDataURL(fileToLoad);
+      }
+    },
   }
 }
 </script>
@@ -300,4 +360,21 @@ export default {
 .row-equal > div {
   padding: .5rem;
 }
+
+
+#select-icon{
+  margin-top: 4px;
+  //width: 150px;
+}
+
+#app-logo{
+  width: 110px;
+  margin: auto;
+  display: block;
+}
+
+#change-icon{
+  display: none;
+}
+
 </style>

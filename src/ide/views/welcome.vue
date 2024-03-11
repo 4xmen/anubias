@@ -45,26 +45,25 @@
 
 <script>
 import {ipcRenderer} from 'electron';
+
 export default {
   name: "welcome",
   data: () => {
     return {}
   },
-  computed:{
-
-  },
-  methods:{
+  computed: {},
+  methods: {
     openWebsite(url) {
-      ipcRenderer.send('open-website',url);
+      ipcRenderer.send('open-website', url);
     },
-    goSetting(){
+    goSetting() {
       this.$router.push('/settings');
     },
-    goNewProject(){
+    goNewProject() {
       this.$router.push('/new-project');
     },
-    async openProject(){
-      await ipcRenderer.invoke('run-menu-event','&Open project');
+    async openProject() {
+      await ipcRenderer.invoke('run-menu-event', '&Open project');
     }
   }
 }
@@ -76,10 +75,12 @@ h4 {
   font-size: 110%;
   padding-top: .3em;
 }
+
 img {
   height: 5.5em;
   float: right;
 }
+
 #welcome-grid {
   display: grid;
   grid-template-columns: repeat(21, 1fr);
@@ -87,11 +88,12 @@ img {
   grid-gap: 1rem;
 }
 
-#welcome-grid i{
+#welcome-grid i {
   -webkit-text-stroke-color: var(--darker-bg);
   -webkit-text-stroke-width: 1px;
 }
-#welcome-grid .big-icon{
+
+#welcome-grid .big-icon {
   -webkit-text-stroke-color: var(--darker-bg);
   -webkit-text-stroke-width: 2px;
 }
@@ -187,7 +189,7 @@ img {
   margin: -.4em -32px 0 .5em;
 }
 
-.container{
+.container {
   user-select: none;
 }
 
