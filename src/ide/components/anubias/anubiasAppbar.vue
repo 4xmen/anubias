@@ -1,7 +1,6 @@
 <template>
   <div>
-    <div class="safe-area" v-if="currentPage.safeArea" :style="getStyleSafeArea">
-
+    <div class="safe-area" :style="'background-color:' + color2web(properties.color, false) ">
     </div>
     <div id="appBar" :style="getAppStyle">
       <i class="back material-icons" :style="getBackStyle" v-if="properties.back">{{isRTL?'arrow_forward':'arrow_back'}}</i>
