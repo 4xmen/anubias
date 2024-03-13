@@ -121,6 +121,26 @@ let fixFlutterObjectTitle = function (title) {
     return tmp[tmp.length - 1];
 };
 
+
+/**
+ * detect is lang rtl or not
+ * @param langCode like "en" or "fa"
+ * @returns {boolean}
+ */
+let isRTLLanguage = function (langCode) {
+    // List of RTL language codes
+    const rtlLanguages = [
+        'ar', 'arb', 'arq', 'ary', 'az', 'ckb', 'dv', 'fa', 'he', 'khw', 'ks', 'ku', 'mzn', 'nqo',
+        'pnb', 'ps', 'sd', 'ug', 'ur', 'uz', 'yi', 'zgh'
+    ];
+
+    // Convert the input language code to lowercase for case-insensitive matching
+    langCode = langCode.toLowerCase();
+
+    // Check if the language code is in the list of RTL languages
+    return rtlLanguages.includes(langCode);
+}
+
 export {
     color2web,
     getColor,
@@ -129,5 +149,6 @@ export {
     createScreenShot,
     arrayMove,
     unixTimestamp,
-    fixFlutterObjectTitle
+    fixFlutterObjectTitle,
+    isRTLLanguage,
 };

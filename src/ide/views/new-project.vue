@@ -71,14 +71,9 @@
         </template>
       </div>
       <div class="row-equal">
-        <div>
-          <toggle label="Is RTL?" v-model="newProject.isRTL" :size=".8"></toggle>
-        </div>
-        <div>
+        <div style="padding-top: 2.63rem">
           <toggle label="Is dark?" v-model="newProject.isDark" :size=".8"></toggle>
         </div>
-      </div>
-      <div class="row-equal">
         <div class="input-container">
           <label for="lang">
             Project language
