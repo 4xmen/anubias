@@ -70,10 +70,10 @@
           </div>
         </template>
       </div>
+      <p>
+        This options just for start application, You can change them while app running:
+      </p>
       <div class="row-equal">
-        <div style="padding-top: 2.63rem">
-          <toggle label="Is dark?" v-model="newProject.isDark" :size=".8"></toggle>
-        </div>
         <div class="input-container">
           <label for="lang">
             Project language
@@ -85,6 +85,10 @@
             Project country
           </label>
           <input type="text" id="country" v-model="newProject.country" placeholder="Project county..."/>
+        </div>
+        <div>
+          <div class="fix-top"></div>
+          <toggle label="Is dark?" v-model="newProject.isDark" :size=".8"></toggle>
         </div>
       </div>
 
@@ -311,6 +315,10 @@ export default {
 
 <style scoped>
 
+p{
+  padding: 1.45em 0 0;
+}
+
 #colors {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -376,4 +384,7 @@ export default {
   display: none;
 }
 
+.fix-top{
+  padding-top: 2.2em;
+}
 </style>
