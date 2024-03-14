@@ -266,6 +266,7 @@ mixin Paddinator {
   }
 }
 
+
 mixin Marginator {
   String margin = '15';
 
@@ -300,26 +301,40 @@ mixin Marginator {
   }
 }
 
-class AnubiasPreloader with Paddinator, Alignator, Widthator, Heightator {
+mixin ColorFixer{
+  late BuildContext context;
+  Color fixColor(Color? color){
+    if (color == null){
+      return  Theme.of(context).colorScheme.primary;
+    }else{
+      return color;
+    }
+  }
+}
+
+class AnubiasPreloader with Paddinator, Alignator, Widthator, Heightator, ColorFixer {
+
   late BuildContext context;
   String width;
 
   String height;
   String align;
-  Color color;
+  Color? color;
   bool visible;
 
 
   AnubiasPreloader({
-    this.width = "50",
-    this.height = "50",
+    this.width = "150",
+    this.height = "150",
     this.align = 'center',
     this.visible = true,
-    this.color = Colors.green,
+    this.color = null,
     required this.context,
   });
+  
 
   Offstage generate() {
+    
     return Offstage(
       offstage: !visible,
       child: Container(
@@ -329,7 +344,8 @@ class AnubiasPreloader with Paddinator, Alignator, Widthator, Heightator {
           width: getWidth(),
           height: getHeight(),
           child:  CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(color),
+            valueColor: AlwaysStoppedAnimation<Color>(fixColor(color)),
+            strokeWidth: getWidth() / 10,
           ),
         ),
       ),
