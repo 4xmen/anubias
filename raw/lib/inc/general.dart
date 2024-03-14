@@ -333,7 +333,7 @@ class AnubiasPreloader with Paddinator, Alignator, Widthator, Heightator, ColorF
   });
   
 
-  Offstage generate() {
+  Offstage toWidget() {
     
     return Offstage(
       offstage: !visible,

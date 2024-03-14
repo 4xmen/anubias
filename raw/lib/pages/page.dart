@@ -15,18 +15,19 @@ class RawPage extends StatefulWidget {
   State<RawPage> createState() => _RawPageState();
 }
 
-class _RawPageState extends State<RawPage> {
+class _RawPageState extends State<RawPage> with Paddinator, Alignator {
 
-  late AnubiasPreloader preloader1 ;
+  /** define anubias class **/
+  // late AnubiasPreloader preloader1 ;
 
 
   @override
   void initState() {
     super.initState();
-    preloader1 = AnubiasPreloader(context: context);
-    preloader1.width = "250";
-    preloader1.height = "250";
-    // preloader1.color =
+
+
+    /** initial anubias object & declare default value **/
+    // preloader1 = AnubiasPreloader(context: context);
   }
 
   @override
@@ -36,43 +37,20 @@ class _RawPageState extends State<RawPage> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text("anubias app"),
       ),
-      body: Center(
+      body: Container(
+        padding: getPadding() ,
+        alignment: getAlign(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            preloader1.generate(),
+            /** render objects inn page **/
           ],
         ),
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FloatingActionButton(
-            onPressed: () {
-              // widget.changeAppData(newLanf = "IR",newCoutry= "");
-              setState(() {
-                // widget.application.lang = "fa";
-                // widget.application.country = "IR";
-                widget.application.isDark = !widget.application.isDark;
-                widget.application.lang = "en";
-                widget.application.country = "US";
-                widget.application.color = Colors.amber;
-              });
-            },
-            tooltip: 'Toggle Theme',
-            child: Icon(Icons.brightness_6),
-          ),
-          FloatingActionButton(
-            onPressed: () {
-              // widget.changeAppData(newLanf = "IR",newCoutry= "");
-              setState(() {
-                preloader1.color = Colors.lightBlue;
-
-              });
-            },
-            tooltip: 'Toggle Theme',
-            child: Icon(Icons.toggle_on),
-          ),
+          /** float buttons ***/
         ],
       ),
     );
