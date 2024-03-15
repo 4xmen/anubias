@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 // import 'package:smart_select/smart_select.dart';
 import 'dart:convert';
 
-mixin Alignator {
+mixin Alianable {
   String align = 'center';
   bool _isTextAlign = false;
 
@@ -27,7 +27,7 @@ mixin Alignator {
   }
 }
 
-mixin AlignatorChildren {
+mixin AlianableChildren {
   String align = 'center';
 
   getAlignCross() {
@@ -57,7 +57,7 @@ mixin AlignatorChildren {
   }
 }
 
-mixin Radidusator {
+mixin Radiusable {
   String borderRadius = '5';
 
   getBorderRadius() {
@@ -96,7 +96,7 @@ mixin Radidusator {
   }
 }
 
-mixin Widthator {
+mixin Widthable {
   String width = '';
   late BuildContext context;
 
@@ -112,7 +112,7 @@ mixin Widthator {
     return double.parse(this.width);
   }
 }
-mixin Heightator {
+mixin Heightable {
   String height = '';
   late BuildContext context;
 
@@ -129,7 +129,7 @@ mixin Heightator {
   }
 }
 
-mixin Borderator {
+mixin Borderable {
   String border = '0';
   Color borderColor = Colors.black;
 
@@ -232,7 +232,7 @@ mixin Borderator {
     }
   }
 }
-mixin Paddinator {
+mixin Paddinable {
   String padding = '15';
 
   getPadding() {
@@ -267,7 +267,7 @@ mixin Paddinator {
 }
 
 
-mixin Marginator {
+mixin Paddinable {
   String margin = '15';
 
   getMargin() {
@@ -312,7 +312,7 @@ mixin ColorFixer{
   }
 }
 
-class AnubiasPreloader with Paddinator, Alignator, Widthator, Heightator, ColorFixer {
+class AnubiasPreloader with Paddinable, Alianable, Widthable, Heightable, ColorFixer {
 
   late BuildContext context;
   String width;
