@@ -15,19 +15,16 @@ class RawPage extends StatefulWidget {
   State<RawPage> createState() => _RawPageState();
 }
 
-class _RawPageState extends State<RawPage> with Paddinator, Alignator {
-
+class _RawPageState extends State<RawPage> with Paddinable, Alianable {
   /** define anubias class **/
-  // late AnubiasPreloader preloader1 ;
-
+  late AnubiasPreloader preloader1;
 
   @override
   void initState() {
     super.initState();
 
-
     /** initial anubias object & declare default value **/
-    // preloader1 = AnubiasPreloader(context: context);
+    preloader1 = AnubiasPreloader(context: context);
   }
 
   @override
@@ -38,11 +35,12 @@ class _RawPageState extends State<RawPage> with Paddinator, Alignator {
         title: Text("anubias app"),
       ),
       body: Container(
-        padding: getPadding() ,
+        padding: getPadding(),
         alignment: getAlign(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            preloader1.toWidget(),
             /** render objects inn page **/
           ],
         ),
@@ -51,6 +49,16 @@ class _RawPageState extends State<RawPage> with Paddinator, Alignator {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           /** float buttons ***/
+          FloatingActionButton.extended(
+            onPressed: () {
+              // Add your onPressed code here!
+              setState(() {
+                preloader1.color = Colors.tealAccent;
+              });
+            },
+            label: const Text('Add'),
+            icon: const Icon(Icons.add),
+          ),
         ],
       ),
     );

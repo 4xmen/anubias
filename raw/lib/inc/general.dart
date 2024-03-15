@@ -267,7 +267,7 @@ mixin Paddinable {
 }
 
 
-mixin Paddinable {
+mixin Marginable {
   String margin = '15';
 
   getMargin() {
