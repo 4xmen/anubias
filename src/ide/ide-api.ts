@@ -35,6 +35,10 @@ ipcRenderer.on('storage-add-recent-project', async (_event, ...args) => {
                 recentProjects.splice(recentProjects.indexOf(fileName),1);
             }
             recentProjects = [fileName].concat(recentProjects);
+            // limit 10 for recent project
+            if (recentProjects.length == 11){
+                recentProjects.pop();
+            }
             storage.set('recent-projects',recentProjects);
         }
         console.log(recentProjects);
