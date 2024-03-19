@@ -84,6 +84,7 @@ const ideStore = {
         pages: {
             currentPage: {},
         },
+        recentProject:[],
         sideBar:{
           activeIndex: 0,
         },
@@ -189,7 +190,7 @@ const ideStore = {
         },
         HIDE_CONFIRM(state) {
             state.confirm.enabled = false;
-        }
+        },
     },
     actions: {
         setIdeTitle: {
@@ -276,6 +277,11 @@ const ideStore = {
                 state.version.minor + '.' +
                 state.version.patch + '-' +
                 state.version.suffix;
+        },
+        recentProjectList(state,getters, rootState){
+            // commit here
+            state.recentProject = storage.get('recent-projects');
+            return state.recentProject;
         },
         currentPage(state) {
             return state.pages.currentPage;

@@ -22,6 +22,13 @@
           <i class="ri-history-line"></i>
           Recent projects
         </h2>
+        <div v-if="typeof this.recentProjectList == 'object'">
+          <ul id="recent-list">
+            <li v-for="project in this.recentProjectList">
+              {{extractFileName(project)}}
+            </li>
+          </ul>
+        </div>
       </div>
       <div id="document" @click="openWebsite('https://anubias.app/doc/#/')">
         <i class="ri-book-open-line  big-icon"></i>
@@ -45,14 +52,22 @@
 
 <script>
 import {ipcRenderer} from 'electron';
+import {mapGetters} from "vuex";
 
 export default {
   name: "welcome",
   data: () => {
     return {}
   },
-  computed: {},
+  computed: {
+    ...mapGetters(
+        'ide', ['recentProjectList']
+    ),
+  },
   methods: {
+    extractFileName(file){
+      return file.split('/')[file.split('/').length -1 ]
+    },
     openWebsite(url) {
       ipcRenderer.send('open-website', url);
     },
@@ -193,4 +208,15 @@ img {
   user-select: none;
 }
 
+
+#recent-list{
+  list-style: none;
+  text-align: start;
+  padding: 1rem ;
+}
+
+#recent-list li{
+  padding: 4px 1rem  ;
+  color: white;
+}
 </style>

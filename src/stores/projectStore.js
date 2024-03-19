@@ -51,7 +51,7 @@ const projectStore = {
             // check duplicate notify
             if (Math.round(+new Date() / 1000) > state.lastLoadProjectNotify + 2) {
                 toast.success("Project loaded...");
-                state.lastLoadProjectNotify = Math.round(+new Date() / 1000);
+                state.lastLoadProjectNotify = Math.round(+ new Date() / 1000);
             }
         },
         BACKUP_PROJECT(state) {
@@ -68,7 +68,7 @@ const projectStore = {
         ADD_COMPONENT_TO_PAGE(state, {pageIndex, isVisual, component}) {
             // console.log;
             let c = {...component};
-            // check is app app bar
+            // check is app bar
             if (c.type === 'appbar') {
                 c.name = getUniqueName(state.project.pages[pageIndex], component.name);
                 if (c.name === 'appbar2') {
