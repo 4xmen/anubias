@@ -19,13 +19,31 @@ ipcRenderer.on('redirect', (_event, ...args) => {
 });
 
 //Listen for async message from main process to get data
-ipcRenderer.on('electron-store-get-data', (_event, key) => {
-    _event.sender.send('electron-store-send-data', storage.get(key));
-})
+ipcRenderer.on('electron-storage-get-data', (_event, key) => {
+    _event.sender.send('electron-storage-send-data', storage.get(key));
+});
+//Listen adding new recent project
+ipcRenderer.on('storage-add-recent-project', async (_event, ...args) => {
+    if (typeof  args[0] !== "undefined"){
+        const fileName = args[0];
+        let recentProjects : any = await storage.get('recent-projects');
+        if (typeof  recentProjects == "undefined"){
+            recentProjects = [fileName];
+            storage.set('recent-projects',recentProjects);
+        }else{
+            if (recentProjects.indexOf(fileName) != -1){
+                recentProjects.splice(recentProjects.indexOf(fileName),1);
+            }
+            recentProjects = [fileName].concat(recentProjects);
+            storage.set('recent-projects',recentProjects);
+        }
+        console.log(recentProjects);
+    }
+});
 
 //Listen for async message from main process to set data
-ipcRenderer.on('electron-store-set-data', (_event, key, data) => {
-    _event.sender.send('electron-store-send-data', storage.set(key, data));
+ipcRenderer.on('electron-storage-set-data', (_event, key, data) => {
+    _event.sender.send('electron-storage-send-data', storage.set(key, data));
 })
 
 ipcRenderer.on('update-project-data', (e, key, data) => {

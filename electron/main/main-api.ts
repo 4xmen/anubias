@@ -2,7 +2,7 @@ import {ipcMain, shell, BrowserWindow, Menu} from 'electron';
 import {AppMenu} from './app-menu';
 
 const Store = require('electron-store');
-const store: any = new Store();
+const storage: any = new Store();
 let win: any = null;
 let menuapp: any = null;
 let lastProject: string = '';
@@ -16,8 +16,8 @@ ipcMain.on('open-website', async (_event, ...args) => {
     await shell.openExternal(args[0]);
 });
 
-ipcMain.handle('electron-store-get-data', (event, key) => {
-    return store.get(key);
+ipcMain.handle('electron-storage-get-data', (event, key) => {
+    return storage.get(key);
 });
 
 //

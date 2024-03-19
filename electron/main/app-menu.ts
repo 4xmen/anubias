@@ -68,7 +68,8 @@ class AppMenu {
                         // console.log(projectData.pages.length);
                         this._win.webContents.send('update-project-data', 'projectFile', fileName);
                         this._win.webContents.send('update-project-data', 'projectPath', path.dirname(fileName));
-                        return  true
+                        this._win.webContents.send('storage-add-recent-project', fileName);
+                        return  true;
                     } catch (e) {
                         console.log(e.message);
                         this._win.webContents.send('toast', 'error', 'file load error: '+e.message);
@@ -336,12 +337,14 @@ class AppMenu {
                     enabled: this._hasProject && this.getMenuState('canSave'),
                     click: async () => {
                         // await this.ide.createProject();
-                        if (this._win.vuexStore.project.projectFile != '') {
+                        const fileName = this._win.vuexStore.project.projectFile;
+                        if (fileName != '') {
                             try {
 
-                                await fs.writeFileSync(this._win.vuexStore.project.projectFile, JSON.stringify(this._win.vuexStore.project.project), 'utf-8');
+                                await fs.writeFileSync(fileName, JSON.stringify(this._win.vuexStore.project.project), 'utf-8');
                                 this._win.webContents.send('toast', 'success', 'Project saved!');
                                 this._win.webContents.send('update-project-data', 'isSave', true);
+                                this._win.webContents.send('storage-add-recent-project', fileName);
                                 this._menuStats['canSave'] = false;
                             } catch (e) {
                                 this._win.webContents.send('toast', 'error', 'Save error: ' + e.message);
@@ -387,6 +390,7 @@ class AppMenu {
                                 this._win.webContents.send('update-project-data', 'isSave', true);
                                 this._win.webContents.send('update-project-data', 'projectFile', result.filePath);
                                 this._win.webContents.send('update-project-data', 'projectPath', path.dirname(result.filePath));
+                                this._win.webContents.send('storage-add-recent-project', result.filePath);
                             } catch (e) {
                                 console.log(e.message);
                                 this._win.webContents.send('toast', 'error', 'Save error: ' + e.message);
