@@ -9,7 +9,7 @@ let ide = store.state.ide;
  * @param color
  * @returns {string|*}
  */
-let getColor = (color) => {
+const getColor = (color) => {
     if (color.indexOf('0x') !== -1) {
         return '#' + color.substr(10, 6) + color.substr(8, 2);
     }
@@ -28,7 +28,7 @@ let getColor = (color) => {
  * @param isActiveWidget
  * @returns {string|*}
  */
-let color2web = (color, isActiveWidget = true) => {
+const color2web = (color, isActiveWidget = true) => {
     if (color === 'null') {
         if (isActiveWidget) {
             return getColor(project.project.appColor);
@@ -49,7 +49,7 @@ let color2web = (color, isActiveWidget = true) => {
  * @param isHeight : Boolean is height value
  * @returns {string} size with px | %
  */
-let getSize = (value, isHeight = false) => {
+const getSize = (value, isHeight = false) => {
     // WIP: need complete later
     if (value.toString().indexOf('%') != -1) {
         return value;
@@ -63,7 +63,7 @@ let getSize = (value, isHeight = false) => {
  * @returns {string}
  */
 
-let calcPaddingOrMargin = (value) => {
+const calcPaddingOrMargin = (value) => {
     try {
         let calced = value.split(',');
         let result = '';
@@ -81,7 +81,7 @@ let calcPaddingOrMargin = (value) => {
  * @param selector css selector
  * @returns {Promise<string>} base64 string
  */
-let createScreenShot = async (selector) => {
+const createScreenShot = async (selector) => {
     return await htmlToImage.toPng(document.querySelector(selector));
 };
 
@@ -92,7 +92,7 @@ let createScreenShot = async (selector) => {
  * @param fromIndex
  * @param toIndex
  */
-let arrayMove = function (arr, fromIndex, toIndex) {
+const arrayMove = function (arr, fromIndex, toIndex) {
     let element = arr[fromIndex];
     arr.splice(fromIndex, 1);
     arr.splice(toIndex, 0, element);
@@ -103,7 +103,7 @@ let arrayMove = function (arr, fromIndex, toIndex) {
  * get unix timestamp
  * @returns {number}
  */
-let unixTimestamp = function () {
+const unixTimestamp = function () {
     return Math.round(+new Date() / 1000);
 };
 
@@ -113,7 +113,7 @@ let unixTimestamp = function () {
  * @param title
  * @returns {string}
  */
-let fixFlutterObjectTitle = function (title) {
+const fixFlutterObjectTitle = function (title) {
     if (title === 'null') {
         return 'Default';
     }
@@ -127,7 +127,7 @@ let fixFlutterObjectTitle = function (title) {
  * @param langCode like "en" or "fa"
  * @returns {boolean}
  */
-let isRTLLanguage = function (langCode) {
+const isRTLLanguage = function (langCode) {
     // List of RTL language codes
     const rtlLanguages = [
         'ar', 'arb', 'arq', 'ary', 'az', 'ckb', 'dv', 'fa', 'he', 'khw', 'ks', 'ku', 'mzn', 'nqo',
