@@ -1,5 +1,7 @@
 import {ipcMain, shell, BrowserWindow, Menu} from 'electron';
 import {AppMenu} from './app-menu';
+import fs from "fs";
+import path from "path";
 
 const Store = require('electron-store');
 const storage: any = new Store();
@@ -36,6 +38,29 @@ ipcMain.on("set-has-project", (event, ...args) => {
     menuapp.setHasProject(args[0]);
     let menu = Menu.buildFromTemplate(menuapp.menu());
     Menu.setApplicationMenu(menu);
+});
+/**
+ * set has project for menu build
+ */
+ipcMain.handle("open-project", async (event, ...args) => {
+    const fileName = args[0];
+    if (!fs.existsSync(fileName)){
+        return false;
+    }
+    try {
+        const projectContent = fs.readFileSync(fileName, 'utf-8');
+        const projectData = JSON.parse(projectContent);
+        win.webContents.send('load-project-data',projectData);
+        // console.log(projectData.pages.length);
+        win.webContents.send('update-project-data', 'projectFile', fileName);
+        win.webContents.send('update-project-data', 'projectPath', path.dirname(fileName));
+        win.webContents.send('storage-add-recent-project', fileName);
+    } catch(e) {
+        console.log(e.message);
+        return  false;
+    }
+
+    return  true;
 });
 
 /**

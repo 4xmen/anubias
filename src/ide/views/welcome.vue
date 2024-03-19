@@ -24,7 +24,7 @@
         </h2>
         <div v-if="typeof this.recentProjectList == 'object'">
           <ul id="recent-list">
-            <li v-for="project in this.recentProjectList">
+            <li v-for="project in this.recentProjectList" @click="openRecentProject(project)">
               {{extractFileName(project)}}
             </li>
           </ul>
@@ -53,11 +53,13 @@
 <script>
 import {ipcRenderer} from 'electron';
 import {mapGetters} from "vuex";
-
+import {useToast} from "vue-toastification";
 export default {
   name: "welcome",
   data: () => {
     return {}
+  },
+  mounted() {
   },
   computed: {
     ...mapGetters(
@@ -65,8 +67,18 @@ export default {
     ),
   },
   methods: {
+    async openRecentProject(file){
+      let r = await ipcRenderer.invoke('open-project', file);
+      if (!r){
+        const toast = useToast();
+        toast.error("Can't open project");
+      }else{
+        this.$router.push('/main');
+      }
+    },
     extractFileName(file){
-      return file.split('/')[file.split('/').length -1 ]
+      const  fileName = file.split('/')[file.split('/').length -1 ];
+      return fileName.substring(0, fileName.length -4)
     },
     openWebsite(url) {
       ipcRenderer.send('open-website', url);
@@ -216,7 +228,12 @@ img {
 }
 
 #recent-list li{
+  transition: var(--transition-duration);
   padding: 4px 1rem  ;
   color: white;
+  cursor: pointer;
+}
+#recent-list li:hover{
+  background: var(--text-hilight-darker);
 }
 </style>
