@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import '../inc/application.dart';
 import '../inc/general.dart';
 
-/*** start import all pages ***/
+/*** import all pages start ***/
 
-/*** end import all pages ***/
+/*** import all pages end ***/
 
 class RawPage extends StatefulWidget {
   const RawPage({super.key, required this.application});
@@ -16,49 +16,51 @@ class RawPage extends StatefulWidget {
 }
 
 class _RawPageState extends State<RawPage> with Paddinable, Alianable {
-  /** define anubias class **/
-  late AnubiasPreloader preloader1;
+
+  /*** define anubias class ***/
 
   @override
   void initState() {
     super.initState();
 
     /** initial anubias object & declare default value **/
-    preloader1 = AnubiasPreloader(context: context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      /*** appbar start ***/
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text("anubias app"),
       ),
-      body: Container(
-        padding: getPadding(),
-        alignment: getAlign(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            preloader1.toWidget(),
-            /** render objects inn page **/
-          ],
+      /** appbar end **/
+      body: SingleChildScrollView(
+        child: Container(
+          padding: getPadding(),
+          alignment: getAlign(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              /*** render objects in page ***/
+            ],
+          ),
         ),
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          /** float buttons ***/
+          /*** float buttons start ***/
           FloatingActionButton.extended(
             onPressed: () {
               // Add your onPressed code here!
               setState(() {
-                preloader1.color = Colors.tealAccent;
               });
             },
             label: const Text('Add'),
             icon: const Icon(Icons.add),
           ),
+          /*** float buttons end ***/
         ],
       ),
     );
