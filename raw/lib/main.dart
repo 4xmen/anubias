@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import './inc/application.dart';
 
-/*** start import all pages ***/
+/*** import all pages ***/
 import './pages/page.dart';
-/*** end import all pages ***/
 
 void main() {
   runApp(const MyApp());

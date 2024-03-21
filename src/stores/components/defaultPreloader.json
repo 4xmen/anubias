@@ -9,38 +9,38 @@
   "visible": true,
   "validator": {
     "version": 2,
-    "name" : {
+    "name": {
       "type": "String",
       "regex": "^[a-zA-Z_][a-zA-Z0-9_]*$",
       "state": ""
     },
-    "padding" : {
+    "padding": {
       "type": "String|Number",
       "regex": "^\\d+(,\\d+){0,3}$",
       "state": "input"
     },
-    "align" : {
+    "align": {
       "type": "String|Align",
       "regex": "^(null|left|right|center)$",
       "state": "input"
     },
-    "width" : {
+    "width": {
       "type": "String|Number",
-      "regex":  "^\\d*\\.?\\d+%?$",
+      "regex": "^\\d*\\.?\\d+%?$",
       "state": "input"
     },
-    "height" : {
+    "height": {
       "type": "String|Number",
-      "regex":  "^\\d*\\.?\\d+%?$",
+      "regex": "^\\d*\\.?\\d+%?$",
       "state": "input"
     },
-    "color":{
+    "color": {
       "type": "String|Color",
       "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
       "state": "input"
     },
-    "visible":{
-      "type":  "Boolean",
+    "visible": {
+      "type": "Boolean",
       "regex": "^(true|false)$",
       "state": "input"
     }

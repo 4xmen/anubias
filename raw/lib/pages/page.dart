@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import '../inc/application.dart';
 import '../inc/general.dart';
 
-/*** import all pages start ***/
+/*** import all pages ***/
 
-/*** import all pages end ***/
 
 class RawPage extends StatefulWidget {
   const RawPage({super.key, required this.application});
@@ -22,19 +21,17 @@ class _RawPageState extends State<RawPage> with Paddinable, Alianable {
   @override
   void initState() {
     super.initState();
-
     /** initial anubias object & declare default value **/
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*** appbar start ***/
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        title: Text("anubias app"),
-      ),
-      /** appbar end **/
+      /*** render header ***/
+      // appBar: AppBar(
+      //   backgroundColor: Theme.of(context).colorScheme.primary,
+      //   title: Text("anubias app"),
+      // ),
       body: SingleChildScrollView(
         child: Container(
           padding: getPadding(),
@@ -50,7 +47,7 @@ class _RawPageState extends State<RawPage> with Paddinable, Alianable {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          /*** float buttons start ***/
+          /*** render footer ***/
           FloatingActionButton.extended(
             onPressed: () {
               // Add your onPressed code here!
@@ -60,7 +57,6 @@ class _RawPageState extends State<RawPage> with Paddinable, Alianable {
             label: const Text('Add'),
             icon: const Icon(Icons.add),
           ),
-          /*** float buttons end ***/
         ],
       ),
     );

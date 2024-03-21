@@ -11,7 +11,7 @@
   },
   "tie": [
   ],
-  "validator": {
+    "validator": {
     "version": 2,
     "name": {
       "type": "String",

@@ -41,7 +41,6 @@ ipcRenderer.on('storage-add-recent-project', async (_event, ...args) => {
             }
             storage.set('recent-projects',recentProjects);
         }
-        console.log(recentProjects);
     }
 });
 
