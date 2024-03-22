@@ -137,6 +137,9 @@ const projectStore = {
         UPDATE_PROJECT_DATA(state, payload) {
             state[payload.key] = payload.value;
         },
+        UPDATE_PROJECT_DETAIL(state, payload) {
+            state.project[payload.key] = payload.value;
+        },
     }
     ,
     actions: {

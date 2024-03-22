@@ -56,12 +56,12 @@
     <div id="properties" :class="propertiesClass" :style="propertiesStyle">
       <h3 @click="expandProperties">
         <span>
-          Properties
+          Project properties
         </span>
         <i class="ri-checkbox-indeterminate-line" @click="togglePropertiesCollapse"></i>
       </h3>
       <div class="properties">
-
+        <fast-project-properties></fast-project-properties>
       </div>
     </div>
     <anubias-confirm
@@ -95,12 +95,13 @@ import Store from 'electron-store';
 import components from "../components/components-panel.vue";
 import sidebar from "../components/sidebar.vue";
 import anubiasConfirm from "../components/anubias-confirm.vue";
+import fastProjectProperties from "../components/fast-project-properties.vue";
 
 const storage = new Store();
 
 export default {
   name: "anubias",
-  components: {buttons, iconButton: iconButtons, device, components, sidebar, anubiasConfirm},
+  components: {buttons, iconButton: iconButtons, device, components, sidebar, anubiasConfirm,fastProjectProperties},
   data: () => {
     return {
       deviceZoom: ['AUTO', '120%', '100%', '75%', '50%'],
