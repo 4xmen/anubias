@@ -131,6 +131,9 @@ const projectStore = {
                 toast.warning("You can't remove the last page of project");
             }
         },
+        SET_ENTRY_POINT(state, payload){
+            state.project.entryPoint = payload;
+        },
         UPDATE_PROJECT_DATA(state, payload) {
             state[payload.key] = payload.value;
         },

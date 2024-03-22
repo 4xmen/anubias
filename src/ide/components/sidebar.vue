@@ -80,6 +80,7 @@ export default {
   data() {
     return {
       activePageName: '',
+      epName:'', // entryPoint name
     }
   },
   mounted() {
@@ -134,17 +135,22 @@ export default {
 
     },
     fixActivePage() {
+
       let pages = this.project.project.pages;
       for (let i in pages) {
         if (pages[parseInt(i)].name === this.activePageName) {
           // console.log('e', this.activePageName);
           this.changePage(parseInt(i));
-          break;
+        }
+        // fix entry point index
+        if (pages[parseInt(i)].name === this.epName) {
+          console.log(i);
+          this.$store.commit("project/SET_ENTRY_POINT", i);
         }
       }
     },
     updatePageSort(e) {
-
+      this.epName = this.project.project.pages[this.project.project.entryPoint].name;
       this.activePageName = this.project.project.pages[this.ide.activePage].name;
       // console.log('s', this.activePageName);
       arrayMove(this.project.project.pages, e.oldIndex, e.newIndex);
