@@ -24,6 +24,7 @@ ipcMain.handle('electron-storage-get-data', (event, key) => {
 
 //
 ipcMain.on("app-started", (event, args) => {
+    console.log("--- app started ---");
     win = BrowserWindow.getFocusedWindow();
 
     menuapp = new AppMenu(win);
