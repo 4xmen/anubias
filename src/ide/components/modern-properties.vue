@@ -338,7 +338,17 @@ export default {
       this.tooltip = '';
     },
     remAction(i) {
-      this.properties.actions.splice(i, 1);
+      this.$store.dispatch('ide/showConfirm', {
+        onConfirm: () =>{
+          this.properties.actions.splice(i, 1);
+        },
+        onCancel:() => {
+
+        },
+        text: 'Are you sure to remove this action?',
+        title: 'Action remove confirm',
+      });
+
     },
     updateActionsSort(e) {
       arrayMove(this.properties.actions, e.oldIndex, e.newIndex);
