@@ -281,7 +281,6 @@ export default {
     },
     selectImage(e) {
       const toast = useToast();
-      let self = this;
       if (!e.target.files) return;
 
       let files = e.target.files;
@@ -290,14 +289,14 @@ export default {
         let base64;
         let fileToLoad = e.target.files[i]
         let fileReader = new FileReader();
-        fileReader.onload = function (fileLoadedEvent) {
+        fileReader.onload =  (fileLoadedEvent) => {
           let img = new Image();
           base64 = fileLoadedEvent.target.result;
-          img.onload = function () {
+          img.onload =  () => {
             if (base64.split(';')[0] !== "data:image/png") {
               toast.error("Image is not png!");
             } else if (img.width === 512 && img.height === 512) {
-              self.newProject.icon = base64;
+              this.newProject.icon = base64;
               toast.info("Icon changed");
             } else {
               toast.warning("You need select image (512x512), Your image is: (" + img.width + 'x' + img.height + ")");

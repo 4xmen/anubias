@@ -339,7 +339,7 @@ export default {
     },
     remAction(i) {
       this.$store.dispatch('ide/showConfirm', {
-        onConfirm: () =>{
+        onConfirm: () => {
           this.properties.actions.splice(i, 1);
         },
         onCancel:() => {
@@ -354,7 +354,6 @@ export default {
       arrayMove(this.properties.actions, e.oldIndex, e.newIndex);
     },
     selectImage(e) {
-      let self = this;
       if (!e.target.files) return;
 
       let files = e.target.files;
@@ -363,9 +362,9 @@ export default {
         let base64;
         let fileToLoad = e.target.files[i]
         let fileReader = new FileReader();
-        fileReader.onload = function (fileLoadedEvent) {
+        fileReader.onload =  (fileLoadedEvent) => {
           base64 = fileLoadedEvent.target.result;
-          self.properties.image = base64;
+          this.properties.image = base64;
         };
         fileReader.readAsDataURL(fileToLoad);
       }
