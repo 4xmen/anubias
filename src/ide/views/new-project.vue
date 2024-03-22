@@ -231,7 +231,7 @@ export default {
   computed: {
     ...mapState(['ide', 'project']),
     getIcon() {
-      console.log(this.newProject.icon);
+      // console.log(this.newProject.icon);
       if (this.newProject.icon == null) {
         return "./src/ide/assets/svg/logo/anubias-logo.svg";
       } else {

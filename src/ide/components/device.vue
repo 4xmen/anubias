@@ -227,7 +227,7 @@ export default {
         // create project backup
         this.$store.dispatch('project/backupProject');
         this.$store.dispatch('ide/setCanScreenshot', false);
-        console.log('screenshoting...');
+        console.log(`--- screenshot ${this.activePageIndex} ---`);
       }
     }, 10000, this);
   },
@@ -273,7 +273,6 @@ export default {
       let style = '';
       if (this.device.height < 2000) {
         style += 'top: -' + (Math.abs(Math.ceil((2000 - this.deviceWidth) / 400))) * 0.5 + '%;'
-        console.log(style);
       }
       if (this.isLandscape) {
         style += 'transform: rotateZ(-90deg);';
