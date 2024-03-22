@@ -177,7 +177,7 @@ import anubiasRow from "./anubias/anubiasRow.vue";
 import anubiasText from "./anubias/anubiasText.vue";
 import anubiasToggle from "./anubias/anubiasToggle.vue";
 // import fuctions
-import {createScreenShot} from "../js/general-functions";
+import {createScreenShot, isRTLLanguage} from "../js/general-functions";
 
 export default {
   name: "device",
@@ -319,7 +319,7 @@ export default {
       } else {
         style += 'background: #2e2e2e;';
       }
-      if (this.project.isRTL) {
+      if (isRTLLanguage(this.project.lang)) {
         style += 'direction: rtl;';
       }
       this.resizeSvg();
@@ -401,7 +401,7 @@ export default {
       } else {
         console.log('invalid area');
       }
-    }
+    },
   },
 }
 </script>
