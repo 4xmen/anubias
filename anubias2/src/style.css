@@ -199,6 +199,11 @@ input {
     display: none;
 }
 
+.other-tabs{
+    grid-column: 1 / 20;
+    grid-row: 2 /5;
+}
+
 .r90deg {
     transform: rotateZ(90deg);
 }

@@ -30,14 +30,17 @@
         <i class="ri-wifi-line"></i>
       </div>
     </div>
-    <div id="main" :style="mainStyle">
-      <div class="grid" v-if="tabIndex === 0">
+
+    <div id="main" :style="mainStyle" v-if="tabIndex === 0">
+      <div class="grid" >
         <sidebar></sidebar>
         <div id="device-container">
           <device></device>
         </div>
       </div>
-
+    </div>
+    <div v-if="tabIndex === 1" class="other-tabs">
+      <blue-print></blue-print>
     </div>
     <div id="components" :class="componentsClass" :style="componentsStyle" v-if="tabIndex === 0">
       <h3 @click="expandComponents">
@@ -76,6 +79,7 @@
         logs here
         {{ project.projectFile }}
         {{ project.isSave ? 'save' : 'not save' }}
+        "{{tabIndex}}"
       </div>
     </div>
   </div>
@@ -91,12 +95,13 @@ import Store from 'electron-store';
 import components from "../components/components-panel.vue";
 import sidebar from "../components/sidebar.vue";
 import anubiasConfirm from "../components/anubias-confirm.vue";
-
+import bluePrint from "./blue-print.vue";
+import BluePrint from "./blue-print.vue";
 const storage = new Store();
 
 export default {
   name: "anubias",
-  components: {buttons, iconButton: iconButtons, device, components, sidebar, anubiasConfirm},
+  components: {BluePrint, buttons, iconButton: iconButtons, device, components, sidebar, anubiasConfirm},
   data: () => {
     return {
       tabIndex: 0,
