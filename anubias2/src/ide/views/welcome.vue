@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <img src="src/ide/assets/svg/logo/white-logo.svg" alt="">
+    <img src="../assets/svg/logo/white-logo.svg" alt="">
     <h1>
       Anubias
     </h1>

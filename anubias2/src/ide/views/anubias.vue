@@ -1,16 +1,12 @@
 <template>
   <div id="app" :style="appStyle">
     <div id="tabs">
-      <div class="tab active">
-        Main
-      </div>
-      <div class="tab">
-        <i class="ri-close-line close"></i>
-        Other tab sample
-
+      <div :class="`tab ${iTab === tabIndex?'active':''}`" v-for="(tab,iTab) in tabs" :key="iTab" @click="changeTab(iTab)">
+        <i class="ri-close-line close" v-if="iTab !== 0"></i>
+        {{tabs[iTab]}}
       </div>
     </div>
-    <div id="buttons">
+    <div id="buttons" v-if="tabIndex === 0">
       <div id="device-selector">
         <span>
           Device:
@@ -35,7 +31,7 @@
       </div>
     </div>
     <div id="main" :style="mainStyle">
-      <div class="grid">
+      <div class="grid" v-if="tabIndex === 0">
         <sidebar></sidebar>
         <div id="device-container">
           <device></device>
@@ -43,7 +39,7 @@
       </div>
 
     </div>
-    <div id="components" :class="componentsClass" :style="componentsStyle">
+    <div id="components" :class="componentsClass" :style="componentsStyle" v-if="tabIndex === 0">
       <h3 @click="expandComponents">
         <span>
           Components
@@ -52,8 +48,8 @@
       </h3>
       <components></components>
 
-    </div>
-    <div id="properties" :class="propertiesClass" :style="propertiesStyle">
+    </div >
+    <div id="properties" :class="propertiesClass" :style="propertiesStyle" v-if="tabIndex === 0">
       <h3 @click="expandProperties">
         <span>
           Properties
@@ -71,7 +67,7 @@
         :on-cancel="ide.confirm.onCancel"
         :enabled="ide.confirm.enabled"
     ></anubias-confirm>
-    <div id="logs" :class="pagesClass">
+    <div id="logs" :class="logClass">
       <h3 @click="expandLogs">
         Logs
         <i class="ri-checkbox-indeterminate-line" @click="toggleLogsCollapse"></i>
@@ -103,6 +99,8 @@ export default {
   components: {buttons, iconButton: iconButtons, device, components, sidebar, anubiasConfirm},
   data: () => {
     return {
+      tabIndex: 0,
+      tabs: ['Main' , 'Blue Print',"Blue Print 2"],
       deviceZoom: ['AUTO', '120%', '100%', '75%', '50%'],
       orients: ['<i class="ri-smartphone-line"></i>', '<i class="ri-smartphone-line r90deg"></i>'],
     };
@@ -157,7 +155,7 @@ export default {
       }
       return '';
     },
-    pagesClass() {
+    logClass() {
       if (this.ide.logs.collapsed) {
         return 'collapsed';
       }
@@ -206,6 +204,9 @@ export default {
     }
   },
   methods: {
+    changeTab(index) {
+      this.tabIndex = index;
+    },
     toggleComponentsCollapse() {
       this.$store.dispatch('ide/toggleComponentsCollapse');
     },
