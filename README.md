@@ -15,10 +15,13 @@
 
 </div>
 
+> Imporant note: The README describes version 1. We are currently working on v2 and the master branch is v2. To view v1 details, click here:  [v1 branch](https://github.com/4xmen/anubias/tree/v1)
+
+
+
 # Anubias-Desktop
 
 Anubias is project help you to make your mobile apps so easy and native with GUI : )
-
 
 # Demo
 
@@ -28,14 +31,9 @@ Anubias is project help you to make your mobile apps so easy and native with GUI
 </div>
 <div align="center">
 <h2>Easy To Use</h2>
-<img src="public/screen-shots/sc2.png" width="500px">
-</div>
-<div align="center">
-<h2>Compile Fast</h2>
-<img src="public/screen-shots/sc4.png" width="500px">
-</div>
 
 # Downloads
+
 The latest version is available for
 
 * [Windows](https://anubias.app/dl/wini) ([portable](https://anubias.app/dl/winp))
@@ -43,14 +41,13 @@ The latest version is available for
 * [Linux](https://anubias.app/dl/linux)
 * [WebApp](https://anubias.app/demo)
 
-
 ## 🔗 Links
+
 https://anubias.app/
 <br>
 http://4xmen.ir/
 <br>
 https://xstack.ir
-
 
 ## Features
 
@@ -61,20 +58,20 @@ https://xstack.ir
 * 👨‍💻 xScript ( xScript code look like javascript )
 * 💯 Free ( Totally Free )
 
-
-
 ## Linux Installation
 
 Install form linux Snapcraft Store
 
 ```bash
-  snap install anubias --classic
+snap install anubias --classic
 ```
 
 ## Report Some Bugs
+
 Find a Bug? Please, [create an issue](https://github.com/4xmen/Anubias-Desktop/issues) and we'll fix it together for a better template.
 
 ## Contribution
+
 Contribution are always welcome and recommended! Here is how:
 
 - Fork the repository ([here is the guide](https://help.github.com/articles/fork-a-repo/)).
@@ -110,13 +107,11 @@ Contribution are always welcome and recommended! Here is how:
 
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/GNU)
 
-
-
 [GPL](https://www.gnu.org/licenses/gpl-3.0.en.html)
-
 
 ## Support
 
 [![buymeacoffee](src/assets/badge/paypal.svg)](https://www.paypal.me/swepc)
 
 <div align="center"> Developed With Love ! ❤️</div>
+
