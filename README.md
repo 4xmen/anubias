@@ -1,13 +1,4 @@
-<h1 align="center">
-  <br>
-  <a href="https://anubias.app/">
-    <img src="public/icon.png" alt="Anubias" width="150">
-  </a>
-  <br>
-  <a href="https://anubias.app">Anubias Desktop</a>
-  <br>
-  <hr>
-</h1>
+span
 
 <div align="center">
 
@@ -16,8 +7,6 @@
 </div>
 
 > Imporant note: The README describes version 1. We are currently working on v2 and the master branch is v2. To view v1 details, click here:  [v1 branch](https://github.com/4xmen/anubias/tree/v1)
-
-
 
 # Anubias-Desktop
 
@@ -114,4 +103,3 @@ Contribution are always welcome and recommended! Here is how:
 [![buymeacoffee](src/assets/badge/paypal.svg)](https://www.paypal.me/swepc)
 
 <div align="center"> Developed With Love ! ❤️</div>
-

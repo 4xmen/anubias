@@ -1,0 +1,35 @@
+{
+  "name": "anubias",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-opener": "~2",
+    "@tauri-apps/plugin-store": "~2",
+    "@vue-flow/core": "^1.48.2",
+    "html-to-image": "^1.11.13",
+    "material-icons": "^1.13.14",
+    "remixicon": "^4.9.1",
+    "sortablejs": "^1.15.7",
+    "sortablejs-vue3": "^1.3.0",
+    "vazirmatn": "^33.0.3",
+    "vue": "^3.5.33",
+    "vue-color-kit": "^1.0.6",
+    "vue-router": "^5.0.6",
+    "vue-toastification": "^2.0.0-rc.5",
+    "vuex": "^4.1.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2",
+    "@vitejs/plugin-vue": "^6.0.6",
+    "vite": "^8.0.10",
+    "vite-plugin-vue-devtools": "^8.1.2"
+  }
+}
