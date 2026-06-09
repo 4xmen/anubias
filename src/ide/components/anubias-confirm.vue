@@ -28,6 +28,9 @@ export default {
   name: "anubias-confirm",
   components: {},
   data: () => {
+    return{
+
+    }
   },
   props: {
     enabled: {

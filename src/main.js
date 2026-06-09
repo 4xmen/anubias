@@ -1,6 +1,5 @@
 import {createApp} from 'vue';
 
-console.log('test')
 // app css
 import "./ide/css/style.css";
 

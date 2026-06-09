@@ -36,6 +36,8 @@ import { LazyStore } from '@tauri-apps/plugin-store';
 
 const storage = new LazyStore('ide.json', { autoSave: false });
 
+import {invoke} from "@tauri-apps/api/core";
+
 const ideStore = {
     namespaced: true,
     state:  () =>  ({
@@ -252,19 +254,25 @@ const ideStore = {
                 title: payload.title,
             });
         },
-        setMenuCanUndo(context, data) {
+        async setMenuCanUndo(context, data) {
             // console.log(data,'undo');
             context.commit('SET_MENU_CAN_UNDO', data);
-            ipcRenderer.send('set-menu-state', 'canUndo', data);
+            await invoke("set_menu_state", {
+                state: "CanUndo",
+                value: true
+            });
         },
         setCanScreenshot(context, data) {
             // console.log(data,'undo');
             context.commit('SET_CAN_SCREENSHOT', data);
         },
-        setMenuCanSave(context, data) {
+        async setMenuCanSave(context, data) {
             // console.log(data,'undo');
             context.commit('SET_MENU_CAN_SAVE', data);
-            ipcRenderer.send('set-menu-state', 'canSave', data);
+            await invoke("set_menu_state", {
+                state: "CanSave",
+                value: true
+            });
         },
         /**
          * set active page index

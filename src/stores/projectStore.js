@@ -48,7 +48,7 @@ const projectStore = {
             // let title = ide.state().appName + ' - ' + project.name;
             // this.dispatch('setIdeTitle', title);
 
-            console.log('[pro',project);
+            // console.log('[pro',project);
             await storage.set('lastLoadedProject', project);
             // ipcRenderer.send('set-has-project', true);
             await invoke('set_has_project', {
