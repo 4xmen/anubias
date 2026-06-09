@@ -238,14 +238,14 @@ export default {
         this.toggleLogsCollapse();
       }
     },
-    initialLoadProject() {
+    async initialLoadProject() {
       // check if project
 
       if (this.$store.state.project.projectFile == '') {
 
         try {
           if (this.$store.state.project.pages.length === []) {
-            this.$store.dispatch('project/loadProject', storage.get('lastCreatedProject'));
+            this.$store.dispatch('project/loadProject',await storage.get('lastCreatedProject'));
 
           } else {
             // set entry point  to active
@@ -253,7 +253,7 @@ export default {
           }
         } catch (e) {
           console.log(e.message);
-          this.$store.dispatch('project/loadProject', storage.get('lastLoadedProject'));
+          this.$store.dispatch('project/loadProject', await storage.get('lastLoadedProject'));
         }
       }
 

@@ -1,10 +1,10 @@
-span
-
 <div align="center">
 
 [![anubias](https://snapcraft.io/anubias/badge.svg)](https://snapcraft.io/anubias)
 
 </div>
+
+<br>
 
 > Imporant note: The README describes version 1. We are currently working on v2 and the master branch is v2. To view v1 details, click here:  [v1 branch](https://github.com/4xmen/anubias/tree/v1)
 
@@ -103,3 +103,4 @@ Contribution are always welcome and recommended! Here is how:
 [![buymeacoffee](src/assets/badge/paypal.svg)](https://www.paypal.me/swepc)
 
 <div align="center"> Developed With Love ! ❤️</div>
+

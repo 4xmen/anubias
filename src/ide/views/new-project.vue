@@ -226,7 +226,7 @@ export default {
         this.stepIndex--;
       }
     },
-    nxt() {
+    async nxt() {
       if (this.stepIndex === this.projectSteps.length - 1) {
 
         // create project and go to main page
@@ -239,7 +239,8 @@ export default {
           page.name = 'page' + (i + 1);
           this.newProject.pages.push({...page});
         }
-        this.createProject(this.newProject);
+        await this.createProject(this.newProject);
+        // console.log(this.newProject);
         this.$router.push('/main');
 
       } else {

@@ -35,7 +35,8 @@ const projectStore = {
         async CREATE_PROJECT(state, project) {
             project.anubias = ide.getters.version(ide.state());
             await storage.set('lastCreatedProject', project);
-            this.commit('project/LOAD_PROJECT', project);
+            console.log(await storage.get('lastCreatedProject'));
+            await this.commit('project/LOAD_PROJECT', project);
             toast.success("Project initialized...");
         },
         async LOAD_PROJECT(state, project) {
@@ -47,12 +48,13 @@ const projectStore = {
             // let title = ide.state().appName + ' - ' + project.name;
             // this.dispatch('setIdeTitle', title);
 
+            console.log('[pro',project);
             await storage.set('lastLoadedProject', project);
-            this.dispatch('ide/setActivePage', project.entryPoint);
             // ipcRenderer.send('set-has-project', true);
             await invoke('set_has_project', {
                 status: true
             })
+            this.dispatch('ide/setActivePage', project.entryPoint);
             // check duplicate notify
             if (Math.round(+new Date() / 1000) > state.lastLoadProjectNotify + 2) {
                 toast.success("Project loaded...");
@@ -145,16 +147,16 @@ const projectStore = {
          * @param context
          * @param project : Object anubias project object
          */
-        createProject(context, project) {
-            context.commit('CREATE_PROJECT', project);
+        async createProject(context, project) {
+           await context.commit('CREATE_PROJECT', project);
         },
         /**
          *
          * @param context
          * @param project : Object anubias project object
          */
-        loadProject(context, project) {
-            context.commit('LOAD_PROJECT', project);
+        async loadProject(context, project) {
+            await context.commit('LOAD_PROJECT', project);
         },
         backupProject(context) {
             context.commit('BACKUP_PROJECT');
@@ -198,6 +200,9 @@ const projectStore = {
     },
     getters: {
         getPage: (state) => (i) => {
+            if (state.project.pages == undefined || state.project.pages[i] === undefined) {
+                return {};
+            }
             return state.project.pages[i];
         },
         appColor: (state) => {
