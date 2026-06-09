@@ -1,0 +1,73 @@
+{
+  "type": "column",
+  "name": "column",
+  "align": "center",
+  "width": "100%",
+  "height": "null",
+  "color": "null",
+  "border": "0",
+  "borderColor": "Colors.transparent",
+  "padding": "0",
+  "margin": "0",
+  "borderRadius": "0",
+  "children": [],
+  "visible": true,
+  "validator": {
+    "version": 2,
+    "name": {
+      "type": "String",
+      "regex": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+      "state": ""
+    },
+    "align" : {
+      "type": "String",
+      "regex": "^(null|left|right|center)$",
+      "state": "input"
+    },
+    "width" : {
+      "type": "String|Number",
+      "regex":  "^\\d*\\.?\\d+%?$",
+      "state": "input"
+    },
+    "height" : {
+      "type": "String|Number",
+      "regex":  "^\\d*\\.?\\d+%?$",
+      "state": "input"
+    },
+    "color":{
+      "type": "String|Color",
+      "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
+      "state": "input"
+    },
+    "border" : {
+      "type": "String|Number",
+      "regex": "^\\d+(,\\d+){0,3}$",
+      "state": "input"
+    },
+    "borderColor":{
+      "type": "String|Color",
+      "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
+      "state": "input"
+    },
+    "padding" : {
+      "type": "String|Number",
+      "regex": "^\\d+(,\\d+){0,3}$",
+      "state": "input"
+    },
+    "margin" : {
+      "type": "String|Number",
+      "regex": "^\\d+(,\\d+){0,3}$",
+      "state": "input"
+    },
+    "borderRadius" : {
+      "type": "String|Number",
+      "regex": "^\\d+(,\\d+){0,3}$",
+      "state": "input"
+    },
+    "visible": {
+      "type": "Boolean",
+      "regex": "^(true|false)$",
+      "state": "input"
+    }
+  }
+}

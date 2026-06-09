@@ -1,0 +1,48 @@
+{
+  "type": "divider",
+  "name": "divider",
+  "color": "null",
+  "height": 16,
+  "thickness": 1,
+  "indent": 0,
+  "endIndent": 0,
+  "visible": true,
+  "validator": {
+    "version": 2,
+    "name": {
+      "type": "String",
+      "regex": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+      "state": ""
+    },
+    "color":{
+      "type": "String|Color",
+      "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
+      "state": "input"
+    },
+    "height" : {
+      "type": "String|Number",
+      "regex":  "^\\d*\\.?\\d+%?$",
+      "state": "input"
+    },
+    "thickness" : {
+      "type": "String",
+      "regex": "^[0-9]{1,2}$",
+      "state": "input"
+    },
+    "indent" : {
+      "type": "String",
+      "regex": "^[0-9]{1,2}$",
+      "state": "input"
+    },
+    "endIndent" : {
+      "type": "String",
+      "regex": "^[0-9]{1,2}$",
+      "state": "input"
+    },
+    "visible": {
+      "type": "Boolean",
+      "regex": "^(true|false)$",
+      "state": "input"
+    }
+  }
+}

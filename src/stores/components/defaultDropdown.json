@@ -1,0 +1,152 @@
+{
+  "type": "dropdown",
+  "name": "dropdown",
+  "title": "Dropdown",
+  "color": "null",
+  "padding": "0",
+  "width": "null",
+  "placeholder": "Choose",
+  "icon": "person",
+  "iconColor": "Colors.white",
+  "iconSize": "24",
+  "trailing": "arrow_forward_ios",
+  "trailingColor": "Colors.white",
+  "trailingSize": "19",
+  "modalTitle": "Choose please",
+  "modalColor": "null",
+  "modalBgColor": "null",
+  "hint": "",
+  "options": [],
+  "multiple": false,
+  "twoLine": false,
+  "searchable": false,
+  "enabled": true,
+  "value": "",
+  "values": "",
+  "loading": false,
+  "onChanged": "// run when change value \n// you can use `state`,`state.value`, `state.title`\n",
+  "visible": true,
+  "validator": {
+    "version": 2,
+    "name": {
+      "type": "String",
+      "regex": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+      "state": ""
+    },
+    "title": {
+      "type": "String",
+      "regex": "^.*$",
+      "state": "input"
+    },
+    "color":{
+      "type": "String|Color",
+      "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
+      "state": "input"
+    },
+    "padding": {
+      "type": "String|Number",
+      "regex": "^\\d+(,\\d+){0,3}$",
+      "state": "input"
+    },
+    "width" : {
+      "type": "String|Number",
+      "regex":  "^\\d*\\.?\\d+%?$",
+      "state": "input"
+    },
+    "placeholder": {
+      "type": "String",
+      "regex": "^.*$",
+      "state": "input"
+    },
+    "icon": {
+      "type": "String",
+      "regex": "^.*$",
+      "state": "input"
+    },
+    "iconColor":{
+      "type": "String|Color",
+      "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
+      "state": "input"
+    },
+    "iconSize": {
+      "type":  "Number",
+      "regex": "^[0-9]{1,3}$",
+      "state": "input"
+    },
+    "trailing": {
+      "type": "String",
+      "regex": "^.*$",
+      "state": "input"
+    },
+    "trailingColor":{
+      "type": "String|Color",
+      "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
+      "state": "input"
+    },
+    "trailingSize": {
+      "type":  "Number",
+      "regex": "^[0-9]{1,3}$",
+      "state": "input"
+    },
+    "modalTitle": {
+      "type": "String",
+      "regex": "^.*$",
+      "state": "input"
+    },
+    "modalColor":{
+      "type": "String|Color",
+      "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
+      "state": "input"
+    },
+    "modalBgColor":{
+      "type": "String|Color",
+      "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
+      "state": "input"
+    },
+    "hint": {
+      "type": "String",
+      "regex": "^.*$",
+      "state": "input"
+    },
+    "multiple":{
+      "type":  "Boolean",
+      "regex": "^(true|false)$",
+      "state": "input"
+    },
+    "twoLine":{
+      "type":  "Boolean",
+      "regex": "^(true|false)$",
+      "state": "input"
+    },
+    "searchable":{
+      "type":  "Boolean",
+      "regex": "^(true|false)$",
+      "state": "input"
+    },
+    "enabled":{
+      "type":  "Boolean",
+      "regex": "^(true|false)$",
+      "state": "input"
+    },
+    "value": {
+      "type": "String",
+      "regex": "^.*$",
+      "state": "output"
+    },
+    "values": {
+      "type": "Array",
+      "regex": "",
+      "state": "output"
+    },
+    "loading":{
+      "type":  "Boolean",
+      "regex": "^(true|false)$",
+      "state": "input"
+    },
+    "visible":{
+      "type":  "Boolean",
+      "regex": "^(true|false)$",
+      "state": "input"
+    }
+  }
+}

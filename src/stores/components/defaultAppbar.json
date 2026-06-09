@@ -1,0 +1,54 @@
+{
+  "type": "appbar",
+  "name": "appbar",
+  "title": "app bar title",
+  "color": "null",
+  "textColor": "null",
+  "back": false,
+  "actions": [],
+  "visible": true,
+  "menu": null,
+  "validator": {
+    "version": 2,
+    "name": {
+      "type": "String",
+      "regex": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+      "state": ""
+    },
+    "title": {
+      "type": "String",
+      "regex": "^.*$",
+      "state": "input"
+    },
+    "color":{
+      "type": "String|Color",
+      "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
+      "state": "input"
+    },
+    "textColor":{
+      "type": "String|Color",
+      "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
+      "state": "input"
+    },
+    "back":{
+      "type":  "Boolean",
+      "regex": "^(true|false)$",
+      "state": "input"
+    },
+    "actions":{
+      "type": "Array",
+      "regex": "",
+      "state": ""
+    },
+    "visible":{
+      "type":  "Boolean",
+      "regex": "^(true|false)$",
+      "state": "input"
+    },
+    "menu":{
+      "type": "null|String",
+      "regex": "",
+      "state": "input"
+    }
+  }
+}
