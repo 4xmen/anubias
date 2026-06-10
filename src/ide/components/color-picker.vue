@@ -47,15 +47,15 @@
 
 <script>
 
-// import { ColorPicker } from 'vue-color-kit' ;
-// import 'vue-color-kit/dist/vue-color-kit.css';
+import { ColorPicker } from 'vue-color-kit' ;
+import 'vue-color-kit/dist/vue-color-kit.css';
 import {mapGetters} from "vuex";
 import {getColor} from "../js/general-functions.js";
 
 export default {
   name: "color-picker",
   components: {
-    // ColorPicker,
+    ColorPicker,
   },
   props: {
     modelValue: {

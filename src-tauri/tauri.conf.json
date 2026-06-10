@@ -14,7 +14,11 @@
       {
         "title": "Anubias v2",
         "width": 1200,
-        "height": 768
+        "height": 768,
+        "center": true,
+        "maximized": true,
+        "minHeight": 700,
+        "minWidth": 1200
       }
     ],
     "security": {
