@@ -1,9 +1,10 @@
 <template>
   <div id="app" :style="appStyle">
     <div id="tabs">
-      <div :class="`tab ${iTab === tabIndex?'active':''}`" v-for="(tab,iTab) in tabs" :key="iTab" @click="changeTab(iTab)">
+      <div :class="`tab ${iTab === tabIndex?'active':''}`" v-for="(tab,iTab) in tabs" :key="iTab"
+           @click="changeTab(iTab)">
         <i class="ri-close-line close" v-if="iTab !== 0"></i>
-        {{tabs[iTab]}}
+        {{ tabs[iTab] }}
       </div>
     </div>
     <div id="buttons" v-if="tabIndex === 0">
@@ -11,11 +12,17 @@
         <span>
           Device:
         </span>
-        <select v-model="activeDevice" style="width: 60%">
-          <option v-for="(device,i) in ide.devices" :value="i" :key="i">
+        <!--        <select v-model="activeDevice" style="width: 60%">-->
+        <!--          <option v-for="(device,i) in ide.devices" :value="i" :key="i">-->
+        <!--            {{ device.name }}-->
+        <!--          </option>-->
+        <!--        </select>-->
+
+        <searchable-combobox v-model="activeDevice">
+          <option-ex v-for="(device,i) in ide.devices" :value="i" :key="i">
             {{ device.name }}
-          </option>
-        </select>
+          </option-ex>
+        </searchable-combobox>
       </div>
       <div>
         <icon-button id="orient" v-model="orient" :list="orients" :no-border-y="true"></icon-button>
@@ -32,7 +39,7 @@
     </div>
 
     <div id="main" :style="mainStyle" v-if="tabIndex === 0">
-      <div class="grid" >
+      <div class="grid">
         <sidebar></sidebar>
         <div id="device-container">
           <device></device>
@@ -51,7 +58,7 @@
       </h3>
       <components></components>
 
-    </div >
+    </div>
     <div id="properties" :class="propertiesClass" :style="propertiesStyle" v-if="tabIndex === 0">
       <h3 @click="expandProperties">
         <span>
@@ -79,7 +86,7 @@
         logs here
         {{ project.projectFile }}
         {{ project.isSave ? 'save' : 'not save' }}
-        "{{tabIndex}}"
+        "{{ tabIndex }}"
       </div>
     </div>
   </div>
@@ -91,22 +98,28 @@ import {mapGetters} from 'vuex';
 import buttons from "../components/buttons.vue";
 import iconButtons from "../components/icon-buttons.vue";
 import device from "../components/device.vue";
-import { LazyStore } from '@tauri-apps/plugin-store';
+import {LazyStore} from '@tauri-apps/plugin-store';
 import components from "../components/components-panel.vue";
 import sidebar from "../components/sidebar.vue";
 import anubiasConfirm from "../components/anubias-confirm.vue";
 import bluePrint from "./blue-print.vue";
 import BluePrint from "./blue-print.vue";
+import SearchableCombobox from "../components/srachable-combobox.vue";
+import OptionEx from "../components/option-ex.vue";
 
-const storage = new LazyStore('ide.json', { autoSave: false });
+const storage = new LazyStore('ide.json', {autoSave: false});
 
 export default {
   name: "anubias",
-  components: {BluePrint, buttons, iconButton: iconButtons, device, components, sidebar, anubiasConfirm},
+  components: {
+    OptionEx,
+    SearchableCombobox,
+    BluePrint, buttons, iconButton: iconButtons, device, components, sidebar, anubiasConfirm
+  },
   data: () => {
     return {
       tabIndex: 0,
-      tabs: ['Main' , 'Blue Print',"Blue Print 2"],
+      tabs: ['Main', 'Blue Print', "Blue Print 2"],
       deviceZoom: ['AUTO', '120%', '100%', '75%', '50%'],
       orients: ['<i class="ri-smartphone-line"></i>', '<i class="ri-smartphone-line r90deg"></i>'],
     };
@@ -245,7 +258,7 @@ export default {
 
         try {
           if (this.$store.state.project.pages.length === []) {
-            this.$store.dispatch('project/loadProject',await storage.get('lastCreatedProject'));
+            this.$store.dispatch('project/loadProject', await storage.get('lastCreatedProject'));
 
           } else {
             // set entry point  to active
