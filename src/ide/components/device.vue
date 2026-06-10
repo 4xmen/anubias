@@ -217,9 +217,10 @@ export default {
     };
   },
   mounted() {
+    console.log("Component mounted.");
     this.timerPic = setInterval(async () => {
       // update previwe image
-      if (!this.isSave && this.canScreen) {
+      if (this.canScreen) {
         await this.$store.dispatch('project/updatePagePreview', {
           pageIndex: this.activePageIndex,
           image: await createScreenShot('#component-holder'),
@@ -227,7 +228,6 @@ export default {
         // create project backup
         this.$store.dispatch('project/backupProject');
         this.$store.dispatch('ide/setCanScreenshot', false);
-        console.log('screenshoting...');
       }
     }, 10000, this);
   },

@@ -228,6 +228,9 @@ export default {
   watch: {
     properties: {
       handler: function (val, oldVal) {
+        if (val !== oldVal) {
+          this.$store.dispatch('ide/setCanScreenshot', true);
+        }
         // Return the object that changed
         if (val.online !== undefined) {
           if (val.online && val.image.substring(0, 5) === 'data:') {

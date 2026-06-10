@@ -95,6 +95,7 @@ const projectStore = {
                 }
             }
             this.dispatch('ide/setMenuCanUndo', true);
+            this.dispatch('ide/setCanScreenshot', true);
         },
         SET_PAGE_PREVIEW(state, {pageIndex, image}) {
 
@@ -184,6 +185,7 @@ const projectStore = {
                 pageIndex: pageIndex,
                 image: image,
             });
+            this.dispatch('ide/setCanScreenshot', false);
         },
         updatePages(context, pages) {
             context.commit('SET_PAGE_PREVIEW', pages);
