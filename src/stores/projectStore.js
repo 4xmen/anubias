@@ -6,6 +6,8 @@ import {useToast} from "vue-toastification";
 // import {state} from "vue-tsc/out/shared";
 import defaultPage from './components/defaultPage.json';
 import { LazyStore } from '@tauri-apps/plugin-store';
+import {generatePageId} from "../ide/js/system-functions.js";
+import {PreviewManager} from "../ide/js/preview-manager.js";
 
 const storage = new LazyStore('ide.json', { autoSave: false });
 
@@ -25,6 +27,7 @@ const projectStore = {
          * you need to update new-project.vue too
          */
         project: projectTemplate,
+        previews: new PreviewManager(),
         projectFile: '',
         projectPath: '',
         isSave: true,
@@ -60,6 +63,11 @@ const projectStore = {
                 toast.success("Project loaded...");
                 state.lastLoadProjectNotify = Math.round(+new Date() / 1000);
             }
+
+            // add previews object
+            project.pages.forEach((page) => {
+                state.previews.register(page.id);
+            });
         },
         async BACKUP_PROJECT(state) {
             // console.log(JSON.stringify(state.project).length);
@@ -101,7 +109,7 @@ const projectStore = {
 
             try {
                 if (image !== undefined) {
-                    state.project.pages[pageIndex].preview = image;
+                     state.previews.update(state.project.pages[pageIndex].id, image);
                 }
             } catch (e) {
                 console.log(`Update preview problem: ${e.message}`);
@@ -127,8 +135,10 @@ const projectStore = {
                 i++;
                 newPage.name = 'page' + i;
             } while (names.indexOf(newPage.name) !== -1)
+            newPage.id = generatePageId();
             // add page finaly
             state.project.pages.push(newPage);
+            state.previews.register(newPage.id);
         },
         REMOVE_PAGE(state, index) {
             if (state.project.pages.length > 1) {

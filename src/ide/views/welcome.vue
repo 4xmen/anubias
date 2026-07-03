@@ -44,7 +44,8 @@
 </template>
 
 <script>
-import { invoke } from '@tauri-apps/api/core'
+import { invoke } from '@tauri-apps/api/core';
+import { open } from '@tauri-apps/plugin-dialog';
 
 export default {
   name: "welcome",
@@ -71,7 +72,23 @@ export default {
       this.$router.push('/new-project');
     },
     async openProject(){
-      // await ipcRenderer.invoke('run-menu-event','&Open project');
+      const selected = await open({
+        multiple: false,
+        directory: false,
+        filters: [
+          {
+            name: 'Anubias files',
+            extensions: ['anb'],
+          },
+          {
+            name: 'All files',
+            extensions: ['*'],
+          },
+        ],
+      });
+
+      console.log(selected);
+
     }
   }
 }

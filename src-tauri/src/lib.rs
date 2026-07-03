@@ -1,4 +1,5 @@
 mod menu_state;
+mod file;
 
 use std::sync::Mutex;
 use tauri::{
@@ -7,20 +8,18 @@ use tauri::{
     Manager,
 };
 
-use crate::menu_state::{MenuState, set_menu_state};
+use crate::menu_state::{set_menu_state, MenuState};
 use tauri::AppHandle;
+use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_opener::OpenerExt;
 use tauri_plugin_store::StoreExt;
-
-
+use file::{save_project,load_project};
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
-
-
 
 #[tauri::command]
 fn open_url(app: AppHandle, url: String) {
@@ -35,20 +34,25 @@ fn set_has_project(app: AppHandle, status: bool) -> bool {
     true
 }
 
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let mut menu_state = Mutex::new(MenuState::new());
 
-
     tauri::Builder::default()
+        .plugin(tauri_plugin_fs::init())
+        .plugin(tauri_plugin_dialog::init())
         .manage(menu_state)
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_dialog::init())
         .invoke_handler(tauri::generate_handler![
             greet,
             open_url,
             set_has_project,
-            set_menu_state
+            set_menu_state,
+            save_project,
+            load_project,
         ])
         .setup(|app| {
             let file_menu = Submenu::with_items(

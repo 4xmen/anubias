@@ -172,8 +172,9 @@
 
   // ------------- this for debug : most remove production begin ------------
   <div class="test" v-for="(v,k) in properties.validator" :key="k">
-    {{k}}:{{v.type}}
+    {{ k }}:{{ v.type }}
   </div>
+
   // --------- this for debug : most remove production end -------------
 </template>
 
@@ -190,6 +191,8 @@ import {arrayMove, fixFlutterObjectTitle} from "../js/general-functions.js";
 
 import {useToast} from "vue-toastification";
 import {Sortable} from "sortablejs-vue3";
+import {invoke} from "@tauri-apps/api/core";
+import {open,save} from "@tauri-apps/plugin-dialog";
 // import { ipcRenderer} from "electron";
 
 
@@ -228,9 +231,7 @@ export default {
   watch: {
     properties: {
       handler: function (val, oldVal) {
-        if (val !== oldVal) {
-          this.$store.dispatch('ide/setCanScreenshot', true);
-        }
+        this.$store.dispatch('ide/setCanScreenshot', true);
         // Return the object that changed
         if (val.online !== undefined) {
           if (val.online && val.image.substring(0, 5) === 'data:') {
@@ -280,8 +281,8 @@ export default {
             if (p.type === type) {
               count++;
             }
-          } catch(e) {
-              console.log(e.message,i);
+          } catch (e) {
+            console.log(e.message, i);
           }
 
         }
@@ -365,6 +366,64 @@ export default {
     },
     titleFixer(title) {
       return fixFlutterObjectTitle(title);
+    },
+    async debugSave() {
+      const path = await save({
+        multiple: false,
+        directory: false,
+        filters: [
+          {
+            name: 'Anubias files',
+            extensions: ['anb'],
+          },
+          {
+            name: 'All files',
+            extensions: ['*'],
+          },
+        ],
+      });
+      if (path){
+
+      await invoke("save_project", {
+        path,
+        project: JSON.stringify(projectStore.project),
+        previews: await projectStore.previews.export()
+      });
+      }
+    },
+    async debugLoad() {
+
+      const path = await open({
+        multiple: false,
+        directory: false,
+        filters: [
+          {
+            name: 'Anubias files',
+            extensions: ['anb'],
+          },
+          {
+            name: 'All files',
+            extensions: ['*'],
+          },
+        ],
+      });
+      if (path) {
+
+        const result = await invoke("load_project", {
+          path
+        });
+
+        projectStore.project = JSON.parse(result.project);
+
+        for (const preview of result.previews) {
+          projectStore.previews.register(preview.pageId);
+
+          projectStore.previews.update(
+              preview.pageId,
+              new Blob([preview.data])
+          );
+        }
+      }
     }
   }
 }

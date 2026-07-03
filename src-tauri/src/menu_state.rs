@@ -1,19 +1,17 @@
-use tauri::State;
-use std::sync::Mutex;
 use serde::{Deserialize, Serialize};
+use std::sync::Mutex;
+use tauri::State;
 
-pub struct MenuState{
+pub struct MenuState {
     can_undo: bool,
     can_redo: bool,
     can_save: bool,
     is_project_loaded: bool,
 }
 
-
-
-impl MenuState{
-    pub fn new() -> Self{
-        MenuState{
+impl MenuState {
+    pub fn new() -> Self {
+        MenuState {
             can_save: false,
             can_undo: false,
             can_redo: false,
@@ -23,14 +21,12 @@ impl MenuState{
 }
 
 #[derive(Serialize, Deserialize)]
-pub enum StateList{
+pub enum StateList {
     CanSave,
     CanUndo,
     CanRedo,
     IsProjectLoaded,
 }
-
-
 
 #[tauri::command]
 pub fn set_menu_state(

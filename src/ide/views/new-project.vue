@@ -180,6 +180,8 @@ import {mapState} from 'vuex';
 import {mapActions} from 'vuex';
 import prjTemplate from '../../stores/assets/projectTemplate.json';
 import defaultPage from '../../stores/components/defaultPage.json';
+import {generatePageId} from "../js/system-functions.js";
+
 
 export default {
   name: "new-project",
@@ -237,6 +239,7 @@ export default {
         let page = defaultPage;
         for (let i = 0; i < this.newProject.pageCount; i++) {
           page.name = 'page' + (i + 1);
+          page.id = generatePageId();
           this.newProject.pages.push({...page});
         }
         await this.createProject(this.newProject);

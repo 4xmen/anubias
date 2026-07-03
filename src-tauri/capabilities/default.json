@@ -19,6 +19,8 @@
           "url": "custom:*"
         }
       ]
-    }
+    },
+    "dialog:default",
+    "fs:default"
   ]
 }

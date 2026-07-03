@@ -36,7 +36,7 @@
             <template #item="{element, index}">
               <div :key="element.name" :class="`draggable page `+(ide.activePage === index?'active':'')"
                    @click="changePage(index)">
-                <div :style="`background-image: url(${element.preview})`" class="img">
+                <div :style="`background-image: url(${this.project.previews.getUrl(element.id)})`" class="img">
                   <i class="ri-close-line rem-page" @click="remPage(index)"></i>
                 </div>
                 {{ element.name }}
@@ -87,7 +87,7 @@ export default {
   computed: {
     ...mapState(['ide', 'project']),
     ...mapGetters(
-        'project', ['pages']
+        'project', ['pages'],
     ),
     activeIndex: {
       get() {

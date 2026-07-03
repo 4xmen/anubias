@@ -82,7 +82,7 @@ let calcPaddingOrMargin = (value) => {
  * @returns {Promise<string>} base64 string
  */
 let createScreenShot = async (selector) => {
-    return await htmlToImage.toPng(document.querySelector(selector));
+    return await htmlToImage.toBlob(document.querySelector(selector));
 };
 
 
@@ -121,6 +121,8 @@ let fixFlutterObjectTitle = function (title) {
     return tmp[tmp.length - 1];
 };
 
+
+
 export {
     color2web,
     getColor,
@@ -129,5 +131,5 @@ export {
     createScreenShot,
     arrayMove,
     unixTimestamp,
-    fixFlutterObjectTitle
+    fixFlutterObjectTitle,
 };
