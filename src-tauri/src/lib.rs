@@ -1,5 +1,6 @@
 mod menu_state;
 mod file;
+mod format;
 
 use std::sync::Mutex;
 use tauri::{
