@@ -24,6 +24,51 @@ const IS_DEBUG: bool = false;
 /// |│                     DataMap Index                       | │ │
 /// └───────────────────────────────────────────────────────────┘
 
+#[derive(Debug, thiserror::Error)]
+pub enum DataMapError {
+    #[error("Serialization error")]
+    Serialize,
+
+    #[error("Deserialization error")]
+    Deserialize,
+
+    #[error("IO: de/compression error: {0}")]
+    Io(#[from] std::io::Error),
+}
+
+/// Error type for project file operations
+#[derive(Debug, thiserror::Error)]
+pub enum ProjectError {
+    #[error("IO error: {0}")]
+    Io(#[from] io::Error),
+
+    #[error("DataMap error: {0}")]
+    DataMap(#[from] DataMapError),
+
+    #[error("UTF-8 error: {0}")]
+    Utf8(#[from] std::string::FromUtf8Error),
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct PreviewData {
+    pub page_id: String,
+    pub data: Vec<u8>,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct SaveProjectRequest {
+    pub path: String,
+    pub project: String,
+    pub previews: Vec<PreviewData>,
+}
+
+#[derive(Serialize, Debug)]
+pub struct LoadProjectResponse {
+    pub project: String,
+    pub previews: Vec<PreviewData>,
+}
+
+
 /// Project file metadata.
 ///
 /// Layout:
@@ -101,6 +146,34 @@ impl ProjectMetadata {
         self.version == app::VERSION
     }
 
+
+
+    /// Converts a SaveProjectRequest into a ProjectMetadata instance.
+    ///
+    /// This function transforms the incoming request data from the frontend into an internal project
+    /// representation. It processes the project configuration JSON and associated preview data, organizing
+    /// them into a structured ProjectMetadata object ready for saving to disk.
+    ///
+    /// # Processing Steps
+    ///
+    /// 1. **Project Configuration**: Converts the project JSON string into a FileEntry with the name "project.json"
+    /// 2. **Initialization**: Creates a new ProjectMetadata with default metadata values (timestamps/IDs set to 0)
+    /// 3. **Preview Data**: Iterates through all preview entries and converts each PreviewData into FileEntry objects
+    /// 4. **Debug Output**: If debug mode is enabled, logs the constructed project structure
+    ///
+    /// # Parameters
+    ///
+    /// * `req` - A SaveProjectRequest containing:
+    ///   - `path`: Destination file path (used by the caller for saving)
+    ///   - `project`: JSON string containing the main project configuration
+    ///   - `previews`: Vector of PreviewData objects representing preview pages
+    ///
+    /// # Returns
+    ///
+    /// Returns a fully constructed `ProjectMetadata` object containing:
+    /// - Main project configuration as a FileEntry named "project.json"
+    /// - All preview data as separate FileEntry objects derived from PreviewData
+    ///
     pub fn from_request(req: SaveProjectRequest) -> Self {
         let project_main_data =
             FileEntry::from_string(req.project, "project.json".to_string(), None);
@@ -129,6 +202,39 @@ impl ProjectMetadata {
     /// │ data_map_size          u64         Size of compressed DataMap   │
     /// │ data_map               [...]       Compressed & serialized DataMap │
     /// └───────────────────────────────────────────────────────────────┘
+    ///
+    /// Saves the project to a binary file on disk with compression.
+    ///
+    /// This function serializes the ProjectLoader instance into a structured binary format and writes it
+    /// to the specified path. The data map is compressed before writing to reduce file size. The resulting
+    /// file can be loaded back using the `load` method.
+    ///
+    /// # File Format
+    ///
+    /// The binary file is written in little-endian encoding with the following structure:
+    /// - **Magic Number** (8 bytes): File signature for format identification
+    /// - **Version** (2 bytes): File format version for compatibility checking
+    /// - **Random Seed** (8 bytes): Seed value used in project generation or validation
+    /// - **Data Map Offset** (8 bytes): Byte offset where the compressed data map begins (calculated as header_size)
+    /// - **Data Map Size** (8 bytes): Byte size of the compressed data map section
+    /// - **Compressed Data Map** (variable size): Compressed project entries written at the calculated offset
+    ///
+    /// # Parameters
+    ///
+    /// * `path` - A path-like object where the binary project file will be created or overwritten
+    ///
+    /// # Returns
+    ///
+    /// Returns `Result<(), ProjectError>` indicating:
+    /// - `Ok(())`: File successfully written and flushed to disk
+    /// - `Err(ProjectError)`: If compression, file I/O, or serialization fails
+    ///
+    /// # Errors
+    ///
+    /// This function returns an error in the following cases:
+    /// - File cannot be created or written to (permission denied, path invalid, etc.)
+    /// - Data map compression fails
+    /// - Buffer flush fails
     pub fn save<P: AsRef<Path>>(&self, path: P) -> Result<(), ProjectError> {
         let mut file = File::create(path)?;
 
@@ -154,7 +260,53 @@ impl ProjectMetadata {
         Ok(())
     }
 
-    /// Reads the project file back (symmetric to `save`).
+    /// Loads a project file from disk and parses its binary structure.
+    ///
+    /// This function reads a binary project file from the specified path and reconstructs the ProjectLoader
+    /// instance by parsing its structured format. The file format consists of a header followed by a compressed
+    /// data map section.
+    ///
+    /// # File Format
+    ///
+    /// The binary file structure (little-endian encoding):
+    /// - **Magic Number** (8 bytes): File signature for format identification
+    /// - **Version** (2 bytes): File format version for compatibility checking
+    /// - **Random Seed** (8 bytes): Seed value used in project generation or validation
+    /// - **Data Map Offset** (8 bytes): Byte offset where the compressed data map section begins
+    /// - **Data Map Size** (8 bytes): Byte size of the compressed data map section
+    /// - **Compressed Data Map** (variable size): Compressed project entries, located at the specified offset
+    ///
+    /// # Parameters
+    ///
+    /// * `path` - A path-like object pointing to the binary project file on disk
+    ///
+    /// # Returns
+    ///
+    /// Returns `Result<Self, ProjectError>` containing:
+    /// - `Ok(ProjectLoader)`: Successfully loaded and parsed project file
+    /// - `Err(ProjectError)`: If file I/O fails, binary parsing fails, or decompression fails
+    ///
+    /// # Errors
+    ///
+    /// This function returns an error in the following cases:
+    /// - File cannot be opened or read from disk
+    /// - Header fields are incomplete or truncated
+    /// - Data map offset or size is invalid
+    /// - Compressed data map cannot be decompressed
+    ///
+    /// # Example
+    ///
+    /// ```ignore
+    /// match ProjectLoader::load("path/to/project.bin") {
+    ///     Ok(loader) => {
+    ///         if loader.verify() {
+    ///             let response = loader.into_response()?;
+    ///             println!("Project loaded successfully");
+    ///         }
+    ///     }
+    ///     Err(e) => eprintln!("Failed to load project: {}", e),
+    /// }
+    /// ```
     pub fn load<P: AsRef<Path>>(path: P) -> Result<Self, ProjectError> {
         let mut file = File::open(path)?;
 
@@ -194,6 +346,27 @@ impl ProjectMetadata {
         })
     }
 
+
+
+    /// Verifies the integrity of the uncompressed file data.
+    ///
+    /// This function performs comprehensive validation checks on the decompressed project file to ensure
+    /// data integrity and compatibility. It validates the file format, version compatibility, and data integrity
+    /// by verifying CRC32 checksums for all entries.
+    ///
+    /// # Validation Steps
+    ///
+    /// 1. **Magic Number Check**: Verifies the file has the correct magic bytes (file signature)
+    /// 2. **Version Check**: Ensures the file format version is supported by the current implementation
+    /// 3. **CRC32 Integrity Check**: Validates each entry's data against its stored CRC32 checksum
+    ///
+    /// # Returns
+    ///
+    /// Returns `true` if all validation checks pass, `false` if any check fails:
+    /// - Invalid magic number indicates corrupted or incompatible file format
+    /// - Unsupported version indicates the file was created by a newer/incompatible version
+    /// - CRC32 mismatch indicates data corruption during decompression or storage
+    ///
     pub fn verify(&self) -> bool {
         if !self.is_valid_magic() {
             return false;
@@ -209,6 +382,25 @@ impl ProjectMetadata {
         true
     }
 
+
+
+
+    /// Converts the project data map into a structured response object suitable for frontend consumption via Tauri.
+    ///
+    /// This function processes entries from the internal data map and organizes them into a `LoadProjectResponse`.
+    /// It extracts the main project configuration from "project.json" and collects all preview data from entries
+    /// with paths starting with "/preview/". Other entries are currently ignored.
+    ///
+    /// # Returns
+    ///
+    /// Returns a `Result<LoadProjectResponse, ProjectError>` containing:
+    /// - `Ok(LoadProjectResponse)`: Successfully parsed response with project JSON content and preview data
+    /// - `Err(ProjectError)`: If UTF-8 conversion of the project.json file fails
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if the project.json entry contains invalid UTF-8 sequences.
+    ///
     pub fn into_response(self) -> Result<LoadProjectResponse, ProjectError> {
         let mut result = LoadProjectResponse {
             project: "".to_string(),
@@ -277,6 +469,25 @@ pub struct FileEntry {
 }
 
 impl FileEntry {
+
+    /// Creates a FileEntry from a string with optional metadata hash.
+    ///
+    /// Converts a string into binary data and calculates its CRC32 checksum for integrity verification.
+    /// Used primarily for storing text-based project configuration (e.g., "project.json").
+    ///
+    /// # Parameters
+    ///
+    /// * `string_data` - The string content to store as file data
+    /// * `path` - The file path/name within the project (e.g., "project.json")
+    /// * `hash` - Optional metadata hash; defaults to empty string if None
+    ///
+    /// # Returns
+    ///
+    /// A FileEntry with:
+    /// - Binary representation of the input string
+    /// - Calculated CRC32 checksum
+    /// - Specified path and optional hash
+    ///
     pub fn from_string(string_data: String, path: String, hash: Option<String>) -> Self {
         let bytes = string_data.into_bytes();
         Self {
@@ -288,6 +499,25 @@ impl FileEntry {
         }
     }
 
+
+    /// Creates a FileEntry from preview image data.
+    ///
+    /// Converts preview image bytes into a FileEntry with an auto-generated path and page ID as hash.
+    /// Used for storing preview/thumbnail images (WebP format) within the project.
+    ///
+    /// # Parameters
+    ///
+    /// * `preview_data` - PreviewData containing:
+    ///   - `page_id`: Numeric identifier for the preview page
+    ///   - `data`: Raw image bytes (typically WebP format)
+    ///
+    /// # Returns
+    ///
+    /// A FileEntry with:
+    /// - Path formatted as "/preview/{page_id}.webp"
+    /// - Calculated CRC32 checksum
+    /// - page_id stored as the hash field
+    ///
     pub fn from_preview(preview_data: PreviewData) -> Self {
         Self {
             size: preview_data.data.len() as u64,
@@ -408,50 +638,6 @@ impl Default for DataMap {
     fn default() -> Self {
         Self::new()
     }
-}
-
-#[derive(Debug, thiserror::Error)]
-pub enum DataMapError {
-    #[error("Serialization error")]
-    Serialize,
-
-    #[error("Deserialization error")]
-    Deserialize,
-
-    #[error("IO/de/compression error: {0}")]
-    Io(#[from] std::io::Error),
-}
-
-/// Error type for project file operations
-#[derive(Debug, thiserror::Error)]
-pub enum ProjectError {
-    #[error("IO error: {0}")]
-    Io(#[from] io::Error),
-
-    #[error("DataMap error: {0}")]
-    DataMap(#[from] DataMapError),
-
-    #[error("UTF-8 error: {0}")]
-    Utf8(#[from] std::string::FromUtf8Error),
-}
-
-#[derive(Deserialize, Serialize)]
-pub struct PreviewData {
-    pub page_id: String,
-    pub data: Vec<u8>,
-}
-
-#[derive(Deserialize, Debug)]
-pub struct SaveProjectRequest {
-    pub path: String,
-    pub project: String,
-    pub previews: Vec<PreviewData>,
-}
-
-#[derive(Serialize, Debug)]
-pub struct LoadProjectResponse {
-    pub project: String,
-    pub previews: Vec<PreviewData>,
 }
 
 #[tauri::command]
