@@ -1,11 +1,13 @@
-use std::fmt;
-use serde::{Deserialize, Serialize};
 use crate::format::app;
+use serde::{Deserialize, Serialize};
+use std::fmt;
+use std::fs::File;
 use std::io::{self, Read, Seek, SeekFrom, Write};
 use std::path::Path;
-use zstd::stream::{Encoder, Decoder};
 use thiserror::Error;
-use std::fs::File;
+use zstd::stream::{Decoder, Encoder};
+
+const IS_DEBUG: bool = false;
 
 /// how is project structure
 /// ┌───────────────────────────────────────────────────────────┐
@@ -76,13 +78,9 @@ pub struct ProjectMetadata {
     pub data_map_size: u64,
 }
 
-
 impl ProjectMetadata {
     /// Creates project metadata.
-    pub fn new(
-        data_map_offset: u64,
-        data_map_size: u64,
-    ) -> Self {
+    pub fn new(data_map_offset: u64, data_map_size: u64) -> Self {
         Self {
             magic: app::MAGIC,
             version: app::VERSION,
@@ -104,13 +102,16 @@ impl ProjectMetadata {
     }
 
     pub fn from_request(req: SaveProjectRequest) -> Self {
-        let project_main_data = FileEntry::from_string(req.project,"project.json".to_string(), None);
-        let mut project = ProjectMetadata::new(0,0);
+        let project_main_data =
+            FileEntry::from_string(req.project, "project.json".to_string(), None);
+        let mut project = ProjectMetadata::new(0, 0);
         project.add_file_entry(project_main_data);
         for preview in req.previews {
             project.add_file_entry(FileEntry::from_preview(preview));
         }
-        dbg!(&project);
+        if IS_DEBUG {
+            dbg!(&project);
+        }
         project
     }
 
@@ -192,8 +193,43 @@ impl ProjectMetadata {
             data_map_size,
         })
     }
-}
 
+    pub fn verify(&self) -> bool {
+        if !self.is_valid_magic() {
+            return false;
+        }
+        if !self.is_supported_version() {
+            return false;
+        }
+        for entry in self.data_map.entries.iter() {
+            if crc32fast::hash(&entry.data) != entry.crc32 {
+                return false;
+            }
+        }
+        true
+    }
+
+    pub fn into_response(self) -> Result<LoadProjectResponse, ProjectError> {
+        let mut result = LoadProjectResponse {
+            project: "".to_string(),
+            previews: vec![],
+        };
+        for entry in self.data_map.entries.into_iter() {
+            println!("path: {:?}", entry.path);
+            if entry.path == "project.json" {
+                result.project = String::from_utf8(entry.data)?;
+            } else if entry.path.starts_with("/preview/") {
+                result.previews.push(PreviewData {
+                    page_id: entry.hash,
+                    data: entry.data,
+                });
+            } else {
+                // not now
+            }
+        }
+        Ok(result)
+    }
+}
 
 /// Describes a single compressed asset stored inside the project.
 ///
@@ -238,9 +274,7 @@ pub struct FileEntry {
     pub data: Vec<u8>,
 
     pub crc32: u32,
-
 }
-
 
 impl FileEntry {
     pub fn from_string(string_data: String, path: String, hash: Option<String>) -> Self {
@@ -255,16 +289,15 @@ impl FileEntry {
     }
 
     pub fn from_preview(preview_data: PreviewData) -> Self {
-        Self{
+        Self {
             size: preview_data.data.len() as u64,
             crc32: crc32fast::hash(&preview_data.data),
             data: preview_data.data,
-            path: format!("/preview/{}.webp",&preview_data.page_id),
+            path: format!("/preview/{}.webp", &preview_data.page_id),
             hash: preview_data.page_id,
         }
     }
 }
-
 
 impl fmt::Debug for FileEntry {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -277,6 +310,19 @@ impl fmt::Debug for FileEntry {
             .field("path", &self.path)
             .field("size", &self.size)
             .field("crc32", &self.crc32)
+            .field("data_preview", &preview)
+            .field("data_len", &self.data.len())
+            .finish()
+    }
+}
+impl fmt::Debug for PreviewData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let preview_len = self.data.len().min(3);
+
+        let preview: Vec<u8> = self.data[..preview_len].to_vec();
+
+        f.debug_struct("PreviewData")
+            .field("page_id", &self.page_id)
             .field("data_preview", &preview)
             .field("data_len", &self.data.len())
             .finish()
@@ -342,23 +388,19 @@ impl DataMap {
     /// Serializes the DataMap using postcard then compresses it with zstd.
     pub fn compress(&self, level: i32) -> Result<Vec<u8>, DataMapError> {
         // Serialize with postcard (compact and fast)
-        let serialized = postcard::to_allocvec(self)
-            .map_err(|_| DataMapError::Serialize)?;
+        let serialized = postcard::to_allocvec(self).map_err(|_| DataMapError::Serialize)?;
 
         // Compress with zstd
-        zstd::encode_all(&serialized[..], level)
-            .map_err(DataMapError::Io)
+        zstd::encode_all(&serialized[..], level).map_err(DataMapError::Io)
     }
 
     /// Decompresses the data with zstd then deserializes with postcard.
     pub fn decompress(bytes: &[u8]) -> Result<Self, DataMapError> {
         // Decompress with zstd
-        let decompressed = zstd::decode_all(bytes)
-            .map_err(DataMapError::Io)?;
+        let decompressed = zstd::decode_all(bytes).map_err(DataMapError::Io)?;
 
         // Deserialize with postcard
-        postcard::from_bytes(&decompressed)
-            .map_err(|_| DataMapError::Deserialize)
+        postcard::from_bytes(&decompressed).map_err(|_| DataMapError::Deserialize)
     }
 }
 
@@ -367,7 +409,6 @@ impl Default for DataMap {
         Self::new()
     }
 }
-
 
 #[derive(Debug, thiserror::Error)]
 pub enum DataMapError {
@@ -381,8 +422,6 @@ pub enum DataMapError {
     Io(#[from] std::io::Error),
 }
 
-
-
 /// Error type for project file operations
 #[derive(Debug, thiserror::Error)]
 pub enum ProjectError {
@@ -391,9 +430,12 @@ pub enum ProjectError {
 
     #[error("DataMap error: {0}")]
     DataMap(#[from] DataMapError),
+
+    #[error("UTF-8 error: {0}")]
+    Utf8(#[from] std::string::FromUtf8Error),
 }
 
-#[derive(Deserialize, Serialize, Debug)]
+#[derive(Deserialize, Serialize)]
 pub struct PreviewData {
     pub page_id: String,
     pub data: Vec<u8>,
@@ -412,23 +454,31 @@ pub struct LoadProjectResponse {
     pub previews: Vec<PreviewData>,
 }
 
-
-
 #[tauri::command]
 pub fn save_project(request: SaveProjectRequest) -> Result<(), String> {
-    // dbg!(&request);
+    if IS_DEBUG {
+        dbg!(&request);
+    }
     let save_path = request.path.clone();
-    ProjectMetadata::from_request(request).save(save_path).unwrap();
+    ProjectMetadata::from_request(request)
+        .save(save_path)
+        .unwrap();
     // write file...
     Ok(())
 }
 
 #[tauri::command]
 pub fn load_project(path: String) -> Result<LoadProjectResponse, String> {
-    // read file...
-    Ok(LoadProjectResponse {
-        project: String::new(),
-        previews: Vec::new(),
-    })
-}
+    let project = ProjectMetadata::load(Path::new(&path))
+        .map_err(|error| format!("Failed to load project from path {}: {}", path, error))?;
 
+    if !project.verify() {
+        return Err("Project does not verified.".to_string());
+    }
+
+    let response = project.into_response().map_err(|error| error.to_string())?;
+    if IS_DEBUG {
+        dbg!(&response);
+    }
+    Ok(response)
+}

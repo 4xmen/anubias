@@ -89,12 +89,11 @@
         "{{ tabIndex }}"
 
         --- for debug begin--
+
         <button @click="debugSave">
           save
         </button>
-        <button @click="debugLoad">
-          load
-        </button>
+
         --- for debug end--
       </div>
     </div>
@@ -115,7 +114,7 @@ import bluePrint from "./blue-print.vue";
 import BluePrint from "./blue-print.vue";
 import SearchableCombobox from "../components/srachable-combobox.vue";
 import OptionEx from "../components/option-ex.vue";
-import {open, save} from "@tauri-apps/plugin-dialog";
+import { save} from "@tauri-apps/plugin-dialog";
 import {invoke} from "@tauri-apps/api/core";
 
 const storage = new LazyStore('ide.json', {autoSave: false});
@@ -252,48 +251,20 @@ export default {
           },
         ],
       });
-      if (path){
-        const req  = {
+      if (path) {
+        const req = {
           path,
-          project: JSON.stringify(this.project),
+          project: JSON.stringify(this.project.project),
           previews: await this.project.previews.export()
         };
-        console.log(req);
+        // console.log(req);
         let r = await invoke("save_project", {request: req});
-        console.log(r);
-      }
-    },
-    async debugLoad() {
 
-      const path = await open({
-        multiple: false,
-        directory: false,
-        filters: [
-          {
-            name: 'Anubias files',
-            extensions: ['anb'],
-          },
-          {
-            name: 'All files',
-            extensions: ['*'],
-          },
-        ],
-      });
-      if (path) {
+        // /// debug
+        // for( const page of this.project.project.pages) {
+        //   inspectBlob(this.project.previews.get(page.id).blob)
+        // }
 
-        const result = await invoke("load_project", {
-          path
-        });
-
-        projectStore.project = JSON.parse(result.project);
-
-        for (const preview of result.previews) {
-          this.project.previews.register(preview.pageId);
-          this.project.previews.update(
-              preview.pageId,
-              new Blob([preview.data])
-          );
-        }
       }
     },
     changeTab(index) {

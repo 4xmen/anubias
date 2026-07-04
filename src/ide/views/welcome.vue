@@ -44,8 +44,8 @@
 </template>
 
 <script>
-import { invoke } from '@tauri-apps/api/core';
-import { open } from '@tauri-apps/plugin-dialog';
+import {invoke} from '@tauri-apps/api/core';
+import {open} from '@tauri-apps/plugin-dialog';
 
 export default {
   name: "welcome",
@@ -56,23 +56,21 @@ export default {
     // console.log(this.$store.state.ide);
 
   },
-  computed:{
-
-  },
-  methods:{
+  computed: {},
+  methods: {
     async openWebsite(url) {
       await invoke('open_url', {
         url: url
       })
     },
-    goSetting(){
+    goSetting() {
       this.$router.push('/settings');
     },
-    goNewProject(){
+    goNewProject() {
       this.$router.push('/new-project');
     },
-    async openProject(){
-      const selected = await open({
+    async openProject() {
+      const path = await open({
         multiple: false,
         directory: false,
         filters: [
@@ -86,9 +84,20 @@ export default {
           },
         ],
       });
+      if (path) {
 
-      console.log(selected);
+        const result = await invoke("load_project", {
+          path
+        });
 
+
+        await this.$store.dispatch('project/loadProject', JSON.parse(result.project));
+        setTimeout(()=>{
+          this.$store.dispatch('project/updateProjectPreview', result.previews);
+          this.$router.push('/main');
+        },100);
+
+      }
     }
   }
 }
@@ -100,10 +109,12 @@ h4 {
   font-size: 110%;
   padding-top: .3em;
 }
+
 img {
   height: 5.5em;
   float: right;
 }
+
 #welcome-grid {
   display: grid;
   grid-template-columns: repeat(21, 1fr);
@@ -111,11 +122,12 @@ img {
   grid-gap: 1rem;
 }
 
-#welcome-grid i{
+#welcome-grid i {
   -webkit-text-stroke-color: var(--darker-bg);
   -webkit-text-stroke-width: 1px;
 }
-#welcome-grid .big-icon{
+
+#welcome-grid .big-icon {
   -webkit-text-stroke-color: var(--darker-bg);
   -webkit-text-stroke-width: 2px;
 }
@@ -211,7 +223,7 @@ img {
   margin: -.4em -32px 0 .5em;
 }
 
-.container{
+.container {
   user-select: none;
 }
 

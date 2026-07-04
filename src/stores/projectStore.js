@@ -1,15 +1,15 @@
 import projectTemplate from './assets/projectTemplate.json';
 import ide from './ideStore';
-import { invoke } from '@tauri-apps/api/core'
+import {invoke} from '@tauri-apps/api/core'
 import {getUniqueName} from "../ide/js/component-control";
 import {useToast} from "vue-toastification";
 // import {state} from "vue-tsc/out/shared";
 import defaultPage from './components/defaultPage.json';
-import { LazyStore } from '@tauri-apps/plugin-store';
+import {LazyStore} from '@tauri-apps/plugin-store';
 import {generatePageId} from "../ide/js/system-functions.js";
 import {PreviewManager} from "../ide/js/preview-manager.js";
 
-const storage = new LazyStore('ide.json', { autoSave: false });
+const storage = new LazyStore('ide.json', {autoSave: false});
 
 // const storage = new Store();
 const toast = useToast();
@@ -73,7 +73,7 @@ const projectStore = {
             // console.log(JSON.stringify(state.project).length);
             // console.log(JSON.stringify(storage.get('lastLoadedProject')).length);
             if (JSON.stringify(state.project) !== JSON.stringify(storage.get('lastLoadedProject'))) {
-               await storage.set('backupProject', state.project);
+                await storage.set('backupProject', state.project);
             }
         },
         async RESTORE_PROJECT(state) {
@@ -109,7 +109,7 @@ const projectStore = {
 
             try {
                 if (image !== undefined) {
-                     state.previews.update(state.project.pages[pageIndex].id, image);
+                    state.previews.update(state.project.pages[pageIndex].id, image);
                 }
             } catch (e) {
                 console.log(`Update preview problem: ${e.message}`);
@@ -150,6 +150,13 @@ const projectStore = {
         UPDATE_PROJECT_DATA(state, payload) {
             state[payload.key] = payload.value;
         },
+        UPDATE_PROJECT_PREVIEWS(state, payload) {
+            for (let preview of payload) {
+                // preview.data یک array است، درست تبدیل کن
+                const bytes = new Uint8Array(preview.data);
+                state.previews.update(preview.page_id, new Blob([bytes]));
+            }
+        }
     }
     ,
     actions: {
@@ -159,7 +166,7 @@ const projectStore = {
          * @param project : Object anubias project object
          */
         async createProject(context, project) {
-           await context.commit('CREATE_PROJECT', project);
+            await context.commit('CREATE_PROJECT', project);
         },
         /**
          *
@@ -206,9 +213,12 @@ const projectStore = {
         removePage(context, i) {
             context.commit('REMOVE_PAGE', i);
         },
-        changeSaveState(context,isSave){
-          context.commit('UPDATE_PROJECT_DATA',{key: 'isSave',value: isSave});
+        changeSaveState(context, isSave) {
+            context.commit('UPDATE_PROJECT_DATA', {key: 'isSave', value: isSave});
         },
+        updateProjectPreview(context, previews) {
+            context.commit('UPDATE_PROJECT_PREVIEWS', previews);
+        }
     },
     getters: {
         getPage: (state) => (i) => {

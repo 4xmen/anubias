@@ -1,3 +1,5 @@
+import {inspectBlob} from "./system-functions.js";
+
 /**
  * Runtime preview cache.
  *
@@ -26,12 +28,14 @@ export class PreviewManager {
             return;
         }
 
-        this.previews.set(pageId, {
-            blob: null,
-            url: null,
-            dirty: false,
-            updatedAt: 0,
-        });
+        if (!this.previews.has(pageId)) {
+            this.previews.set(pageId, {
+                blob: null,
+                url: null,
+                dirty: false,
+                updatedAt: 0,
+            });
+        }
     }
 
     /**
@@ -52,6 +56,10 @@ export class PreviewManager {
         preview.url = URL.createObjectURL(blob);
         preview.dirty = true;
         preview.updatedAt = Date.now();
+        // update force
+        // this.previews = new Map(this.previews);
+        // debug
+        // inspectBlob(blob,'after');
     }
 
     /**
