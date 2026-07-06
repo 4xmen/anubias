@@ -15,6 +15,12 @@ pub struct MenuState {
 
 
 impl MenuState {
+    /// Creates a new menu state instance with all options disabled by default.
+    ///
+    /// # Returns
+    ///
+    /// A new `MenuState` where all action states (`can_save`, `can_undo`, `can_redo`, and
+    /// `is_project_loaded`) are initialized to `false`.
     pub fn new() -> Self {
         MenuState {
             can_save: false,
@@ -24,7 +30,20 @@ impl MenuState {
         }
     }
 
-    // rebuild ide menu
+    /// Updates the menu to reflect the current state.
+    ///
+    /// Rebuilds the menu based on whether a project is currently loaded. When a project is
+    /// loaded, additional menu options become available. Otherwise, only basic menu items
+    /// are shown.
+    ///
+    /// # Arguments
+    ///
+    /// * `app` - A reference to the application instance used to apply the new menu.
+    ///
+    /// # Returns
+    ///
+    /// `Ok(())` if the menu was successfully updated, or an `Err` if something went wrong
+    /// during the menu construction or application.
     pub fn rebuild_menu<R: Runtime>(&self, app: &AppHandle<R>) -> tauri::Result<()> {
         let menu = if self.is_project_loaded {
             build_menu_with_project(app, self)?
@@ -36,6 +55,7 @@ impl MenuState {
     }
 }
 
+
 #[derive(Serialize, Deserialize)]
 pub enum StateList {
     CanSave,
@@ -44,6 +64,18 @@ pub enum StateList {
     IsProjectLoaded,
 }
 
+/// Constructs the basic menu structure when no project is open.
+///
+/// Creates a menu with fundamental options available regardless of project state.
+/// This includes actions like creating a new project, opening an existing one, and exiting.
+///
+/// # Arguments
+///
+/// * `app` - A reference to the application instance needed to build menu components.
+///
+/// # Returns
+///
+/// Returns the constructed menu, or an `Err` if menu construction fails.
 pub fn build_menu_no_project<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<Menu<R>> {
     let file_menu = Submenu::with_items(
         app,
@@ -62,6 +94,20 @@ pub fn build_menu_no_project<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<Me
     Menu::with_items(app, &[&file_menu,&help_menu])
 }
 
+/// Constructs the complete menu structure when a project is open.
+///
+/// Builds a menu with all available options for an active project. Menu item availability
+/// is determined by the current state—for example, the Save option is only enabled when
+/// there are unsaved changes, and Undo/Redo are enabled based on history availability.
+///
+/// # Arguments
+///
+/// * `app` - A reference to the application instance needed to build menu components.
+/// * `state` - The current menu state that determines which options should be enabled or disabled.
+///
+/// # Returns
+///
+/// Returns the constructed menu, or an `Err` if menu construction fails.
 pub fn build_menu_with_project<R: Runtime>(
     app: &AppHandle<R>,
     state: &MenuState
@@ -143,6 +189,25 @@ pub fn build_menu_with_project<R: Runtime>(
     Menu::with_items(app, &[&file_menu, &edit_menu, &view_menu , &app_menu , &setting_menu ,&help_menu])
 }
 
+
+/// Updates a specific menu state property and applies the changes to the menu.
+///
+/// This is a tauri command call from front-end API
+/// Modifies one of the menu state flags that control whether certain menu options are
+/// enabled or disabled. When the project-loaded state changes, the entire menu is rebuilt.
+/// For other state changes, only the affected menu items are updated.
+///
+/// # Arguments
+///
+/// * `app` - A reference to the application instance used to update the menu.
+/// * `menu_state` - A shared reference to the current menu state that will be modified.
+/// * `state` - Which state property should be updated.
+/// * `value` - The new value for the selected property.
+///
+/// # Returns
+///
+/// Returns `Ok(true)` if the state was successfully updated and applied, or an `Err`
+/// with a description if the operation failed.
 #[tauri::command]
 pub fn set_menu_state<R: Runtime>(
     app: AppHandle<R>,
@@ -168,6 +233,24 @@ pub fn set_menu_state<R: Runtime>(
     Ok(true)
 }
 
+
+/// Updates the enabled state of individual menu items based on the current menu state.
+///
+/// Locates specific menu items within the application menu and sets their enabled
+/// or disabled status according to the corresponding properties in the menu state.
+/// This is used for incremental updates when state changes that do not require
+/// a complete menu rebuild.
+///
+/// # Arguments
+///
+/// * `app` - A reference to the application instance from which the menu is retrieved.
+/// * `state` - A reference to the current menu state containing the enabled/disabled
+///   flags for each menu item.
+///
+/// # Returns
+///
+/// Returns `Ok(())` if the menu items were successfully updated, or an `Err` with
+/// a description if retrieving or updating the menu failed.
 fn update_individual_items<R: Runtime>(
     app: &AppHandle<R>,
     state: &MenuState
@@ -204,7 +287,24 @@ fn update_individual_items<R: Runtime>(
     Ok(())
 }
 
-// search recursive menu item
+
+
+
+/// Recursively searches for a menu item by its identifier throughout the menu structure.
+///
+/// Traverses the menu hierarchy, checking both top-level items and items within submenus,
+/// to locate the menu item with the specified ID. The search uses a breadth-first approach
+/// at each level before descending into nested submenus.
+///
+/// # Arguments
+///
+/// * `menu` - The menu to search within.
+/// * `id` - The identifier string of the menu item to find.
+///
+/// # Returns
+///
+/// Returns `Some(MenuItemKind)` if a matching item is found, or `None` if no item
+/// with the given ID exists in the menu structure.
 fn find_menu_item_by_id<R: Runtime>(
     menu: &Menu<R>,
     id: &str
@@ -224,6 +324,21 @@ fn find_menu_item_by_id<R: Runtime>(
     None
 }
 
+/// Recursively searches for a menu item within a submenu and its nested submenus.
+///
+/// A helper function that traverses a submenu hierarchy to find an item by its identifier.
+/// It checks the current submenu first, then recursively searches any nested submenus
+/// found within it.
+///
+/// # Arguments
+///
+/// * `submenu` - The submenu to search within.
+/// * `id` - The identifier string of the menu item to find.
+///
+/// # Returns
+///
+/// Returns `Some(MenuItemKind)` if a matching item is found, or `None` if no item
+/// with the given ID exists in the submenu or its nested structure.
 fn find_in_submenu<R: Runtime>(
     submenu: &Submenu<R>,
     id: &str
@@ -244,6 +359,20 @@ fn find_in_submenu<R: Runtime>(
 }
 
 
+/// Constructs the Help submenu with application assistance and information options.
+///
+/// Creates a submenu containing links to documentation, issue reporting, version checking,
+/// and other help-related functionality. The submenu is enabled by default and ready to
+/// be integrated into the application menu.
+///
+/// # Arguments
+///
+/// * `app` - A reference to the application instance used to create menu items.
+///
+/// # Returns
+///
+/// Returns `Ok(Submenu)` containing the constructed Help menu if successful, or an `Err`
+/// if creating any of the menu items failed.
 fn help_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<Submenu<R>> {
     let help_menu = Submenu::with_items(
         app,

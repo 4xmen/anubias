@@ -56,7 +56,7 @@ pub fn run() {
             load_project,
         ])
         .setup(|app| {
-            // MenuState را manage کن
+            // to manage menu state
             let menu_state = Mutex::new(MenuState::new());
             app.manage(menu_state);   
 
