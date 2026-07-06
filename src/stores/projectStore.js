@@ -68,6 +68,8 @@ const projectStore = {
             project.pages.forEach((page) => {
                 state.previews.register(page.id);
             });
+
+            this.dispatch('ide/setMenuState', { name: 'IsProjectLoaded', state: true});
         },
         async BACKUP_PROJECT(state) {
             // console.log(JSON.stringify(state.project).length);
@@ -102,8 +104,10 @@ const projectStore = {
                     state.project.pages[pageIndex].children.nonVisual.push(c);
                 }
             }
-            this.dispatch('ide/setMenuCanUndo', true);
+            this.dispatch('ide/setMenuState', { name: 'CanUndo', state: true});
+            this.dispatch('ide/setMenuState', { name: 'CanSave', state: true});
             this.dispatch('ide/setCanScreenshot', true);
+
         },
         SET_PAGE_PREVIEW(state, {pageIndex, image}) {
 

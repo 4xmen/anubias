@@ -53,8 +53,8 @@ export default {
     return {}
   },
   mounted() {
-    // console.log(this.$store.state.ide);
-
+    // reset menu of app
+    this.$store.dispatch('ide/ResetMenuState');
   },
   computed: {},
   methods: {
@@ -92,10 +92,10 @@ export default {
 
 
         await this.$store.dispatch('project/loadProject', JSON.parse(result.project));
-        setTimeout(()=>{
+        setTimeout(() => {
           this.$store.dispatch('project/updateProjectPreview', result.previews);
           this.$router.push('/main');
-        },100);
+        }, 100);
 
       }
     }

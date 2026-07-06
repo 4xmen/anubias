@@ -213,6 +213,7 @@ export default {
   mounted() {
     this.$refs.name.focus();
     btnWave();
+    this.$store.dispatch('ide/ResetMenuState');
   },
   computed: {
     ...mapState(['ide', 'project'])

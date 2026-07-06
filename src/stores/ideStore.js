@@ -95,15 +95,15 @@ const ideStore = {
             orient: 0,
             zoom: 0,
         },
-        // menu status depends on `app-menu.ts`
         menu: {
-            canSave: false,
-            canUndo: false,
-            canRedo: false,
-            canPaste: false,
-            canCut: false,
-            canCopy: false,
-            canOnlineBuild: false,
+            CanSave: false,
+            CanUndo: false,
+            CanRedo: false,
+            // canPaste: false,
+            // canCut: false,
+            // canCopy: false,
+            // canOnlineBuild: false,
+            IsProjectLoaded: false,
         },
         confirm: {
             title: "Confirm",
@@ -170,11 +170,11 @@ const ideStore = {
         SET_DROP_AREA(state, area) {
             state.dropArea = area;
         },
-        SET_MENU_CAN_UNDO(state, data) {
-            state.menu.canUndo = data;
-        },
-        SET_MENU_CAN_SAVE(state, data) {
-            state.menu.canSave = data;
+        async SET_MENU_STATE(state, payload ) {
+            console.log(payload);
+            state.menu[payload.name] = payload.state;
+            return invoke('set_menu_state', { state: payload.name, value: payload.state })
+                .catch(err => console.error('Menu update failed:', err))
         },
         SET_CAN_SCREENSHOT(state, data) {
             state.canScreenshot = data;
@@ -254,25 +254,24 @@ const ideStore = {
                 title: payload.title,
             });
         },
-        async setMenuCanUndo(context, data) {
+        async setMenuState(context, {name, state}) {
             // console.log(data,'undo');
-            context.commit('SET_MENU_CAN_UNDO', data);
-            await invoke("set_menu_state", {
-                state: "CanUndo",
-                value: true
+            context.commit('SET_MENU_STATE', {
+                name: name,
+                state: state,
             });
+        },
+        async ResetMenuState(context) {
+            for( const name in context.state.menu) {
+                context.commit('SET_MENU_STATE', {
+                    name: name,
+                    state: false,
+                });
+            }
         },
         setCanScreenshot(context, data) {
             // console.log(data,'undo');
             context.commit('SET_CAN_SCREENSHOT', data);
-        },
-        async setMenuCanSave(context, data) {
-            // console.log(data,'undo');
-            context.commit('SET_MENU_CAN_SAVE', data);
-            await invoke("set_menu_state", {
-                state: "CanSave",
-                value: true
-            });
         },
         /**
          * set active page index

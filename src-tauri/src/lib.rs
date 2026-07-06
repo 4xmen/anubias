@@ -9,7 +9,7 @@ use tauri::{
     Manager,
 };
 
-use crate::menu_state::{set_menu_state, MenuState};
+use crate::menu_state::{set_menu_state, MenuState,build_menu_no_project };
 use tauri::AppHandle;
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_opener::OpenerExt;
@@ -41,9 +41,9 @@ pub fn run() {
     let mut menu_state = Mutex::new(MenuState::new());
 
     tauri::Builder::default()
+        .manage(menu_state)
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
-        .manage(menu_state)
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
@@ -56,35 +56,25 @@ pub fn run() {
             load_project,
         ])
         .setup(|app| {
-            let file_menu = Submenu::with_items(
-                app,
-                "File",
-                true,
-                &[
-                    &MenuItem::with_id(app, "new", "New", true, None::<&str>)?,
-                    &MenuItem::with_id(app, "open", "Open", true, None::<&str>)?,
-                ],
-            )?;
+            // MenuState را manage کن
+            let menu_state = Mutex::new(MenuState::new());
+            app.manage(menu_state);   
 
-            app.on_menu_event(move |app_handle: &tauri::AppHandle, event| {
-                println!("menu event: {:?}", event.id());
+            // initial menu without project
+            let initial_state = MenuState::new();
+            let menu = build_menu_no_project(app.handle())?;
+            app.set_menu(menu)?;
 
+            // Event handler
+            app.on_menu_event(|app_handle, event| {
                 match event.id().0.as_str() {
-                    "open" => {
-                        println!("open event");
-                    }
-                    "close" => {
-                        println!("close event");
-                    }
-                    _ => {
-                        println!("unexpected menu event");
-                    }
+                    "new" => { /* ... */ }
+                    "open" => { /* ... */ }
+                    "save" => { /* ... */ }
+                    "undo" => { /* ... */ }
+                    _ => {}
                 }
             });
-
-            let menu = Menu::with_items(app, &[&file_menu])?;
-
-            app.set_menu(menu)?;
 
             Ok(())
         })
