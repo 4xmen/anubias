@@ -2,7 +2,7 @@ use std::ffi::c_long;
 use serde::{Deserialize, Serialize};
 use std::sync::Mutex;
 use tauri::{AppHandle, State, Runtime};
-use tauri::menu::{Menu, Submenu, MenuItem, MenuItemKind};
+use tauri::menu::{Menu, Submenu, MenuItem, MenuItemKind, PredefinedMenuItem, CheckMenuItem};
 
 #[derive(Clone)]
 pub struct MenuState {
@@ -11,6 +11,8 @@ pub struct MenuState {
     can_save: bool,
     is_project_loaded: bool,
 }
+
+
 
 impl MenuState {
     pub fn new() -> Self {
@@ -50,11 +52,14 @@ pub fn build_menu_no_project<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<Me
         &[
             &MenuItem::with_id(app, "new", "New Project", true, None::<&str>)?,
             &MenuItem::with_id(app, "open", "Open...", true, None::<&str>)?,
-            &MenuItem::with_id(app, "exit", "Exit", true, None::<&str>)?,
+            &PredefinedMenuItem::separator(app)?,
+            &MenuItem::with_id(app, "exit", "Exit", true, Some("Alt+F4"))?,
         ],
     )?;
 
-    Menu::with_items(app, &[&file_menu])
+
+    let help_menu = help_menu(app)?;
+    Menu::with_items(app, &[&file_menu,&help_menu])
 }
 
 pub fn build_menu_with_project<R: Runtime>(
@@ -67,10 +72,12 @@ pub fn build_menu_with_project<R: Runtime>(
         true,
         &[
             &MenuItem::with_id(app, "new", "New Project", true, None::<&str>)?,
-            &MenuItem::with_id(app, "open", "Open...", true, None::<&str>)?,
+            &MenuItem::with_id(app, "open", "Open...", true,  Some("CmdOrCtrl+O"))?,
             &MenuItem::with_id(app, "save", "Save", state.can_save, None::<&str>)?,
             &MenuItem::with_id(app, "save_as", "Save As...", true, None::<&str>)?,
             &MenuItem::with_id(app, "close", "Close Project", true, None::<&str>)?,
+            &PredefinedMenuItem::separator(app)?,
+            &MenuItem::with_id(app, "exit", "Exit", true, Some("Alt+F4"))?,
         ],
     )?;
 
@@ -83,8 +90,57 @@ pub fn build_menu_with_project<R: Runtime>(
             &MenuItem::with_id(app, "redo", "Redo", state.can_redo, None::<&str>)?,
         ],
     )?;
+    let view_menu = Submenu::with_items(
+        app,
+        "View",
+        true,
+        &[
+            &MenuItem::with_id(app, "logs", "Logs panel toggle", true, None::<&str>)?,
+            &MenuItem::with_id(app, "components", "Components panel toggle", true, None::<&str>)?,
+            &MenuItem::with_id(app, "properties", "Properties panel toggle", true, None::<&str>)?,
+            &PredefinedMenuItem::separator(app)?,
+            &MenuItem::with_id(app, "fullscreen", "Full screen toggle", true,  Some("F11"))?,
+        ],
+    )?;
+    let setting_menu = Submenu::with_items(
+        app,
+        "Setting",
+        true,
+        &[
+            &MenuItem::with_id(app, "preference", "Preferences", true, None::<&str>)?,
+            &MenuItem::with_id(app, "sdk", "SDK", true, None::<&str>)?,
+            &MenuItem::with_id(app, "emulator", "Emulators", true, None::<&str>)?,
+            &MenuItem::with_id(app, "project", "Project setting", true, None::<&str>)?,
+            &MenuItem::with_id(app, "resource", "Resources", true, None::<&str>)?,
+        ],
+    )?;
+    let app_menu = Submenu::with_items(
+        app,
+        "Application",
+        true,
+        &[
+            &MenuItem::with_id(app, "debug", "Debug", true, None::<&str>)?,
+            &MenuItem::with_id(app, "run", "Run", true, None::<&str>)?,
+            &MenuItem::with_id(app, "clean", "Emulators", true, None::<&str>)?,
+            &MenuItem::with_id(app, "build", "Project setting", true, None::<&str>)?,
+            &Submenu::with_items(
+                app,
+                "Build output",
+                true,
+                &[
+                    &CheckMenuItem::with_id(app, "andriod", "Andriod", true,true,None::<&str>,)?,
+                    &CheckMenuItem::with_id(app, "ios", "iOS", true,false,None::<&str>,)?,
+                    &CheckMenuItem::with_id(app, "desktop", "Desktop", true,false,None::<&str>,)?,
+                    &CheckMenuItem::with_id(app, "web", "WebApp", true,false,None::<&str>,)?,
+                ],
+            )? ,
+            &PredefinedMenuItem::separator(app)?,
+            &MenuItem::with_id(app, "cloud", "Cloud build", true, None::<&str>)?,
+        ],
+    )?;
 
-    Menu::with_items(app, &[&file_menu, &edit_menu])
+    let help_menu = help_menu(app)?;
+    Menu::with_items(app, &[&file_menu, &edit_menu, &view_menu , &app_menu , &setting_menu ,&help_menu])
 }
 
 #[tauri::command]
@@ -185,4 +241,23 @@ fn find_in_submenu<R: Runtime>(
         }
     }
     None
+}
+
+
+fn help_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<Submenu<R>> {
+    let help_menu = Submenu::with_items(
+        app,
+        "Help",
+        true,
+        &[
+            &MenuItem::with_id(app, "started", "Getting Started", true, None::<&str>)?,
+            &MenuItem::with_id(app, "doc", "Documentation", true, None::<&str>)?,
+            &MenuItem::with_id(app, "report", "Report Issue", true, None::<&str>)?,
+            &MenuItem::with_id(app, "check", "Check new version", true, None::<&str>)?,
+            &PredefinedMenuItem::separator(app)?,
+            &MenuItem::with_id(app, "about", "About", true, None::<&str>)?,
+        ],
+    )?;
+
+    Ok(help_menu)
 }
