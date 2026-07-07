@@ -113,6 +113,11 @@ let fixFlutterObjectTitle = function (title) {
     return tmp[tmp.length - 1];
 };
 
+function fixName(filePath) {
+    const hasExt = /\.[^\/\\]+$/.test(filePath);
+    if (!hasExt) return filePath + ".anb";
+    return filePath;
+}
 
 
 export {
@@ -123,4 +128,5 @@ export {
     createScreenShot,
     arrayMove,
     fixFlutterObjectTitle,
+    fixName,
 };

@@ -97,11 +97,12 @@
         --- for debug end--
       </div>
     </div>
+    <restore-modal></restore-modal>
   </div>
 </template>
 
 <script>
-import {mapState} from 'vuex';
+import {mapActions, mapState} from 'vuex';
 import {mapGetters} from 'vuex';
 import buttons from "../components/buttons.vue";
 import iconButtons from "../components/icon-buttons.vue";
@@ -114,15 +115,20 @@ import bluePrint from "./blue-print.vue";
 import BluePrint from "./blue-print.vue";
 import SearchableCombobox from "../components/srachable-combobox.vue";
 import OptionEx from "../components/option-ex.vue";
-import { save} from "@tauri-apps/plugin-dialog";
-import {invoke} from "@tauri-apps/api/core";
+import {save,ask} from "@tauri-apps/plugin-dialog";
 import ProjectProperties from "../components/project-properties.vue";
+import RestoreModal from "../components/restore-modal.vue";
+import {fixName} from "../js/general-functions.js";
+import { exists } from "@tauri-apps/plugin-fs";
+import {invoke} from "@tauri-apps/api/core";
+
 
 const storage = new LazyStore('ide.json', {autoSave: false});
 
 export default {
   name: "anubias",
   components: {
+    RestoreModal,
     ProjectProperties,
     OptionEx,
     SearchableCombobox,
@@ -146,7 +152,7 @@ export default {
     // autosave backup every 3 min
     setInterval(() => {
       this.autosave();
-    },60000 * 3); // WIP: may need autosave backup in ide setting
+    }, 60000 * 3); // WIP: may need autosave backup in ide setting
   },
   beforeUnmount() {
     document.removeEventListener('keydown', this.onKeydown);
@@ -256,33 +262,47 @@ export default {
       }
     },
     // debug states
-    debugAllStates(){
+    debugAllStates() {
       // debug states
-      console.log('ide',this.$store.state.ide);
-      console.log('prj',this.$store.state.project);
+      console.log('ide', this.$store.state.ide);
+      console.log('prj', this.$store.state.project);
     },
     // debug auto save
-    async autosave(){
-       this.$store.dispatch("project/autoSave");
+    async autosave() {
+      this.$store.dispatch("project/autoSave");
     },
     // debug methods
     async debugSave() {
-      let lastFolder = localStorage.getItem('lastFolder') || '';
+      let lastFolder = localStorage.getItem("lastFolder") || "";
+
       const path = await save({
         defaultPath: lastFolder,
         multiple: false,
         directory: false,
         filters: [
-          { name: 'Anubias files', extensions: ['anb'] },
-          { name: 'All files', extensions: ['*'] },
+          { name: "Anubias files", extensions: ["anb"] },
+          { name: "All files", extensions: ["*"] },
         ],
       });
 
-      if (path) {
-        const folder = path.substring(0, path.lastIndexOf('/'));
-        localStorage.setItem('lastFolder', folder);
-        this.$store.dispatch("project/saveProject", path);
+      if (!path) return;
+
+      const fixedPath = fixName(path);
+      const fileExists = await invoke("path_exists", { path: fixedPath });
+
+
+      if (fileExists) {
+        const ok = await ask("OMG :), Do you want to overwrite project file?", {
+          title: "Confirm overwrite",
+          kind: "warning",
+        });
+
+        if (!ok) return;
       }
+
+      const folder = fixedPath.substring(0, fixedPath.lastIndexOf("/"));
+      localStorage.setItem("lastFolder", folder);
+      this.$store.dispatch("project/saveProject", fixedPath);
     },
     changeTab(index) {
       this.tabIndex = index;
@@ -314,43 +334,8 @@ export default {
     },
     async initialLoadProject() {
       // check if project
-
-      if (this.$store.state.project.projectFile == '') {
-
-        try {
-          if (this.$store.state.project.pages.length === []) {
-            this.$store.dispatch('project/loadProject', await storage.get('lastCreatedProject'));
-
-          } else {
-            // set entry point  to active
-            this.$store.dispatch('ide/setActivePage', this.$store.state.project.project.entryPoint);
-          }
-        } catch (e) {
-          // console.log(e.message);
-          this.$store.dispatch('project/loadProject', await storage.get('lastLoadedProject'));
-        }
-      }
-
-      // check backup
-      if (!this.$store.state.ide.disableRestoreProject) {
-        if (storage.get('backupProject') != null) {
-          // console.log(storage.get('backupProject'));
-
-          setTimeout(function () {
-            this.$store.dispatch('ide/showConfirm', {
-              onConfirm() {
-
-                this.$store.dispatch('project/restoreProject');
-              },
-              onCancel() {
-
-              },
-              text: 'We have unsaved backup, Do you want to restore it?',
-              title: 'Project restore confirm',
-            });
-          }.bind(this), 1000);
-        }
-
+      if (this.project.project.pages.length === 0) {
+        await this.$store.dispatch('project/loadLastProject');
       }
     },
     createBackupProject() {

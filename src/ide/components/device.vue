@@ -226,7 +226,7 @@ export default {
           image: await createScreenShot('#component-holder'),
         });
         // create project backup
-        this.$store.dispatch('project/backupProject');
+        // this.$store.dispatch('project/backupProject');
         this.$store.dispatch('ide/setCanScreenshot', false);
       }
     }, 10000, this);

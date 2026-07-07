@@ -13,7 +13,10 @@ use tauri::{
 
 use crate::config::{IS_DEBUG, SECOND_MONITOR};
 use crate::menu_state::{build_menu_no_project, set_menu_state, MenuState};
-use file::{autosave_project_backup, delete_old_backups, list_backups, load_project, save_project};
+use file::{
+    autosave_project_backup, delete_old_backups, list_backups, load_project, path_exists,
+    save_project,
+};
 use tauri::AppHandle;
 use tauri::{PhysicalPosition, Position};
 use tauri_plugin_dialog::DialogExt;
@@ -61,6 +64,7 @@ pub fn run() {
             autosave_project_backup,
             delete_old_backups,
             list_backups,
+            path_exists
         ])
         .setup(|app| {
             if SECOND_MONITOR {

@@ -32,16 +32,17 @@ const projectStore = {
         projectPath: '',
         isSave: true,
         lastLoadProjectNotify: 0,
-        backups:[],
+        backups: [],
     }),
     mutations: {
+
 
         CREATE_PROJECT(state, project) {
             state.project = project;
         },
         LOAD_PROJECT(state, project) {
             state.project = project;
-            state.lastLoadProjectNotify = Math.round(Date.now() / 1000);
+            state.lastLoadProjectNotify = unixTimestamp();
 
             project.pages.forEach((page) => {
                 state.previews.register(page.id);
@@ -134,16 +135,19 @@ const projectStore = {
         SET_BACKUP_LIST(state, list) {
             state.backups = list;
         },
-        IGNORE_BACKUPS(state){
+        IGNORE_BACKUPS(state) {
             state.backups = [];
+        },
+        SET_PROJECT_FILE(state, path) {
+            state.projectFile = path;
         }
     },
     actions: {
         async createProject({commit, dispatch}, project) {
             project.anubias = ide.getters.version(ide.state());
-            await storage.set('lastCreatedProject', project);
+            await storage.set('lastLoadedProject', project);
             commit('CREATE_PROJECT', project);
-            await dispatch('loadProject', project);
+            // await dispatch('loadProject', project);
             toast.success('Project initialized...');
             dispatch('ide/setTitle', null, {root: true});
         },
@@ -158,40 +162,39 @@ const projectStore = {
 
             dispatch('ide/setActivePage', project.entryPoint, {root: true});
 
-            if (Math.round(Date.now() / 1000) > state.lastLoadProjectNotify + 2) {
-                toast.success('Project loaded...');
-                commit('SET_LAST_LOAD_PROJECT_NOTIFY', Math.round(Date.now() / 1000));
-            }
-
+            toast.success('Project loaded...');
             dispatch('ide/setMenuState', {name: 'IsProjectLoaded', state: true}, {root: true});
             dispatch('ide/setTitle', null, {root: true});
 
             // check auto save backup
-            await dispatch('listBackups',state.project.hash);
+            await dispatch('listBackups', state.project.hash);
+
         },
 
-        async listBackups({commit},hash) {
-            console.log('hash',hash);
-            let backups =  await invoke('list_backups', { hash });
-            commit("SET_BACKUP_LIST",backups);
+        async loadLastProject({commit, dispatch, state}) {
+
+            let project = await storage.get('lastLoadedProject');
+            // if this comment not need again must remove
+            commit('LOAD_PROJECT', project);
+
+            await invoke('set_has_project', {status: true});
+
+            dispatch('ide/setActivePage', project.entryPoint, {root: true});
+
+            toast.success('Project loaded...');
+            dispatch('ide/setMenuState', {name: 'IsProjectLoaded', state: true}, {root: true});
+            dispatch('ide/setTitle', null, {root: true});
+
+            // check auto save backup
+            await dispatch('listBackups', state.project.hash);
+        },
+
+        async listBackups({commit}, hash) {
+            let backups = await invoke('list_backups', {hash});
+            commit("SET_BACKUP_LIST", backups);
             if (backups.length > 0) {
                 toast.warning(`${backups.length} backups available`);
             }
-        },
-
-        // backup last project is not for autosave
-        // this just for load last loaded project
-        async backupProject({state}) {
-            if (JSON.stringify(state.project) !== JSON.stringify(await storage.get('lastLoadedProject'))) {
-                await storage.set('backupProject', state.project);
-            }
-        },
-
-        // restore project is not for autosave
-        // this just for load last loaded project
-        async restoreProject({commit}) {
-            const project = await storage.get('backupProject');
-            commit('LOAD_PROJECT', project);
         },
 
 

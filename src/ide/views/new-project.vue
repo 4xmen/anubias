@@ -249,8 +249,9 @@ export default {
         this.newProject.hash = generateHashId();
         await this.createProject(this.newProject);
         // console.log(this.newProject);
-        this.$router.push('/main');
-
+        setTimeout(()=>{
+          this.$router.push('/main');
+        },100);
       } else {
         this.stepIndex++;
       }

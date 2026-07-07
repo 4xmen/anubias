@@ -124,6 +124,9 @@ const ideStore = {
         onEditComponent: {},
         canScreenshot: false,
         disableRestoreProject: true,
+        modals:{
+            restore: false,
+        }
     }),
     mutations: {
         IDE_INIT(state, payload) {
@@ -195,6 +198,10 @@ const ideStore = {
         },
         HIDE_CONFIRM(state) {
             state.confirm.enabled = false;
+        },
+        CHANGE_MODAL_STATE(state, { name, isShow }) {
+            console.log(name, isShow);
+            state.modals[name] = isShow;
         }
     },
     actions: {
@@ -205,7 +212,7 @@ const ideStore = {
                 logs: await storage.get('logsCollapsed')
 
             }
-            context.commit("IDE_INIT", payload)
+            context.commit("IDE_INIT", payload);
         },
         setIdeTitle: {
             root: true,

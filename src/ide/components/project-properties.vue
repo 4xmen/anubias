@@ -36,15 +36,18 @@ export default {
   computed: {
     ...mapState(["project"]),
     ...mapMutations({
-      ignoreBackups: "project/IGNORE_BACKUPS"
-    })
+      ignoreBackups: "project/IGNORE_BACKUPS",
+    }),
   },
   methods: {
     ignoreBackupsNow() {
       this.ignoreBackups();
     },
     viewBackups() {
-      this.$emit("view-backups");
+      this.$store.commit("ide/CHANGE_MODAL_STATE", {
+        name: "restore",
+        isShow: true,
+      });
     },
   },
 };
@@ -128,9 +131,9 @@ export default {
 }
 
 .btn-primary {
-  background: #4c8bf5;
-  color: white;
-  box-shadow: 0 6px 14px rgba(76, 139, 245, 0.25);
+  background: var(--text-hilight);
+  color: black;
+  box-shadow: 0 6px 14px rgba(107, 245, 76, 0.25);
 }
 
 .btn-primary:hover {
