@@ -1,8 +1,9 @@
-use std::ffi::c_long;
+use crate::config::IS_DEBUG;
 use serde::{Deserialize, Serialize};
+use std::ffi::c_long;
 use std::sync::Mutex;
-use tauri::{AppHandle, State, Runtime};
-use tauri::menu::{Menu, Submenu, MenuItem, MenuItemKind, PredefinedMenuItem, CheckMenuItem};
+use tauri::menu::{CheckMenuItem, Menu, MenuItem, MenuItemKind, PredefinedMenuItem, Submenu};
+use tauri::{AppHandle, Runtime, State};
 
 #[derive(Clone)]
 pub struct MenuState {
@@ -11,8 +12,6 @@ pub struct MenuState {
     can_save: bool,
     is_project_loaded: bool,
 }
-
-
 
 impl MenuState {
     /// Creates a new menu state instance with all options disabled by default.
@@ -55,7 +54,6 @@ impl MenuState {
     }
 }
 
-
 #[derive(Serialize, Deserialize)]
 pub enum StateList {
     CanSave,
@@ -89,9 +87,8 @@ pub fn build_menu_no_project<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<Me
         ],
     )?;
 
-
     let help_menu = help_menu(app)?;
-    Menu::with_items(app, &[&file_menu,&help_menu])
+    Menu::with_items(app, &[&file_menu, &help_menu])
 }
 
 /// Constructs the complete menu structure when a project is open.
@@ -110,7 +107,7 @@ pub fn build_menu_no_project<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<Me
 /// Returns the constructed menu, or an `Err` if menu construction fails.
 pub fn build_menu_with_project<R: Runtime>(
     app: &AppHandle<R>,
-    state: &MenuState
+    state: &MenuState,
 ) -> tauri::Result<Menu<R>> {
     let file_menu = Submenu::with_items(
         app,
@@ -118,7 +115,7 @@ pub fn build_menu_with_project<R: Runtime>(
         true,
         &[
             &MenuItem::with_id(app, "new", "New Project", true, None::<&str>)?,
-            &MenuItem::with_id(app, "open", "Open...", true,  Some("CmdOrCtrl+O"))?,
+            &MenuItem::with_id(app, "open", "Open...", true, Some("CmdOrCtrl+O"))?,
             &MenuItem::with_id(app, "save", "Save", state.can_save, None::<&str>)?,
             &MenuItem::with_id(app, "save_as", "Save As...", true, None::<&str>)?,
             &MenuItem::with_id(app, "close", "Close Project", true, None::<&str>)?,
@@ -142,10 +139,22 @@ pub fn build_menu_with_project<R: Runtime>(
         true,
         &[
             &MenuItem::with_id(app, "logs", "Logs panel toggle", true, None::<&str>)?,
-            &MenuItem::with_id(app, "components", "Components panel toggle", true, None::<&str>)?,
-            &MenuItem::with_id(app, "properties", "Properties panel toggle", true, None::<&str>)?,
+            &MenuItem::with_id(
+                app,
+                "components",
+                "Components panel toggle",
+                true,
+                None::<&str>,
+            )?,
+            &MenuItem::with_id(
+                app,
+                "properties",
+                "Properties panel toggle",
+                true,
+                None::<&str>,
+            )?,
             &PredefinedMenuItem::separator(app)?,
-            &MenuItem::with_id(app, "fullscreen", "Full screen toggle", true,  Some("F11"))?,
+            &MenuItem::with_id(app, "fullscreen", "Full screen toggle", true, Some("F11"))?,
         ],
     )?;
     let setting_menu = Submenu::with_items(
@@ -174,21 +183,30 @@ pub fn build_menu_with_project<R: Runtime>(
                 "Build output",
                 true,
                 &[
-                    &CheckMenuItem::with_id(app, "andriod", "Andriod", true,true,None::<&str>,)?,
-                    &CheckMenuItem::with_id(app, "ios", "iOS", true,false,None::<&str>,)?,
-                    &CheckMenuItem::with_id(app, "desktop", "Desktop", true,false,None::<&str>,)?,
-                    &CheckMenuItem::with_id(app, "web", "WebApp", true,false,None::<&str>,)?,
+                    &CheckMenuItem::with_id(app, "andriod", "Andriod", true, true, None::<&str>)?,
+                    &CheckMenuItem::with_id(app, "ios", "iOS", true, false, None::<&str>)?,
+                    &CheckMenuItem::with_id(app, "desktop", "Desktop", true, false, None::<&str>)?,
+                    &CheckMenuItem::with_id(app, "web", "WebApp", true, false, None::<&str>)?,
                 ],
-            )? ,
+            )?,
             &PredefinedMenuItem::separator(app)?,
             &MenuItem::with_id(app, "cloud", "Cloud build", true, None::<&str>)?,
         ],
     )?;
 
     let help_menu = help_menu(app)?;
-    Menu::with_items(app, &[&file_menu, &edit_menu, &view_menu , &app_menu , &setting_menu ,&help_menu])
+    Menu::with_items(
+        app,
+        &[
+            &file_menu,
+            &edit_menu,
+            &view_menu,
+            &app_menu,
+            &setting_menu,
+            &help_menu,
+        ],
+    )
 }
-
 
 /// Updates a specific menu state property and applies the changes to the menu.
 ///
@@ -233,7 +251,6 @@ pub fn set_menu_state<R: Runtime>(
     Ok(true)
 }
 
-
 /// Updates the enabled state of individual menu items based on the current menu state.
 ///
 /// Locates specific menu items within the application menu and sets their enabled
@@ -253,18 +270,27 @@ pub fn set_menu_state<R: Runtime>(
 /// a description if retrieving or updating the menu failed.
 fn update_individual_items<R: Runtime>(
     app: &AppHandle<R>,
-    state: &MenuState
+    state: &MenuState,
 ) -> Result<(), String> {
     let Some(menu) = app.menu() else {
-        println!("⚠️  Menu not found via app.menu()");
+        if IS_DEBUG {
+            println!("⚠️  Menu not found via app.menu()");
+        }
         return Ok(());
     };
 
-    println!("🔍 Updating menu items...");
+    if IS_DEBUG {
+        println!("🔍 Updating menu items...");
+    }
 
     // Save
     if let Some(MenuItemKind::MenuItem(item)) = find_menu_item_by_id(&menu, "save") {
-        println!("✅ Found 'save' item → setting enabled = {}", state.can_save);
+        if IS_DEBUG {
+            println!(
+                "✅ Found 'save' item → setting enabled = {}",
+                state.can_save
+            );
+        }
         let _ = item.set_enabled(state.can_save);
     } else {
         println!("❌ 'save' item NOT found");
@@ -272,23 +298,29 @@ fn update_individual_items<R: Runtime>(
 
     // Undo
     if let Some(MenuItemKind::MenuItem(item)) = find_menu_item_by_id(&menu, "undo") {
-        println!("✅ Found 'undo' item → setting enabled = {}", state.can_undo);
+        if IS_DEBUG {
+            println!(
+                "✅ Found 'undo' item → setting enabled = {}",
+                state.can_undo
+            );
+        }
         let _ = item.set_enabled(state.can_undo);
     } else {
-        println!("❌ 'undo' item NOT found");
+        if IS_DEBUG {
+            println!("❌ 'undo' item NOT found");
+        }
     }
 
     // Redo
     if let Some(MenuItemKind::MenuItem(item)) = find_menu_item_by_id(&menu, "redo") {
-        println!("✅ Found 'redo' item");
+        if IS_DEBUG {
+            println!("✅ Found 'redo' item");
+        }
         let _ = item.set_enabled(state.can_redo);
     }
 
     Ok(())
 }
-
-
-
 
 /// Recursively searches for a menu item by its identifier throughout the menu structure.
 ///
@@ -305,10 +337,7 @@ fn update_individual_items<R: Runtime>(
 ///
 /// Returns `Some(MenuItemKind)` if a matching item is found, or `None` if no item
 /// with the given ID exists in the menu structure.
-fn find_menu_item_by_id<R: Runtime>(
-    menu: &Menu<R>,
-    id: &str
-) -> Option<MenuItemKind<R>> {
+fn find_menu_item_by_id<R: Runtime>(menu: &Menu<R>, id: &str) -> Option<MenuItemKind<R>> {
     if let Some(item) = menu.get(id) {
         return Some(item);
     }
@@ -339,10 +368,7 @@ fn find_menu_item_by_id<R: Runtime>(
 ///
 /// Returns `Some(MenuItemKind)` if a matching item is found, or `None` if no item
 /// with the given ID exists in the submenu or its nested structure.
-fn find_in_submenu<R: Runtime>(
-    submenu: &Submenu<R>,
-    id: &str
-) -> Option<MenuItemKind<R>> {
+fn find_in_submenu<R: Runtime>(submenu: &Submenu<R>, id: &str) -> Option<MenuItemKind<R>> {
     if let Some(item) = submenu.get(id) {
         return Some(item);
     }
@@ -357,7 +383,6 @@ fn find_in_submenu<R: Runtime>(
     }
     None
 }
-
 
 /// Constructs the Help submenu with application assistance and information options.
 ///

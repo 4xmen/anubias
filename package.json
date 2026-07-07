@@ -15,6 +15,7 @@
     "@tauri-apps/plugin-dialog": "~2",
     "@tauri-apps/plugin-fs": "~2",
     "@tauri-apps/plugin-opener": "~2",
+    "@tauri-apps/plugin-positioner": "~2",
     "@tauri-apps/plugin-store": "~2",
     "@vue-flow/core": "^1.48.2",
     "html-to-image": "^1.11.13",

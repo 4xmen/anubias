@@ -30,3 +30,5 @@ rand = "0.10.2"
 postcard = { version = "1", features = ["alloc"] }
 zstd = { version = "0.13", features = ["arrays"] }
 thiserror = "1"
+tauri-plugin-positioner = { version = "2.0.0", features = ["tray-icon"] }
+

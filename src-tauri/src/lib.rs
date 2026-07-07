@@ -1,6 +1,8 @@
-mod menu_state;
 mod file;
 mod format;
+mod menu_state;
+
+mod config;
 
 use std::sync::Mutex;
 use tauri::{
@@ -9,12 +11,15 @@ use tauri::{
     Manager,
 };
 
-use crate::menu_state::{set_menu_state, MenuState,build_menu_no_project };
+use crate::config::{IS_DEBUG, SECOND_MONITOR};
+use crate::menu_state::{build_menu_no_project, set_menu_state, MenuState};
+use file::{load_project, save_project};
 use tauri::AppHandle;
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_opener::OpenerExt;
 use tauri_plugin_store::StoreExt;
-use file::{save_project,load_project};
+use tauri::{PhysicalPosition, Position};
+
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
@@ -35,12 +40,12 @@ fn set_has_project(app: AppHandle, status: bool) -> bool {
     true
 }
 
-
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let mut menu_state = Mutex::new(MenuState::new());
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_positioner::init())
         .manage(menu_state)
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
@@ -56,9 +61,23 @@ pub fn run() {
             load_project,
         ])
         .setup(|app| {
+            if SECOND_MONITOR {
+                let window = app.get_webview_window("main").unwrap();
+
+                if let Some(monitor) = window.available_monitors()?.get(1) {
+                    let pos = monitor.position();
+
+                    window.set_position(Position::Physical(PhysicalPosition {
+                        x: pos.x,
+                        y: pos.y,
+                    }))?;
+
+                    window.maximize()?;
+                }
+            }
             // to manage menu state
             let menu_state = Mutex::new(MenuState::new());
-            app.manage(menu_state);   
+            app.manage(menu_state);
 
             // initial menu without project
             let initial_state = MenuState::new();

@@ -1,3 +1,4 @@
+use crate::config::IS_DEBUG;
 use crate::format::app;
 use serde::{Deserialize, Serialize};
 use std::fmt;
@@ -6,8 +7,6 @@ use std::io::{self, Read, Seek, SeekFrom, Write};
 use std::path::Path;
 use thiserror::Error;
 use zstd::stream::{Decoder, Encoder};
-
-const IS_DEBUG: bool = false;
 
 /// how is project structure
 /// ┌───────────────────────────────────────────────────────────┐
@@ -67,7 +66,6 @@ pub struct LoadProjectResponse {
     pub project: String,
     pub previews: Vec<PreviewData>,
 }
-
 
 /// Project file metadata.
 ///
@@ -145,8 +143,6 @@ impl ProjectMetadata {
     pub fn is_supported_version(&self) -> bool {
         self.version == app::VERSION
     }
-
-
 
     /// Converts a SaveProjectRequest into a ProjectMetadata instance.
     ///
@@ -346,8 +342,6 @@ impl ProjectMetadata {
         })
     }
 
-
-
     /// Verifies the integrity of the uncompressed file data.
     ///
     /// This function performs comprehensive validation checks on the decompressed project file to ensure
@@ -381,9 +375,6 @@ impl ProjectMetadata {
         }
         true
     }
-
-
-
 
     /// Converts the project data map into a structured response object suitable for frontend consumption via Tauri.
     ///
@@ -469,7 +460,6 @@ pub struct FileEntry {
 }
 
 impl FileEntry {
-
     /// Creates a FileEntry from a string with optional metadata hash.
     ///
     /// Converts a string into binary data and calculates its CRC32 checksum for integrity verification.
@@ -498,7 +488,6 @@ impl FileEntry {
             data: bytes,
         }
     }
-
 
     /// Creates a FileEntry from preview image data.
     ///
