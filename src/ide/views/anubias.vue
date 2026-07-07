@@ -134,13 +134,17 @@ export default {
       orients: ['<i class="ri-smartphone-line"></i>', '<i class="ri-smartphone-line r90deg"></i>'],
     };
   },
-  mounted() {
-    // if this not need must remove
-    // this.setIdeTitle('AnubiasApp');
-    // this.$store.dispatch('setIdeTitle', 'AnubiasApp');
-    this.initialLoadProject();
 
-  }, computed: {
+  mounted() {
+    // load project first action
+    this.initialLoadProject();
+    // handle shortcuts
+    document.addEventListener('keydown', this.onKeydown);
+  },
+  beforeUnmount() {
+    document.removeEventListener('keydown', this.onKeydown);
+  },
+  computed: {
     ...mapState(['ide', 'project']),
     ...mapGetters(
         'project', ['getPage']
@@ -230,12 +234,21 @@ export default {
         style += 'grid-column: 15 / 19;';
       }
       return style;
-    }
+    },
   },
   methods: {
-
+    onKeydown(e) {
+      if (e.altKey && e.key.toLowerCase() === 'd') {
+        e.preventDefault()
+        this.debugAllStates()
+      }
+    },
+    debugAllStates(){
+      // debug states
+      console.log('ide',this.$store.state.ide);
+      console.log('prj',this.$store.state.project);
+    },
     // debug methods
-
     async debugSave() {
       const path = await save({
         multiple: false,
@@ -252,13 +265,7 @@ export default {
         ],
       });
       if (path) {
-        const req = {
-          path,
-          project: JSON.stringify(this.project.project),
-          previews: await this.project.previews.export()
-        };
-        // console.log(req);
-        let r = await invoke("save_project", {request: req});
+        this.$store.dispatch("project/saveProject", path);
 
         // /// debug
         // for( const page of this.project.project.pages) {
