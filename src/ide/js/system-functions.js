@@ -5,7 +5,7 @@
  * const pageId = generatePageId();
  * console.log(pageId); // "550e8400-e29b-41d4-a716-446655440000"
  */
-function generatePageId() {
+function generateHashId() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         const r = (Math.random() * 16) | 0;
         const v = c === 'x' ? r : (r & 0x3) | 0x8;
@@ -37,5 +37,14 @@ async function inspectBlob(blob, label = '') {
     return bytes;
 }
 
+/**
+ * get unix timestamp
+ * @returns {number}
+ */
+let unixTimestamp = function () {
+    return Math.round(+new Date() / 1000);
+};
 
-export { generatePageId, inspectBlob };
+
+
+export { generateHashId, inspectBlob, unixTimestamp };

@@ -99,14 +99,6 @@ let arrayMove = function (arr, fromIndex, toIndex) {
     return arr;
 };
 
-/**
- * get unix timestamp
- * @returns {number}
- */
-let unixTimestamp = function () {
-    return Math.round(+new Date() / 1000);
-};
-
 
 /**
  * flutter object to usual string
@@ -130,6 +122,5 @@ export {
     calcPaddingOrMargin,
     createScreenShot,
     arrayMove,
-    unixTimestamp,
     fixFlutterObjectTitle,
 };

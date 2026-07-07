@@ -140,6 +140,11 @@ export default {
     this.initialLoadProject();
     // handle shortcuts
     document.addEventListener('keydown', this.onKeydown);
+
+    // autosave backup every 3 min
+    setInterval(() => {
+      this.autosave();
+    },60000 * 3); // WIP: may need autosave backup in ide setting
   },
   beforeUnmount() {
     document.removeEventListener('keydown', this.onKeydown);
@@ -243,12 +248,20 @@ export default {
         e.preventDefault()
         this.debugAllStates()
       }
+      if (e.altKey && e.key.toLowerCase() === 'a') {
+        e.preventDefault()
+        this.autosave();
+      }
     },
     // debug states
     debugAllStates(){
       // debug states
       console.log('ide',this.$store.state.ide);
       console.log('prj',this.$store.state.project);
+    },
+    // debug auto save
+    async autosave(){
+       this.$store.dispatch("project/autoSave");
     },
     // debug methods
     async debugSave() {

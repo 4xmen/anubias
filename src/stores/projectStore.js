@@ -6,7 +6,7 @@ import {useToast} from "vue-toastification";
 // import {state} from "vue-tsc/out/shared";
 import defaultPage from './components/defaultPage.json';
 import {LazyStore} from '@tauri-apps/plugin-store';
-import {generatePageId} from "../ide/js/system-functions.js";
+import {generateHashId, unixTimestamp} from "../ide/js/system-functions.js";
 import {PreviewManager} from "../ide/js/preview-manager.js";
 
 const storage = new LazyStore('ide.json', {autoSave: false});
@@ -35,55 +35,19 @@ const projectStore = {
     }),
     mutations: {
 
-        async CREATE_PROJECT(state, project) {
-            project.anubias = ide.getters.version(ide.state());
-            await storage.set('lastCreatedProject', project);
-            console.log(await storage.get('lastCreatedProject'));
-            await this.commit('project/LOAD_PROJECT', project);
-            toast.success("Project initialized...");
-            this.dispatch('ide/setTitle');
-
-        },
-        async LOAD_PROJECT(state, project) {
-
+        CREATE_PROJECT(state, project) {
             state.project = project;
+        },
+        LOAD_PROJECT(state, project) {
+            state.project = project;
+            state.lastLoadProjectNotify = Math.round(Date.now() / 1000);
 
-            // if this comment not need again must remove
-            // ide.actions.setIdeTitle(,ide.state().appName + ' - '+ project.name );
-            // let title = ide.state().appName + ' - ' + project.name;
-            // this.dispatch('setIdeTitle', title);
-
-            // console.log('[pro',project);
-            await storage.set('lastLoadedProject', project);
-            // ipcRenderer.send('set-has-project', true);
-            await invoke('set_has_project', {
-                status: true
-            })
-            this.dispatch('ide/setActivePage', project.entryPoint);
-            // check duplicate notify
-            if (Math.round(+new Date() / 1000) > state.lastLoadProjectNotify + 2) {
-                toast.success("Project loaded...");
-                state.lastLoadProjectNotify = Math.round(+new Date() / 1000);
-            }
-
-            // add previews object
             project.pages.forEach((page) => {
                 state.previews.register(page.id);
             });
-
-            this.dispatch('ide/setMenuState', { name: 'IsProjectLoaded', state: true});
-            this.dispatch('ide/setTitle');
         },
-        async BACKUP_PROJECT(state) {
-            // console.log(JSON.stringify(state.project).length);
-            // console.log(JSON.stringify(storage.get('lastLoadedProject')).length);
-            if (JSON.stringify(state.project) !== JSON.stringify(storage.get('lastLoadedProject'))) {
-                await storage.set('backupProject', state.project);
-            }
-        },
-        async RESTORE_PROJECT(state) {
-            // console.log(storage.get('backupProject'));
-            this.commit('project/LOAD_PROJECT', await storage.get('backupProject'));
+        SET_LAST_LOADED_PROJECT(state, project) {
+            state.lastLoadedProject = project;
         },
         ADD_COMPONENT_TO_PAGE(state, {pageIndex, isVisual, component}) {
             // console.log;
@@ -107,8 +71,8 @@ const projectStore = {
                     state.project.pages[pageIndex].children.nonVisual.push(c);
                 }
             }
-            this.dispatch('ide/setMenuState', { name: 'CanUndo', state: true});
-            this.dispatch('ide/setMenuState', { name: 'CanSave', state: true});
+            this.dispatch('ide/setMenuState', {name: 'CanUndo', state: true});
+            this.dispatch('ide/setMenuState', {name: 'CanSave', state: true});
             this.dispatch('ide/setCanScreenshot', true);
             this.dispatch('project/changeSaveState', false);
 
@@ -143,7 +107,7 @@ const projectStore = {
                 i++;
                 newPage.name = 'page' + i;
             } while (names.indexOf(newPage.name) !== -1)
-            newPage.id = generatePageId();
+            newPage.id = generateHashId();
             // add page finaly
             state.project.pages.push(newPage);
             state.previews.register(newPage.id);
@@ -166,30 +130,56 @@ const projectStore = {
                 state.previews.update(preview.page_id, new Blob([bytes]));
             }
         }
-    }
-    ,
+    },
     actions: {
-        /**
-         *
-         * @param context
-         * @param project : Object anubias project object
-         */
-        async createProject(context, project) {
-            await context.commit('CREATE_PROJECT', project);
+        async createProject({commit, dispatch}, project) {
+            project.anubias = ide.getters.version(ide.state());
+            await storage.set('lastCreatedProject', project);
+            commit('CREATE_PROJECT', project);
+            await dispatch('loadProject', project);
+            toast.success('Project initialized...');
+            dispatch('ide/setTitle', null, {root: true});
         },
-        /**
-         *
-         * @param context
-         * @param project : Object anubias project object
-         */
-        async loadProject(context, project) {
-            await context.commit('LOAD_PROJECT', project);
+
+        async loadProject({commit, dispatch, state}, project) {
+
+            // if this comment not need again must remove
+            commit('LOAD_PROJECT', project);
+
+            await storage.set('lastLoadedProject', project);
+            await invoke('set_has_project', {status: true});
+
+            dispatch('ide/setActivePage', project.entryPoint, {root: true});
+
+            if (Math.round(Date.now() / 1000) > state.lastLoadProjectNotify + 2) {
+                toast.success('Project loaded...');
+                commit('SET_LAST_LOAD_PROJECT_NOTIFY', Math.round(Date.now() / 1000));
+            }
+
+            dispatch('ide/setMenuState', {name: 'IsProjectLoaded', state: true}, {root: true});
+            dispatch('ide/setTitle', null, {root: true});
         },
-        backupProject(context) {
-            context.commit('BACKUP_PROJECT');
+
+        async backupProject({state}) {
+            if (JSON.stringify(state.project) !== JSON.stringify(await storage.get('lastLoadedProject'))) {
+                await storage.set('backupProject', state.project);
+            }
         },
-        restoreProject(context) {
-            context.commit('RESTORE_PROJECT');
+
+        async restoreProject({commit}) {
+            const project = await storage.get('backupProject');
+            commit('LOAD_PROJECT', project);
+        },
+
+        async saveProject({state}, path = null) {
+            // save project just save project by project path
+            // so If save as is need to change project path
+            const req = {
+                path: path ?? state.projectPath,
+                project: JSON.stringify(state.project),
+                previews: await state.previews.export()
+            };
+            return await invoke('save_project', {request: req});
         },
         /**
          * add component to page
@@ -227,6 +217,21 @@ const projectStore = {
         },
         updateProjectPreview(context, previews) {
             context.commit('UPDATE_PROJECT_PREVIEWS', previews);
+        },
+        async autoSave({state}) {
+            if (state.isSave) {
+                return false;
+            }
+            const req = {
+                path: null,
+                project: JSON.stringify(state.project),
+                previews: await state.previews.export(),
+            };
+            return await invoke('autosave_project_backup', {
+                request: req,
+                hash: state.project.hash,
+                timestamp: unixTimestamp(),
+            });
         }
     },
     getters: {

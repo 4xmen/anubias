@@ -126,10 +126,10 @@ const ideStore = {
         disableRestoreProject: true,
     }),
     mutations: {
-        async IDE_INIT(state) {
-            state.components.collapsed = await storage.get('componentsCollapsed');
-            state.properties.collapsed = await storage.get('propertiesCollapsed');
-            state.logs.collapsed = await storage.get('logsCollapsed');
+        IDE_INIT(state, payload) {
+            state.components.collapsed = payload.components;
+            state.properties.collapsed = payload.properties;
+            state.logs.collapsed = payload.logs;
         },
         CHANGE_IDE_TITLE(state, title) {
             document.querySelector('title').innerText = state.appName + ' - ' + title;
@@ -172,11 +172,8 @@ const ideStore = {
         SET_DROP_AREA(state, area) {
             state.dropArea = area;
         },
-        async SET_MENU_STATE(state, payload) {
-            console.log(payload);
+        SET_MENU_STATE(state, payload) {
             state.menu[payload.name] = payload.state;
-            return invoke('set_menu_state', {state: payload.name, value: payload.state})
-                .catch(err => console.error('Menu update failed:', err))
         },
         SET_CAN_SCREENSHOT(state, data) {
             state.canScreenshot = data;
@@ -201,6 +198,15 @@ const ideStore = {
         }
     },
     actions: {
+        async initialize(context) {
+            let payload = {
+                components: await storage.get('componentsCollapsed'),
+                properties: await storage.get('propertiesCollapsed'),
+                logs: await storage.get('logsCollapsed')
+
+            }
+            context.commit("IDE_INIT", payload)
+        },
         setIdeTitle: {
             root: true,
             handler(namespacedContext, title) {
@@ -262,13 +268,12 @@ const ideStore = {
                 name: name,
                 state: state,
             });
+            return invoke('set_menu_state', {state: name, value: state})
+                .catch(err => console.error('Menu update failed:', err))
         },
         async ResetMenuState(context) {
             for (const name in context.state.menu) {
-                context.commit('SET_MENU_STATE', {
-                    name: name,
-                    state: false,
-                });
+                await context.dispatch("setMenuState", {name, state: false})
             }
         },
         setCanScreenshot(context, data) {

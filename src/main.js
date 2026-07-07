@@ -38,7 +38,7 @@ const toastOption = {
 };
 
 // initial ide data
-await store.commit("ide/IDE_INIT");
+await store.dispatch("ide/initialize"); //
 
 vueApp.use(store);
 vueApp.use(router);

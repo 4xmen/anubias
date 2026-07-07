@@ -1,5 +1,6 @@
 {
     "name": "",
+    "hash": "",
     "description": "A new awesome app by Anubias",
     "version": "1.0.0",
     "packageName": "com.example.mynewproject",
@@ -36,5 +37,6 @@
         0,
         0,
         ""
-    ]
+    ],
+    "saveTimeStamp": 0
 }

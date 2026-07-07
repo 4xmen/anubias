@@ -13,7 +13,7 @@ use tauri::{
 
 use crate::config::{IS_DEBUG, SECOND_MONITOR};
 use crate::menu_state::{build_menu_no_project, set_menu_state, MenuState};
-use file::{load_project, save_project};
+use file::{load_project, save_project, autosave_project_backup};
 use tauri::AppHandle;
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_opener::OpenerExt;
@@ -59,6 +59,7 @@ pub fn run() {
             set_menu_state,
             save_project,
             load_project,
+            autosave_project_backup,
         ])
         .setup(|app| {
             if SECOND_MONITOR {

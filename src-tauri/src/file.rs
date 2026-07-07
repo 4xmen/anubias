@@ -1,13 +1,12 @@
 use crate::config::IS_DEBUG;
 use crate::format::app;
 use serde::{Deserialize, Serialize};
-use std::fmt;
+use std::{fmt, fs};
 use std::fs::File;
 use std::io::{self, Read, Seek, SeekFrom, Write};
 use std::path::Path;
-use thiserror::Error;
-use zstd::stream::{Decoder, Encoder};
-
+use tauri::{AppHandle, Manager};
+use std::path::PathBuf;
 /// how is project structure
 /// ┌───────────────────────────────────────────────────────────┐
 /// |│                   Project Metadata                      | │
@@ -56,7 +55,7 @@ pub struct PreviewData {
 
 #[derive(Deserialize, Debug)]
 pub struct SaveProjectRequest {
-    pub path: String,
+    pub path: Option<String>,
     pub project: String,
     pub previews: Vec<PreviewData>,
 }
@@ -634,7 +633,8 @@ pub fn save_project(request: SaveProjectRequest) -> Result<(), String> {
     if IS_DEBUG {
         dbg!(&request);
     }
-    let save_path = request.path.clone();
+    let save_path = request.path.clone().ok_or("path is required")?;
+
     ProjectMetadata::from_request(request)
         .save(save_path)
         .unwrap();
@@ -656,4 +656,204 @@ pub fn load_project(path: String) -> Result<LoadProjectResponse, String> {
         dbg!(&response);
     }
     Ok(response)
+}
+
+
+
+/// Creates an autosave backup of the project at a timestamped location.
+///
+/// This Tauri command handler saves a project backup to the application's data directory,
+/// organized by project hash and timestamped for version control. It automatically creates
+/// necessary directory structures and handles file system errors gracefully.
+///
+/// # Parameters
+///
+/// * `app` - Tauri application handle for accessing the app data directory
+/// * `request` - SaveProjectRequest containing project configuration and preview data
+/// * `hash` - Project hash/identifier used to organize backups into subdirectories
+/// * `timestamp` - Unix timestamp (milliseconds) used as the backup filename
+///
+/// # Directory Structure
+///
+/// Backups are stored at: `{APP_DATA_DIR}/backups/{hash}/{timestamp}.anb`
+///
+/// # Returns
+///
+/// * `Ok(String)` - Full path to the created backup file
+/// * `Err(String)` - Error message if directory creation or file saving fails
+///
+/// # Errors
+///
+/// - File system errors during directory creation
+/// - Project serialization or save errors
+/// - Path resolution errors from Tauri
+///
+#[tauri::command]
+pub async fn autosave_project_backup(
+    app: AppHandle,
+    request: SaveProjectRequest,
+    hash: String,
+    timestamp: i64,
+) -> Result<String, String> {
+    let base = app
+        .path()
+        .app_data_dir()
+        .map_err(|e| e.to_string())?;
+
+    let dir = base.join("backups").join(&hash);
+    std::fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
+
+    let path = dir.join(format!("{timestamp}.anb"));
+
+    ProjectMetadata::from_request(request)
+        .save(path.to_string_lossy().to_string())
+        .map_err(|e| e.to_string())?;
+
+    if IS_DEBUG {
+        println!("backup created, {}", path.display());
+    }
+    Ok(path.to_string_lossy().to_string())
+}
+
+#[derive(Serialize, Debug)]
+pub struct BackupEntry {
+    pub timestamp: i64,
+    pub path: String,
+}
+
+
+
+
+
+/// Lists all available backups for a given project, sorted by recency.
+///
+/// This Tauri command retrieves all backup files (.anb) from the project's backup directory,
+/// extracts their timestamps, and returns them sorted in descending order (newest first).
+/// Returns an empty list if no backups exist for the project.
+///
+/// # Parameters
+///
+/// * `app` - Tauri application handle for accessing the app data directory
+/// * `hash` - Project hash/identifier to filter backups
+///
+/// # Returns
+///
+/// * `Ok(Vec<BackupEntry>)` - Sorted list of BackupEntry objects containing timestamp and full path.
+///   Sorted by timestamp in descending order (most recent first).
+/// * `Err(String)` - Error message if directory access fails or timestamps cannot be parsed
+///
+/// # Filtering
+///
+/// Only files with `.anb` extension are included. Files with invalid or unparseable timestamps
+/// (non-numeric filenames) are silently skipped.
+///
+/// # Errors
+///
+/// - File system errors during directory reading
+/// - Path resolution errors from Tauri
+///
+#[tauri::command]
+pub async fn list_backups(
+    app: AppHandle,
+    hash: String,
+) -> Result<Vec<BackupEntry>, String> {
+    let base = app.path().app_data_dir().map_err(|e| e.to_string())?;
+    let dir = base.join("backups").join(&hash);
+
+    if !dir.exists() {
+        return Ok(vec![]);
+    }
+
+    let mut items = vec![];
+
+    let entries = fs::read_dir(&dir).map_err(|e| e.to_string())?;
+    for entry in entries {
+        let entry = entry.map_err(|e| e.to_string())?;
+        let path = entry.path();
+
+        if path.extension().and_then(|s| s.to_str()) != Some("anb") {
+            continue;
+        }
+
+        let ts = match path.file_stem().and_then(|s| s.to_str()).and_then(|s| s.parse::<i64>().ok()) {
+            Some(v) => v,
+            None => continue,
+        };
+
+        items.push(BackupEntry {
+            timestamp: ts,
+            path: path.to_string_lossy().to_string(),
+        });
+    }
+
+    items.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
+    Ok(items)
+}
+
+
+
+
+/// Deletes all backup files older than the specified timestamp.
+///
+/// This Tauri command removes backup files (.anb) from a project's backup directory
+/// that were created before the given timestamp. Useful for cleanup and storage management.
+/// Returns the count of successfully deleted files.
+///
+/// # Parameters
+///
+/// * `app` - Tauri application handle for accessing the app data directory
+/// * `hash` - Project hash/identifier to filter backups
+/// * `timestamp` - Unix timestamp (milliseconds). All backups with timestamps less than this value are deleted
+///
+/// # Returns
+///
+/// * `Ok(usize)` - Number of backup files successfully deleted
+/// * `Err(String)` - Error message if directory access or file deletion fails
+///
+/// # Filtering
+///
+/// Only `.anb` files are processed. Files with invalid or unparseable timestamps are skipped.
+/// Returns 0 if the backup directory does not exist.
+///
+/// # Errors
+///
+/// - File system errors during directory reading or file deletion
+/// - Path resolution errors from Tauri
+///
+#[tauri::command]
+pub async fn delete_old_backups(
+    app: AppHandle,
+    hash: String,
+    timestamp: i64,
+) -> Result<usize, String> {
+    let base = app.path().app_data_dir().map_err(|e| e.to_string())?;
+    let dir = base.join("backups").join(&hash);
+
+    if !dir.exists() {
+        return Ok(0);
+    }
+
+    let mut deleted = 0usize;
+    let entries = fs::read_dir(&dir).map_err(|e| e.to_string())?;
+
+    for entry in entries {
+        let entry = entry.map_err(|e| e.to_string())?;
+        let path = entry.path();
+
+        if path.extension().and_then(|s| s.to_str()) != Some("anb") {
+            continue;
+        }
+
+        let ts = match path.file_stem().and_then(|s| s.to_str()).and_then(|s| s.parse::<i64>().ok()) {
+            Some(v) => v,
+            None => continue,
+        };
+
+        if ts < timestamp {
+            fs::remove_file(&path).map_err(|e| e.to_string())?;
+            deleted += 1;
+        }
+    }
+
+    Ok(deleted)
 }
