@@ -62,12 +62,12 @@
     <div id="properties" :class="propertiesClass" :style="propertiesStyle" v-if="tabIndex === 0">
       <h3 @click="expandProperties">
         <span>
-          Properties
+          Project properties
         </span>
         <i class="ri-checkbox-indeterminate-line" @click="togglePropertiesCollapse"></i>
       </h3>
       <div class="properties">
-
+        <project-properties></project-properties>
       </div>
     </div>
     <anubias-confirm
@@ -116,12 +116,14 @@ import SearchableCombobox from "../components/srachable-combobox.vue";
 import OptionEx from "../components/option-ex.vue";
 import { save} from "@tauri-apps/plugin-dialog";
 import {invoke} from "@tauri-apps/api/core";
+import ProjectProperties from "../components/project-properties.vue";
 
 const storage = new LazyStore('ide.json', {autoSave: false});
 
 export default {
   name: "anubias",
   components: {
+    ProjectProperties,
     OptionEx,
     SearchableCombobox,
     BluePrint, buttons, iconButton: iconButtons, device, components, sidebar, anubiasConfirm

@@ -32,6 +32,7 @@ const projectStore = {
         projectPath: '',
         isSave: true,
         lastLoadProjectNotify: 0,
+        backups:[],
     }),
     mutations: {
 
@@ -129,6 +130,12 @@ const projectStore = {
                 const bytes = new Uint8Array(preview.data);
                 state.previews.update(preview.page_id, new Blob([bytes]));
             }
+        },
+        SET_BACKUP_LIST(state, list) {
+            state.backups = list;
+        },
+        IGNORE_BACKUPS(state){
+            state.backups = [];
         }
     },
     actions: {
@@ -158,18 +165,35 @@ const projectStore = {
 
             dispatch('ide/setMenuState', {name: 'IsProjectLoaded', state: true}, {root: true});
             dispatch('ide/setTitle', null, {root: true});
+
+            // check auto save backup
+            await dispatch('listBackups',state.project.hash);
         },
 
+        async listBackups({commit},hash) {
+            console.log('hash',hash);
+            let backups =  await invoke('list_backups', { hash });
+            commit("SET_BACKUP_LIST",backups);
+            if (backups.length > 0) {
+                toast.warning(`${backups.length} backups available`);
+            }
+        },
+
+        // backup last project is not for autosave
+        // this just for load last loaded project
         async backupProject({state}) {
             if (JSON.stringify(state.project) !== JSON.stringify(await storage.get('lastLoadedProject'))) {
                 await storage.set('backupProject', state.project);
             }
         },
 
+        // restore project is not for autosave
+        // this just for load last loaded project
         async restoreProject({commit}) {
             const project = await storage.get('backupProject');
             commit('LOAD_PROJECT', project);
         },
+
 
         async saveProject({state}, path = null) {
             // save project just save project by project path

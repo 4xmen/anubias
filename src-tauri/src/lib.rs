@@ -13,13 +13,12 @@ use tauri::{
 
 use crate::config::{IS_DEBUG, SECOND_MONITOR};
 use crate::menu_state::{build_menu_no_project, set_menu_state, MenuState};
-use file::{load_project, save_project, autosave_project_backup};
+use file::{autosave_project_backup, delete_old_backups, list_backups, load_project, save_project};
 use tauri::AppHandle;
+use tauri::{PhysicalPosition, Position};
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_opener::OpenerExt;
 use tauri_plugin_store::StoreExt;
-use tauri::{PhysicalPosition, Position};
-
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
@@ -60,6 +59,8 @@ pub fn run() {
             save_project,
             load_project,
             autosave_project_backup,
+            delete_old_backups,
+            list_backups,
         ])
         .setup(|app| {
             if SECOND_MONITOR {

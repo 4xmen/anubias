@@ -167,6 +167,7 @@ input {
     transform: rotateZ(90deg);
     display: block;
     padding: 2px 7px;
+    white-space: nowrap;
 }
 
 #properties.collapsed h3 i, #components.collapsed h3 i {
