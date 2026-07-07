@@ -18,12 +18,12 @@
         </div>
 
         <button
-            v-for="item in sortedBackups"
+            v-for="(item, index) in sortedBackups"
             :key="item.path"
             type="button"
             class="item"
             :class="{ active: selected && selected.path === item.path }"
-            @click="selected = item"
+            @click="selected = item; selectedIndex = index"
         >
           <div class="item-main">
             <div class="item-time">{{ formatTimestamp(item.timestamp) }}</div>
@@ -50,7 +50,9 @@ import {invoke} from "@tauri-apps/api/core";
 export default {
   name: "restore-modal",
   data: () => ({
-    selected: null
+    selected: null,
+    selectedIndex: 0
+
   }),
   computed: {
     ...mapState('project',{
@@ -63,7 +65,33 @@ export default {
       return [...(this.backups || [])].sort((a, b) => b.timestamp - a.timestamp);
     }
   },
+  mounted() {
+    window.addEventListener("keydown", this.onKeydown);
+  },
+  beforeUnmount() {
+    window.removeEventListener("keydown", this.onKeydown);
+  },
   methods: {
+    onKeydown(e) {
+      if (!this.open || !this.sortedBackups.length) return;
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        this.selectedIndex = Math.min(this.selectedIndex + 1, this.sortedBackups.length - 1);
+        this.selected = this.sortedBackups[this.selectedIndex];
+      }
+
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        this.selectedIndex = Math.max(this.selectedIndex - 1, 0);
+        this.selected = this.sortedBackups[this.selectedIndex];
+      }
+
+      if (e.key === "Enter" && this.selected) {
+        e.preventDefault();
+        this.restore();
+      }
+    },
     close() {
       this.$store.commit("ide/CHANGE_MODAL_STATE", {
         name: "restore",
@@ -81,13 +109,15 @@ export default {
         this.$store.dispatch('project/updateProjectPreview', result.previews);
         window.location.reload();
       }, 100);
+
     },
     formatTimestamp(ts) {
       return new Intl.DateTimeFormat("en-US", {
         dateStyle: "medium",
         timeStyle: "short"
       }).format(new Date(ts * 1000));
-    }
+    },
+
   }
 };
 </script>
