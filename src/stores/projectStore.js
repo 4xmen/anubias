@@ -41,6 +41,8 @@ const projectStore = {
             console.log(await storage.get('lastCreatedProject'));
             await this.commit('project/LOAD_PROJECT', project);
             toast.success("Project initialized...");
+            this.dispatch('ide/setTitle');
+
         },
         async LOAD_PROJECT(state, project) {
 
@@ -70,6 +72,7 @@ const projectStore = {
             });
 
             this.dispatch('ide/setMenuState', { name: 'IsProjectLoaded', state: true});
+            this.dispatch('ide/setTitle');
         },
         async BACKUP_PROJECT(state) {
             // console.log(JSON.stringify(state.project).length);
@@ -107,6 +110,7 @@ const projectStore = {
             this.dispatch('ide/setMenuState', { name: 'CanUndo', state: true});
             this.dispatch('ide/setMenuState', { name: 'CanSave', state: true});
             this.dispatch('ide/setCanScreenshot', true);
+            this.dispatch('project/changeSaveState', false);
 
         },
         SET_PAGE_PREVIEW(state, {pageIndex, image}) {
@@ -153,6 +157,7 @@ const projectStore = {
         },
         UPDATE_PROJECT_DATA(state, payload) {
             state[payload.key] = payload.value;
+            this.dispatch('ide/setTitle');
         },
         UPDATE_PROJECT_PREVIEWS(state, payload) {
             for (let preview of payload) {

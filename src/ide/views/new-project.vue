@@ -214,6 +214,9 @@ export default {
     this.$refs.name.focus();
     btnWave();
     this.$store.dispatch('ide/ResetMenuState');
+    if (this.newProject.name.length === 0) {
+      this.newProject.name = "new project";
+    }
   },
   computed: {
     ...mapState(['ide', 'project'])

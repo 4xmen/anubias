@@ -233,6 +233,7 @@ export default {
       handler: function (val, oldVal) {
         this.$store.dispatch('ide/setCanScreenshot', true);
         this.$store.dispatch('ide/setMenuState', { name: 'CanUndo', state: true});
+        this.$store.dispatch('project/changeSaveState', false);
         // Return the object that changed
         if (val.online !== undefined) {
           if (val.online && val.image.substring(0, 5) === 'data:') {

@@ -32,15 +32,17 @@ import componentToggleDefault from './components/defaultToggle.json';
  * import other modules
  */
 
-import { LazyStore } from '@tauri-apps/plugin-store';
+import {LazyStore} from '@tauri-apps/plugin-store';
+import {getCurrentWebviewWindow} from "@tauri-apps/api/webviewWindow";
 
-const storage = new LazyStore('ide.json', { autoSave: false });
+
+const storage = new LazyStore('ide.json', {autoSave: false});
 
 import {invoke} from "@tauri-apps/api/core";
 
 const ideStore = {
     namespaced: true,
-    state:  () =>  ({
+    state: () => ({
         title: 'Anubias',
         appName: 'Anubias',
         version: {
@@ -53,7 +55,7 @@ const ideStore = {
         // panel states
         components: {
             list: componentsList,
-            collapsed:   false,
+            collapsed: false,
             mode: 'grid',
         },
         defaultComponents: {
@@ -86,8 +88,8 @@ const ideStore = {
         pages: {
             currentPage: {},
         },
-        sideBar:{
-          activeIndex: 0,
+        sideBar: {
+            activeIndex: 0,
         },
         // active device preview
         device: {
@@ -170,10 +172,10 @@ const ideStore = {
         SET_DROP_AREA(state, area) {
             state.dropArea = area;
         },
-        async SET_MENU_STATE(state, payload ) {
+        async SET_MENU_STATE(state, payload) {
             console.log(payload);
             state.menu[payload.name] = payload.state;
-            return invoke('set_menu_state', { state: payload.name, value: payload.state })
+            return invoke('set_menu_state', {state: payload.name, value: payload.state})
                 .catch(err => console.error('Menu update failed:', err))
         },
         SET_CAN_SCREENSHOT(state, data) {
@@ -262,7 +264,7 @@ const ideStore = {
             });
         },
         async ResetMenuState(context) {
-            for( const name in context.state.menu) {
+            for (const name in context.state.menu) {
                 context.commit('SET_MENU_STATE', {
                     name: name,
                     state: false,
@@ -281,6 +283,13 @@ const ideStore = {
         setActivePage(context, page) {
             context.commit('SET_ACTIVE_PAGE', page);
         },
+        async setTitle({state, getters, rootState}) {
+            let title = state.title + ' v' + getters.version;
+            if (rootState.project.project.name.length > 0) {
+                title = (rootState.project.isSave ? '' : '● ') + rootState.project.project.name + ' - ' + title;
+            }
+            await getCurrentWebviewWindow().setTitle(title);
+        }
     },
     getters: {
         version(state) {
@@ -289,6 +298,15 @@ const ideStore = {
                 state.version.patch + '-' +
                 state.version.suffix;
         },
+        // async title(state,getters, rootState) {
+        //     let title = state.title  + ' v' +getters.version ;
+        //     if (rootState.project.project.name.length > 0){
+        //         title = (rootState.project.isSave?'':'● ') + rootState.project.project.name + title;
+        //     }
+        //
+        //     await getCurrentWebviewWindow().setTitle(title);
+        //
+        // },
         currentPage(state) {
             return state.pages.currentPage;
         },

@@ -46,6 +46,7 @@
 <script>
 import {invoke} from '@tauri-apps/api/core';
 import {open} from '@tauri-apps/plugin-dialog';
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "welcome",
@@ -55,8 +56,15 @@ export default {
   mounted() {
     // reset menu of app
     this.$store.dispatch('ide/ResetMenuState');
+    this.setTitle;
+
+    console.log();
   },
-  computed: {},
+  computed: {
+    ...mapActions(
+        'ide',['setTitle']
+    )
+  },
   methods: {
     async openWebsite(url) {
       await invoke('open_url', {
