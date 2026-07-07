@@ -237,12 +237,14 @@ export default {
     },
   },
   methods: {
+    // handle ide vue shortcuts
     onKeydown(e) {
       if (e.altKey && e.key.toLowerCase() === 'd') {
         e.preventDefault()
         this.debugAllStates()
       }
     },
+    // debug states
     debugAllStates(){
       // debug states
       console.log('ide',this.$store.state.ide);
@@ -250,28 +252,21 @@ export default {
     },
     // debug methods
     async debugSave() {
+      let lastFolder = localStorage.getItem('lastFolder') || '';
       const path = await save({
+        defaultPath: lastFolder,
         multiple: false,
         directory: false,
         filters: [
-          {
-            name: 'Anubias files',
-            extensions: ['anb'],
-          },
-          {
-            name: 'All files',
-            extensions: ['*'],
-          },
+          { name: 'Anubias files', extensions: ['anb'] },
+          { name: 'All files', extensions: ['*'] },
         ],
       });
+
       if (path) {
+        const folder = path.substring(0, path.lastIndexOf('/'));
+        localStorage.setItem('lastFolder', folder);
         this.$store.dispatch("project/saveProject", path);
-
-        // /// debug
-        // for( const page of this.project.project.pages) {
-        //   inspectBlob(this.project.previews.get(page.id).blob)
-        // }
-
       }
     },
     changeTab(index) {
@@ -343,6 +338,9 @@ export default {
 
       }
     },
+    createBackupProject() {
+
+    }
   },
 }
 </script>
