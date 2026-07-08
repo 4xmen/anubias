@@ -26,19 +26,23 @@ export default {
       type: Number,
       default: 1
     },
-    percentable:{
+    percentable: {
       type: Boolean,
       default: false,
     },
-    onUpdate:{
-      type:Function,
-      default:()=>{},
+    onUpdate: {
+      type: Function,
+      default: () => {},
     }
   },
-  emits: ['update:modelValue','input-val'],
+  emits: ['update:modelValue', 'input-val'],
   data() {
     return {
       dragging: false,
+      // last known mouse X position, used to measure drag speed
+      lastMouseX: 0,
+      // timestamp of the last mousemove event, used to measure drag speed
+      lastMoveTime: 0,
     }
   },
   computed: {
@@ -54,64 +58,94 @@ export default {
     }
   },
   methods: {
-    updating(e){
-      this.$emit('update:modelValue', e.target.value );
+    updating(e) {
+      this.$emit('update:modelValue', e.target.value);
       this.$emit('input-val', this.modelValue);
-      if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown'){
+      if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') {
         this.onUpdate();
       }
     },
-    incUp(){
-      // check is can has percent or not
+    // step is optional so keyboard arrows keep using the fixed "increment" prop
+    incUp(step) {
+      const amount = typeof step === 'number' ? step : this.increment;
+
+      // check if percent suffix should be preserved
       let percent = false;
-      if (this.percentable && this.modelValue.toString().substr(this.modelValue.toString().length-1,1) === '%'){
+      if (this.percentable && this.modelValue.toString().slice(-1) === '%') {
         percent = true;
       }
-      let val = parseInt(this.modelValue) + this.increment <= this.maxValue ? parseInt(this.modelValue) + this.increment : this.maxValue;
-      // added percent when active
-      if (percent){
-        this.$emit('update:modelValue', val+'%');
-      }else{
-        this.$emit('update:modelValue', val);
-      }
+
+      const current = parseInt(this.modelValue);
+      const max = parseInt(this.maxValue);
+      const val = current + amount <= max ? current + amount : max;
+
+      this.$emit('update:modelValue', percent ? val + '%' : val);
       this.$emit('input-val', this.modelValue);
       this.onUpdate();
     },
-    decDown(){
+    decDown(step) {
+      const amount = typeof step === 'number' ? step : this.increment;
+
       let percent = false;
-      // check is can has percent or not
-      if (this.percentable && this.modelValue.toString().substr(this.modelValue.toString().length-1,1) === '%'){
+      if (this.percentable && this.modelValue.toString().slice(-1) === '%') {
         percent = true;
       }
-      let val =  parseInt( this.modelValue ) - this.increment >= this.minValue ? parseInt( this.modelValue) - this.increment : this.minValue;
-      // added percent when active
-      if (percent){
-        this.$emit('update:modelValue', val+'%');
-      }else{
-        this.$emit('update:modelValue', val);
-      }
+
+      const current = parseInt(this.modelValue);
+      const min = parseInt(this.minValue);
+      const val = current - amount >= min ? current - amount : min;
+
+      this.$emit('update:modelValue', percent ? val + '%' : val);
       this.$emit('input-val', this.modelValue);
       this.onUpdate();
     },
-    startDragging() {
-      this.dragging = true
-      window.addEventListener('mousemove', this.updateValue)
-      window.addEventListener('mouseup', this.stopDragging)
+    startDragging(event) {
+      this.dragging = true;
+      // initialize speed-tracking reference point
+      this.lastMouseX = event.clientX;
+      this.lastMoveTime = performance.now();
+
+      window.addEventListener('mousemove', this.updateValue);
+      window.addEventListener('mouseup', this.stopDragging);
     },
     stopDragging() {
-      this.dragging = false
-      window.removeEventListener('mousemove', this.updateValue)
-      window.removeEventListener('mouseup', this.stopDragging)
+      this.dragging = false;
+      window.removeEventListener('mousemove', this.updateValue);
+      window.removeEventListener('mouseup', this.stopDragging);
+    },
+    // Converts mouse speed (px/ms) into an exponential step size,
+    // so fast drags jump by large amounts and slow drags stay precise,
+    // similar to Photoshop's draggable numeric fields.
+    getDynamicStep(speedPxPerMs) {
+      const absSpeed = Math.abs(speedPxPerMs);
+
+      // exponential curve: small movements barely change the multiplier,
+      // fast movements grow the multiplier quickly
+      const multiplier = Math.min(60, Math.pow(absSpeed * 4, 1.7));
+
+      return Math.max(1, Math.round(this.increment * multiplier));
     },
     updateValue(event) {
-      if (this.dragging) {
-        if (event.movementX > 0) {
-          this.incUp();
-        } else {
-          this.decDown();
-        }
-        this.$emit('input-val', this.modelValue);
+      if (!this.dragging) return;
+
+      const now = performance.now();
+      const deltaTime = Math.max(now - this.lastMoveTime, 1); // avoid divide-by-zero
+      const deltaX = event.clientX - this.lastMouseX;
+
+      // speed in pixels per millisecond
+      const speed = deltaX / deltaTime;
+      const step = this.getDynamicStep(speed);
+
+      if (deltaX > 0) {
+        this.incUp(step);
+      } else if (deltaX < 0) {
+        this.decDown(step);
       }
+
+      this.lastMouseX = event.clientX;
+      this.lastMoveTime = now;
+
+      this.$emit('input-val', this.modelValue);
     }
   }
 }
