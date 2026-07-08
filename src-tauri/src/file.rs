@@ -7,6 +7,8 @@ use std::io::{self, Read, Seek, SeekFrom, Write};
 use std::path::Path;
 use tauri::{AppHandle, Manager};
 use std::path::PathBuf;
+use crate::message::{send_log, send_toast, MessageType};
+
 /// how is project structure
 /// ┌───────────────────────────────────────────────────────────┐
 /// |│                   Project Metadata                      | │
@@ -643,18 +645,22 @@ pub fn save_project(request: SaveProjectRequest) -> Result<(), String> {
 }
 
 #[tauri::command]
-pub fn load_project(path: String) -> Result<LoadProjectResponse, String> {
+pub fn load_project( app: AppHandle,path: String) -> Result<LoadProjectResponse, String> {
+
+    send_log(&app,"Try to load project file...");
     let project = ProjectMetadata::load(Path::new(&path))
         .map_err(|error| format!("Failed to load project from path {}: {}", path, error))?;
 
     if !project.verify() {
+        send_toast(&app,MessageType::Error, "Failed to verify project file");
         return Err("Project does not verified.".to_string());
     }
-
+    send_log(&app,"Project verify success...");
     let response = project.into_response().map_err(|error| error.to_string())?;
     if IS_DEBUG {
         dbg!(&response);
     }
+    send_log(&app,"Project uncompress & load success...");
     Ok(response)
 }
 
@@ -699,6 +705,9 @@ pub async fn autosave_project_backup(
         .path()
         .app_data_dir()
         .map_err(|e| e.to_string())?;
+
+
+    send_log(&app,"Try to autosave project backup...");
 
     let dir = base.join("backups").join(&hash);
     std::fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
@@ -757,6 +766,8 @@ pub async fn list_backups(
     app: AppHandle,
     hash: String,
 ) -> Result<Vec<BackupEntry>, String> {
+    send_log(&app,"Autosave Backups checking...");
+    println!("bkf check");
     let base = app.path().app_data_dir().map_err(|e| e.to_string())?;
     let dir = base.join("backups").join(&hash);
 

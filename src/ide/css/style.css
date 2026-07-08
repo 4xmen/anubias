@@ -50,7 +50,7 @@
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-weight: 200;
+    font-weight: 300;
 }
 
 hr{
@@ -185,6 +185,8 @@ input {
     grid-row: 5;
     border: 1px solid var(--lighter-bg);
     border-bottom: 0;
+    overflow: hidden;
+    position: relative;
 }
 
 #logs.collapsed #logs-content {
@@ -200,6 +202,19 @@ input {
     display: none;
 }
 
+#logs #logs-content .app-log{
+    padding: 3px 7px;
+    border-bottom: 1px solid var(--lighter-bg);
+}
+
+#logs #logs-content {
+    overflow-y: auto;
+    position: absolute;
+    top: 30px;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
 .other-tabs{
     grid-column: 1 / 20;
     grid-row: 2 /5;

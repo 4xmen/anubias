@@ -43,40 +43,7 @@ await store.dispatch("ide/initialize"); //
 vueApp.use(store);
 vueApp.use(router);
 vueApp.use(toast, toastOption);
-//
-//
-// store.subscribe((mutation, state) => {
-//     // console.log(state);
-//     ipcRenderer.send('update-store-data', JSON.stringify(state));
-//
-//     if (mutation.type.startsWith("project")) {
-//         let projectName = state.project.project.name;
-//         let  project = JSON.stringify(state.project.project);
-//         const isSaved = state.project.isSave;
-//
-//         // console.log('savee', isSaved);
-//         // check if project changed then:
-//         // update menu
-//         // promise to screenshot
-//         if (oldProject != project) {
-//             oldProject = project;
-//
-//             store.dispatch('project/changeSaveState',false);
-//             store.dispatch('ide/setMenuCanSave',!isSaved);
-//             store.dispatch('ide/setCanScreenshot',true);
-//         }
-//         if (!isSaved) {
-//             projectName += '*';
-//         }
-//         store.commit('ide/CHANGE_IDE_TITLE', projectName);
-//     }
-//
-//
-// });
-//
-//
-// // vueApp.toast = toast;
-//
+
 vueApp.mount('#anubias-app').$nextTick(() => {
     postMessage({payload: 'removeLoading'}, '*');
 });

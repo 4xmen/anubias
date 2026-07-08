@@ -54,7 +54,7 @@
         <span>
           Components
         </span>
-        <i class="ri-checkbox-indeterminate-line" @click="toggleComponentsCollapse"></i>
+        <i title="Collapse" class="ri-checkbox-indeterminate-line" @click="toggleComponentsCollapse"></i>
       </h3>
       <components></components>
 
@@ -64,7 +64,7 @@
         <span>
           Project properties
         </span>
-        <i class="ri-checkbox-indeterminate-line" @click="togglePropertiesCollapse"></i>
+        <i title="Collapse" class="ri-checkbox-indeterminate-line" @click="togglePropertiesCollapse"></i>
       </h3>
       <div class="properties">
         <project-properties></project-properties>
@@ -80,21 +80,27 @@
     <div id="logs" :class="logClass">
       <h3 @click="expandLogs">
         Logs
-        <i class="ri-checkbox-indeterminate-line" @click="toggleLogsCollapse"></i>
+        <i class="ri-checkbox-indeterminate-line" @click="toggleLogsCollapse" title="Collapse"></i>
+        <i class="ri-delete-bin-6-line" style="margin-left: 30px" @click="clearLogs()" title="Clear logs"></i>
       </h3>
       <div id="logs-content">
-        logs here
-        {{ project.projectFile }}
-        {{ project.isSave ? 'save' : 'not save' }}
-        "{{ tabIndex }}"
+<!--        logs here-->
+<!--        {{ project.projectFile }}-->
+<!--        {{ project.isSave ? 'save' : 'not save' }}-->
+<!--        "{{ tabIndex }}"-->
 
-        --- for debug begin--
+<!--        -&#45;&#45; for debug begin&#45;&#45;-->
 
-        <button @click="debugSave">
-          save
-        </button>
+<!--        <button @click="debugSave">-->
+<!--          save-->
+<!--        </button>-->
 
-        --- for debug end--
+<!--        -&#45;&#45; for debug end&#45;&#45;-->
+
+        <div v-for="log in applogs" class="app-log">
+          {{log}}
+        </div>
+
       </div>
     </div>
     <restore-modal></restore-modal>
@@ -165,6 +171,9 @@ export default {
     ...mapGetters(
         'ide', ['currentPage']
     ),
+    ...mapState({
+      applogs: state => state.ide.appLogs,
+    }),
     zoom: {
       get() {
         return this.$store.state.ide.device.zoom;
@@ -250,6 +259,9 @@ export default {
     },
   },
   methods: {
+    clearLogs(){
+      this.$store.commit('ide/CLEAR_LOGS');
+    },
     // handle ide vue shortcuts
     onKeydown(e) {
       if (e.altKey && e.key.toLowerCase() === 'd') {
@@ -349,7 +361,7 @@ export default {
 h3 {
   background: var(--def-bg);
   text-align: center;
-  font-weight: 100;
+  font-weight: 200;
   position: relative;
   overflow: hidden;
 }

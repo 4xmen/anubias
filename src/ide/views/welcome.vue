@@ -55,19 +55,20 @@ export default {
   },
   mounted() {
     // reset menu of app
-    this.ResetMenuState;
-    this.setTitle;
+    this.ResetMenuState();
+    this.setTitle();
   },
   computed: {
-    ...mapActions(
-        'ide',['setTitle','ResetMenuState']
-    )
+
   },
   methods: {
+    ...mapActions(
+        'ide',['setTitle','ResetMenuState']
+    ),
     async openWebsite(url) {
       await invoke('open_url', {
         url: url
-      })
+      });
     },
     goSetting() {
       this.$router.push('/settings');

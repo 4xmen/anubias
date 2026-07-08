@@ -1,7 +1,7 @@
 mod file;
 mod format;
 mod menu_state;
-
+mod message;
 mod config;
 
 use std::sync::Mutex;
@@ -22,6 +22,7 @@ use tauri::{PhysicalPosition, Position};
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_opener::OpenerExt;
 use tauri_plugin_store::StoreExt;
+
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
@@ -69,7 +70,6 @@ pub fn run() {
         .setup(|app| {
             if SECOND_MONITOR {
                 let window = app.get_webview_window("main").unwrap();
-
                 if let Some(monitor) = window.available_monitors()?.get(1) {
                     let pos = monitor.position();
 
