@@ -1,6 +1,6 @@
 mod file;
 mod format;
-mod menu_state;
+mod menu;
 mod message;
 mod config;
 
@@ -12,7 +12,7 @@ use tauri::{
 };
 
 use crate::config::{IS_DEBUG, SECOND_MONITOR};
-use crate::menu_state::{build_menu_no_project, set_menu_state, MenuState};
+use crate::menu::menu_state::{build_menu_no_project, set_menu_state, MenuState};
 use file::{
     autosave_project_backup, delete_old_backups, list_backups, load_project, path_exists,
     save_project,
@@ -91,15 +91,8 @@ pub fn run() {
             app.set_menu(menu)?;
 
             // Event handler
-            app.on_menu_event(|app_handle, event| {
-                match event.id().0.as_str() {
-                    "new" => { /* ... */ }
-                    "open" => { /* ... */ }
-                    "save" => { /* ... */ }
-                    "undo" => { /* ... */ }
-                    _ => {}
-                }
-            });
+            menu::menu_events::register(app);
+
 
             Ok(())
         })
