@@ -199,7 +199,7 @@ const projectStore = {
         },
 
 
-        async saveProject({state, commit}, path = null) {
+        async saveProject({state, commit,dispatch}, path = null) {
             // save project just save project by project path
             // so If save as is need to change project path
             const req = {
@@ -210,7 +210,8 @@ const projectStore = {
             if (await invoke('save_project', {request: req})) {
                 commit('UPDATE_PROJECT_DATA', {key: 'isSave', value: true});
             }
-
+            dispatch('clearBackup',unixTimestamp());
+            commit('IGNORE_BACKUPS');
         },
         /**
          * add component to page
@@ -302,8 +303,7 @@ const projectStore = {
             }
         },
         async clearBackup(context, timestamp) {
-            const r = await invoke('delete_old_backups', {hash: context.state.project.hash , timestamp});
-            console.log(r);
+            return  await invoke('delete_old_backups', {hash: context.state.project.hash , timestamp});
         },
     },
     getters: {
