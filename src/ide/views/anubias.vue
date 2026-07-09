@@ -124,9 +124,9 @@ import OptionEx from "../components/option-ex.vue";
 import {save,ask} from "@tauri-apps/plugin-dialog";
 import ProjectProperties from "../components/project-properties.vue";
 import RestoreModal from "../components/restore-modal.vue";
-import {fixName} from "../js/general-functions.js";
 import { exists } from "@tauri-apps/plugin-fs";
 import {invoke} from "@tauri-apps/api/core";
+import {fixName} from "../js/system-functions.js";
 
 
 const storage = new LazyStore('ide.json', {autoSave: false});

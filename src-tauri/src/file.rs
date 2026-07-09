@@ -631,18 +631,28 @@ impl Default for DataMap {
 }
 
 #[tauri::command]
-pub fn save_project(request: SaveProjectRequest) -> Result<(), String> {
+pub fn save_project(app: AppHandle, request: SaveProjectRequest) -> Result<bool, String> {
+
+    send_log(&app,"Try to save project...");
     if IS_DEBUG {
         dbg!(&request);
     }
+
     let save_path = request.path.clone().ok_or("path is required")?;
 
     ProjectMetadata::from_request(request)
         .save(save_path)
-        .unwrap();
-    // write file...
-    Ok(())
+        .map(|_| {
+            send_log(&app,"Project saved successfully...");
+            true
+        })
+        .map_err(|e| {
+
+            send_log(&app,&format!("Failed to save project: {}", e.to_string()));
+            e.to_string()
+        })
 }
+
 
 #[tauri::command]
 pub fn load_project( app: AppHandle,path: String) -> Result<LoadProjectResponse, String> {

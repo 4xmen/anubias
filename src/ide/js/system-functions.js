@@ -44,7 +44,11 @@ async function inspectBlob(blob, label = '') {
 let unixTimestamp = function () {
     return Math.round(+new Date() / 1000);
 };
+let fixName = function (filePath) {
+    const hasExt = /\.[^\/\\]+$/.test(filePath);
+    if (!hasExt) return filePath + ".anb";
+    return filePath;
+}
 
 
-
-export { generateHashId, inspectBlob, unixTimestamp };
+export { generateHashId, inspectBlob, unixTimestamp, fixName };

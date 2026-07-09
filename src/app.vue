@@ -12,14 +12,15 @@ import {mapActions} from "vuex";
 export default {
   name: "app",
   methods: {
-    ...mapActions(
-        'ide',['addLog','setActivePage']
-    ),
+    ...mapActions({
+      addLog: 'ide/addLog',
+      saveRequest: 'project/projectSaveRequest',
+    }),
   },
   async mounted() {
     // console.log(this.addLog);
     const toast = useToast();
-    // ipcRenderer.send('app-started');
+    // handle toast messages
     await listen("toast", (event) => {
       const { message_type, message_text } = event.payload;
 
@@ -41,8 +42,20 @@ export default {
       }
     });
 
+    // handle log events
     await listen("log", (event) => {
       this.addLog(event.payload);
+    });
+    // handle menu events
+    await listen("menu-event", (event) => {
+      switch (event.payload) {
+
+        case "request-save":
+          this.saveRequest();
+          break;
+        default:
+          this.addLog( "Invalid menu event:" +event.payload );
+      }
     });
   }
 }

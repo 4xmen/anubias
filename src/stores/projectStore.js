@@ -6,8 +6,9 @@ import {useToast} from "vue-toastification";
 // import {state} from "vue-tsc/out/shared";
 import defaultPage from './components/defaultPage.json';
 import {LazyStore} from '@tauri-apps/plugin-store';
-import {generateHashId, unixTimestamp} from "../ide/js/system-functions.js";
+import {fixName, generateHashId, unixTimestamp} from "../ide/js/system-functions.js";
 import {PreviewManager} from "../ide/js/preview-manager.js";
+import {ask, save} from "@tauri-apps/plugin-dialog";
 
 const storage = new LazyStore('ide.json', {autoSave: false});
 
@@ -198,15 +199,18 @@ const projectStore = {
         },
 
 
-        async saveProject({state}, path = null) {
+        async saveProject({state, commit}, path = null) {
             // save project just save project by project path
             // so If save as is need to change project path
             const req = {
-                path: path ?? state.projectPath,
+                path: path ?? state.projectFile,
                 project: JSON.stringify(state.project),
                 previews: await state.previews.export()
             };
-            return await invoke('save_project', {request: req});
+            if (await invoke('save_project', {request: req})) {
+                commit('UPDATE_PROJECT_DATA', {key: 'isSave', value: true});
+            }
+
         },
         /**
          * add component to page
@@ -259,6 +263,41 @@ const projectStore = {
                 hash: state.project.hash,
                 timestamp: unixTimestamp(),
             });
+        },
+        async projectSaveRequest(context) {
+            if (context.state.projectFile === ""){
+                let lastFolder = localStorage.getItem("lastFolder") || "";
+
+                const path = await save({
+                    defaultPath: lastFolder,
+                    multiple: false,
+                    directory: false,
+                    filters: [
+                        { name: "Anubias files", extensions: ["anb"] },
+                        { name: "All files", extensions: ["*"] },
+                    ],
+                });
+
+                if (!path) return;
+                const fixedPath = fixName(path);
+                const fileExists = await invoke("path_exists", { path: fixedPath });
+
+
+                if (fileExists) {
+                    const ok = await ask("OMG :), Do you want to overwrite project file?", {
+                        title: "Confirm overwrite",
+                        kind: "warning",
+                    });
+
+                    if (!ok) return;
+                }
+
+                const folder = fixedPath.substring(0, fixedPath.lastIndexOf("/"));
+                localStorage.setItem("lastFolder", folder);
+                await context.dispatch("saveProject", fixedPath);
+            }else{
+                await context.dispatch("saveProject");
+            }
         }
     },
     getters: {
