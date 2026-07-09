@@ -80,17 +80,15 @@ Contribution are always welcome and recommended! Here is how:
 
 </div>
 
-## Developing Languages
+## Developing languages and technologies
 
-<div align="center">
+[![Rust](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white)](#)
+[![Tauri](https://img.shields.io/badge/Tauri%20v2-24C8DB?style=for-the-badge&logo=tauri&logoColor=white)](#)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](#)
+[![Vue.js](https://img.shields.io/badge/Vue.js%20v3-4FC08D?style=for-the-badge&logo=vuedotjs&logoColor=white)](#)
+[![Vuex](https://img.shields.io/badge/Vuex%20v4-4FC08D?style=for-the-badge&logo=vuex&logoColor=white)](#)
 
-[![javascript](src/assets/badge/javascript.svg)](https://www.javascript.com/)
-[![vuejs](src/assets/badge/vue.svg)](https://vuejs.org/)
-[![webpack](src/assets/badge/webpack.svg)](https://webpack.js.org/)
-[![eslint](src/assets/badge/eslint.svg)](https://eslint.org/)
-[![electron-js](src/assets/badge/electron.svg)](https://www.electronjs.org/)
 
-</div>
 
 ## License
 
@@ -100,7 +98,7 @@ Contribution are always welcome and recommended! Here is how:
 
 ## Support
 
-[![buymeacoffee](src/assets/badge/paypal.svg)](https://www.paypal.me/swepc)
+[![PayPal](https://img.shields.io/badge/PayPal-Donate-blue?logo=paypal&logoColor=white)](https://www.paypal.me/swepc)
 
 <div align="center"> Developed With Love ! ❤️</div>
 
