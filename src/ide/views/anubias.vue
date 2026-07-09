@@ -83,7 +83,7 @@
         <i class="ri-checkbox-indeterminate-line" @click="toggleLogsCollapse" title="Collapse"></i>
         <i class="ri-delete-bin-6-line" style="margin-left: 30px" @click="clearLogs()" title="Clear logs"></i>
       </h3>
-      <div id="logs-content">
+      <div id="logs-content" ref="logBox">
 <!--        logs here-->
 <!--        {{ project.projectFile }}-->
 <!--        {{ project.isSave ? 'save' : 'not save' }}-->
@@ -354,6 +354,23 @@ export default {
 
     }
   },
+  watch: {
+    applogs: {
+      handler() {
+        this.$nextTick(() => {
+          const el = this.$refs.logBox
+          if (el) {
+            el.scrollTo({
+              top: el.scrollHeight,
+              behavior: 'smooth'
+            })
+          }
+        })
+      },
+      deep: true,
+      immediate: true
+    }
+  }
 }
 </script>
 

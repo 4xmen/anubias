@@ -245,6 +245,8 @@ const projectStore = {
         },
         changeSaveState(context, isSave) {
             context.commit('UPDATE_PROJECT_DATA', {key: 'isSave', value: isSave});
+            invoke('set_menu_state', {state: "CanSave", value: true})
+                .catch(err => console.error('Menu update failed:', err))
         },
         updateProjectPreview(context, previews) {
             context.commit('UPDATE_PROJECT_PREVIEWS', previews);
