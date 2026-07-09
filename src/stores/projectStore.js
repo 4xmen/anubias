@@ -267,7 +267,7 @@ const projectStore = {
             });
         },
         async projectSaveRequest(context) {
-            if (context.state.projectFile === ""){
+            if (context.state.projectFile === "") {
                 let lastFolder = localStorage.getItem("lastFolder") || "";
 
                 const path = await save({
@@ -275,14 +275,14 @@ const projectStore = {
                     multiple: false,
                     directory: false,
                     filters: [
-                        { name: "Anubias files", extensions: ["anb"] },
-                        { name: "All files", extensions: ["*"] },
+                        {name: "Anubias files", extensions: ["anb"]},
+                        {name: "All files", extensions: ["*"]},
                     ],
                 });
 
                 if (!path) return;
                 const fixedPath = fixName(path);
-                const fileExists = await invoke("path_exists", { path: fixedPath });
+                const fileExists = await invoke("path_exists", {path: fixedPath});
 
 
                 if (fileExists) {
@@ -297,10 +297,14 @@ const projectStore = {
                 const folder = fixedPath.substring(0, fixedPath.lastIndexOf("/"));
                 localStorage.setItem("lastFolder", folder);
                 await context.dispatch("saveProject", fixedPath);
-            }else{
+            } else {
                 await context.dispatch("saveProject");
             }
-        }
+        },
+        async clearBackup(context, timestamp) {
+            const r = await invoke('delete_old_backups', {hash: context.state.project.hash , timestamp});
+            console.log(r);
+        },
     },
     getters: {
         getPage: (state) => (i) => {

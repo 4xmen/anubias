@@ -35,6 +35,7 @@
 
       <div class="footer">
         <button type="button" class="btn secondary" @click="close">Cancel</button>
+        <button type="button" class="btn secondary" @click="clear">Clear all backups</button>
         <button type="button" class="btn primary" :disabled="!selected" @click="restore">
           Restore
         </button>
@@ -44,21 +45,21 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import {mapActions, mapMutations, mapState} from "vuex";
 import {invoke} from "@tauri-apps/api/core";
+import {unixTimestamp} from "../js/system-functions.js";
 
 export default {
   name: "restore-modal",
   data: () => ({
     selected: null,
     selectedIndex: 0
-
   }),
   computed: {
-    ...mapState('project',{
+    ...mapState('project', {
       backups: state => state.backups,
     }),
-    ...mapState('ide',{
+    ...mapState('ide', {
       open: state => state.modals.restore,
     }),
     sortedBackups() {
@@ -72,6 +73,25 @@ export default {
     window.removeEventListener("keydown", this.onKeydown);
   },
   methods: {
+    ...mapActions({
+      clearBackup: 'project/clearBackup',
+      confirming: 'ide/showConfirm',
+    }),
+    ...mapMutations({
+      'ignoreBackups': 'project/IGNORE_BACKUPS',
+    }),
+    clear() {
+      this.confirming({
+        onConfirm: () => {
+          this.clearBackup(unixTimestamp())
+          this.ignoreBackups()
+          this.close()
+        },
+        onCancel: () => {},
+        text: "Are you sure to clear all backups?",
+        title: 'Backup clear confirm',
+      });
+    },
     onKeydown(e) {
       if (!this.open || !this.sortedBackups.length) return;
 
@@ -145,10 +165,10 @@ export default {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,.08);
+  border: 1px solid rgba(255, 255, 255, .08);
   border-radius: 12px;
   background: #1b1f26;
-  box-shadow: 0 24px 70px rgba(0,0,0,.55);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .55);
 }
 
 .header,
@@ -160,7 +180,7 @@ export default {
 }
 
 .header {
-  border-bottom: 1px solid rgba(255,255,255,.06);
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
 }
 
 .title {
@@ -180,7 +200,7 @@ export default {
   height: 28px;
   border: 0;
   border-radius: 8px;
-  background: rgba(255,255,255,.04);
+  background: rgba(255, 255, 255, .04);
   color: #9aa2af;
   cursor: pointer;
 }
@@ -198,9 +218,9 @@ export default {
   justify-content: space-between;
   gap: 12px;
   padding: 11px 12px;
-  border: 1px solid rgba(255,255,255,.06);
+  border: 1px solid rgba(255, 255, 255, .06);
   border-radius: 10px;
-  background: rgba(255,255,255,.02);
+  background: rgba(255, 255, 255, .02);
   color: inherit;
   text-align: left;
   cursor: pointer;
@@ -244,7 +264,7 @@ export default {
 
 .empty {
   padding: 28px 12px;
-  border: 1px dashed rgba(255,255,255,.08);
+  border: 1px dashed rgba(255, 255, 255, .08);
   border-radius: 12px;
   text-align: center;
   color: #8f96a3;
@@ -262,7 +282,7 @@ export default {
 
 .secondary {
   color: #d7dbe3;
-  background: rgba(255,255,255,.04);
+  background: rgba(255, 255, 255, .04);
 }
 
 .primary {

@@ -18,7 +18,7 @@ Anubias is project help you to make your mobile apps so easy and native with GUI
 <h2>Free Templates</h2>
 <img src="public/screen-shots/sc1.png" width="500px">
 </div>
-<div align="center">
+
 <h2>Easy To Use</h2>
 
 # Downloads
@@ -70,6 +70,8 @@ Contribution are always welcome and recommended! Here is how:
 
 ## Badges
 
+
+
 <div align="center">
 
 [![Anubias-App](https://img.shields.io/badge/Anubias-Desktop-green.svg)](https://anubias.app/)
@@ -82,13 +84,16 @@ Contribution are always welcome and recommended! Here is how:
 
 ## Developing languages and technologies
 
+
+<div align="center">
+
 [![Rust](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white)](#)
 [![Tauri](https://img.shields.io/badge/Tauri%20v2-24C8DB?style=for-the-badge&logo=tauri&logoColor=white)](#)
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](#)
 [![Vue.js](https://img.shields.io/badge/Vue.js%20v3-4FC08D?style=for-the-badge&logo=vuedotjs&logoColor=white)](#)
 [![Vuex](https://img.shields.io/badge/Vuex%20v4-4FC08D?style=for-the-badge&logo=vuex&logoColor=white)](#)
 
-
+</div>
 
 ## License
 

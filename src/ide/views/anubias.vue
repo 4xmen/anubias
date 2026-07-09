@@ -350,9 +350,6 @@ export default {
         await this.$store.dispatch('project/loadLastProject');
       }
     },
-    createBackupProject() {
-
-    }
   },
   watch: {
     applogs: {
