@@ -8,7 +8,12 @@ pub fn register(app: &App) {
             "save" => menu_actions::save(app),
             "open" => menu_actions::open(app),
             "undo" => menu_actions::undo(app),
-            _ => {}
+            "properties" => menu_actions::properties_panel_toggle(app),
+            "components" => menu_actions::components_panel_toggle(app),
+            "logs" => menu_actions::logs_panel_toggle(app),
+            _ => {
+                println!("Unhandled event: {:?}", event.id().as_ref());
+            }
         }
     });
 }

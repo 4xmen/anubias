@@ -15,6 +15,9 @@ export default {
     ...mapActions({
       addLog: 'ide/addLog',
       saveRequest: 'project/projectSaveRequest',
+      logToggle: 'ide/toggleLogsCollapse',
+      componentsToggle: 'ide/toggleComponentsCollapse',
+      propertiesToggle: 'ide/togglePropertiesCollapse',
     }),
   },
   async mounted() {
@@ -53,9 +56,19 @@ export default {
         case "request-save":
           this.saveRequest();
           break;
+        case "logs-panel-toggle":
+          this.logToggle();
+          break;
+        case "components-panel-toggle":
+          this.componentsToggle();
+          break;
+        case "properties-panel-toggle":
+          this.propertiesToggle();
+          break;
         default:
-          this.addLog( "Invalid menu event:" +event.payload );
+          this.addLog( "Invalid menu event: " +event.payload );
       }
+
     });
   }
 }
