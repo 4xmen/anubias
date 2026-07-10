@@ -176,8 +176,8 @@ pub fn build_menu_with_project<R: Runtime>(
         &[
             &MenuItem::with_id(app, "debug", "Debug", true, None::<&str>)?,
             &MenuItem::with_id(app, "run", "Run", true, None::<&str>)?,
-            &MenuItem::with_id(app, "clean", "Emulators", true, None::<&str>)?,
-            &MenuItem::with_id(app, "build", "Project setting", true, None::<&str>)?,
+            &MenuItem::with_id(app, "clean", "Clean", true, None::<&str>)?,
+            &MenuItem::with_id(app, "build", "Build project", true, None::<&str>)?,
             &Submenu::with_items(
                 app,
                 "Build output",

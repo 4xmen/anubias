@@ -65,6 +65,9 @@ export default {
         case "properties-panel-toggle":
           this.propertiesToggle();
           break;
+        case "settings-open":
+          this.$router.push('/settings');
+          break;
         default:
           this.addLog( "Invalid menu event: " +event.payload );
       }

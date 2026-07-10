@@ -21,3 +21,7 @@ pub fn components_panel_toggle(app: &AppHandle) {
 pub fn properties_panel_toggle(app: &AppHandle) {
     let _ = app.emit("menu-event", "properties-panel-toggle");
 }
+
+pub fn open_settings(app: &AppHandle) {
+    let _ = app.emit("menu-event", "settings-open");
+}

@@ -10,6 +10,7 @@ pub fn register(app: &App) {
             "undo" => menu_actions::undo(app),
             "properties" => menu_actions::properties_panel_toggle(app),
             "components" => menu_actions::components_panel_toggle(app),
+            "preference" => menu_actions::open_settings(app),
             "logs" => menu_actions::logs_panel_toggle(app),
             _ => {
                 println!("Unhandled event: {:?}", event.id().as_ref());
