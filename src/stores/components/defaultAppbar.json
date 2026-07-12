@@ -1,6 +1,7 @@
 {
   "type": "appbar",
   "name": "appbar",
+  "hash": "",
   "title": "app bar title",
   "color": "null",
   "textColor": "null",
@@ -49,6 +50,9 @@
       "type": "null|String",
       "regex": "",
       "state": "input"
+    },
+    "hash": {
+      "type": "Invisible"
     }
   }
 }

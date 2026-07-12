@@ -1,6 +1,7 @@
 {
   "type": "button",
   "name": "button",
+  "hash": "",
   "icon": "home",
   "text": "Click me",
   "textColor": "null",
@@ -87,6 +88,9 @@
       "type":  "Boolean",
       "regex": "^(true|false)$",
       "state": "input"
+    },
+    "hash": {
+      "type": "Invisible"
     }
   }
 }

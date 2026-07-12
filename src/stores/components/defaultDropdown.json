@@ -1,6 +1,7 @@
 {
   "type": "dropdown",
   "name": "dropdown",
+  "hash": "",
   "title": "Dropdown",
   "color": "null",
   "padding": "0",
@@ -147,6 +148,9 @@
       "type":  "Boolean",
       "regex": "^(true|false)$",
       "state": "input"
+    },
+    "hash": {
+      "type": "Invisible"
     }
   }
 }

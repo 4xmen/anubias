@@ -1,6 +1,7 @@
 {
   "type": "nav",
   "name": "nav",
+  "hash": "",
   "color": "null",
   "textColor": "null",
   "unselectedItemColor": "null",
@@ -43,6 +44,9 @@
       "type": "String",
       "regex": "^[0-9]{1,2}$",
       "state": "input"
+    },
+    "hash": {
+      "type": "Invisible"
     }
   }
 }

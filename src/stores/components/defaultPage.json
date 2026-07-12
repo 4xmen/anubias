@@ -1,7 +1,7 @@
 {
-  "id": "",
   "type": "page",
   "name": "page",
+  "hash": "",
   "scrollable": true,
   "safeArea": false,
   "padding": "15",
@@ -11,8 +11,6 @@
     "visual": [],
     "nonVisual": []
   },
-  "tie": [
-  ],
   "validator": {
     "version": 2,
     "name": {
@@ -39,6 +37,19 @@
       "type": "String",
       "regex": "^(null|left|right|center)$",
       "state": "input"
+    },
+    "hash": {
+      "type": "Invisible"
+    },
+    "onShow": {
+      "type": "Code",
+      "regex": "",
+      "state": ""
+    },
+    "children": {
+      "type": "Object",
+      "regex": "",
+      "state": ""
     }
   }
 }

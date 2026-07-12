@@ -277,7 +277,7 @@ const ideStore = {
             });
         },
         async setMenuState(context, {name, state}) {
-            // console.log(data,'undo');
+            // console.log('called',{name, state});
             context.commit('SET_MENU_STATE', {
                 name: name,
                 state: state,

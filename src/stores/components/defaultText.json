@@ -1,6 +1,7 @@
 {
   "type": "text",
   "name": "text",
+  "hash": "",
   "text": "Anubias example text : )",
   "align": "null",
   "fontSize": 13.0,
@@ -67,6 +68,9 @@
       "type": "Boolean",
       "regex": "^(true|false)$",
       "state": "input"
+    },
+    "hash": {
+      "type": "Invisible"
     }
   }
 }

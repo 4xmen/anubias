@@ -1,6 +1,7 @@
 {
   "type": "container",
   "name": "container",
+  "hash": "",
   "align": "center",
   "width": "120",
   "height": "120",
@@ -70,6 +71,9 @@
       "type": "Boolean",
       "regex": "^(true|false)$",
       "state": "input"
+    },
+    "hash": {
+      "type": "Invisible"
     }
   }
 }

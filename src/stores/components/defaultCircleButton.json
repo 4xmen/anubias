@@ -1,6 +1,7 @@
 {
   "type": "circle_button",
   "name": "circleButton",
+  "hash": "",
   "icon": "home",
   "iconColor": "null",
   "iconSize": 25,
@@ -46,6 +47,9 @@
       "type":  "Boolean",
       "regex": "^(true|false)$",
       "state": "input"
+    },
+    "hash": {
+      "type": "Invisible"
     }
   }
 }

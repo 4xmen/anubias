@@ -166,7 +166,7 @@ pub fn build_menu_with_project<R: Runtime>(
             &MenuItem::with_id(app, "sdk", "SDK", true, None::<&str>)?,
             &MenuItem::with_id(app, "emulator", "Emulators", true, None::<&str>)?,
             &MenuItem::with_id(app, "project", "Project setting", true, None::<&str>)?,
-            &MenuItem::with_id(app, "resource", "Resources", true, None::<&str>)?,
+            &MenuItem::with_id(app, "resource", "Project resources", true, None::<&str>)?,
         ],
     )?;
     let app_menu = Submenu::with_items(

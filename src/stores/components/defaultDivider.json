@@ -1,6 +1,7 @@
 {
   "type": "divider",
   "name": "divider",
+  "hash": "",
   "color": "null",
   "height": 16,
   "thickness": 1,
@@ -43,6 +44,9 @@
       "type": "Boolean",
       "regex": "^(true|false)$",
       "state": "input"
+    },
+    "hash": {
+      "type": "Invisible"
     }
   }
 }

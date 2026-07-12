@@ -1,6 +1,7 @@
 {
   "type": "input",
   "name": "input",
+  "hash": "",
   "text": "",
   "margin": "0",
   "labelText": "input",
@@ -209,6 +210,9 @@
       "type":  "Boolean",
       "regex": "^(true|false)$",
       "state": "input"
+    },
+    "hash": {
+      "type": "Invisible"
     }
   }
 }

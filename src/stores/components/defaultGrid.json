@@ -1,6 +1,7 @@
 {
   "type": "grid",
   "name": "grid",
+  "hash": "",
   "column": "2",
   "width": "100%",
   "height": "null",
@@ -74,6 +75,9 @@
       "type": "Boolean",
       "regex": "^(true|false)$",
       "state": "input"
+    },
+    "hash": {
+      "type": "Invisible"
     }
   }
 }

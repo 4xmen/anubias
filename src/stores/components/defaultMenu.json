@@ -1,6 +1,7 @@
 {
   "type": "menu",
   "name": "menu",
+  "hash": "",
   "title": "Menu title",
   "textColor": "null",
   "color": "null",
@@ -38,6 +39,9 @@
       "type": "String",
       "regex": ".*",
       "state": "output"
+    },
+    "hash": {
+      "type": "Invisible"
     }
   }
 }

@@ -1,6 +1,7 @@
 {
   "type": "image",
   "name": "image",
+  "hash": "",
   "image": "",
   "padding": "0",
   "width": "100%",
@@ -56,6 +57,9 @@
       "type": "Boolean",
       "regex": "^(true|false)$",
       "state": "input"
+    },
+    "hash": {
+      "type": "Invisible"
     }
   }
 }

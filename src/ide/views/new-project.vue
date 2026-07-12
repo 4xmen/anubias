@@ -243,7 +243,7 @@ export default {
         let page = defaultPage;
         for (let i = 0; i < this.newProject.pageCount; i++) {
           page.name = 'page' + (i + 1);
-          page.id = generateHashId();
+          page.hash = generateHashId();
           this.newProject.pages.push({...page});
         }
         this.newProject.hash = generateHashId();

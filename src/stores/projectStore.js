@@ -46,7 +46,7 @@ const projectStore = {
             state.lastLoadProjectNotify = unixTimestamp();
 
             project.pages.forEach((page) => {
-                state.previews.register(page.id);
+                state.previews.register(page.hash);
             });
         },
         SET_LAST_LOADED_PROJECT(state, project) {
@@ -55,6 +55,8 @@ const projectStore = {
         ADD_COMPONENT_TO_PAGE(state, {pageIndex, isVisual, component}) {
             // console.log;
             let c = {...component};
+            c.hash = generateHashId();
+            // console.log(c);
             // check is app app bar
             if (c.type === 'appbar') {
                 c.name = getUniqueName(state.project.pages[pageIndex], component.name);
@@ -82,9 +84,10 @@ const projectStore = {
         },
         SET_PAGE_PREVIEW(state, {pageIndex, image}) {
 
+            // console.log('preview:',pageIndex, image);
             try {
                 if (image !== undefined) {
-                    state.previews.update(state.project.pages[pageIndex].id, image);
+                    state.previews.update(state.project.pages[pageIndex].hash, image);
                 }
             } catch (e) {
                 console.log(`Update preview problem: ${e.message}`);
@@ -110,10 +113,10 @@ const projectStore = {
                 i++;
                 newPage.name = 'page' + i;
             } while (names.indexOf(newPage.name) !== -1)
-            newPage.id = generateHashId();
+            newPage.hash = generateHashId();
             // add page finaly
             state.project.pages.push(newPage);
-            state.previews.register(newPage.id);
+            state.previews.register(newPage.hash);
         },
         REMOVE_PAGE(state, index) {
             if (state.project.pages.length > 1) {
@@ -128,7 +131,6 @@ const projectStore = {
         },
         UPDATE_PROJECT_PREVIEWS(state, payload) {
             for (let preview of payload) {
-                // preview.data یک array است، درست تبدیل کن
                 const bytes = new Uint8Array(preview.data);
                 state.previews.update(preview.page_id, new Blob([bytes]));
             }
@@ -151,6 +153,9 @@ const projectStore = {
             // await dispatch('loadProject', project);
             toast.success('Project initialized...');
             dispatch('ide/setTitle', null, {root: true});
+            this.dispatch('ide/setMenuState', {name: 'IsProjectLoaded', state: true});
+            this.dispatch('ide/setMenuState', {name: 'CanSave', state: true});
+            dispatch('ide/setActivePage', project.entryPoint, {root: true});
         },
 
         async loadProject({commit, dispatch, state}, project) {

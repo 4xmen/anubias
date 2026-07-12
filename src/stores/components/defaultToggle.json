@@ -1,6 +1,7 @@
 {
   "type": "toggle",
   "name": "toggle",
+  "hash": "",
   "text": "Toggle title",
   "fontSize": 14.0,
   "maxLine": 1,
@@ -68,6 +69,9 @@
       "type": "Boolean",
       "regex": "^(true|false)$",
       "state": "input"
+    },
+    "hash": {
+      "type": "Invisible"
     }
   }
 }
