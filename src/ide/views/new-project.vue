@@ -244,7 +244,7 @@ export default {
         for (let i = 0; i < this.newProject.pageCount; i++) {
           page.name = 'page' + (i + 1);
           page.hash = generateHashId();
-          this.newProject.pages.push({...page});
+          this.newProject.pages.push(structuredClone(page));
         }
         this.newProject.hash = generateHashId();
         await this.createProject(this.newProject);
