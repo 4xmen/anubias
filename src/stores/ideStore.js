@@ -166,6 +166,7 @@ const ideStore = {
         SET_ACTIVE_PAGE(state, pageIndex) {
             state.pages.currentPage = this.getters['project/getPage'](pageIndex);
             state.activePage = pageIndex;
+            console.log(state.pages.currentPage);
         },
         UPDATE_CURRENT_PAGE(state, info) {
             state.pages.currentPage = info;
@@ -201,7 +202,7 @@ const ideStore = {
             state.confirm.enabled = false;
         },
         CHANGE_MODAL_STATE(state, {name, isShow}) {
-            console.log(name, isShow);
+            // console.log(name, isShow);
             state.modals[name] = isShow;
         },
         ADD_LOG(state, payload) {
@@ -297,10 +298,10 @@ const ideStore = {
         /**
          * set active page index
          * @param context
-         * @param page : Number
+         * @param pageIndex : Number
          */
-        setActivePage(context, page) {
-            context.commit('SET_ACTIVE_PAGE', page);
+        setActivePage(context, pageIndex) {
+            context.commit('SET_ACTIVE_PAGE', pageIndex);
         },
         async setTitle({state, getters, rootState}) {
             let title = state.title + ' v' + getters.version;

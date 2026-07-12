@@ -34,12 +34,38 @@ const projectStore = {
         isSave: true,
         lastLoadProjectNotify: 0,
         backups: [],
+        componentHashMap: [],
+        pageHashMap: [],
     }),
     mutations: {
+        RENEW_HASHMAP(state) {
+            console.log('RENEW HASHMAP');
+            state.componentHashMap = [];
+            state.pageHashMap = [];
+            for (const page of state.project.pages) {
+                state.pageHashMap.push(page.hash);
+                for (const component of page.children.visual) {
+                    state.componentHashMap.push({
+                        parent: page.hash,
+                        hash: component.hash,
+                        type: 'visual'
 
-
+                    });
+                }
+                for (const component of page.children.nonVisual) {
+                    state.componentHashMap.push({
+                        parent: page.hash,
+                        hash: component.hash,
+                        type: 'nonVisual'
+                    });
+                }
+            }
+        },
         CREATE_PROJECT(state, project) {
             state.project = project;
+            project.pages.forEach((page) => {
+                state.previews.register(page.hash);
+            });
         },
         LOAD_PROJECT(state, project) {
             state.project = project;
@@ -84,7 +110,7 @@ const projectStore = {
         },
         SET_PAGE_PREVIEW(state, {pageIndex, image}) {
 
-            // console.log('preview:',pageIndex, image);
+            console.log('preview:',pageIndex, image);
             try {
                 if (image !== undefined) {
                     state.previews.update(state.project.pages[pageIndex].hash, image);
@@ -116,6 +142,7 @@ const projectStore = {
             newPage.hash = generateHashId();
             // add page finaly
             state.project.pages.push(newPage);
+            console.log('before reg',newPage.hash);
             state.previews.register(newPage.hash);
         },
         REMOVE_PAGE(state, index) {
@@ -150,6 +177,7 @@ const projectStore = {
             project.anubias = ide.getters.version(ide.state());
             await storage.set('lastLoadedProject', project);
             commit('CREATE_PROJECT', project);
+            commit('RENEW_HASHMAP');
             // await dispatch('loadProject', project);
             toast.success('Project initialized...');
             dispatch('ide/setTitle', null, {root: true});
@@ -162,7 +190,7 @@ const projectStore = {
 
             // if this comment not need again must remove
             commit('LOAD_PROJECT', project);
-
+            commit('RENEW_HASHMAP');
             await storage.set('lastLoadedProject', project);
             await invoke('set_has_project', {status: true});
 
@@ -182,7 +210,7 @@ const projectStore = {
             let project = await storage.get('lastLoadedProject');
             // if this comment not need again must remove
             commit('LOAD_PROJECT', project);
-
+            commit('RENEW_HASHMAP');
             await invoke('set_has_project', {status: true});
 
             dispatch('ide/setActivePage', project.entryPoint, {root: true});
@@ -204,7 +232,7 @@ const projectStore = {
         },
 
 
-        async saveProject({state, commit,dispatch}, path = null) {
+        async saveProject({state, commit, dispatch}, path = null) {
             // save project just save project by project path
             // so If save as is need to change project path
             const req = {
@@ -215,7 +243,7 @@ const projectStore = {
             if (await invoke('save_project', {request: req})) {
                 commit('UPDATE_PROJECT_DATA', {key: 'isSave', value: true});
             }
-            dispatch('clearBackup',unixTimestamp());
+            dispatch('clearBackup', unixTimestamp());
             commit('IGNORE_BACKUPS');
         },
         /**
@@ -308,7 +336,7 @@ const projectStore = {
             }
         },
         async clearBackup(context, timestamp) {
-            return  await invoke('delete_old_backups', {hash: context.state.project.hash , timestamp});
+            return await invoke('delete_old_backups', {hash: context.state.project.hash, timestamp});
         },
     },
     getters: {
