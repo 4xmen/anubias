@@ -93,16 +93,8 @@ export default {
       });
       if (path) {
 
-        const result = await invoke("load_project", {
-          path
-        });
-
-        this.$store.commit('project/SET_PROJECT_FILE', path);
-        await this.$store.dispatch('project/loadProject', JSON.parse(result.project));
-        setTimeout(() => {
-          this.$store.dispatch('project/updateProjectPreview', result.previews);
-          this.$router.push('/main');
-        }, 100);
+        await this.$store.dispatch('project/prepareProjectFile', path);
+        this.$router.push('/main');
 
       }
     }

@@ -166,7 +166,6 @@ const ideStore = {
         SET_ACTIVE_PAGE(state, pageIndex) {
             state.pages.currentPage = this.getters['project/getPage'](pageIndex);
             state.activePage = pageIndex;
-            console.log(state.pages.currentPage);
         },
         UPDATE_CURRENT_PAGE(state, info) {
             state.pages.currentPage = info;

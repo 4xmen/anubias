@@ -149,6 +149,7 @@ export default {
       // console.log('s', this.activePageName);
       arrayMove(this.project.project.pages, e.oldIndex, e.newIndex);
       setTimeout(this.fixActivePage, 100);
+      this.$store.commit('project/RENEW_HASHMAP');
 
     }
   }

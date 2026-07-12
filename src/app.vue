@@ -7,7 +7,9 @@
 <script>
 import {useToast} from "vue-toastification";
 import { listen } from "@tauri-apps/api/event";
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
+import {open} from "@tauri-apps/plugin-dialog";
+import {ask} from "@tauri-apps/plugin-dialog";
 
 export default {
   name: "app",
@@ -18,7 +20,33 @@ export default {
       logToggle: 'ide/toggleLogsCollapse',
       componentsToggle: 'ide/toggleComponentsCollapse',
       propertiesToggle: 'ide/togglePropertiesCollapse',
+      prepareProjectFile: 'project/prepareProjectFile',
     }),
+    async openProject(){
+      const ok = await ask("OMG :), Do you open file before save current project?", {
+        title: "Confirm open",
+        kind: "warning",
+      });
+
+      if (!ok) return;
+      const path = await open({
+        multiple: false,
+        directory: false,
+        filters: [
+          {
+            name: 'Anubias files',
+            extensions: ['anb'],
+          },
+          {
+            name: 'All files',
+            extensions: ['*'],
+          },
+        ],
+      });
+      if (path) {
+        await this.prepareProjectFile(path);
+      }
+    }
   },
   async mounted() {
     // console.log(this.addLog);
@@ -56,6 +84,9 @@ export default {
         case "request-save":
           this.saveRequest();
           break;
+        case "request-open":
+          this.openProject();
+          break;
         case "logs-panel-toggle":
           this.logToggle();
           break;
@@ -73,6 +104,11 @@ export default {
       }
 
     });
+  },
+  computed:{
+    ...mapState({
+      isSave: 'project/isSave'
+    })
   }
 }
 </script>

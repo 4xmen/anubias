@@ -39,7 +39,7 @@ const projectStore = {
     }),
     mutations: {
         RENEW_HASHMAP(state) {
-            console.log('RENEW HASHMAP');
+            // console.log('RENEW HASHMAP');
             state.componentHashMap = [];
             state.pageHashMap = [];
             for (const page of state.project.pages) {
@@ -110,7 +110,7 @@ const projectStore = {
         },
         SET_PAGE_PREVIEW(state, {pageIndex, image}) {
 
-            console.log('preview:',pageIndex, image);
+            // console.log('preview:',pageIndex, image);
             try {
                 if (image !== undefined) {
                     state.previews.update(state.project.pages[pageIndex].hash, image);
@@ -142,7 +142,7 @@ const projectStore = {
             newPage.hash = generateHashId();
             // add page finaly
             state.project.pages.push(newPage);
-            console.log('before reg',newPage.hash);
+            // console.log('before reg',newPage.hash);
             state.previews.register(newPage.hash);
         },
         REMOVE_PAGE(state, index) {
@@ -159,7 +159,12 @@ const projectStore = {
         UPDATE_PROJECT_PREVIEWS(state, payload) {
             for (let preview of payload) {
                 const bytes = new Uint8Array(preview.data);
-                state.previews.update(preview.page_id, new Blob([bytes]));
+                if ( state.previews.has(preview.page_id)){
+                    state.previews.update(preview.page_id, new Blob([bytes]));
+                }else{
+                    state.previews.register(preview.page_id, new Blob([bytes]));
+                    state.previews.update(preview.page_id, new Blob([bytes]));
+                }
             }
         },
         SET_BACKUP_LIST(state, list) {
@@ -176,6 +181,7 @@ const projectStore = {
         async createProject({commit, dispatch}, project) {
             project.anubias = ide.getters.version(ide.state());
             await storage.set('lastLoadedProject', project);
+            await storage.set('lastLoadedProjectPath', "");
             commit('CREATE_PROJECT', project);
             commit('RENEW_HASHMAP');
             // await dispatch('loadProject', project);
@@ -192,6 +198,7 @@ const projectStore = {
             commit('LOAD_PROJECT', project);
             commit('RENEW_HASHMAP');
             await storage.set('lastLoadedProject', project);
+            await storage.set('lastLoadedProjectPath', state.projectFile);
             await invoke('set_has_project', {status: true});
 
             dispatch('ide/setActivePage', project.entryPoint, {root: true});
@@ -205,9 +212,27 @@ const projectStore = {
 
         },
 
+        async prepareProjectFile({commit, dispatch}, path) {
+            const result = await invoke("load_project", {
+                path
+            });
+
+            commit('SET_PROJECT_FILE', path);
+            await dispatch('loadProject', JSON.parse(result.project));
+            setTimeout(() => {
+                dispatch('updateProjectPreview', result.previews);
+            }, 100);
+        },
+
         async loadLastProject({commit, dispatch, state}) {
 
+            let path = await storage.get('lastLoadedProjectPath');
+            if ( path !== '' ) {
+                dispatch("prepareProjectFile", path);
+                return;
+            }
             let project = await storage.get('lastLoadedProject');
+
             // if this comment not need again must remove
             commit('LOAD_PROJECT', project);
             commit('RENEW_HASHMAP');
