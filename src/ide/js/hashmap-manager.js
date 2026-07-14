@@ -152,35 +152,3 @@ export class HashMapManager {
         return this.pageHashMap.includes(hash) ? hash : undefined
     }
 }
-
-/* -------------------------------------------------------------
-   example Vuex usage (mutations only)
-
-   mutations: {
-     RENEW_HASHMAP (state, project) {
-       if (!state.hashMapMgr) state.hashMapMgr = new HashMapManager()
-       state.hashMapMgr.renew(project)
-
-       // optional reactive copies
-       state.pageHashMap = state.hashMapMgr.pageHashMap
-       state.componentHashMap = state.hashMapMgr.componentHashMap
-     },
-
-     REMOVE_COMPONENT (state, hash) {
-       state.hashMapMgr.removeComponent(hash)
-       state.componentHashMap = state.hashMapMgr.componentHashMap
-     },
-
-     REMOVE_PAGE (state, hash) {
-       state.hashMapMgr.removePage(hash)
-       state.pageHashMap = state.hashMapMgr.pageHashMap
-       state.componentHashMap = state.hashMapMgr.componentHashMap
-     },
-
-     RESTORE_HASH (state, hash) {
-       state.hashMapMgr.restore(hash)
-       state.pageHashMap = state.hashMapMgr.pageHashMap
-       state.componentHashMap = state.hashMapMgr.componentHashMap
-     }
-   }
-*/

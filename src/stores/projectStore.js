@@ -111,9 +111,12 @@ const projectStore = {
             this.dispatch('project/pushUndoCommand', undoCommand);
 
         },
+        CLEAR_REDO(state) {
+          state.redoStack = [];
+            this.dispatch('ide/setMenuState', {name: 'CanRedo', state: false});
+        },
         PUSH_UNDO_COMMAND(state, command) {
             state.undoStack.push(command);
-            state.redoStack = [];
             this.dispatch('ide/setMenuState', {name: 'CanUndo', state: true});
         },
         PUSH_REDO_COMMAND(state, command) {
@@ -193,6 +196,7 @@ const projectStore = {
 
         undo({state,dispatch,commit}) {
             let command = state.undoStack.pop();
+            commit("PUSH_REDO_COMMAND", command);
 
             switch(command.action) {
                 case 'ADD':
@@ -208,11 +212,7 @@ const projectStore = {
                 default:
                     console.error('Unknown action', command);
             }
-            commit("PUSH_REDO_COMMAND", command);
-            console.log(state.undoStack);
-            if (state.undoStack.length === 0) {
-                dispatch('ide/setMenuState', {name: 'CanUndo', state: false},{root: true});
-            }
+            dispatch('updateRedoUndoMenu');
         },
         redo({state,dispatch,commit}) {
             let command = state.redoStack.pop();
@@ -230,15 +230,21 @@ const projectStore = {
                 default:
                     console.error('Unknown action', command);
             }
-            commit("PUSH_REDO_COMMAND", command);
+            commit("PUSH_UNDO_COMMAND", command);
 
-            if (state.undoStack.length === 0) {
-                dispatch('ide/setMenuState', {name: 'CanUndo', state: false},{root: true});
-            }
+            dispatch('updateRedoUndoMenu');
         },
 
 
 
+        updateRedoUndoMenu({state,dispatch}) {
+            if (state.redoStack.length === 0) {
+                dispatch('ide/setMenuState', {name: 'CanRedo', state: false},{root: true});
+            }
+            if (state.undoStack.length === 0) {
+                dispatch('ide/setMenuState', {name: 'CanUndo', state: false},{root: true});
+            }
+        },
         pushUndoCommand({commit}, command) {
             commit('PUSH_UNDO_COMMAND', command);
         },
@@ -391,6 +397,7 @@ const projectStore = {
                 component: component
             });
 
+            context.commit("CLEAR_REDO");
         },
         updatePagePreview(context, {pageIndex, image}) {
             context.commit('SET_PAGE_PREVIEW', {
