@@ -1,13 +1,12 @@
 use crate::config::IS_DEBUG;
 use crate::format::app;
+use crate::message::{send_log, send_toast, MessageType};
 use serde::{Deserialize, Serialize};
-use std::{fmt, fs};
 use std::fs::File;
 use std::io::{self, Read, Seek, SeekFrom, Write};
 use std::path::Path;
+use std::{fmt, fs};
 use tauri::{AppHandle, Manager};
-use std::path::PathBuf;
-use crate::message::{send_log, send_toast, MessageType};
 
 /// how is project structure
 /// ┌───────────────────────────────────────────────────────────┐
@@ -75,9 +74,7 @@ pub struct LoadProjectResponse {
 /// ┌───────────────────────────────────────────────────────────────┐
 /// │ magic                  File signature                        │
 /// │ version                File format version                   │
-/// │ random_seed            Project random seed                   │
-/// │ data_map_offset        Offset of serialized DataMap          │
-/// │ data_map_size          Serialized DataMap size              │
+/// │ random_seed            Project random seed                   │ │
 /// │ data_map               all project files
 /// └───────────────────────────────────────────────────────────────┘
 ///
@@ -115,23 +112,16 @@ pub struct ProjectMetadata {
     /// all project files
     pub data_map: DataMap,
 
-    /// Location of DataMap.
-    pub data_map_offset: u64,
-
-    /// Serialized DataMap size.
-    pub data_map_size: u64,
 }
 
 impl ProjectMetadata {
     /// Creates project metadata.
-    pub fn new(data_map_offset: u64, data_map_size: u64) -> Self {
+    pub fn new() -> Self {
         Self {
             magic: app::MAGIC,
             version: app::VERSION,
             random_seed: app::random_seed(),
             data_map: DataMap::new(),
-            data_map_offset,
-            data_map_size,
         }
     }
 
@@ -174,7 +164,7 @@ impl ProjectMetadata {
     pub fn from_request(req: SaveProjectRequest) -> Self {
         let project_main_data =
             FileEntry::from_string(req.project, "project.json".to_string(), None);
-        let mut project = ProjectMetadata::new(0, 0);
+        let mut project = ProjectMetadata::new();
         project.add_file_entry(project_main_data);
         for preview in req.previews {
             project.add_file_entry(FileEntry::from_preview(preview));
@@ -338,8 +328,6 @@ impl ProjectMetadata {
             version,
             random_seed,
             data_map,
-            data_map_offset,
-            data_map_size,
         })
     }
 
@@ -519,6 +507,7 @@ impl FileEntry {
     }
 }
 
+
 impl fmt::Debug for FileEntry {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let preview_len = self.data.len().min(3);
@@ -549,7 +538,7 @@ impl fmt::Debug for PreviewData {
     }
 }
 
-//// Lookup table for every asset stored in the project.
+/// Lookup table for every asset stored in the project.
 ///
 /// The DataMap is serialized at the end of the file to avoid
 /// rewriting offsets while saving.
@@ -572,6 +561,8 @@ pub struct DataMap {
     pub entries: Vec<FileEntry>,
 }
 
+
+#[allow(dead_code)]
 impl DataMap {
     /// Creates an empty index.
     pub fn new() -> Self {
@@ -632,8 +623,7 @@ impl Default for DataMap {
 
 #[tauri::command]
 pub fn save_project(app: AppHandle, request: SaveProjectRequest) -> Result<bool, String> {
-
-    send_log(&app,"Try to save project...");
+    send_log(&app, "Try to save project...");
     if IS_DEBUG {
         dbg!(&request);
     }
@@ -643,38 +633,34 @@ pub fn save_project(app: AppHandle, request: SaveProjectRequest) -> Result<bool,
     ProjectMetadata::from_request(request)
         .save(save_path)
         .map(|_| {
-            send_log(&app,"Project saved successfully...");
+            send_log(&app, "Project saved successfully...");
             true
         })
         .map_err(|e| {
-
-            send_log(&app,&format!("Failed to save project: {}", e.to_string()));
+            send_log(&app, &format!("Failed to save project: {}", e.to_string()));
             e.to_string()
         })
 }
 
-
 #[tauri::command]
-pub fn load_project( app: AppHandle,path: String) -> Result<LoadProjectResponse, String> {
-
-    send_log(&app,"Try to load project file...");
+pub fn load_project(app: AppHandle, path: String) -> Result<LoadProjectResponse, String> {
+    send_log(&app, "Try to load project file...");
     let project = ProjectMetadata::load(Path::new(&path))
         .map_err(|error| format!("Failed to load project from path {}: {}", path, error))?;
 
     if !project.verify() {
-        send_toast(&app,MessageType::Error, "Failed to verify project file");
+        send_toast(&app, MessageType::Error, "Failed to verify project file");
         return Err("Project does not verified.".to_string());
     }
-    send_log(&app,"Project verify success...");
+    send_log(&app, "Project verify success...");
     let response = project.into_response().map_err(|error| error.to_string())?;
+    send_log(&app, "Project uncompress & load success...");
+
     if IS_DEBUG {
         dbg!(&response);
     }
-    send_log(&app,"Project uncompress & load success...");
     Ok(response)
 }
-
-
 
 /// Creates an autosave backup of the project at a timestamped location.
 ///
@@ -711,13 +697,9 @@ pub async fn autosave_project_backup(
     hash: String,
     timestamp: i64,
 ) -> Result<String, String> {
-    let base = app
-        .path()
-        .app_data_dir()
-        .map_err(|e| e.to_string())?;
+    let base = app.path().app_data_dir().map_err(|e| e.to_string())?;
 
-
-    send_log(&app,"Try to autosave project backup...");
+    send_log(&app, "Try to autosave project backup...");
 
     let dir = base.join("backups").join(&hash);
     std::fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
@@ -739,10 +721,6 @@ pub struct BackupEntry {
     pub timestamp: i64,
     pub path: String,
 }
-
-
-
-
 
 /// Lists all available backups for a given project, sorted by recency.
 ///
@@ -772,11 +750,8 @@ pub struct BackupEntry {
 /// - Path resolution errors from Tauri
 ///
 #[tauri::command]
-pub async fn list_backups(
-    app: AppHandle,
-    hash: String,
-) -> Result<Vec<BackupEntry>, String> {
-    send_log(&app,"Autosave Backups checking...");
+pub async fn list_backups(app: AppHandle, hash: String) -> Result<Vec<BackupEntry>, String> {
+    send_log(&app, "Autosave Backups checking...");
     println!("bkf check");
     let base = app.path().app_data_dir().map_err(|e| e.to_string())?;
     let dir = base.join("backups").join(&hash);
@@ -796,7 +771,11 @@ pub async fn list_backups(
             continue;
         }
 
-        let ts = match path.file_stem().and_then(|s| s.to_str()).and_then(|s| s.parse::<i64>().ok()) {
+        let ts = match path
+            .file_stem()
+            .and_then(|s| s.to_str())
+            .and_then(|s| s.parse::<i64>().ok())
+        {
             Some(v) => v,
             None => continue,
         };
@@ -810,9 +789,6 @@ pub async fn list_backups(
     items.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
     Ok(items)
 }
-
-
-
 
 /// Deletes all backup files older than the specified timestamp.
 ///
@@ -865,7 +841,11 @@ pub async fn delete_old_backups(
             continue;
         }
 
-        let ts = match path.file_stem().and_then(|s| s.to_str()).and_then(|s| s.parse::<i64>().ok()) {
+        let ts = match path
+            .file_stem()
+            .and_then(|s| s.to_str())
+            .and_then(|s| s.parse::<i64>().ok())
+        {
             Some(v) => v,
             None => continue,
         };
@@ -878,7 +858,6 @@ pub async fn delete_old_backups(
 
     Ok(deleted)
 }
-
 
 /// Checks whether a file or directory exists at the given path.
 ///

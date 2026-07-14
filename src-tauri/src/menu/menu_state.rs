@@ -1,6 +1,5 @@
 use crate::config::IS_DEBUG;
 use serde::{Deserialize, Serialize};
-use std::ffi::c_long;
 use std::sync::Mutex;
 use tauri::menu::{CheckMenuItem, Menu, MenuItem, MenuItemKind, PredefinedMenuItem, Submenu};
 use tauri::{AppHandle, Runtime, State};
@@ -116,7 +115,7 @@ pub fn build_menu_with_project<R: Runtime>(
         &[
             &MenuItem::with_id(app, "new", "New Project", true, None::<&str>)?,
             &MenuItem::with_id(app, "open", "Open...", true, Some("CmdOrCtrl+O"))?,
-            &MenuItem::with_id(app, "save", "Save", state.can_save, None::<&str>)?,
+            &MenuItem::with_id(app, "save", "Save", state.can_save,Some("CmdOrCtrl+S"))?,
             &MenuItem::with_id(app, "save_as", "Save As...", true, None::<&str>)?,
             &MenuItem::with_id(app, "close", "Close Project", true, None::<&str>)?,
             &PredefinedMenuItem::separator(app)?,
@@ -129,8 +128,14 @@ pub fn build_menu_with_project<R: Runtime>(
         "Edit",
         true,
         &[
-            &MenuItem::with_id(app, "undo", "Undo", state.can_undo, None::<&str>)?,
-            &MenuItem::with_id(app, "redo", "Redo", state.can_redo, None::<&str>)?,
+            &MenuItem::with_id(app, "undo", "Undo", state.can_undo, Some("CmdOrCtrl+Z"))?,
+            &MenuItem::with_id(
+                app,
+                "redo",
+                "Redo",
+                state.can_redo,
+                Some("CmdOrCtrl+Shift+Z"),
+            )?,
         ],
     )?;
     let view_menu = Submenu::with_items(
@@ -293,7 +298,9 @@ fn update_individual_items<R: Runtime>(
         }
         let _ = item.set_enabled(state.can_save);
     } else {
-        println!("❌ 'save' item NOT found");
+        if IS_DEBUG {
+            println!("❌ 'save' item NOT found");
+        }
     }
 
     // Undo

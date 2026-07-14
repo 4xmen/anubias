@@ -6,7 +6,7 @@
 
 <script>
 import {useToast} from "vue-toastification";
-import { listen } from "@tauri-apps/api/event";
+import {listen} from "@tauri-apps/api/event";
 import {mapActions, mapState} from "vuex";
 import {open} from "@tauri-apps/plugin-dialog";
 import {ask} from "@tauri-apps/plugin-dialog";
@@ -21,14 +21,19 @@ export default {
       componentsToggle: 'ide/toggleComponentsCollapse',
       propertiesToggle: 'ide/togglePropertiesCollapse',
       prepareProjectFile: 'project/prepareProjectFile',
+      undo: 'project/undo',
+      redo: 'project/redo',
     }),
-    async openProject(){
-      const ok = await ask("OMG :), Do you open file before save current project?", {
-        title: "Confirm open",
-        kind: "warning",
-      });
+    async openProject() {
 
-      if (!ok) return;
+      if (!this.isSave) {
+        const ok = await ask("OMG :), Do you open file before save current project?", {
+          title: "Confirm open",
+          kind: "warning",
+        });
+        if (!ok) return;
+      }
+
       const path = await open({
         multiple: false,
         directory: false,
@@ -53,7 +58,7 @@ export default {
     const toast = useToast();
     // handle toast messages
     await listen("toast", (event) => {
-      const { message_type, message_text } = event.payload;
+      const {message_type, message_text} = event.payload;
 
       switch (message_type) {
         case "Info":
@@ -99,15 +104,21 @@ export default {
         case "settings-open":
           this.$router.push('/settings');
           break;
+        case "request-undo":
+          this.undo();
+          break;
+        case "request-redo":
+          this.redo();
+          break;
         default:
-          this.addLog( "Invalid menu event: " +event.payload );
+          this.addLog("Invalid menu event: " + event.payload);
       }
 
     });
   },
-  computed:{
+  computed: {
     ...mapState({
-      isSave: 'project/isSave'
+      isSave: state => state.project.isSave
     })
   }
 }

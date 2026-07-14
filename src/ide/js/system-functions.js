@@ -6,7 +6,14 @@
  * console.log(pageId); // "550e8400-e29b-41d4-a716-446655440000"
  */
 function generateHashId() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    return 'xxxxxxxx-xxxx-2xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = (Math.random() * 16) | 0;
+        const v = c === 'x' ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+    });
+}
+function generateCommandId() {
+    return 'com-yxxx-xxxxx'.replace(/[xy]/g, function(c) {
         const r = (Math.random() * 16) | 0;
         const v = c === 'x' ? r : (r & 0x3) | 0x8;
         return v.toString(16);
@@ -50,5 +57,13 @@ let fixName = function (filePath) {
     return filePath;
 }
 
+let safeClone = function (Object) {
+    try {
+        return structuredClone(Object);
+    } catch {
+        return JSON.parse(JSON.stringify(Object));
+    }
 
-export { generateHashId, inspectBlob, unixTimestamp, fixName };
+}
+
+export { generateHashId, inspectBlob, unixTimestamp, fixName, generateCommandId, safeClone };

@@ -5,11 +5,14 @@ pub fn save(app: &AppHandle) {
 }
 
 pub fn open(app: &AppHandle) {
-    let _ = app.emit("menu-event","request-open");
+    let _ = app.emit("menu-event", "request-open");
 }
 
 pub fn undo(app: &AppHandle) {
     let _ = app.emit("menu-event", "request-undo");
+}
+pub fn redo(app: &AppHandle) {
+    let _ = app.emit("menu-event", "request-redo");
 }
 
 pub fn logs_panel_toggle(app: &AppHandle) {

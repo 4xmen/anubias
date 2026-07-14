@@ -6,9 +6,11 @@ import {useToast} from "vue-toastification";
 // import {state} from "vue-tsc/out/shared";
 import defaultPage from './components/defaultPage.json';
 import {LazyStore} from '@tauri-apps/plugin-store';
-import {fixName, generateHashId, unixTimestamp} from "../ide/js/system-functions.js";
+import {fixName, generateCommandId, generateHashId, safeClone, unixTimestamp} from "../ide/js/system-functions.js";
 import {PreviewManager} from "../ide/js/preview-manager.js";
 import {ask, save} from "@tauri-apps/plugin-dialog";
+import {HashMapManager} from "../ide/js/hashmap-manager.js";
+import {find} from "sortablejs/src/utils.js";
 
 const storage = new LazyStore('ide.json', {autoSave: false});
 
@@ -34,32 +36,13 @@ const projectStore = {
         isSave: true,
         lastLoadProjectNotify: 0,
         backups: [],
-        componentHashMap: [],
-        pageHashMap: [],
+        hashmaps: new HashMapManager(),
+        undoStack: [],
+        redoStack: [],
     }),
     mutations: {
         RENEW_HASHMAP(state) {
-            // console.log('RENEW HASHMAP');
-            state.componentHashMap = [];
-            state.pageHashMap = [];
-            for (const page of state.project.pages) {
-                state.pageHashMap.push(page.hash);
-                for (const component of page.children.visual) {
-                    state.componentHashMap.push({
-                        parent: page.hash,
-                        hash: component.hash,
-                        type: 'visual'
-
-                    });
-                }
-                for (const component of page.children.nonVisual) {
-                    state.componentHashMap.push({
-                        parent: page.hash,
-                        hash: component.hash,
-                        type: 'nonVisual'
-                    });
-                }
-            }
+            state.hashmaps.renew( state.project );
         },
         CREATE_PROJECT(state, project) {
             state.project = project;
@@ -80,8 +63,13 @@ const projectStore = {
         },
         ADD_COMPONENT_TO_PAGE(state, {pageIndex, isVisual, component}) {
             // console.log;
-            let c = {...component};
+            let c = safeClone(component); // we can't use structuredClone or {...component}
             c.hash = generateHashId();
+            let dataMap = {
+                parent: state.project.pages[pageIndex].hash,
+                hash: c.hash,
+                type: 'visual'
+            }
             // console.log(c);
             // check is app app bar
             if (c.type === 'appbar') {
@@ -100,13 +88,37 @@ const projectStore = {
                     state.project.pages[pageIndex].children.visual.push(c);
                 } else {
                     state.project.pages[pageIndex].children.nonVisual.push(c);
+                    dataMap.type =  'nonVisual';
                 }
             }
-            this.dispatch('ide/setMenuState', {name: 'CanUndo', state: true});
+
+            state.hashmaps.addComponent(dataMap);
+
+            const undoCommand = {
+                id: generateCommandId(),
+                entity: "COMPONENT",
+                action: "ADD",
+                targetId: c.hash,
+                payload: {
+                    parent: dataMap.parent,
+                    data: structuredClone(c),
+                    type: dataMap.type,
+                },
+            };
             this.dispatch('ide/setMenuState', {name: 'CanSave', state: true});
             this.dispatch('ide/setCanScreenshot', true);
             this.dispatch('project/changeSaveState', false);
+            this.dispatch('project/pushUndoCommand', undoCommand);
 
+        },
+        PUSH_UNDO_COMMAND(state, command) {
+            state.undoStack.push(command);
+            state.redoStack = [];
+            this.dispatch('ide/setMenuState', {name: 'CanUndo', state: true});
+        },
+        PUSH_REDO_COMMAND(state, command) {
+            state.redoStack.push(command);
+            this.dispatch('ide/setMenuState', {name: 'CanRedo', state: true});
         },
         SET_PAGE_PREVIEW(state, {pageIndex, image}) {
 
@@ -159,9 +171,9 @@ const projectStore = {
         UPDATE_PROJECT_PREVIEWS(state, payload) {
             for (let preview of payload) {
                 const bytes = new Uint8Array(preview.data);
-                if ( state.previews.has(preview.page_id)){
+                if (state.previews.has(preview.page_id)) {
                     state.previews.update(preview.page_id, new Blob([bytes]));
-                }else{
+                } else {
                     state.previews.register(preview.page_id, new Blob([bytes]));
                     state.previews.update(preview.page_id, new Blob([bytes]));
                 }
@@ -175,9 +187,104 @@ const projectStore = {
         },
         SET_PROJECT_FILE(state, path) {
             state.projectFile = path;
-        }
+        },
     },
     actions: {
+
+        undo({state,dispatch,commit}) {
+            let command = state.undoStack.pop();
+
+            switch(command.action) {
+                case 'ADD':
+                    if (command.entity === "COMPONENT"){
+                        // remove component
+                        dispatch('removeComponent', command.targetId);
+                    }else if (command.entity === "PAGE"){
+                        // remove page
+                    } else {
+                        console.warn("Unknown command Entity", command.entity);
+                    }
+                    break;
+                default:
+                    console.error('Unknown action', command);
+            }
+            commit("PUSH_REDO_COMMAND", command);
+            console.log(state.undoStack);
+            if (state.undoStack.length === 0) {
+                dispatch('ide/setMenuState', {name: 'CanUndo', state: false},{root: true});
+            }
+        },
+        redo({state,dispatch,commit}) {
+            let command = state.redoStack.pop();
+            switch(command.action) {
+                case 'ADD':
+                    if (command.entity === "COMPONENT"){
+                        // restore component
+                        dispatch('restoreComponent', command);
+                    }else if (command.entity === "PAGE"){
+                        // restore page
+                    } else {
+                        console.warn("Unknown command Entity", command.entity);
+                    }
+                    break;
+                default:
+                    console.error('Unknown action', command);
+            }
+            commit("PUSH_REDO_COMMAND", command);
+
+            if (state.undoStack.length === 0) {
+                dispatch('ide/setMenuState', {name: 'CanUndo', state: false},{root: true});
+            }
+        },
+
+
+
+        pushUndoCommand({commit}, command) {
+            commit('PUSH_UNDO_COMMAND', command);
+        },
+        pushRedoCommand({commit}, command) {
+            commit('PUSH_REDO_COMMAND', command);
+        },
+        removeComponent({state}, component_hash) {
+            //find component hash index
+            const componentIndex = state.hashmaps.findComponentIndex(component_hash);
+
+            if (componentIndex !== -1) {
+                const componentHashMap = state.hashmaps.getComponent(component_hash);
+
+                // remove component from hashmap
+                state.hashmaps.removeComponent(component_hash);
+
+                // find page component
+                const page = state.project.pages.find(p => p.hash === componentHashMap.parent);
+
+                if (page) {
+                    // check component type
+                    if (componentHashMap.type === 'visual') {
+                        const visualIndex = page.children.visual.findIndex(
+                            c => c.hash === component_hash
+                        );
+                        if (visualIndex !== -1) {
+                            page.children.visual.splice(visualIndex, 1);
+                        }
+                    } else if (componentHashMap.type === 'nonVisual') {
+                        const nonVisualIndex = page.children.nonVisual.findIndex(
+                            c => c.hash === component_hash
+                        );
+                        if (nonVisualIndex !== -1) {
+                            page.children.nonVisual.splice(nonVisualIndex, 1);
+                        }
+                    }
+                }
+            }
+        },
+        restoreComponent({state}, command) {
+            // // restore hashmap
+            state.hashmaps.restore(command.targetId);
+            // // restore component
+            state.project.pages[state.hashmaps.findPageIndex(command.payload.parent)].children[command.payload.type].push(safeClone(command.payload.data));
+        },
+
         async createProject({commit, dispatch}, project) {
             project.anubias = ide.getters.version(ide.state());
             await storage.set('lastLoadedProject', project);
@@ -199,7 +306,6 @@ const projectStore = {
             commit('RENEW_HASHMAP');
             await storage.set('lastLoadedProject', project);
             await storage.set('lastLoadedProjectPath', state.projectFile);
-            await invoke('set_has_project', {status: true});
 
             dispatch('ide/setActivePage', project.entryPoint, {root: true});
 
@@ -227,7 +333,7 @@ const projectStore = {
         async loadLastProject({commit, dispatch, state}) {
 
             let path = await storage.get('lastLoadedProjectPath');
-            if ( path !== '' ) {
+            if (path !== '') {
                 dispatch("prepareProjectFile", path);
                 return;
             }
@@ -236,7 +342,6 @@ const projectStore = {
             // if this comment not need again must remove
             commit('LOAD_PROJECT', project);
             commit('RENEW_HASHMAP');
-            await invoke('set_has_project', {status: true});
 
             dispatch('ide/setActivePage', project.entryPoint, {root: true});
 
@@ -285,6 +390,7 @@ const projectStore = {
                 isVisual: isVisual,
                 component: component
             });
+
         },
         updatePagePreview(context, {pageIndex, image}) {
             context.commit('SET_PAGE_PREVIEW', {

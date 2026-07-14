@@ -538,6 +538,13 @@
   dependencies:
     "@tauri-apps/api" "^2.11.0"
 
+"@tauri-apps/plugin-global-shortcut@~2":
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/@tauri-apps/plugin-global-shortcut/-/plugin-global-shortcut-2.3.2.tgz#d78f2dc68c4e3fbebba1375b9dba80a7d558c368"
+  integrity sha512-UReHNXrLvpEjylE4jb4oCYiy96uRykPUthoCQCmRXYrd5hs5X9DrW+qOn7GLW57EJN4tdK8bgK5twBTz2NOxzA==
+  dependencies:
+    "@tauri-apps/api" "^2.11.0"
+
 "@tauri-apps/plugin-opener@~2":
   version "2.5.4"
   resolved "https://registry.yarnpkg.com/@tauri-apps/plugin-opener/-/plugin-opener-2.5.4.tgz#b37883e4d36125b8c5a0c74f683395958a65bd7d"

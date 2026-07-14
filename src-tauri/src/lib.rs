@@ -1,13 +1,12 @@
+mod config;
 mod file;
 mod format;
 mod menu;
 mod message;
-mod config;
+mod global_shortcut;
 
 use std::sync::Mutex;
 use tauri::{
-    image::Image,
-    menu::{IconMenuItemBuilder, Menu, MenuItem, Submenu},
     Manager,
 };
 
@@ -19,10 +18,7 @@ use file::{
 };
 use tauri::AppHandle;
 use tauri::{PhysicalPosition, Position};
-use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_opener::OpenerExt;
-use tauri_plugin_store::StoreExt;
-
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
@@ -34,20 +30,14 @@ fn greet(name: &str) -> String {
 fn open_url(app: AppHandle, url: String) {
     let _ = app.opener().open_url(url, None::<&str>);
 }
-#[tauri::command]
-fn set_has_project(app: AppHandle, status: bool) -> bool {
-    // let store = app.store("settings.json").unwrap();
-    // store.set("theme", "dark");
-    // change app menu
-
-    true
-}
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    let mut menu_state = Mutex::new(MenuState::new());
+
+    let menu_state = Mutex::new(MenuState::new());
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_global_shortcut::Builder::new().build())
         .plugin(tauri_plugin_positioner::init())
         .manage(menu_state)
         .plugin(tauri_plugin_fs::init())
@@ -58,7 +48,6 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             greet,
             open_url,
-            set_has_project,
             set_menu_state,
             save_project,
             load_project,
@@ -68,7 +57,10 @@ pub fn run() {
             path_exists
         ])
         .setup(|app| {
-            if SECOND_MONITOR {
+
+
+            println!("App debug status: {}",IS_DEBUG);
+            if SECOND_MONITOR  {
                 let window = app.get_webview_window("main").unwrap();
                 if let Some(monitor) = window.available_monitors()?.get(1) {
                     let pos = monitor.position();
@@ -86,13 +78,14 @@ pub fn run() {
             app.manage(menu_state);
 
             // initial menu without project
-            let initial_state = MenuState::new();
             let menu = build_menu_no_project(app.handle())?;
             app.set_menu(menu)?;
 
             // Event handler
             menu::menu_events::register(app);
 
+            // register global shortcut
+            global_shortcut::init(app.handle());
 
             Ok(())
         })
