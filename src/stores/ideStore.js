@@ -106,6 +106,7 @@ const ideStore = {
             // canCopy: false,
             // canOnlineBuild: false,
             IsProjectLoaded: false,
+
         },
         confirm: {
             title: "Confirm",
@@ -128,6 +129,12 @@ const ideStore = {
             restore: false,
         },
         appLogs: [],
+        fastChange:{
+            // track is on fast change or not
+            isFastChange: false,
+            // hold padding of start point of fast change
+            startPadding: null,
+        }
     }),
     mutations: {
         IDE_INIT(state, payload) {
@@ -209,7 +216,13 @@ const ideStore = {
         },
         CLEAR_LOGS(state) {
             state.appLogs = [];
-        }
+        },
+        SET_ON_EDIT_PROPERTIES(state, payload) {
+            console.log('change prop payload', payload);
+            for( const key in payload) {
+              state.onEditComponent[key] = payload[key];
+            }
+        },
     },
     actions: {
         async initialize(context) {
@@ -313,6 +326,13 @@ const ideStore = {
             // console.log('msg', message);
             commit('ADD_LOG', message);
         },
+        fastChangeStart({state}, padding) {
+            state.fastChange.isFastChange = true;
+            state.fastChange.startPadding = padding;
+        },
+        fastChangeEnd({state}) {
+            state.fastChange.isFastChange = false;
+        }
     },
     getters: {
         version(state) {
@@ -350,6 +370,7 @@ const ideStore = {
         },
     }
 };
+
 
 
 export default ideStore;

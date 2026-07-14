@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import {mapActions, mapState} from "vuex";
+
 export default {
   name: "input-draggable",
   props: {
@@ -46,6 +48,10 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      isFastChange: state => state.ide.fastChange.isFastChange,
+      startPadding: state => state.ide.fastChange.startPadding
+    }),
     computedValue: {
       get() {
         return this.modelValue;
@@ -58,6 +64,11 @@ export default {
     }
   },
   methods: {
+
+    ...mapActions({
+      startFastChange: "ide/fastChangeStart",
+      endFastChange: "ide/fastChangeEnd",
+    }),
     updating(e) {
       this.$emit('update:modelValue', e.target.value);
       this.$emit('input-val', this.modelValue);
@@ -100,6 +111,7 @@ export default {
       this.onUpdate();
     },
     startDragging(event) {
+      this.startFastChange(this.modelValue);
       this.dragging = true;
       // initialize speed-tracking reference point
       this.lastMouseX = event.clientX;
@@ -112,6 +124,9 @@ export default {
       this.dragging = false;
       window.removeEventListener('mousemove', this.updateValue);
       window.removeEventListener('mouseup', this.stopDragging);
+      this.$emit('update:modelValue', this.modelValue + 1);
+      this.endFastChange();
+      this.$emit('update:modelValue', this.modelValue );
     },
     // Converts mouse speed (px/ms) into an exponential step size,
     // so fast drags jump by large amounts and slow drags stay precise,

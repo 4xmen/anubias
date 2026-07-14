@@ -15,6 +15,15 @@ import "vue-toastification/dist/index.css";
 import 'vazirmatn/Vazirmatn-Variable-font-face.css';
 import 'remixicon/fonts/remixicon.css';
 import 'material-icons';
+
+// define prtotypes
+Object.defineProperty(String.prototype, 'capitalize', {
+    value: function() {
+        return this.charAt(0).toUpperCase() + this.slice(1);
+    },
+    enumerable: false
+});
+
 //
 const vueApp = createApp(App);
 

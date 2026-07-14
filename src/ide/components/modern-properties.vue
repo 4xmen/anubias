@@ -25,6 +25,14 @@
         </div>
       </div>
     </collapsible>
+    <collapsible v-if="propTypeCount('String|Color') > 0" icon="ri-palette-line" title="Colors properties">
+      <template v-for="(p,index) in properties" :key="index">
+        <div v-if="properties.validator[index] !== undefined
+                && properties.validator[index].type === 'String|Color'">
+          <color-picker v-model="properties[index]" :label="index"></color-picker>
+        </div>
+      </template>
+    </collapsible>
     <collapsible v-if="properties.fit !== undefined" :title="'Fit ('+titleFixer(properties.fit)+')'"
                  icon="ri-layout-right-2-line">
       <select v-model="properties.fit ">
@@ -105,14 +113,6 @@
         <toggle icon="ri-links-line" label="Link width & height" v-model="isLinkedWidthHeight" :size=".6"></toggle>
       </div>
     </collapsible>
-    <collapsible v-if="propTypeCount('String|Color') > 0" icon="ri-palette-line" title="Colors properties">
-      <template v-for="(p,index) in properties" :key="index">
-        <div v-if="properties.validator[index] !== undefined
-                && properties.validator[index].type === 'String|Color'">
-          <color-picker v-model="properties[index]" :label="index"></color-picker>
-        </div>
-      </template>
-    </collapsible>
     <collapsible v-if="properties.padding !== undefined" title="Padding">
       <around v-model="properties.padding"></around>
     </collapsible>
@@ -124,8 +124,8 @@
         </div>
       </template>
     </collapsible>
-    <collapsible v-if="properties.actions !== undefined" title="Actions" icon="ri-stack-line">
 
+    <collapsible v-if="properties.actions !== undefined" title="Actions" icon="ri-stack-line">
       <div title="You can drag and drop to change sort of action's button">
         <Sortable
             :list="properties.actions"

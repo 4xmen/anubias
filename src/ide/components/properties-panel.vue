@@ -13,7 +13,7 @@
 
 <script>
 import classic from './classic-properties.vue';
-import modern from './modern-properties.vue';
+import modern from './modren-props.vue';
 import {mapState} from 'vuex';
 export default {
   name: "properties-panel",

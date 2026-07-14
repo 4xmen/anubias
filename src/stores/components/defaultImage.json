@@ -23,7 +23,7 @@
       "state": "input"
     },
     "image": {
-      "type": "String",
+      "type": "String|Url|Resource",
       "regex": "^.*$",
       "state": "input"
     },
@@ -41,7 +41,7 @@
       "type": "String|Select",
       "regex": "^BoxFit\\.[a-zA-Z_]*$",
       "state": "input",
-      "Items": [ "none","BoxFit.fill", "BoxFit.contain", "BoxFit.cover", "BoxFit.fitWidth", "BoxFit.fitHeight", "BoxFit.scaleDown"]
+      "items": [ "none","BoxFit.fill", "BoxFit.contain", "BoxFit.cover", "BoxFit.fitWidth", "BoxFit.fitHeight", "BoxFit.scaleDown"]
     },
     "align" : {
       "type": "String|Align",
