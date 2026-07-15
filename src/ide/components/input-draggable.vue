@@ -1,9 +1,12 @@
 <template>
   <input type="text" :value="computedValue"
+         @focus="focusing"
          @input="updateValue"
          @keyup="updating"
+         @keydown="keydowning"
          @keydown.up="incUp"
          @keydown.down="decDown"
+         @blur="bluring"
          @mousedown="startDragging"/>
 </template>
 
@@ -34,7 +37,8 @@ export default {
     },
     onUpdate: {
       type: Function,
-      default: () => {},
+      default: () => {
+      },
     }
   },
   emits: ['update:modelValue', 'input-val'],
@@ -45,6 +49,12 @@ export default {
       lastMouseX: 0,
       // timestamp of the last mousemove event, used to measure drag speed
       lastMoveTime: 0,
+      // has focus
+      hasFocus: false,
+      // value end of drag
+      endDraggingValue: null,
+      // shift
+      isPressedShift: false,
     }
   },
   computed: {
@@ -66,19 +76,37 @@ export default {
   methods: {
 
     ...mapActions({
-      startFastChange: "ide/fastChangeStart",
-      endFastChange: "ide/fastChangeEnd",
+      lazyChangeStart: "ide/lazyChangeStart",
+      lazyChangeDone: "ide/lazyChangeDone",
+      lazyChangeUpdate: "ide/lazyChangeCurrentValue",
     }),
+    focusing() {
+      this.lazyChangeStart(this.modelValue);
+      this.hasFocus = true;
+    },
+    bluring() {
+      this.lazyChangeDone();
+      this.hasFocus = false;
+    },
+    keydowning(e) {
+      if (e.key === "Shift") {
+        this.isPressedShift = true;
+      }
+      this.lazyChangeStart(this.endDraggingValue);
+    },
     updating(e) {
       this.$emit('update:modelValue', e.target.value);
       this.$emit('input-val', this.modelValue);
       if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') {
         this.onUpdate();
       }
+      if (e.key === "Shift") {
+        this.isPressedShift = false;
+      }
     },
     // step is optional so keyboard arrows keep using the fixed "increment" prop
     incUp(step) {
-      const amount = typeof step === 'number' ? step : this.increment;
+      let amount = typeof step === 'number' ? step : this.increment;
 
       // check if percent suffix should be preserved
       let percent = false;
@@ -86,6 +114,9 @@ export default {
         percent = true;
       }
 
+      if (this.isPressedShift){
+        amount *= 10;
+      }
       const current = parseInt(this.modelValue);
       const max = parseInt(this.maxValue);
       const val = current + amount <= max ? current + amount : max;
@@ -95,13 +126,16 @@ export default {
       this.onUpdate();
     },
     decDown(step) {
-      const amount = typeof step === 'number' ? step : this.increment;
+      let amount = typeof step === 'number' ? step : this.increment;
 
       let percent = false;
       if (this.percentable && this.modelValue.toString().slice(-1) === '%') {
         percent = true;
       }
 
+      if (this.isPressedShift){
+        amount *= 10;
+      }
       const current = parseInt(this.modelValue);
       const min = parseInt(this.minValue);
       const val = current - amount >= min ? current - amount : min;
@@ -111,7 +145,8 @@ export default {
       this.onUpdate();
     },
     startDragging(event) {
-      this.startFastChange(this.modelValue);
+      let current = this.modelValue;
+      this.lazyChangeStart(current);
       this.dragging = true;
       // initialize speed-tracking reference point
       this.lastMouseX = event.clientX;
@@ -124,9 +159,9 @@ export default {
       this.dragging = false;
       window.removeEventListener('mousemove', this.updateValue);
       window.removeEventListener('mouseup', this.stopDragging);
-      this.$emit('update:modelValue', this.modelValue + 1);
-      this.endFastChange();
-      this.$emit('update:modelValue', this.modelValue );
+      this.$emit('update:modelValue', this.modelValue);
+      this.endDraggingValue = this.modelValue;
+      this.lazyChangeDone();
     },
     // Converts mouse speed (px/ms) into an exponential step size,
     // so fast drags jump by large amounts and slow drags stay precise,
@@ -161,6 +196,7 @@ export default {
       this.lastMoveTime = now;
 
       this.$emit('input-val', this.modelValue);
+      this.lazyChangeUpdate(this.modelValue);
     }
   }
 }
