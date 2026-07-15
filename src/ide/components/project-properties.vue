@@ -35,11 +35,11 @@ export default {
   name: "project-properties",
   computed: {
     ...mapState(["project"]),
+  },
+  methods: {
     ...mapMutations({
       ignoreBackups: "project/IGNORE_BACKUPS",
     }),
-  },
-  methods: {
     ignoreBackupsNow() {
       this.ignoreBackups();
     },

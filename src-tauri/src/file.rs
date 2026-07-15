@@ -387,7 +387,7 @@ impl ProjectMetadata {
             previews: vec![],
         };
         for entry in self.data_map.entries.into_iter() {
-            println!("path: {:?}", entry.path);
+            // println!("path: {:?}", entry.path);
             if entry.path == "project.json" {
                 result.project = String::from_utf8(entry.data)?;
             } else if entry.path.starts_with("/preview/") {

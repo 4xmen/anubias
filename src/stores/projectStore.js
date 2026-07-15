@@ -236,7 +236,9 @@ const projectStore = {
         },
 
 
+        makeUndoCommandChangeOnEditComponentProperty(state, command) {
 
+        },
         updateRedoUndoMenu({state,dispatch}) {
             if (state.redoStack.length === 0) {
                 dispatch('ide/setMenuState', {name: 'CanRedo', state: false},{root: true});

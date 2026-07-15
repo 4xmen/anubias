@@ -51,8 +51,11 @@ let color2web = (color, isActiveWidget = true) => {
  */
 let getSize = (value, isHeight = false) => {
     // WIP: need complete later
-    if (value.toString().indexOf('%') != -1) {
+    if (value.toString().indexOf('%') !== -1) {
         return value;
+    }
+    if (value.length === 0 ) {
+        value = '0';
     }
     return value + 'px';
 };

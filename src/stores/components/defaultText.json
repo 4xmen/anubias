@@ -9,7 +9,7 @@
   "maxLine": 0,
   "overflow": "null",
   "color": "null",
-  "weight": "normal",
+  "weight": "null",
   "softWrap": true,
   "visible": true,
   "validator": {
@@ -47,7 +47,8 @@
     "overflow": {
       "type": "String|Select",
       "regex": "^(null|ellipsis|fade|visible|clip)$",
-      "state": "input"
+      "state": "input",
+      "items": ["null","ellipsis","fade","visible","clip"]
     },
     "color": {
       "type": "String|Color",
@@ -57,7 +58,8 @@
     "weight": {
       "type": "String|Select",
       "regex": "^(null|FontWeight\\.w100|FontWeight\\.w200|FontWeight\\.w300|FontWeight\\.w400|FontWeight\\.w500|FontWeight\\.w600|FontWeight\\.w700|FontWeight\\.w800|FontWeight\\.w900)$",
-      "state": "input"
+      "state": "input",
+      "items": ["null","FontWeight.w100", "FontWeight.w200", "FontWeight.w300", "FontWeight.w400","FontWeight.w500", "FontWeight.w600", "FontWeight.w700", "FontWeight.w800", "FontWeight.w900"]
     },
     "softWrap": {
       "type": "Boolean",

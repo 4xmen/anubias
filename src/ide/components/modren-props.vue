@@ -82,14 +82,14 @@
           <label class="input-container">
             {{ txt.label.capitalize() }}:
             <span v-if="txt.validator.regex === '.*'">
-              <textarea v-model="txt.value" rows="2"
-                        :pattern="txt.validator.regex"
+              <textarea @focus="lazyChangeFocus" @blur="lazyChangeBlur"
+                        v-model="txt.value" rows="2" :pattern="txt.validator.regex"
                         @update:model-value="(newVal) => {updateProps(txt,newVal);}">
               </textarea>
             </span>
             <span v-else>
-              <input type="text" v-model="txt.value"
-                     :pattern="txt.validator.regex"
+              <input type="text" v-model="txt.value" :pattern="txt.validator.regex"
+                     @focus="lazyChangeFocus" @blur="lazyChangeBlur"
                      @update:model-value="(newVal) => {updateProps(txt,newVal);}">
             </span>
           </label>
@@ -116,12 +116,12 @@
                  icon="ri-pencil-ruler-2-line"
                  title="Size control">
       <div v-for="size in groupedProperties.sizes">
-        <label v-if="size.key === 'width'" class="input-container" >
+        <label v-if="size.key === 'width'" class="input-container">
           Width
           <template v-if="isLinkedWidthHeight"> & height</template>
           :
           <template v-if="isLinkedWidthHeight">
-            <dinput  v-model="size.value" min-value="0" max-value="999"
+            <dinput v-model="size.value" min-value="0" max-value="999"
                     :percentable="true" @update:model-value="(newVal) => {widthHeightUpdate(newVal);}"/>
           </template>
           <template v-else>
@@ -183,7 +183,10 @@
         </div>
       </div>
     </collapsible>
-
+    <!--  padding editor  -->
+    <collapsible v-if="groupedProperties.paddings.length === 1" title="Padding">
+      <around v-model="localProperties.padding"   @update:model-value="(newVal) => {updateProps(groupedProperties.paddings[0],newVal);}"></around>
+    </collapsible>
   </div>
 </template>
 
@@ -199,6 +202,7 @@ import dinput from "./input-draggable.vue";
 import {Sortable} from "sortablejs-vue3";
 import iconPicker from "./icon-picker.vue";
 import {useToast} from "vue-toastification";
+import around from "./around-controller.vue";
 
 /**
  * Why we use Composition API in this component:
@@ -219,7 +223,7 @@ let nameWatch = null;
 
 const store = useStore();
 
-const  toast = useToast();
+const toast = useToast();
 // ====================== STATE ======================
 
 // Raw data from Vuex (readonly reference)
@@ -241,7 +245,7 @@ const actIcon = ref('')
 // Grouped properties for UI sections (colors, sizes, booleans, etc.)
 const groupedProperties = reactive({
   aligns: [],
-  sizes:[],
+  sizes: [],
   numbers: [],
   paddings: [],
   colors: [],
@@ -254,6 +258,7 @@ const groupedProperties = reactive({
 
 // ====================== COMPUTED ======================
 
+
 // Example computed
 const hasSizeProperties = computed(() =>
     !!(localProperties.value?.width !== undefined || localProperties.value?.height !== undefined)
@@ -261,6 +266,12 @@ const hasSizeProperties = computed(() =>
 
 // ====================== METHODS ======================
 
+function lazyChangeFocus(e){
+  store.dispatch('ide/lazyChangeStart',e.target.value);
+}
+function lazyChangeBlur(){
+  store.dispatch("ide/lazyChangeDone");
+}
 
 function alignLabel(key) {
   if (key === 'align') {
@@ -422,18 +433,20 @@ function addAction() {
   });
 }
 
-function  remAction(i) {
+function remAction(i) {
   localProperties.value.actions.splice(i, 1);
   store.commit("ide/SET_ON_EDIT_PROPERTIES", {
     actions: localProperties.value.actions,
   });
 }
+
 function updateActionsSort(e) {
   arrayMove(localProperties.value.actions, e.oldIndex, e.newIndex);
   store.commit("ide/SET_ON_EDIT_PROPERTIES", {
     actions: localProperties.value.actions,
   });
 }
+
 // ====================== LIFECYCLE ======================
 
 onMounted(() => {
