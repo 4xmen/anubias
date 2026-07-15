@@ -382,7 +382,7 @@ function groupProperties() {
       groupedProperties.strings.push(item)
     }
   })
-  console.log(groupedProperties);
+  // console.log(groupedProperties);
 }
 
 // function updateProperty(key, value) {

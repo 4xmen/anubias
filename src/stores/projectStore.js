@@ -42,7 +42,7 @@ const projectStore = {
     }),
     mutations: {
         RENEW_HASHMAP(state) {
-            state.hashmaps.renew( state.project );
+            state.hashmaps.renew(state.project);
         },
         CREATE_PROJECT(state, project) {
             state.project = project;
@@ -61,7 +61,7 @@ const projectStore = {
         SET_LAST_LOADED_PROJECT(state, project) {
             state.lastLoadedProject = project;
         },
-        ADD_COMPONENT_TO_PAGE(state, { page_index, component, data_map }) {
+        ADD_COMPONENT_TO_PAGE(state, {page_index, component, data_map}) {
             // add component to the page tree
             if (component.type === 'appbar') {
                 // appbar component
@@ -77,7 +77,7 @@ const projectStore = {
             state.hashmaps.addComponent(data_map)
         },
         CLEAR_REDO(state) {
-          state.redoStack = [];
+            state.redoStack = [];
             this.dispatch('ide/setMenuState', {name: 'CanRedo', state: false});
         },
         PUSH_UNDO_COMMAND(state, command) {
@@ -159,19 +159,39 @@ const projectStore = {
     },
     actions: {
 
-        undo({state,dispatch,commit}) {
+        async undo({state, dispatch, commit}) {
             let command = state.undoStack.pop();
             commit("PUSH_REDO_COMMAND", command);
 
-            switch(command.action) {
+            switch (command.action) {
                 case 'ADD':
-                    if (command.entity === "COMPONENT"){
+                    if (command.entity === "COMPONENT") {
                         // remove component
                         dispatch('removeComponent', command.targetId);
-                    }else if (command.entity === "PAGE"){
+                    } else if (command.entity === "PAGE") {
                         // remove page
                     } else {
                         console.warn("Unknown command Entity", command.entity);
+                    }
+                    break;
+                case "UPDATE":
+                    let instance = null;
+                    if (command.entity === "COMPONENT") {
+                        const {
+                            index,
+                            pageIndex,
+                            type
+                        } = state.hashmaps.findComponentFullIndexes(command.targetId, state.project);
+                        instance = state.project.pages[pageIndex].children[type][index];
+                    } else if (command.entity === "PAGE") {
+
+                        instance = state.project.pages[state.hashmaps.findPageIndex(command.targetId)];
+                    } else {
+                        // project
+                        instance = state.project;
+                    }
+                    for (const payload of command.payload) {
+                        instance[payload.field] = payload.before;
                     }
                     break;
                 default:
@@ -179,17 +199,36 @@ const projectStore = {
             }
             dispatch('updateRedoUndoMenu');
         },
-        redo({state,dispatch,commit}) {
+        redo({state, dispatch, commit}) {
             let command = state.redoStack.pop();
-            switch(command.action) {
+            switch (command.action) {
                 case 'ADD':
-                    if (command.entity === "COMPONENT"){
+                    if (command.entity === "COMPONENT") {
                         // restore component
                         dispatch('restoreComponent', command);
-                    }else if (command.entity === "PAGE"){
+                    } else if (command.entity === "PAGE") {
                         // restore page
                     } else {
                         console.warn("Unknown command Entity", command.entity);
+                    }
+                    break;
+                case "UPDATE":
+                    let instance = null;
+                    if (command.entity === "COMPONENT") {
+                        const {
+                            index,
+                            pageIndex,
+                            type
+                        } = state.hashmaps.findComponentFullIndexes(command.targetId, state.project);
+                        instance = state.project.pages[pageIndex].children[type][index];
+                    } else if (command.entity === "PAGE") {
+                        instance = state.project.pages[state.hashmaps.findPageIndex(command.targetId)];
+                    } else {
+                        // project
+                        instance = state.project;
+                    }
+                    for (const payload of command.payload) {
+                        instance[payload.field] = payload.after;
                     }
                     break;
                 default:
@@ -200,16 +239,12 @@ const projectStore = {
             dispatch('updateRedoUndoMenu');
         },
 
-
-        makeUndoCommandChangeOnEditComponentProperty(state, command) {
-
-        },
-        updateRedoUndoMenu({state,dispatch}) {
+        updateRedoUndoMenu({state, dispatch}) {
             if (state.redoStack.length === 0) {
-                dispatch('ide/setMenuState', {name: 'CanRedo', state: false},{root: true});
+                dispatch('ide/setMenuState', {name: 'CanRedo', state: false}, {root: true});
             }
             if (state.undoStack.length === 0) {
-                dispatch('ide/setMenuState', {name: 'CanUndo', state: false},{root: true});
+                dispatch('ide/setMenuState', {name: 'CanUndo', state: false}, {root: true});
             }
         },
         pushUndoCommand({commit}, command) {
@@ -220,35 +255,13 @@ const projectStore = {
         },
         removeComponent({state}, component_hash) {
             //find component hash index
-            const componentIndex = state.hashmaps.findComponentIndex(component_hash);
+            const {index, pageIndex, type} = state.hashmaps.findComponentFullIndexes(component_hash, state.project);
 
-            if (componentIndex !== -1) {
-                const componentHashMap = state.hashmaps.getComponent(component_hash);
-
+            if (index !== -1) {
                 // remove component from hashmap
                 state.hashmaps.removeComponent(component_hash);
 
-                // find page component
-                const page = state.project.pages.find(p => p.hash === componentHashMap.parent);
-
-                if (page) {
-                    // check component type
-                    if (componentHashMap.type === 'visual') {
-                        const visualIndex = page.children.visual.findIndex(
-                            c => c.hash === component_hash
-                        );
-                        if (visualIndex !== -1) {
-                            page.children.visual.splice(visualIndex, 1);
-                        }
-                    } else if (componentHashMap.type === 'nonVisual') {
-                        const nonVisualIndex = page.children.nonVisual.findIndex(
-                            c => c.hash === component_hash
-                        );
-                        if (nonVisualIndex !== -1) {
-                            page.children.nonVisual.splice(nonVisualIndex, 1);
-                        }
-                    }
-                }
+                state.project.pages[pageIndex].children[type].splice(index, 1);
             }
         },
         restoreComponent({state}, command) {
@@ -356,7 +369,7 @@ const projectStore = {
          * @param {Boolean} isVisual
          * @param {Object} component   // original component object
          */
-        async addComponentToPage({ commit, dispatch, state }, { pageIndex, isVisual, component }) {
+        async addComponentToPage({commit, dispatch, state}, {pageIndex, isVisual, component}) {
             // clone component safely (cannot use structuredClone or spread)
             const c = safeClone(component)
             c.hash = generateHashId()
@@ -364,8 +377,8 @@ const projectStore = {
             // prepare hashmap entry
             const data_map = {
                 parent: state.project.pages[pageIndex].hash,
-                hash:   c.hash,
-                type:   isVisual ? 'visual' : 'nonVisual',
+                hash: c.hash,
+                type: isVisual ? 'visual' : 'nonVisual',
             }
 
             // set a unique name and warn if trying to add a second appbar
@@ -384,20 +397,20 @@ const projectStore = {
 
             // build undo command
             const undo_command = {
-                id:       generateCommandId(),
-                entity:   'COMPONENT',
-                action:   'ADD',
+                id: generateCommandId(),
+                entity: 'COMPONENT',
+                action: 'ADD',
                 targetId: c.hash,
                 payload: {
                     parent: data_map.parent,
-                    data:   structuredClone(c),
-                    type:   data_map.type,
+                    data: structuredClone(c),
+                    type: data_map.type,
                 },
             }
 
             // dispatch UI‑related actions
-            dispatch('ide/setMenuState',      { name: 'CanSave', state: true }, {root: true});
-            dispatch('ide/setCanScreenshot',  true, {root: true});
+            dispatch('ide/setMenuState', {name: 'CanSave', state: true}, {root: true});
+            dispatch('ide/setCanScreenshot', true, {root: true});
             dispatch('changeSaveState', false)
             dispatch('pushUndoCommand', undo_command)
 

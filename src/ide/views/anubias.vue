@@ -265,11 +265,14 @@ export default {
     // handle ide vue shortcuts
     onKeydown(e) {
       if (e.altKey && e.key.toLowerCase() === 'd') {
-        e.preventDefault()
-        this.debugAllStates()
+        e.preventDefault();
+        this.debugAllStates();
+      }
+      if (e.altKey && e.key.toLowerCase() === 's') {
+        e.preventDefault();
       }
       if (e.altKey && e.key.toLowerCase() === 'a') {
-        e.preventDefault()
+        e.preventDefault();
         this.autosave();
       }
     },

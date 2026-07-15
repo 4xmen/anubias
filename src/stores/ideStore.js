@@ -34,6 +34,7 @@ import componentToggleDefault from './components/defaultToggle.json';
 
 import {LazyStore} from '@tauri-apps/plugin-store';
 import {getCurrentWebviewWindow} from "@tauri-apps/api/webviewWindow";
+
 const FAST_CHANGE_WINDOW_MS = 300;
 const FAST_CHANGE_IDLE_TIMEOUT_MS = 300;
 
@@ -41,6 +42,7 @@ const storage = new LazyStore('ide.json', {autoSave: false});
 let fastChangeTimer = null;
 
 import {invoke} from "@tauri-apps/api/core";
+import {generateCommandId, safeClone} from "../ide/js/system-functions.js";
 
 const ideStore = {
     namespaced: true,
@@ -245,7 +247,7 @@ const ideStore = {
                 state.onEditComponent[key] = payload[key];
             }
         },
-        SET_FAST_CHANGE_DETECTOR(state, { field, start, lastTime }) {
+        SET_FAST_CHANGE_DETECTOR(state, {field, start, lastTime}) {
             state.fastChangeDetector.field = field;
             state.fastChangeDetector.start = start;
             state.fastChangeDetector.lastTime = lastTime;
@@ -378,10 +380,27 @@ const ideStore = {
                 value: startValue,
             });
         },
-        lazyChangeDone({commit,state}) {
-            if (state.lazyChange.startValue !== state.lazyChange.value &&  state.lazyChange.fields.length > 0) {
-                console.log('lazyUndo',state.lazyChange.startValue, state.lazyChange.value, state.lazyChange.fields);
+        lazyChangeDone({commit, state, dispatch}) {
+            if (state.lazyChange.startValue !== state.lazyChange.value && state.lazyChange.fields.length > 0) {
+                // console.log('lazyUndo', state.lazyChange.startValue, state.lazyChange.value, state.lazyChange.fields);
+                let payload = [];
+                for (const field of state.lazyChange.fields) {
+                    payload.push({
+                        field,                   // dot-path if nested, e.g. "style.color"
+                        before: safeClone(state.lazyChange.startValue),
+                        after: safeClone(state.lazyChange.value),
+                    })
+                }
+
                 // create undo command here
+                const undoCommand = {
+                    id: generateCommandId(),
+                    entity: (state.onEditComponent.type  === 'page' ? "PAGE" : "COMPONENT"), // "COMPONENT" | "PAGE"
+                    action: "UPDATE",
+                    targetId: state.onEditComponent.hash,    // meaning depends on `entity` (component hash, page id, ...)
+                    payload,
+                };
+                dispatch('project/pushUndoCommand', undoCommand, {root: true});
             }
             commit('UPDATE_LAZY_CHANGE_STATE', {
                 name: 'isActive',
@@ -405,7 +424,7 @@ const ideStore = {
                 value: currentValue,
             });
         },
-        setOnEditProperties({ state, commit, dispatch }, payload) {
+        setOnEditProperties({state, commit, dispatch}, payload) {
             const payloadKeys = Object.keys(payload);
             const firstKey = payloadKeys[0];
 
@@ -457,7 +476,7 @@ const ideStore = {
             }
         },
 
-        finalizeFastChangeDetector({ state, commit }) {
+        finalizeFastChangeDetector({state, commit, dispatch}) {
             const field = state.fastChangeDetector.field;
             if (field === null) return;
 
@@ -466,7 +485,21 @@ const ideStore = {
 
             if (startValue !== endValue) {
                 // create undo command here
-                console.log('fastUndo',startValue, endValue, field);
+                // console.log('fastUndo', startValue, endValue, field);
+                const undoCommand = {
+                    id: generateCommandId(),
+                    entity: (state.onEditComponent.type  === 'page' ? "PAGE" : "COMPONENT"), // "COMPONENT" | "PAGE"
+                    action: "UPDATE",
+                    targetId: state.onEditComponent.hash,    // meaning depends on `entity` (component hash, page id, ...)
+                    payload: [
+                        {
+                            field,
+                            before: startValue,
+                            after: endValue,
+                        },
+                    ],
+                };
+                dispatch('project/pushUndoCommand', undoCommand, {root: true});
             }
 
             commit('RESET_FAST_CHANGE_DETECTOR');

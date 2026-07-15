@@ -43,6 +43,30 @@ export class HashMapManager {
     findComponentIndex (hash) {
         return this.componentHashMap.findIndex(c => c.hash === hash)
     }
+    /* -----------------------------------------------------------
+     * find component,page index & type (‑1 if not found)
+     * ----------------------------------------------------------- */
+    findComponentFullIndexes(hash, project) {
+        let hashmap = this.getComponent(hash);
+        let pageIndex = this.findPageIndex(hashmap.parent);
+        let index = 0;
+        for (const c of project.pages[pageIndex].children[hashmap.type]) {
+            if (c.hash === hashmap.hash) {
+                return {
+                    index,
+                    type: hashmap.type,
+                    pageIndex,
+                }
+            }
+            index++;
+        }
+        return {
+            index: -1,
+            type: null,
+            pageIndex,
+        }
+        // return this.componentHashMap.findIndex(c => c.hash === hash);
+    }
 
 
     /* -----------------------------------------------------------
