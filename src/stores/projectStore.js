@@ -61,55 +61,20 @@ const projectStore = {
         SET_LAST_LOADED_PROJECT(state, project) {
             state.lastLoadedProject = project;
         },
-        ADD_COMPONENT_TO_PAGE(state, {pageIndex, isVisual, component}) {
-            // console.log;
-            let c = safeClone(component); // we can't use structuredClone or {...component}
-            c.hash = generateHashId();
-            let dataMap = {
-                parent: state.project.pages[pageIndex].hash,
-                hash: c.hash,
-                type: 'visual'
-            }
-            // console.log(c);
-            // check is app app bar
-            if (c.type === 'appbar') {
-                c.name = getUniqueName(state.project.pages[pageIndex], component.name);
-                if (c.name === 'appbar2') {
-                    // show warning
-                    let msg = `You can't add ${c.type} more!`;
-                    toast.warning(msg);
-                } else {
-                    state.project.pages[pageIndex].children.visual.unshift(c);
-                }
+        ADD_COMPONENT_TO_PAGE(state, { page_index, component, data_map }) {
+            // add component to the page tree
+            if (component.type === 'appbar') {
+                // appbar component
+                state.project.pages[page_index].children.visual.unshift(component)
+            } else if (data_map.type === 'visual') {
+                state.project.pages[page_index].children.visual.push(component)
             } else {
-                // usual components
-                c.name = getUniqueName(state.project.pages[pageIndex], component.name);
-                if (isVisual) {
-                    state.project.pages[pageIndex].children.visual.push(c);
-                } else {
-                    state.project.pages[pageIndex].children.nonVisual.push(c);
-                    dataMap.type =  'nonVisual';
-                }
+                // non‑visual component
+                state.project.pages[page_index].children.nonVisual.push(component)
             }
 
-            state.hashmaps.addComponent(dataMap);
-
-            const undoCommand = {
-                id: generateCommandId(),
-                entity: "COMPONENT",
-                action: "ADD",
-                targetId: c.hash,
-                payload: {
-                    parent: dataMap.parent,
-                    data: structuredClone(c),
-                    type: dataMap.type,
-                },
-            };
-            this.dispatch('ide/setMenuState', {name: 'CanSave', state: true});
-            this.dispatch('ide/setCanScreenshot', true);
-            this.dispatch('project/changeSaveState', false);
-            this.dispatch('project/pushUndoCommand', undoCommand);
-
+            // register component in hashmap
+            state.hashmaps.addComponent(data_map)
         },
         CLEAR_REDO(state) {
           state.redoStack = [];
@@ -386,20 +351,58 @@ const projectStore = {
         },
         /**
          * add component to page
-         * @param context
-         * @param pageIndex : Number
-         * @param isVisual : Boolean
-         * @param component : Object anubias component object
+         * @param {Object} context
+         * @param {Number} pageIndex
+         * @param {Boolean} isVisual
+         * @param {Object} component   // original component object
          */
-        addComponentToPage(context, {pageIndex, isVisual, component}) {
-            // const currentPageIndex = this.
-            context.commit('ADD_COMPONENT_TO_PAGE', {
-                pageIndex: pageIndex,
-                isVisual: isVisual,
-                component: component
-            });
+        async addComponentToPage({ commit, dispatch, state }, { pageIndex, isVisual, component }) {
+            // clone component safely (cannot use structuredClone or spread)
+            const c = safeClone(component)
+            c.hash = generateHashId()
 
-            context.commit("CLEAR_REDO");
+            // prepare hashmap entry
+            const data_map = {
+                parent: state.project.pages[pageIndex].hash,
+                hash:   c.hash,
+                type:   isVisual ? 'visual' : 'nonVisual',
+            }
+
+            // set a unique name and warn if trying to add a second appbar
+            c.name = getUniqueName(state.project.pages[pageIndex], component.name)
+            if (c.type === 'appbar' && c.name === 'appbar2') {
+                toast.warning(`you can't add ${c.type} more!`)
+                return
+            }
+
+            // commit mutation to update state
+            commit('ADD_COMPONENT_TO_PAGE', {
+                page_index: pageIndex,
+                component: c,
+                data_map,
+            })
+
+            // build undo command
+            const undo_command = {
+                id:       generateCommandId(),
+                entity:   'COMPONENT',
+                action:   'ADD',
+                targetId: c.hash,
+                payload: {
+                    parent: data_map.parent,
+                    data:   structuredClone(c),
+                    type:   data_map.type,
+                },
+            }
+
+            // dispatch UI‑related actions
+            dispatch('ide/setMenuState',      { name: 'CanSave', state: true }, {root: true});
+            dispatch('ide/setCanScreenshot',  true, {root: true});
+            dispatch('changeSaveState', false)
+            dispatch('pushUndoCommand', undo_command)
+
+            // clear redo stack
+            commit('CLEAR_REDO')
         },
         updatePagePreview(context, {pageIndex, image}) {
             context.commit('SET_PAGE_PREVIEW', {

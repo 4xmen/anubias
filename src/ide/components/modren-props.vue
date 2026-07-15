@@ -324,14 +324,14 @@ function straitEditProps(item, value) {
   item.value = value;
   let payload = {};
   payload[item.key] = value;
-  store.commit("ide/SET_ON_EDIT_PROPERTIES", payload);
+  store.dispatch("ide/setOnEditProperties", payload);
 }
 
 
 function updateProps(item, value) {
   let payload = {};
   payload[item.key] = value;
-  store.commit("ide/SET_ON_EDIT_PROPERTIES", payload);
+  store.dispatch("ide/setOnEditProperties", payload);
 }
 
 function groupProperties() {
@@ -398,7 +398,7 @@ function widthHeightUpdate(value) {
         item.value = value;
       }
     });
-    store.commit("ide/SET_ON_EDIT_PROPERTIES", {
+    store.dispatch("ide/setOnEditProperties", {
       height: value,
       width: value,
     });
@@ -428,21 +428,21 @@ function addAction() {
     tooltip: tooltip.value,
   });
   tooltip.value = '';
-  store.commit("ide/SET_ON_EDIT_PROPERTIES", {
+  store.dispatch("ide/setOnEditProperties", {
     actions: localProperties.value.actions,
   });
 }
 
 function remAction(i) {
   localProperties.value.actions.splice(i, 1);
-  store.commit("ide/SET_ON_EDIT_PROPERTIES", {
+  store.dispatch("ide/setOnEditProperties", {
     actions: localProperties.value.actions,
   });
 }
 
 function updateActionsSort(e) {
   arrayMove(localProperties.value.actions, e.oldIndex, e.newIndex);
-  store.commit("ide/SET_ON_EDIT_PROPERTIES", {
+  store.dispatch("ide/setOnEditProperties", {
     actions: localProperties.value.actions,
   });
 }
@@ -465,7 +465,7 @@ watch(() => localProperties.value.name, (newVal) => {
   clearTimeout(nameWatch);
   // delay to commit name
   nameWatch = setTimeout(() => {
-    store.commit("ide/SET_ON_EDIT_PROPERTIES", {
+    store.dispatch("ide/setOnEditProperties", {
       name: newVal,
     });
   }, 5000);

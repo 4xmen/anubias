@@ -34,7 +34,8 @@ import componentToggleDefault from './components/defaultToggle.json';
 
 import {LazyStore} from '@tauri-apps/plugin-store';
 import {getCurrentWebviewWindow} from "@tauri-apps/api/webviewWindow";
-
+const FAST_CHANGE_WINDOW_MS = 300;
+const FAST_CHANGE_IDLE_TIMEOUT_MS = 300;
 
 const storage = new LazyStore('ide.json', {autoSave: false});
 let fastChangeTimer = null;
@@ -166,27 +167,9 @@ const ideStore = {
             document.querySelector('title').innerText = state.appName + ' - ' + title;
             state.title = title;
         },
+
+
         SET_ON_EDIT_COMPONENT(state, component) {
-            // must finalize BEFORE swapping onEditComponent, otherwise the pending
-            // fastChangeDetector (or lazyChange) burst would resolve its "end value"
-            // against the NEW component's fields -> a corrupted/meaningless undo command
-            this.commit('ide/FINALIZE_FAST_CHANGE_DETECTOR');
-            clearTimeout(fastChangeTimer);
-            fastChangeTimer = null;
-
-            // lazyChange can also be mid-flight when the component switches
-            // (e.g. user dragging, then clicks another component before mouseup fires)
-            // so it needs the same "close it out properly" treatment
-            if (state.lazyChange.isActive) {
-                if (state.lazyChange.startValue !== state.lazyChange.value) {
-                    // create undo command here (same rule as UPDATE_LAZY_CHANGE_STATE)
-                }
-                state.lazyChange.isActive = false;
-                state.lazyChange.startValue = null;
-                state.lazyChange.fields = [];
-                state.lazyChange.value = null;
-            }
-
             state.onEditComponent = component;
         },
         TOGGLE_COMPONENTS_COLLAPSE(state) {
@@ -258,89 +241,22 @@ const ideStore = {
             state.appLogs = [];
         },
         SET_ON_EDIT_PROPERTIES(state, payload) {
-            // needed so the setTimeout callback below can commit back into the store
-            const store = this;
-
-            let payloadKeys = Object.keys(payload);
-            const firstKey = payloadKeys[0];
-
-            // fastChangeDetector is only a FALLBACK: while lazyChange is active it already
-            // guarantees a predictable undo command, so skip fast-change tracking entirely
-            if (!state.lazyChange.isActive) {
-                const now = Date.now();
-                const isSameField = state.fastChangeDetector.field === firstKey;
-                const isWithinFastWindow = (now - state.fastChangeDetector.lastTime) < 300;
-
-                if (isSameField && isWithinFastWindow) {
-                    // still inside the same burst on the same field:
-                    // keep the original `start` value, just push the window forward
-                    state.fastChangeDetector.lastTime = now;
-                } else {
-                    // either a different field started changing, or too much time passed
-                    // since the last edit -> whatever burst we were tracking (if any) is over
-                    store.commit('ide/FINALIZE_FAST_CHANGE_DETECTOR');
-
-                    // start tracking a brand new potential burst for this field
-                    state.fastChangeDetector.field = firstKey;
-                    state.fastChangeDetector.start = state.onEditComponent[firstKey];
-                    state.fastChangeDetector.lastTime = now;
-                }
-
-                // fallback inactivity timer: if the user simply stops editing altogether,
-                // there is no future commit to naturally detect "burst is over", so we
-                // schedule this timer ourselves to finalize it after 300ms of silence
-                clearTimeout(fastChangeTimer);
-                fastChangeTimer = setTimeout(() => {
-                    store.commit('ide/FINALIZE_FAST_CHANGE_DETECTOR');
-                }, 300);
-            }
-
-            let valueHolder = null;
-            // commit properties to show in live-preview
             for (const key in payload) {
                 state.onEditComponent[key] = payload[key];
-                if (state.lazyChange.isActive) {
-                    valueHolder = payload[key];
-                }
-            }
-
-            // note: why we handle this values look at lazyChange comments
-            if (state.lazyChange.isActive) {
-                this.dispatch('ide/lazyChangeCurrentValue', valueHolder);
-                if (state.lazyChange.fields.length === 0) {
-                    this.dispatch('ide/lazyChangeSetFields', payloadKeys);
-                }
             }
         },
-
-        // finalizes whatever fast-change burst is currently tracked (if any).
-        // called either when a new field/burst starts, or by the inactivity timer above.
-        FINALIZE_FAST_CHANGE_DETECTOR(state) {
-            const field = state.fastChangeDetector.field;
-            if (field === null) {
-                return; // nothing was being tracked, nothing to do
-            }
-
-            const startValue = state.fastChangeDetector.start;
-            const endValue = state.onEditComponent[field];
-
-            if (startValue !== endValue) {
-                // create undo command here (field, startValue -> endValue)
-                console.log('fastUndo',startValue,endValue, field);
-            }
-
-            // reset so the next edit can start tracking a clean, fresh burst
+        SET_FAST_CHANGE_DETECTOR(state, { field, start, lastTime }) {
+            state.fastChangeDetector.field = field;
+            state.fastChangeDetector.start = start;
+            state.fastChangeDetector.lastTime = lastTime;
+        },
+        RESET_FAST_CHANGE_DETECTOR(state) {
             state.fastChangeDetector.field = null;
             state.fastChangeDetector.start = null;
             state.fastChangeDetector.lastTime = 0;
         },
 
         UPDATE_LAZY_CHANGE_STATE(state, payload) {
-            if (payload.name === 'isActive' && payload.value === false && state.lazyChange.startValue !== state.lazyChange.value &&  state.lazyChange.fields.length > 0) {
-                console.log('lazyUndo',state.lazyChange.startValue, state.lazyChange.value, state.lazyChange.fields);
-                // state.lazyChange.startValue = state.lazyChange.value;
-                // create undo command here
-            }
             state.lazyChange[payload.name] = payload.value;
         },
     },
@@ -363,6 +279,12 @@ const ideStore = {
         setOnEditComponent: {
             root: true,
             handler(namespacedContext, component) {
+                // must finalize BEFORE swapping onEditComponent, otherwise the pending
+                // fastChangeDetector (or lazyChange) burst would resolve its "end value"
+                // against the NEW component's fields -> a corrupted/meaningless undo command
+                clearTimeout(fastChangeTimer);
+                fastChangeTimer = null;
+                namespacedContext.dispatch('finalizeFastChangeDetector');
                 namespacedContext.commit('SET_ON_EDIT_COMPONENT', component);
             }
         },
@@ -456,15 +378,20 @@ const ideStore = {
                 value: startValue,
             });
         },
-        lazyChangeDone({commit}) {
+        lazyChangeDone({commit,state}) {
+            if (state.lazyChange.startValue !== state.lazyChange.value &&  state.lazyChange.fields.length > 0) {
+                console.log('lazyUndo',state.lazyChange.startValue, state.lazyChange.value, state.lazyChange.fields);
+                // create undo command here
+            }
             commit('UPDATE_LAZY_CHANGE_STATE', {
                 name: 'isActive',
                 value: false,
-            });
+            })
             commit('UPDATE_LAZY_CHANGE_STATE', {
                 name: 'fields',
                 value: [],
             });
+
         },
         lazyChangeSetFields({commit}, fields) {
             commit('UPDATE_LAZY_CHANGE_STATE', {
@@ -477,7 +404,73 @@ const ideStore = {
                 name: 'value',
                 value: currentValue,
             });
-        }
+        },
+        setOnEditProperties({ state, commit, dispatch }, payload) {
+            const payloadKeys = Object.keys(payload);
+            const firstKey = payloadKeys[0];
+
+            if (!state.lazyChange.isActive) {
+                const now = Date.now();
+                // ASSUMPTION: outside lazyChange we never receive multi-key payloads.
+                // fastChangeDetector only tracks payloadKeys[0] and silently ignores the rest.
+                // if this fires, someone added a multi-field commit path outside lazyChange
+                // and fastChangeDetector logic below needs a real refactor to handle it.
+                if (payloadKeys.length > 1) {
+                    console.warn(
+                        '[fastChangeDetector] received multi-key payload outside lazyChange:',
+                        payloadKeys,
+                        '— fastChangeDetector only tracks the first key; refactor needed if this is intentional.'
+                    );
+                }
+
+                const isSameField = state.fastChangeDetector.field === firstKey;
+                const isWithinWindow = (now - state.fastChangeDetector.lastTime) < FAST_CHANGE_WINDOW_MS;
+
+                if (!isSameField || !isWithinWindow) {
+                    dispatch('finalizeFastChangeDetector');
+                    commit('SET_FAST_CHANGE_DETECTOR', {
+                        field: firstKey,
+                        start: state.onEditComponent[firstKey],
+                        lastTime: now,
+                    });
+                } else {
+                    commit('SET_FAST_CHANGE_DETECTOR', {
+                        field: firstKey,
+                        start: state.fastChangeDetector.start,
+                        lastTime: now,
+                    });
+                }
+
+                clearTimeout(fastChangeTimer);
+                fastChangeTimer = setTimeout(() => {
+                    dispatch('finalizeFastChangeDetector');
+                }, FAST_CHANGE_IDLE_TIMEOUT_MS);
+            }
+
+            commit('SET_ON_EDIT_PROPERTIES', payload);
+
+            if (state.lazyChange.isActive) {
+                dispatch('lazyChangeCurrentValue', payload[firstKey]);
+                if (state.lazyChange.fields.length === 0) {
+                    dispatch('lazyChangeSetFields', payloadKeys);
+                }
+            }
+        },
+
+        finalizeFastChangeDetector({ state, commit }) {
+            const field = state.fastChangeDetector.field;
+            if (field === null) return;
+
+            const startValue = state.fastChangeDetector.start;
+            const endValue = state.onEditComponent[field];
+
+            if (startValue !== endValue) {
+                // create undo command here
+                console.log('fastUndo',startValue, endValue, field);
+            }
+
+            commit('RESET_FAST_CHANGE_DETECTOR');
+        },
     },
     getters: {
         version(state) {
