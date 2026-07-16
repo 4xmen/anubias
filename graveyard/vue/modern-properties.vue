@@ -180,14 +180,14 @@
 
 <script>
 import {mapGetters, mapState} from 'vuex';
-import collapsible from "./collapsible.vue";
-import toggle from './switch.vue';
-import around from './around-controller.vue'
-import colorPicker from './color-picker.vue'
-import dinput from './input-draggable.vue';
-import iconPicker from './icon-picker.vue';
+import collapsible from "../../src/ide/components/collapsible.vue";
+import toggle from '../../src/ide/components/switch.vue';
+import around from '../../src/ide/components/around-controller.vue'
+import colorPicker from '../../src/ide/components/color-picker.vue'
+import dinput from '../../src/ide/components/input-draggable.vue';
+import iconPicker from '../../src/ide/components/icon-picker.vue';
 
-import {arrayMove, fixFlutterObjectTitle} from "../js/general-functions.js";
+import {arrayMove, fixFlutterObjectTitle} from "../../src/ide/js/general-functions.js";
 
 import {useToast} from "vue-toastification";
 import {Sortable} from "sortablejs-vue3";
