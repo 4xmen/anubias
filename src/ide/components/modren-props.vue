@@ -228,7 +228,10 @@ const toast = useToast();
 
 // Raw data from Vuex (readonly reference)
 const onEditComponent = computed(() =>
-    store.state.ide.onEditComponent
+    store.state.ide.onEditComponent,
+)
+const syncOnEditComponent = computed(() =>
+    store.state.ide.syncOnEditComponent,
 )
 
 // Local editable copy - this is where all UI changes happen
@@ -447,6 +450,12 @@ function updateActionsSort(e) {
   });
 }
 
+function syncEditComponent(val) {
+  if (!val) return
+  localProperties.value = safeClone(val)   // deep clone
+  groupProperties()
+}
+
 // ====================== LIFECYCLE ======================
 
 onMounted(() => {
@@ -460,6 +469,15 @@ watch(onEditComponent, (newVal) => {
     groupProperties()
   }
 }, {immediate: true});
+
+// sync prop editor while redo/undo
+watch(syncOnEditComponent, (newVal) => {
+  if (newVal) {
+    localProperties.value = safeClone(newVal) // deep clone
+    store.commit('ide/SYNC_ON_EDIT_COMPONENT',null);
+    groupProperties()
+  }
+});
 
 watch(() => localProperties.value.name, (newVal) => {
   clearTimeout(nameWatch);

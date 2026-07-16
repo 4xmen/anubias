@@ -54,7 +54,7 @@ let getSize = (value, isHeight = false) => {
     if (value.toString().indexOf('%') !== -1) {
         return value;
     }
-    if (value.length === 0 ) {
+    if (value.length === 0) {
         value = '0';
     }
     return value + 'px';
@@ -125,5 +125,5 @@ export {
     calcPaddingOrMargin,
     createScreenShot,
     arrayMove,
-    fixFlutterObjectTitle,
+    fixFlutterObjectTitle
 };

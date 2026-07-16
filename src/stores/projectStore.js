@@ -6,7 +6,14 @@ import {useToast} from "vue-toastification";
 // import {state} from "vue-tsc/out/shared";
 import defaultPage from './components/defaultPage.json';
 import {LazyStore} from '@tauri-apps/plugin-store';
-import {fixName, generateCommandId, generateHashId, safeClone, unixTimestamp} from "../ide/js/system-functions.js";
+import {
+    fixName,
+    generateCommandId,
+    generateHashId,
+    getInstanceByCommand,
+    safeClone,
+    unixTimestamp
+} from "../ide/js/system-functions.js";
 import {PreviewManager} from "../ide/js/preview-manager.js";
 import {ask, save} from "@tauri-apps/plugin-dialog";
 import {HashMapManager} from "../ide/js/hashmap-manager.js";
@@ -158,8 +165,7 @@ const projectStore = {
         },
     },
     actions: {
-
-        async undo({state, dispatch, commit}) {
+        async undo({state, dispatch, commit, rootState}) {
             let command = state.undoStack.pop();
             commit("PUSH_REDO_COMMAND", command);
 
@@ -175,23 +181,12 @@ const projectStore = {
                     }
                     break;
                 case "UPDATE":
-                    let instance = null;
-                    if (command.entity === "COMPONENT") {
-                        const {
-                            index,
-                            pageIndex,
-                            type
-                        } = state.hashmaps.findComponentFullIndexes(command.targetId, state.project);
-                        instance = state.project.pages[pageIndex].children[type][index];
-                    } else if (command.entity === "PAGE") {
-
-                        instance = state.project.pages[state.hashmaps.findPageIndex(command.targetId)];
-                    } else {
-                        // project
-                        instance = state.project;
-                    }
+                    let undoInstance = getInstanceByCommand(command, state);
                     for (const payload of command.payload) {
-                        instance[payload.field] = payload.before;
+                        undoInstance[payload.field] = payload.before;
+                    }
+                    if (rootState.ide.onEditComponent.hash === undoInstance.hash) {
+                        commit("ide/SYNC_ON_EDIT_COMPONENT", undoInstance,{root: true});
                     }
                     break;
                 default:
@@ -199,7 +194,7 @@ const projectStore = {
             }
             dispatch('updateRedoUndoMenu');
         },
-        redo({state, dispatch, commit}) {
+        redo({state, dispatch, commit, rootState}) {
             let command = state.redoStack.pop();
             switch (command.action) {
                 case 'ADD':
@@ -213,22 +208,12 @@ const projectStore = {
                     }
                     break;
                 case "UPDATE":
-                    let instance = null;
-                    if (command.entity === "COMPONENT") {
-                        const {
-                            index,
-                            pageIndex,
-                            type
-                        } = state.hashmaps.findComponentFullIndexes(command.targetId, state.project);
-                        instance = state.project.pages[pageIndex].children[type][index];
-                    } else if (command.entity === "PAGE") {
-                        instance = state.project.pages[state.hashmaps.findPageIndex(command.targetId)];
-                    } else {
-                        // project
-                        instance = state.project;
-                    }
+                    let instance = getInstanceByCommand(command, state);
                     for (const payload of command.payload) {
                         instance[payload.field] = payload.after;
+                    }
+                    if (rootState.ide.onEditComponent.hash === instance.hash) {
+                        commit("ide/SYNC_ON_EDIT_COMPONENT", instance,{root: true});
                     }
                     break;
                 default:

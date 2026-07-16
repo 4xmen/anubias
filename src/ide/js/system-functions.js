@@ -6,14 +6,15 @@
  * console.log(pageId); // "550e8400-e29b-41d4-a716-446655440000"
  */
 function generateHashId() {
-    return 'xxxxxxxx-xxxx-2xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    return 'xxxxxxxx-xxxx-2xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         const r = (Math.random() * 16) | 0;
         const v = c === 'x' ? r : (r & 0x3) | 0x8;
         return v.toString(16);
     });
 }
+
 function generateCommandId() {
-    return 'com-yxxx-xxxxx'.replace(/[xy]/g, function(c) {
+    return 'com-yxxx-xxxxx'.replace(/[xy]/g, function (c) {
         const r = (Math.random() * 16) | 0;
         const v = c === 'x' ? r : (r & 0x3) | 0x8;
         return v.toString(16);
@@ -65,5 +66,26 @@ let safeClone = function (Object) {
     }
 
 }
+/**
+ * getInstance for edited entity to redo/undo direct
+ * @param command UndoCommand
+ * @param state ProjectState
+ * @returns {*} object of [project|page|component]
+ */
+let getInstanceByCommand = function (command, state) {
+    if (command.entity === "COMPONENT") {
+        const {
+            index,
+            pageIndex,
+            type
+        } = state.hashmaps.findComponentFullIndexes(command.targetId, state.project);
+        return state.project.pages[pageIndex].children[type][index];
+    } else if (command.entity === "PAGE") {
+        return state.project.pages[state.hashmaps.findPageIndex(command.targetId)];
+    } else {
+        // project
+        return state.project;
+    }
+}
 
-export { generateHashId, inspectBlob, unixTimestamp, fixName, generateCommandId, safeClone };
+export {generateHashId, inspectBlob, unixTimestamp, fixName, generateCommandId, safeClone, getInstanceByCommand};

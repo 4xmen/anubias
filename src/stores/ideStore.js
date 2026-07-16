@@ -132,6 +132,8 @@ const ideStore = {
             restore: false,
         },
         appLogs: [],
+        // this is for sync prop editor state on redo/undo
+        syncOnEditComponent: null,
         onEditComponent: {},
         // enables predictable undo commands during rapid user edits
         // by batching changes in expected fast-change areas (textarea, draggable elements & etc.)
@@ -173,6 +175,9 @@ const ideStore = {
 
         SET_ON_EDIT_COMPONENT(state, component) {
             state.onEditComponent = component;
+        },
+        SYNC_ON_EDIT_COMPONENT(state, component) {
+            state.syncOnEditComponent = component;
         },
         TOGGLE_COMPONENTS_COLLAPSE(state) {
             state.components.collapsed = !state.components.collapsed;
@@ -281,6 +286,7 @@ const ideStore = {
         setOnEditComponent: {
             root: true,
             handler(namespacedContext, component) {
+                console.log('componentChanged',component);
                 // must finalize BEFORE swapping onEditComponent, otherwise the pending
                 // fastChangeDetector (or lazyChange) burst would resolve its "end value"
                 // against the NEW component's fields -> a corrupted/meaningless undo command
