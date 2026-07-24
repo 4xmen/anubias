@@ -36,11 +36,11 @@ const routes = [
         name: 'new-project',
         component: view('new-project'),
     },
-    {
-        path: '/about',
-        name: 'about',
-        component: view('about'),
-    },
+    // {
+    //     path: '/about',
+    //     name: 'about',
+    //     component: view('about'),
+    // },
     {
         path: '/welcome',
         name: 'welcome',

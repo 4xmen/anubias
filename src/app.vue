@@ -10,6 +10,8 @@ import {listen} from "@tauri-apps/api/event";
 import {mapActions, mapState} from "vuex";
 import {open} from "@tauri-apps/plugin-dialog";
 import {ask} from "@tauri-apps/plugin-dialog";
+import { invoke } from "@tauri-apps/api/core";
+
 
 export default {
   name: "app",
@@ -51,6 +53,10 @@ export default {
       if (path) {
         await this.prepareProjectFile(path);
       }
+    },
+    async openAbout(){
+      console.log('openAbout');
+      await invoke("open_about");
     }
   },
   async mounted() {
@@ -109,6 +115,9 @@ export default {
           break;
         case "request-redo":
           this.redo();
+          break;
+        case "open-about":
+          this.openAbout();
           break;
         default:
           this.addLog("Invalid menu event: " + event.payload);

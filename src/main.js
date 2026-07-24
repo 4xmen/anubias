@@ -16,6 +16,7 @@ import 'vazirmatn/Vazirmatn-Variable-font-face.css';
 import 'remixicon/fonts/remixicon.css';
 import 'material-icons';
 
+
 // define prtotypes
 Object.defineProperty(String.prototype, 'capitalize', {
     value: function() {

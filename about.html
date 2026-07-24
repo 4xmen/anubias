@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #about {
+            height: 100vh;
+            width: 100vw;
+        }
+
+        body {
+        }
+
+        section {
+            width: 100vw;
+            height: 100vh;
+            float: left;
+            background-size: cover;
+        }
+
+        section.hover {
+            background-image: url(splash.jpg);
+        }
+        h1{
+            font-weight: 100;
+            background: #ffffff33;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+<div id="about">
+    <section class="hover" >
+        <h1 data-tauri-drag-region>
+            Anubias v2.0.0-alpha
+        </h1>
+    </section>
+</div>
+<script src="src/windows/about/jquery.slim.min.js"></script>
+<script src="src/windows/about/jquery.ripples.min.js"></script>
+<script>
+    try {
+        $(".hover").ripples({
+            resolution: 1080,
+            perturbance: 0.01,
+            interactive: true
+        });
+    } catch (e) {
+        $(".error")
+            .show()
+            .text(e);
+    }
+
+    setInterval(function () {
+        var $el = $(".automattic");
+        var x = Math.random() * $el.outerWidth();
+        var y = Math.random() * $el.outerHeight();
+        var dropRadius = 30;
+        var strength = 0.04 + Math.random() * 0.04;
+
+        $el.ripples("drop", x, y, dropRadius, strength);
+    }, 4000);
+
+</script>
+<script type="module" src="/src/windows/about/about.js"></script>
+</body>
+</html>

@@ -5,6 +5,8 @@ mod menu;
 mod message;
 mod global_shortcut;
 
+mod window_manger;
+
 use std::sync::Mutex;
 use tauri::{
     Manager,
@@ -19,7 +21,7 @@ use file::{
 use tauri::AppHandle;
 use tauri::{PhysicalPosition, Position};
 use tauri_plugin_opener::OpenerExt;
-
+use window_manger::{open_about };
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -54,7 +56,8 @@ pub fn run() {
             autosave_project_backup,
             delete_old_backups,
             list_backups,
-            path_exists
+            path_exists,
+            open_about
         ])
         .setup(|app| {
 

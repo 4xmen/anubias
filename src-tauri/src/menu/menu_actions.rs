@@ -14,6 +14,9 @@ pub fn undo(app: &AppHandle) {
 pub fn redo(app: &AppHandle) {
     let _ = app.emit("menu-event", "request-redo");
 }
+pub fn about(app: &AppHandle) {
+    let _ = app.emit("menu-event", "open-about");
+}
 
 pub fn logs_panel_toggle(app: &AppHandle) {
     let _ = app.emit("menu-event", "logs-panel-toggle");

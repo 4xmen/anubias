@@ -6,13 +6,17 @@
     "linux"
   ],
   "windows": [
-    "main"
+    "main",
+    "about"
   ],
   "permissions": [
+    "core:window:allow-start-dragging",
+    "core:window:allow-close",
     "positioner:default",
     "global-shortcut:default",
     "global-shortcut:allow-is-registered",
     "global-shortcut:allow-register",
     "global-shortcut:allow-unregister"
+
   ]
 }
