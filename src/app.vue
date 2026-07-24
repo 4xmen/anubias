@@ -55,7 +55,6 @@ export default {
       }
     },
     async openAbout(){
-      console.log('openAbout');
       await invoke("open_about");
     }
   },

@@ -18,11 +18,14 @@ import {PreviewManager} from "../ide/js/preview-manager.js";
 import {ask, save} from "@tauri-apps/plugin-dialog";
 import {HashMapManager} from "../ide/js/hashmap-manager.js";
 import {find} from "sortablejs/src/utils.js";
+import {RecentProjectManager} from "../ide/js/recent-project-manager.js";
 
 const storage = new LazyStore('ide.json', {autoSave: false});
 
 // const storage = new Store();
 const toast = useToast();
+
+const recentManger = new RecentProjectManager(storage);
 
 
 /***
@@ -290,12 +293,15 @@ const projectStore = {
         },
 
         async prepareProjectFile({commit, dispatch}, path) {
+
             const result = await invoke("load_project", {
                 path
             });
 
             commit('SET_PROJECT_FILE', path);
-            await dispatch('loadProject', JSON.parse(result.project));
+            let projectData = JSON.parse(result.project);
+            await dispatch('loadProject', projectData);
+            await recentManger.addOrUpdate(projectData.name, path);
             setTimeout(() => {
                 dispatch('updateProjectPreview', result.previews);
             }, 100);
