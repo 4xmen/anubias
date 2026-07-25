@@ -42,6 +42,11 @@ const routes = [
     //     component: view('about'),
     // },
     {
+        path: '/resource-manager',
+        name: 'resource-manager',
+        component: view('resource-manager'),
+    },
+    {
         path: '/welcome',
         name: 'welcome',
         component: view('welcome'),
