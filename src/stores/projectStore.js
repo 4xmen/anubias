@@ -7,6 +7,7 @@ import {useToast} from "vue-toastification";
 import defaultPage from './components/defaultPage.json';
 import {LazyStore} from '@tauri-apps/plugin-store';
 import {
+    createBlankImageBlob,
     fixName,
     generateCommandId,
     generateHashId,
@@ -14,11 +15,11 @@ import {
     safeClone,
     unixTimestamp
 } from "../ide/js/system-functions.js";
-import {PreviewManager} from "../ide/js/preview-manager.js";
 import {ask, save} from "@tauri-apps/plugin-dialog";
 import {HashMapManager} from "../ide/js/hashmap-manager.js";
-import {find} from "sortablejs/src/utils.js";
 import {RecentProjectManager} from "../ide/js/recent-project-manager.js";
+import assetStore from "../ide/js/asset-manager.js";
+import assetManager from "../ide/js/asset-manager.js";
 
 const storage = new LazyStore('ide.json', {autoSave: false});
 
@@ -40,7 +41,8 @@ const projectStore = {
          * you need to update new-project.vue too
          */
         project: projectTemplate,
-        previews: new PreviewManager(),
+        thumbnails: [],
+        resources: new Map(),
         projectFile: '',
         projectPath: '',
         isSave: true,
@@ -49,6 +51,7 @@ const projectStore = {
         hashmaps: new HashMapManager(),
         undoStack: [],
         redoStack: [],
+        assetCounter: 0,  // asset counter is some trigger for update live preview to aviod over-eng to manger all preview url
     }),
     mutations: {
         RENEW_HASHMAP(state) {
@@ -56,16 +59,18 @@ const projectStore = {
         },
         CREATE_PROJECT(state, project) {
             state.project = project;
+            state.thumbnails = [];
             project.pages.forEach((page) => {
-                state.previews.register(page.hash);
+                state.thumbnails.push(page.hash);
             });
         },
         LOAD_PROJECT(state, project) {
             state.project = project;
             state.lastLoadProjectNotify = unixTimestamp();
 
+            state.thumbnails = [];
             project.pages.forEach((page) => {
-                state.previews.register(page.hash);
+                state.thumbnails.push(page.hash);
             });
         },
         SET_LAST_LOADED_PROJECT(state, project) {
@@ -98,18 +103,18 @@ const projectStore = {
             state.redoStack.push(command);
             this.dispatch('ide/setMenuState', {name: 'CanRedo', state: true});
         },
-        SET_PAGE_PREVIEW(state, {pageIndex, image}) {
-
-            // console.log('preview:',pageIndex, image);
-            try {
-                if (image !== undefined) {
-                    state.previews.update(state.project.pages[pageIndex].hash, image);
-                }
-            } catch (e) {
-                console.log(`Update preview problem: ${e.message}`);
-            }
-
-        },
+        // SET_PAGE_PREVIEW(state, {pageIndex, image}) {
+        //
+        //     // console.log('preview:',pageIndex, image);
+        //     try {
+        //         if (image !== undefined) {
+        //             state.previews.update(state.project.pages[pageIndex].hash, image);
+        //         }
+        //     } catch (e) {
+        //         console.log(`Update preview problem: ${e.message}`);
+        //     }
+        //
+        // },
         UPDATE_PAGES(state, pages) {
             state.project.pages = pages;
         },
@@ -133,7 +138,7 @@ const projectStore = {
             // add page finaly
             state.project.pages.push(newPage);
             // console.log('before reg',newPage.hash);
-            state.previews.register(newPage.hash);
+            state.thumbnails.push(newPage.hash);
         },
         REMOVE_PAGE(state, index) {
             if (state.project.pages.length > 1) {
@@ -147,15 +152,7 @@ const projectStore = {
             this.dispatch('ide/setTitle');
         },
         UPDATE_PROJECT_PREVIEWS(state, payload) {
-            for (let preview of payload) {
-                const bytes = new Uint8Array(preview.data);
-                if (state.previews.has(preview.page_id)) {
-                    state.previews.update(preview.page_id, new Blob([bytes]));
-                } else {
-                    state.previews.register(preview.page_id, new Blob([bytes]));
-                    state.previews.update(preview.page_id, new Blob([bytes]));
-                }
-            }
+
         },
         SET_BACKUP_LIST(state, list) {
             state.backups = list;
@@ -166,6 +163,9 @@ const projectStore = {
         SET_PROJECT_FILE(state, path) {
             state.projectFile = path;
         },
+        ASSET_COUNTING(state) {
+            state.assetCounter += 1;
+        }
     },
     actions: {
         async undo({state, dispatch, commit, rootState}) {
@@ -189,7 +189,7 @@ const projectStore = {
                         undoInstance[payload.field] = payload.before;
                     }
                     if (rootState.ide.onEditComponent.hash === undoInstance.hash) {
-                        commit("ide/SYNC_ON_EDIT_COMPONENT", undoInstance,{root: true});
+                        commit("ide/SYNC_ON_EDIT_COMPONENT", undoInstance, {root: true});
                     }
                     break;
                 default:
@@ -216,7 +216,7 @@ const projectStore = {
                         instance[payload.field] = payload.after;
                     }
                     if (rootState.ide.onEditComponent.hash === instance.hash) {
-                        commit("ide/SYNC_ON_EDIT_COMPONENT", instance,{root: true});
+                        commit("ide/SYNC_ON_EDIT_COMPONENT", instance, {root: true});
                     }
                     break;
                 default:
@@ -259,7 +259,7 @@ const projectStore = {
             state.project.pages[state.hashmaps.findPageIndex(command.payload.parent)].children[command.payload.type].push(safeClone(command.payload.data));
         },
 
-        async createProject({commit, dispatch}, project) {
+        async createProject({commit, dispatch,state}, project) {
             project.anubias = ide.getters.version(ide.state());
             await storage.set('lastLoadedProject', project);
             await storage.set('lastLoadedProjectPath', "");
@@ -271,6 +271,10 @@ const projectStore = {
             this.dispatch('ide/setMenuState', {name: 'IsProjectLoaded', state: true});
             this.dispatch('ide/setMenuState', {name: 'CanSave', state: true});
             dispatch('ide/setActivePage', project.entryPoint, {root: true});
+
+            // register preview
+            dispatch('projectPageRegister');
+
         },
 
         async loadProject({commit, dispatch, state}, project) {
@@ -287,9 +291,11 @@ const projectStore = {
             dispatch('ide/setMenuState', {name: 'IsProjectLoaded', state: true}, {root: true});
             dispatch('ide/setTitle', null, {root: true});
 
+            // register preview
+            dispatch('projectPageRegister');
+
             // check auto save backup
             await dispatch('listBackups', state.project.hash);
-
         },
 
         async prepareProjectFile({commit, dispatch}, path) {
@@ -326,8 +332,17 @@ const projectStore = {
             dispatch('ide/setMenuState', {name: 'IsProjectLoaded', state: true}, {root: true});
             dispatch('ide/setTitle', null, {root: true});
 
+            dispatch('projectPageRegister');
+
             // check auto save backup
             await dispatch('listBackups', state.project.hash);
+        },
+
+        async projectPageRegister({state}){
+            // create preview thumb assets
+            for( const page of state.project.pages) {
+                assetStore.register(page.hash,'preview', await createBlankImageBlob());
+            }
         },
 
         async listBackups({commit}, hash) {
@@ -342,10 +357,12 @@ const projectStore = {
         async saveProject({state, commit, dispatch}, path = null) {
             // save project just save project by project path
             // so If save as is need to change project path
+            const previews =  await  assetStore.export('preview');
+            console.log(previews);
             const req = {
                 path: path ?? state.projectFile,
                 project: JSON.stringify(state.project),
-                previews: await state.previews.export()
+                previews:  previews,
             };
             if (await invoke('save_project', {request: req})) {
                 commit('UPDATE_PROJECT_DATA', {key: 'isSave', value: true});
@@ -408,16 +425,21 @@ const projectStore = {
             // clear redo stack
             commit('CLEAR_REDO')
         },
-        updatePagePreview(context, {pageIndex, image}) {
-            context.commit('SET_PAGE_PREVIEW', {
-                pageIndex: pageIndex,
-                image: image,
-            });
-            this.dispatch('ide/setCanScreenshot', false);
+        updatePagePreviewByIndex({state,dispatch}, {pageIndex, image}) {
+            dispatch('updatePagePreview',{
+                pageHash: state.project.pages[pageIndex].hash,
+                image,
+            })
         },
-        updatePages(context, pages) {
-            context.commit('SET_PAGE_PREVIEW', pages);
+        updatePagePreview({state, dispatch, commit}, {pageHash, image}) {
+            // console.log('page preview update', pageHash);
+            assetManager.update(pageHash,image);
+            commit("ASSET_COUNTING"); // to update live previews
+            dispatch('ide/setCanScreenshot', false,{root: true});
         },
+        // updatePages(context, pages) {
+        //     context.commit('SET_PAGE_PREVIEW', pages);
+        // },
         addNewPageProject(context) {
             context.commit('ADD_NEW_PAGE');
         },
@@ -429,8 +451,20 @@ const projectStore = {
             invoke('set_menu_state', {state: "CanSave", value: true})
                 .catch(err => console.error('Menu update failed:', err))
         },
-        updateProjectPreview(context, previews) {
-            context.commit('UPDATE_PROJECT_PREVIEWS', previews);
+        updateProjectPreview({dispatch, commit}, previews) {
+            // update preview data from decompressed from rust
+            for (let preview of previews) {
+                console.log('pid',preview.id);
+                const bytes = new Uint8Array(preview.data);
+                dispatch('updatePagePreview',{
+                    pageHash: preview.id,
+                    image:  new Blob([bytes]),
+                });
+            }
+
+            // update previews
+            commit("ASSET_COUNTING");
+
         },
         async autoSave({state}) {
             if (state.isSave) {
@@ -439,7 +473,7 @@ const projectStore = {
             const req = {
                 path: null,
                 project: JSON.stringify(state.project),
-                previews: await state.previews.export(),
+                previews: await assetStore.export('preview'),
             };
             return await invoke('autosave_project_backup', {
                 request: req,

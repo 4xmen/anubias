@@ -15,7 +15,7 @@ import "vue-toastification/dist/index.css";
 import 'vazirmatn/Vazirmatn-Variable-font-face.css';
 import 'remixicon/fonts/remixicon.css';
 import 'material-icons';
-
+import assetStore from "./ide/js/asset-manager.js";
 
 // define prtotypes
 Object.defineProperty(String.prototype, 'capitalize', {
@@ -53,6 +53,11 @@ await store.dispatch("ide/initialize"); //
 vueApp.use(store);
 vueApp.use(router);
 vueApp.use(toast, toastOption);
+
+vueApp.provide('assetStore', assetStore);
+
+// this line just for debug must remove
+window.assetStore = assetStore;
 
 vueApp.mount('#anubias-app').$nextTick(() => {
     postMessage({payload: 'removeLoading'}, '*');

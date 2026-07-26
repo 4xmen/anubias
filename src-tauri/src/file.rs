@@ -50,7 +50,7 @@ pub enum ProjectError {
 
 #[derive(Deserialize, Serialize)]
 pub struct PreviewData {
-    pub page_id: String,
+    pub id: String,
     pub data: Vec<u8>,
 }
 
@@ -392,7 +392,7 @@ impl ProjectMetadata {
                 result.project = String::from_utf8(entry.data)?;
             } else if entry.path.starts_with("/preview/") {
                 result.previews.push(PreviewData {
-                    page_id: entry.hash,
+                    id: entry.hash,
                     data: entry.data,
                 });
             } else {
@@ -501,8 +501,8 @@ impl FileEntry {
             size: preview_data.data.len() as u64,
             crc32: crc32fast::hash(&preview_data.data),
             data: preview_data.data,
-            path: format!("/preview/{}.webp", &preview_data.page_id),
-            hash: preview_data.page_id,
+            path: format!("/preview/{}.webp", &preview_data.id),
+            hash: preview_data.id,
         }
     }
 }
@@ -531,7 +531,7 @@ impl fmt::Debug for PreviewData {
         let preview: Vec<u8> = self.data[..preview_len].to_vec();
 
         f.debug_struct("PreviewData")
-            .field("page_id", &self.page_id)
+            .field("page_id", &self.id)
             .field("data_preview", &preview)
             .field("data_len", &self.data.len())
             .finish()

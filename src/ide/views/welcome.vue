@@ -30,7 +30,7 @@
               :key="prj.path || prj.name"
               tabindex="0"
               role="button"
-              @click="openProject(prj)"
+              @click="openRecent(prj.path)"
               @keydown.enter.prevent="openProject(prj)"
           >
             <div class="recent-project-main">

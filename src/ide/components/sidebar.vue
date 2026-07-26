@@ -4,7 +4,7 @@
       <div :class="getItemClass(0) + ' item'" title="non-visual components" @click="setActiveIndex(0)">
         <i class="ri-eye-off-line"></i>
       </div>
-      <div :class="getItemClass(1) + ' item'"  title="properties" @click="setActiveIndex(1)">
+      <div :class="getItemClass(1) + ' item'" title="properties" @click="setActiveIndex(1)">
         <i class="ri-pen-nib-line"></i>
       </div>
       <div :class="getItemClass(2)  + ' item'" title="pages" @click="setActiveIndex(2)">
@@ -36,7 +36,7 @@
             <template #item="{element, index}">
               <div :key="element.name" :class="`draggable page `+(ide.activePage === index?'active':'')"
                    @click="changePage(index)">
-                <div :style="`background-image: url(${this.project.previews.getUrl(element.hash)})`" class="img">
+                <div :style="`background-image: url(${this.assetPreview(element.hash)})`" class="img">
                   <i class="ri-close-line rem-page" @click="remPage(index)"></i>
                 </div>
                 {{ element.name }}
@@ -69,6 +69,8 @@ import {arrayMove} from "../js/general-functions.js";
 
 import {Sortable} from "sortablejs-vue3";
 
+import assetStore from "../js/asset-manager.js";
+import assetManager from "../js/asset-manager.js";
 
 export default {
   name: "sidebar",
@@ -80,6 +82,7 @@ export default {
   data() {
     return {
       activePageName: '',
+      imageCounter: 0,
     }
   },
   mounted() {
@@ -89,6 +92,9 @@ export default {
     ...mapGetters(
         'project', ['pages'],
     ),
+    ...mapState({
+      assetCounter: state => state.project.assetCounter,
+    }),
     activeIndex: {
       get() {
         return this.$store.state.ide.sideBar.activeIndex;
@@ -99,6 +105,14 @@ export default {
     },
   },
   methods: {
+    assetPreview(id) {
+      const prvw = assetManager.getLivePreview(id);
+      if (prvw) {
+        this.imageCounter = this.assetCounter;
+        return prvw;
+      }
+      return '';
+    },
     addNewPage() {
       this.$store.dispatch('project/addNewPageProject');
     },
@@ -111,9 +125,9 @@ export default {
         onConfirm() {
 
           this.$store.dispatch('project/removePage', i);
-          setTimeout( () => {
+          setTimeout(() => {
             this.changePage(0);
-          },100,this)
+          }, 100, this)
         },
         onCancel() {
 
@@ -123,8 +137,12 @@ export default {
       });
     },
     setActiveIndex(i) {
+
       this.index = i;
       this.activeIndex = i;
+      if ( i === 2) {
+        this.$store.commit('project/ASSET_COUNTING');
+      }
     },
     getItemClass(i) {
       if (i === this.activeIndex) {
@@ -253,7 +271,7 @@ export default {
   cursor: pointer;
 }
 
-.side .item i{
+.side .item i {
   -webkit-text-stroke-color: var(--def-bg);
   -webkit-text-stroke-width: 1px;
 }

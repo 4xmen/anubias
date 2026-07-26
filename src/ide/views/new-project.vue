@@ -180,7 +180,7 @@ import {mapState} from 'vuex';
 import {mapActions} from 'vuex';
 import prjTemplate from '../../stores/assets/projectTemplate.json';
 import defaultPage from '../../stores/components/defaultPage.json';
-import {generateHashId} from "../js/system-functions.js";
+import {generateHashId, safeClone} from "../js/system-functions.js";
 
 
 export default {
@@ -244,7 +244,7 @@ export default {
         for (let i = 0; i < this.newProject.pageCount; i++) {
           page.name = 'page' + (i + 1);
           page.hash = generateHashId();
-          this.newProject.pages.push(structuredClone(page));
+          this.newProject.pages.push(safeClone(page));
         }
         this.newProject.hash = generateHashId();
         await this.createProject(this.newProject);
