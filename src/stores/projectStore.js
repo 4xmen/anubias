@@ -43,6 +43,12 @@ const projectStore = {
         project: projectTemplate,
         thumbnails: [],
         resources: new Map(),
+        resourceDirectories:[
+            'Images',
+            'Audios',
+            'Icons',
+            'Fonts',
+        ],
         projectFile: '',
         projectPath: '',
         isSave: true,
@@ -165,7 +171,10 @@ const projectStore = {
         },
         ASSET_COUNTING(state) {
             state.assetCounter += 1;
-        }
+        },
+        ADD_RESOURCES_DIR(state,dirName) {
+            state.resourceDirectories.push(dirName);
+        },
     },
     actions: {
         async undo({state, dispatch, commit, rootState}) {

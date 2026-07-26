@@ -1,6 +1,16 @@
 <template>
   <section class="resource-manager">
 
+    <prompt-input
+      :prompt-text="prompt.title"
+      :prompt-title="prompt.title"
+      :prompt-placeholder="prompt.placeholder"
+      :on-accept="prompt.onConfirm"
+      :on-cancel="prompt.onCancel"
+      :enabled="prompt.enabled"
+      :default-value="defPromptValue"
+    />
+
     <!-- Header -->
     <header class="toolbar">
 
@@ -9,7 +19,7 @@
           <i class="ri-add-line" />
         </button>
 
-        <button class="tool-button">
+        <button class="tool-button" @click="newDir">
           <i class="ri-folder-add-line" />
         </button>
 
@@ -41,26 +51,10 @@
 
         <ul class="folder-tree">
 
-          <li class="active">
-            <i class="ri-folder-open-line" />
-            Textures
+          <li v-for="(dir,i) in resourceDirs" :class="i === activeDir?'active':''" :key="i" @click="changeActiveDir(i)">
+            <i class="" :class="i === activeDir?'ri-folder-open-line':'ri-folder-line'" />
+            {{dir}}
           </li>
-
-          <li>
-            <i class="ri-folder-line" />
-            Audio
-          </li>
-
-          <li>
-            <i class="ri-folder-line" />
-            Icons
-          </li>
-
-          <li>
-            <i class="ri-folder-line" />
-            Fonts
-          </li>
-
         </ul>
 
       </aside>
@@ -134,9 +128,46 @@
 
 <script setup>
 
-import {ref} from "vue";
+import {computed, ref} from "vue";
+import {useStore} from "vuex";
+import promptInput from "../components/anubias-prompt.vue";
+import anubiasConfirm from "../components/anubias-confirm.vue";
+import {useToast} from "vue-toastification";
+
+const store = useStore();
+const toast = useToast();
+
+const resourceDirs = computed(()=>{
+  return store.state.project.resourceDirectories;
+});
+
+const prompt = computed(()=>{
+  return store.state.ide.prompt;
+})
+
+const activeDir = ref(0);
+const defPromptValue = ref('');
 
 
+function changeActiveDir(i){
+  activeDir.value = i;
+}
+
+function newDir(){
+  defPromptValue.value = 'newfolder';
+  prompt.value.title = 'New folder';
+  prompt.value.text = "New directory name";
+  prompt.value.onConfirm = (value)=>{
+
+    if (resourceDirs.value.indexOf(value) === -1){
+      store.commit("project/ADD_RESOURCES_DIR",value)
+    }else{
+      toast.warning("Duplicate resource directory");
+    }
+  }
+  prompt.value.enabled = true;
+  //
+}
 
 
 </script>
