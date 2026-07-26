@@ -1,3 +1,35 @@
+/**
+ * AssetStore
+ * ----------
+ *
+ * A lightweight in-memory repository for binary project assets.
+ *
+ * The primary purpose of this store is to keep Blob objects outside of the
+ * reactive Vuex state. Only lightweight metadata and identifiers are stored
+ * in Vuex, while the actual binary data is managed here.
+ *
+ * This separation significantly reduces memory usage, keeps the reactive
+ * state small, and avoids unnecessary reactivity overhead when working with
+ * large binary assets.
+ *
+ * The store is intentionally designed to be simple. It contains no
+ * project-specific business logic and is only responsible for storing,
+ * retrieving, exporting, and managing the lifetime of binary assets.
+ *
+ * Current asset consumers include:
+ *   - Project resources
+ *   - Page preview thumbnails
+ *
+ * Additional asset categories may be introduced in the future without
+ * changing the overall architecture.
+ *
+ * This class replaces both PreviewManager and ResourceManager.
+ * Their old implementations can be found in /graveyard/js if you are
+ * interested in the project's evolution. 🙂
+ *
+ * This is implemented as a singleton to ensure a single source of truth
+ * for all in-memory Blob objects and to avoid unnecessary memory duplication.
+ */
 export class AssetStore {
     constructor() {
         /** @private */
