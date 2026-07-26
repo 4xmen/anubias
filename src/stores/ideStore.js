@@ -121,6 +121,16 @@ const ideStore = {
             },
             enabled: false,
         },
+        prompt: {
+            title: "Prompt",
+            text: "Input",
+            placeholder: "Input",
+            onAccept() {
+            },
+            onCancel() {
+            },
+            enabled: false,
+        },
         activePage: 0,
         devices: devices,
         colors: colors,
@@ -234,12 +244,24 @@ const ideStore = {
             state.confirm.enabled = true;
 
         },
+        SHOW_PROMPT(state, data) {
+            // console.log('fire confirm!',data);
+            state.prompt.onAccept = data.onConfirm;
+            state.prompt.onCancel = data.onCancel;
+            state.prompt.text = data.text;
+            state.prompt.title = data.title;
+            state.prompt.enabled = true;
+            state.prompt.placeholder = data.placeholder;
+        },
         HIDE_CONFIRM(state) {
             state.confirm.enabled = false;
         },
         CHANGE_MODAL_STATE(state, {name, isShow}) {
             // console.log(name, isShow);
             state.modals[name] = isShow;
+        },
+        HIDE_PROMPT(state) {
+            state.prompt.enabled = false;
         },
         ADD_LOG(state, payload) {
             state.appLogs.push(payload);
@@ -317,6 +339,34 @@ const ideStore = {
          * @param payload {onConfirm: Function, onCancel: Function, text: String, title: String}
          */
         showConfirm(context, payload) {
+            if (payload.onAccept === undefined) {
+                console.warn('Accept function nessesary');
+                return;
+            }
+            if (payload.onCancel === undefined) {
+                payload.onCancel = () => {
+                };
+            }
+            if (payload.text === undefined) {
+                payload.text = 'Are you sure?';
+            }
+            if (payload.title === undefined) {
+                payload.title = 'Confirm';
+            }
+
+            context.commit('SHOW_PROMPT', {
+                onAccept: payload.onAccept,
+                onCancel: payload.onCancel,
+                text: payload.text,
+                title: payload.title,
+            });
+        },
+        /**
+         *
+         * @param context
+         * @param payload {onConfirm: Function, onCancel: Function, text: String, title: String}
+         */
+        showPrompt(context, payload) {
             if (payload.onConfirm === undefined) {
                 console.warn('Confirm function nessesary');
                 return;
