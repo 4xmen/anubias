@@ -1,4 +1,4 @@
-import {inspectBlob} from "./system-functions.js";
+import {inspectBlob} from "../../src/ide/js/system-functions.js";
 
 /**
  * Runtime preview cache.
