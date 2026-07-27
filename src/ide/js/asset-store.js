@@ -163,6 +163,7 @@ export class AssetStore {
             return false;
         }
 
+        this._revokeLivePreview(assetHashId);
         this._trash.set(assetHashId, this._assets.get(assetHashId));
         this._assets.delete(assetHashId);
 

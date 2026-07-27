@@ -175,6 +175,10 @@ const projectStore = {
         },
         ADD_RESOURCE(state, payload) {
             state.resources.push(payload);
+        },
+        REMOVE_RESOURCE(state, hashId) {
+            console.log(state.resources.find(resource => resource.hash === hashId));
+            state.resources.splice(state.resources.find(resource => resource.hash === hashId),1);
         }
     },
     actions: {
@@ -536,6 +540,12 @@ const projectStore = {
         },
         async addResource({commit}, payload) {
             commit('ADD_RESOURCE', payload);
+        },
+        async removeResource({commit}, hashId) {
+            console.log('remRes', hashId);
+            assetStore.remove(hashId);
+            // WIP: we need check here linked resource here
+            commit('REMOVE_RESOURCE', hashId);
         }
     },
     getters: {

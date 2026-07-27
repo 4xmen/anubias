@@ -11,6 +11,13 @@
         :default-value="defPromptValue"
     />
 
+    <anubias-confirm
+        :confirm-text="ide.confirm.text"
+        :confirm-title="ide.confirm.title"
+        :on-confirm="ide.confirm.onConfirm"
+        :on-cancel="ide.confirm.onCancel"
+        :enabled="ide.confirm.enabled"
+    ></anubias-confirm>
     <!-- Header -->
     <header class="toolbar">
 
@@ -27,7 +34,7 @@
           <i class="ri-edit-line"/>
         </button>
 
-        <button class="tool-button danger">
+        <button class="tool-button danger" @click="removeSelectedResources">
           <i class="ri-delete-bin-line"/>
         </button>
       </div>
@@ -125,7 +132,11 @@
           <textarea v-model="previewText" readonly class="text-preview" rows="12"></textarea>
         </div>
         <div v-else>
-          Preview unavialable for this type
+          <div class="preview-container">
+            <h4 class="text-center">
+              Preview unavailable for this type
+            </h4>
+          </div>
         </div>
       </aside>
 
@@ -166,6 +177,9 @@ const resources = computed(() => {
 const prompt = computed(() => {
   return store.state.ide.prompt;
 })
+const ide = computed(() => {
+  return store.state.ide;
+});
 
 const activeDir = ref(0);
 const defPromptValue = ref('');
@@ -178,6 +192,9 @@ const previewText = ref(null);
 function changeActiveDir(i) {
   activeDir.value = i;
   selected.value = [];
+  previewUrl.value = null;
+  previewKind.value = null;
+  previewText.value = null;
 }
 
 function newDir() {
@@ -259,13 +276,14 @@ async function addResource() {
 async function toggleSelect(resource) {
   previewUrl.value = null;
   previewKind.value = null;
+  previewText.value = null;
   if (selected.value.indexOf(resource) === -1) {
     selected.value.push(resource);
     assetStore.releaseLivePreviewByType('resource');
     if (PREVIEW_ALLOW_KINDS.indexOf(resource.previewKind) !== -1) {
       console.log('create preview');
       previewUrl.value = assetStore.getLivePreview(resource.hashId);
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise(resolve => setTimeout(resolve, 100));
       previewKind.value = resource.previewKind;
     } else if (resource.previewKind === 'text') {
       previewKind.value = resource.previewKind;
@@ -300,6 +318,28 @@ function getFileIcon(resource) {
   }
 }
 
+function removeSelectedResources() {
+  store.dispatch('ide/showConfirm', {
+    onConfirm() {
+      previewUrl.value = null;
+      previewKind.value = null;
+      previewText.value = null;
+      for (const res of selected.value) {
+        store.dispatch('project/removeResource', res.hashId)
+      }
+      selected.value = [];
+
+    },
+    onCancel() {
+
+    },
+    text: "Are you sure to remove these resources?",
+    title: 'Remove resources confirm',
+  });
+
+
+}
+
 function resourceClass(resource) {
   if (selected.value.indexOf(resource) === -1) {
     return 'resource-item';
@@ -316,15 +356,25 @@ function resourceClass(resource) {
 .video-preview, .audio-preview, .image-preview, .text-preview {
   width: 100%;
   height: auto;
+  display: block;
 }
 
-.text-preview{
+.text-preview {
   padding: .45rem;
-  height: 90vh;
+  height: calc(100vh - 85px);
   background: #00000088;
   color: #eeeeee;
   outline: none;
   border: none;
+  width: 100%;
+}
+
+.preview-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 85px);
+  width: 100%;
 }
 
 /* Layout */
