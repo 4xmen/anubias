@@ -60,6 +60,7 @@ dependencies = [
  "tauri-plugin-positioner",
  "tauri-plugin-store",
  "thiserror 1.0.69",
+ "tokio",
  "zstd",
 ]
 
@@ -3983,7 +3984,9 @@ dependencies = [
  "bytes",
  "libc",
  "mio",
+ "parking_lot",
  "pin-project-lite",
+ "signal-hook-registry",
  "socket2",
  "tokio-macros",
  "windows-sys 0.61.2",

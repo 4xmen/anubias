@@ -134,6 +134,23 @@ export class AssetStore {
     }
 
     /**
+     * Releases the live preview of some assets by types.
+     *
+     *
+     * @param {string} type - asset type
+     * @returns {boolean} True if the preview was released.
+     */
+    releaseLivePreviewByType(type) {
+        for (const [id, asset] of this._assets) {
+            if (asset.type !== type) {
+                continue;
+            }
+            return this._revokeLivePreview(id);
+        }
+
+    }
+
+    /**
      * Moves an asset into the trash.
      *
      * The live preview is intentionally preserved to support undo.
@@ -267,11 +284,26 @@ export class AssetStore {
 
             result.push({
                 id,
-                data:  new Uint8Array(await asset.blob.arrayBuffer()),
+                data: new Uint8Array(await asset.blob.arrayBuffer()),
             });
         }
 
         return result;
+    }
+
+
+    /**
+     * get blob as text find by hashId
+     * @param assetHashId
+     * @returns {string|null}
+     */
+    async getText(assetHashId) {
+        if (!this._assets.has(assetHashId)) {
+            return null;
+        }
+
+        const asset = this._assets.get(assetHashId);
+        return await asset.blob.text();
     }
 }
 

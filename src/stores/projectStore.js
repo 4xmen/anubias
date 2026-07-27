@@ -42,8 +42,8 @@ const projectStore = {
          */
         project: projectTemplate,
         thumbnails: [],
-        resources: new Map(),
-        resourceDirectories:[
+        resources: [],
+        resourceDirectories: [
             'Images',
             'Audios',
             'Icons',
@@ -170,9 +170,12 @@ const projectStore = {
         ASSET_COUNTING(state) {
             state.assetCounter += 1;
         },
-        ADD_RESOURCES_DIR(state,dirName) {
+        ADD_RESOURCES_DIR(state, dirName) {
             state.resourceDirectories.push(dirName);
         },
+        ADD_RESOURCE(state, payload) {
+            state.resources.push(payload);
+        }
     },
     actions: {
         async undo({state, dispatch, commit, rootState}) {
@@ -266,7 +269,7 @@ const projectStore = {
             state.project.pages[state.hashmaps.findPageIndex(command.payload.parent)].children[command.payload.type].push(safeClone(command.payload.data));
         },
 
-        async createProject({commit, dispatch,state}, project) {
+        async createProject({commit, dispatch, state}, project) {
             project.anubias = ide.getters.version(ide.state());
             await storage.set('lastLoadedProject', project);
             await storage.set('lastLoadedProjectPath', "");
@@ -345,10 +348,10 @@ const projectStore = {
             await dispatch('listBackups', state.project.hash);
         },
 
-        async projectPageRegister({state}){
+        async projectPageRegister({state}) {
             // create preview thumb assets
-            for( const page of state.project.pages) {
-                assetStore.register(page.hash,'preview', await createBlankImageBlob());
+            for (const page of state.project.pages) {
+                assetStore.register(page.hash, 'preview', await createBlankImageBlob());
             }
         },
 
@@ -364,12 +367,12 @@ const projectStore = {
         async saveProject({state, commit, dispatch}, path = null) {
             // save project just save project by project path
             // so If save as is need to change project path
-            const previews =  await  assetStore.export('preview');
+            const previews = await assetStore.export('preview');
             console.log(previews);
             const req = {
                 path: path ?? state.projectFile,
                 project: JSON.stringify(state.project),
-                previews:  previews,
+                previews: previews,
             };
             if (await invoke('save_project', {request: req})) {
                 dispatch('changeSaveState', true);
@@ -432,17 +435,17 @@ const projectStore = {
             // clear redo stack
             commit('CLEAR_REDO')
         },
-        updatePagePreviewByIndex({state,dispatch}, {pageIndex, image}) {
-            dispatch('updatePagePreview',{
+        updatePagePreviewByIndex({state, dispatch}, {pageIndex, image}) {
+            dispatch('updatePagePreview', {
                 pageHash: state.project.pages[pageIndex].hash,
                 image,
             })
         },
         updatePagePreview({state, dispatch, commit}, {pageHash, image}) {
             // console.log('page preview update', pageHash);
-            assetManager.update(pageHash,image);
+            assetManager.update(pageHash, image);
             commit("ASSET_COUNTING"); // to update live previews
-            dispatch('ide/setCanScreenshot', false,{root: true});
+            dispatch('ide/setCanScreenshot', false, {root: true});
         },
         // updatePages(context, pages) {
         //     context.commit('SET_PAGE_PREVIEW', pages);
@@ -450,7 +453,7 @@ const projectStore = {
         addNewPageProject(context) {
             context.commit('ADD_NEW_PAGE');
         },
-        removePage({commit,state, dispatch}, i) {
+        removePage({commit, state, dispatch}, i) {
             if (state.project.pages.length > 1) {
                 commit('REMOVE_PAGE', i);
                 dispatch('changeSaveState', false);
@@ -468,9 +471,9 @@ const projectStore = {
             for (let preview of previews) {
                 // console.log('pid',preview.id);
                 const bytes = new Uint8Array(preview.data);
-                dispatch('updatePagePreview',{
+                dispatch('updatePagePreview', {
                     pageHash: preview.id,
-                    image:  new Blob([bytes]),
+                    image: new Blob([bytes]),
                 });
             }
 
@@ -531,6 +534,9 @@ const projectStore = {
         async clearBackup(context, timestamp) {
             return await invoke('delete_old_backups', {hash: context.state.project.hash, timestamp});
         },
+        async addResource({commit}, payload) {
+            commit('ADD_RESOURCE', payload);
+        }
     },
     getters: {
         getPage: (state) => (i) => {

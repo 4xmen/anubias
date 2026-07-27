@@ -6,9 +6,11 @@ use std::fs::File;
 use std::io::{self, Read, Seek, SeekFrom, Write};
 use std::path::Path;
 use std::{fmt, fs};
+use std::fmt::format;
 use tauri::{AppHandle, Manager};
 use file_format::{FileFormat, Kind};
 
+const MAX_IMPORT_FILE_SIZE: u64 = 50 * 1024 * 1024;
 /// how is project structure
 /// ┌───────────────────────────────────────────────────────────┐
 /// |│                   Project Metadata                      | │
@@ -622,6 +624,94 @@ impl Default for DataMap {
     }
 }
 
+
+
+/// High-level preview category used by the frontend.
+#[derive(Debug, Clone, Copy, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub enum PreviewKind {
+    None,
+    Image,
+    Video,
+    Audio,
+    Font,
+    Text,
+}
+
+
+#[derive(Debug, Clone, Copy, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub enum AssetKind {
+    Image,
+    Video,
+    Audio,
+    Font,
+    Document,
+    Archive,
+    Executable,
+    Package,
+    Disk,
+    DataBase,
+    Unknown,
+}
+
+
+impl From<file_format::Kind> for AssetKind {
+    fn from(kind: file_format::Kind) -> Self {
+        match kind {
+            file_format::Kind::Image => Self::Image,
+            file_format::Kind::Video => Self::Video,
+            file_format::Kind::Audio => Self::Audio,
+            file_format::Kind::Font => Self::Font,
+            file_format::Kind::Document => Self::Document,
+            file_format::Kind::Compressed => Self::Archive,
+            file_format::Kind::Archive => Self::Archive,
+            file_format::Kind::Executable => Self::Executable,
+            file_format::Kind::Package => Self::Package,
+            file_format::Kind::Disk => Self::Disk,
+            file_format::Kind::Database => Self::DataBase,
+            _ => Self::Unknown,
+        }
+    }
+}
+/// Metadata and binary data returned after importing a file.
+///
+/// This structure represents the canonical result of the import step.
+/// The frontend should rely on this metadata instead of inferring file
+/// information from the file name or extension.
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ImportedAsset {
+    /// Original file name including its extension.
+    pub original_name: String,
+
+    /// Raw binary content of the imported file.
+    pub bytes: Vec<u8>,
+
+    /// File size in bytes.
+    pub size: u64,
+
+    /// MIME type detected from the file content.
+    pub mime: String,
+
+    /// High-level file kind reported by `file-format`.
+    pub kind: AssetKind,
+
+    /// UI preview category.
+    pub preview_kind: PreviewKind,
+
+    /// CRC32 checksum of the raw file bytes.
+    pub crc32: u32,
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct FileMetadata {
+    pub original_name: String,
+    pub size: u64,
+    pub mime: String,
+}
+
 #[tauri::command]
 pub fn save_project(app: AppHandle, request: SaveProjectRequest) -> Result<bool, String> {
     send_log(&app, "Try to save project...");
@@ -886,91 +976,71 @@ pub fn path_exists(path: String) -> bool {
 
 
 
-/// High-level preview category used by the frontend.
-#[derive(Debug, Clone, Copy, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub enum PreviewKind {
-    None,
-    Image,
-    Video,
-    Audio,
-    Font,
-    Text,
-}
-
-#[derive(Debug, Clone, Copy, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub enum AssetKind {
-    Image,
-    Video,
-    Audio,
-    Font,
-    Document,
-    Archive,
-    Executable,
-    Package,
-    Disk,
-    DataBase,
-    Unknown,
-}
-
-
-impl From<file_format::Kind> for AssetKind {
-    fn from(kind: file_format::Kind) -> Self {
-        match kind {
-            file_format::Kind::Image => Self::Image,
-            file_format::Kind::Video => Self::Video,
-            file_format::Kind::Audio => Self::Audio,
-            file_format::Kind::Font => Self::Font,
-            file_format::Kind::Document => Self::Document,
-            file_format::Kind::Compressed => Self::Archive,
-            file_format::Kind::Archive => Self::Archive,
-            file_format::Kind::Executable => Self::Executable,
-            file_format::Kind::Package => Self::Package,
-            file_format::Kind::Disk => Self::Disk,
-            file_format::Kind::Database => Self::DataBase,
-            _ => Self::Unknown,
-        }
-    }
-}
-/// Metadata and binary data returned after importing a file.
+/// Retrieves metadata for a file without loading its entire contents into memory.
 ///
-/// This structure represents the canonical result of the import step.
-/// The frontend should rely on this metadata instead of inferring file
-/// information from the file name or extension.
-#[derive(Debug, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct ImportedAsset {
-    /// Original file name including its extension.
-    pub original_name: String,
+/// The returned metadata includes:
+/// - Original file name.
+/// - File size in bytes.
+/// - Detected MIME type.
+/// - Asset kind.
+/// - Preview kind used by the application.
+///
+/// This command is intended for lightweight validation and decision-making
+/// before performing more expensive operations such as importing or processing
+/// the file.
+///
+/// # Errors
+///
+/// Returns an error if the file cannot be accessed or its metadata cannot be
+/// determined.
+///  IMPORTANT NOTE: this function is fast may can't detect well
+#[tauri::command]
+pub async fn get_fast_file_metadata(path: String) -> Result<FileMetadata, String> {
+    tokio::task::spawn_blocking(move || {
+        let metadata = fs::metadata(&path).map_err(|e| e.to_string())?;
 
-    /// Raw binary content of the imported file.
-    pub bytes: Vec<u8>,
+        // a few bytes to detect
+        let mut file = File::open(&path).map_err(|e| e.to_string())?;
 
-    /// File size in bytes.
-    pub size: u64,
+        let mut header = [0u8; 8192];
+        let read = file.read(&mut header).map_err(|e| e.to_string())?;
 
-    /// MIME type detected from the file content.
-    pub mime: String,
+        let format = FileFormat::from_bytes(&header[..read]);
 
-    /// High-level file kind reported by `file-format`.
-    pub kind: AssetKind,
+        let mime = format.media_type().to_string();
 
-    /// UI preview category.
-    pub preview_kind: PreviewKind,
+        Ok(FileMetadata {
+            original_name: Path::new(&path)
+                .file_name()
+                .unwrap_or_default()
+                .to_string_lossy()
+                .into_owned(),
 
-    /// CRC32 checksum of the raw file bytes.
-    pub crc32: u32,
+            size: metadata.len(),
+            mime,
+        })
+    })
+        .await
+        .map_err(|e| e.to_string())?
 }
 
-#[tauri::command]
+
 /// Reads a file from disk and returns its binary content together with
 /// metadata detected from the file itself.
 ///
 /// The detected MIME type and file kind are derived from the file content,
 /// not from its extension. This makes Rust the single source of truth for
 /// imported assets.
-pub fn read_file_binary(path: String) -> Result<ImportedAsset, String> {
+fn read_file_binary_impl(path: String) -> Result<ImportedAsset, String> {
+    let metadata = fs::metadata(&path).map_err(|e| e.to_string())?;
+
+    if metadata.len() > MAX_IMPORT_FILE_SIZE {
+        return Err(format!(
+            "The selected file exceeds the maximum supported size of {} MB.",
+            MAX_IMPORT_FILE_SIZE / 1024 / 1024
+        ));
+    }
+
     let bytes = fs::read(&path).map_err(|e| e.to_string())?;
 
     let metadata = fs::metadata(&path).map_err(|e| e.to_string())?;
@@ -985,14 +1055,16 @@ pub fn read_file_binary(path: String) -> Result<ImportedAsset, String> {
         Kind::Video => PreviewKind::Video,
         Kind::Audio => PreviewKind::Audio,
         Kind::Font => PreviewKind::Font,
-        // detect readable kind
+
         _ if mime.starts_with("text/")
             || mime == "application/json"
             || mime == "application/xml"
             || mime == "application/javascript"
             || mime == "application/x-sh"
             || format == FileFormat::PlainText => PreviewKind::Text,
-        Kind::Document | Kind::Archive => PreviewKind::Text, // یا None اگر نمی‌خوای
+
+        Kind::Document | Kind::Archive => PreviewKind::Text,
+
         _ => PreviewKind::None,
     };
 
@@ -1009,12 +1081,32 @@ pub fn read_file_binary(path: String) -> Result<ImportedAsset, String> {
 
         size: metadata.len(),
 
-        mime: format.media_type().to_string(),
+        mime,
 
-        kind:  format.kind().into(),
+        kind: file_kind.into(),
 
         preview_kind,
 
         crc32,
     })
+}
+
+/// Imports a file from disk and produces an `ImportedAsset`.
+///
+/// The returned asset contains the original file bytes, metadata, detected
+/// media information, preview type, and a CRC32 checksum.
+///
+/// This function performs blocking I/O and should be executed using
+/// `tokio::task::spawn_blocking`.
+///
+/// # Errors
+///
+/// Returns an error if the file or its metadata cannot be read.
+#[tauri::command]
+pub async fn read_file_binary(path: String) -> Result<ImportedAsset, String> {
+    tokio::task::spawn_blocking(move || {
+        read_file_binary_impl(path)
+    })
+    .await
+    .map_err(|e| e.to_string())?
 }

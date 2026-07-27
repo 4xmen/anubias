@@ -50,7 +50,6 @@
         </div>
 
         <ul class="folder-tree">
-
           <li v-for="(dir,i) in resourceDirs" :class="i === activeDir?'active':''" :key="i" @click="changeActiveDir(i)">
             <i class="" :class="i === activeDir?'ri-folder-open-line':'ri-folder-line'"/>
             {{ dir }}
@@ -66,50 +65,41 @@
 
         <div class="resource-grid">
 
-          <div class="resource-item selected">
+          <template v-for="res in resources">
 
-            <div class="preview image">
-              <img src="https://4xmen.ir/wp-content/uploads/2026/06/rust-golden-rules.jpg" alt="bg"/>
+            <div :class="resourceClass(res)" v-if="res.directory === resourceDirs[activeDir]"
+                 @click="toggleSelect(res)">
+
+              <div class="preview icon">
+                <i :class="getFileIcon(res)"/>
+              </div>
+
+              <div class="name">
+                {{ res.originalName }}
+              </div>
             </div>
+          </template>
 
-            <div class="name">
-              background.png
-            </div>
+          <!--          <div class="resource-item selected">-->
 
-          </div>
+          <!--            <div class="preview image">-->
+          <!--              <img src="https://4xmen.ir/wp-content/uploads/2026/06/rust-golden-rules.jpg" alt="bg"/>-->
+          <!--            </div>-->
 
-          <div class="resource-item">
+          <!--            <div class="name">-->
+          <!--              background.png-->
+          <!--            </div>-->
+
+          <!--          </div>-->
+
+          <div class="resource-item placeholder" v-if="onUploadResource">
 
             <div class="preview icon">
-              <i class="ri-music-2-line"/>
+              <i class="ri-loader-2-line spinner"/>
             </div>
 
             <div class="name">
-              click.wav
-            </div>
-
-          </div>
-
-          <div class="resource-item">
-
-            <div class="preview icon">
-              <i class="ri-file-code-line"/>
-            </div>
-
-            <div class="name">
-              config.json
-            </div>
-
-          </div>
-
-          <div class="resource-item">
-
-            <div class="preview icon">
-              <i class="ri-file-line"/>
-            </div>
-
-            <div class="name">
-              readme.txt
+              Loading new resource...
             </div>
 
           </div>
@@ -122,20 +112,37 @@
         <div class="panel-title">
           Preview
         </div>
+        <div v-if="previewKind === 'image'">
+          <img :src="previewUrl" class="image-preview" alt="preview image">
+        </div>
+        <div v-else-if="previewKind === 'video'">
+          <video :src="previewUrl" class="video-preview" controls></video>
+        </div>
+        <div v-else-if="previewKind === 'audio'">
+          <audio :src="previewUrl" controls class="audio-preview"></audio>
+        </div>
+        <div v-else-if="previewKind === 'text' && previewText !== null">
+          <textarea v-model="previewText" readonly class="text-preview" rows="12"></textarea>
+        </div>
+        <div v-else>
+          Preview unavialable for this type
+        </div>
       </aside>
 
     </div>
 
     <footer class="status-bar">
-      {{ resources.size }} Resources • {{ selected.length }} Selected
+      {{ resources.length }} Resources • {{ selected.length }} Selected
     </footer>
 
   </section>
 </template>
 
 <script setup>
+const MAX_IMPORT_FILE_SIZE = 50 * 1024 * 1024;
+const PREVIEW_ALLOW_KINDS = ['image', 'video', 'audio'];
 
-import {computed, ref} from "vue";
+import {computed, nextTick, ref} from "vue";
 import {useStore} from "vuex";
 import promptInput from "../components/anubias-prompt.vue";
 import anubiasConfirm from "../components/anubias-confirm.vue";
@@ -163,10 +170,14 @@ const prompt = computed(() => {
 const activeDir = ref(0);
 const defPromptValue = ref('');
 const selected = ref([]);
-
+const onUploadResource = ref(false);
+const previewUrl = ref(null);
+const previewKind = ref(null);
+const previewText = ref(null);
 
 function changeActiveDir(i) {
   activeDir.value = i;
+  selected.value = [];
 }
 
 function newDir() {
@@ -193,7 +204,12 @@ async function addResource() {
     filters: [
       {
         name: 'App General Resources',
-        extensions: ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg', 'bmp', 'ico', 'mp3', 'wav', 'aac', 'flac', 'm4a', 'ogg', 'wma', 'mp4', 'webm', 'avi', 'mov', 'mkv', '3gp', 'ttf', 'otf', 'woff', 'woff2', 'eot', 'json', 'xml', 'yaml', 'yml', 'csv', 'txt', 'md', 'html', 'css', 'js'],
+        extensions: [
+          'jpg', 'jpeg', 'png', 'webp', 'gif', 'svg', 'bmp', 'ico', 'mp3', 'wav',
+          'aac', 'flac', 'm4a', 'ogg', 'wma', 'mp4', 'webm', 'avi', 'mov', 'mkv', '3gp', 'ttf',
+          'otf', 'woff', 'woff2', 'eot', 'json', 'xml', 'yaml', 'yml', 'csv', 'txt', 'md', 'html',
+          'css', 'js', 'pdf'
+        ],
       },
       {
         name: 'All files',
@@ -202,27 +218,114 @@ async function addResource() {
     ],
   });
   if (path) {
-    const fileInfo = getFileInfo(path);
-    if (!fileInfo.hasExtension) {
-      toast.error("Import error: You can't import file don't have extension");
+    onUploadResource.value = true;
+    try {
+
+      const fileInfo = getFileInfo(path);
+      if (!fileInfo.hasExtension) {
+        toast.error("Import error: You can't import file don't have extension");
+      }
+
+      const metadata = await invoke("get_fast_file_metadata", {path});
+
+      if (metadata.size > MAX_IMPORT_FILE_SIZE) {
+        toast.error("The selected file exceeds the maximum supported size.");
+        return;
+      }
+
+      const hashId = generateHashId();
+      const data = await invoke("read_file_binary", {
+        path,
+      });
+      // const uint8 = new Uint8Array(bytes);
+      assetStore.register(hashId, 'resource', new Blob([new Uint8Array(data.bytes)], {
+        type: data.mime
+      }));
+      delete data.bytes;
+      data.hashId = hashId;
+      data.directory = resourceDirs.value[activeDir.value];
+      await store.dispatch('project/addResource', data);
+      console.log(data);
+    } catch (e) {
+      console.log(e.message);
+      onUploadResource.value = false;
+    } finally {
+      onUploadResource.value = false;
     }
 
-    const hashId = generateHashId();
-    const data = await invoke("read_file_binary", {
-      path,
-    });
-    delete data.bytes;
-    console.log(data);
-    // const uint8 = new Uint8Array(bytes);
-
   }
-
-
 }
 
+async function toggleSelect(resource) {
+  previewUrl.value = null;
+  previewKind.value = null;
+  if (selected.value.indexOf(resource) === -1) {
+    selected.value.push(resource);
+    assetStore.releaseLivePreviewByType('resource');
+    if (PREVIEW_ALLOW_KINDS.indexOf(resource.previewKind) !== -1) {
+      console.log('create preview');
+      previewUrl.value = assetStore.getLivePreview(resource.hashId);
+      await new Promise(resolve => setTimeout(resolve, 10));
+      previewKind.value = resource.previewKind;
+    } else if (resource.previewKind === 'text') {
+      previewKind.value = resource.previewKind;
+      previewText.value = await assetStore.getText(resource.hashId);
+    }
+
+  } else {
+    selected.value.splice(selected.value.indexOf(resource), 1);
+  }
+}
+
+function getFileIcon(resource) {
+  let codeAssume = ['js', 'css', 'json', 'xml', 'yml', 'yaml']
+  switch (resource.previewKind) {
+    case "audio":
+      return 'ri-music-2-line';
+    case "video":
+      return 'ri-video-on-line';
+    case "font":
+      return 'ri-font-serif';
+    case "image":
+      return 'ri-image-2-line';
+    case "text":
+      const fileInfo = getFileInfo(resource.originalName);
+      if (codeAssume.indexOf(fileInfo.ext) !== -1) {
+        return 'ri-file-code-line';
+      } else {
+        return 'ri-file-text-line'
+      }
+    default:
+      return 'ri-file-line';
+  }
+}
+
+function resourceClass(resource) {
+  if (selected.value.indexOf(resource) === -1) {
+    return 'resource-item';
+  }
+  return 'resource-item selected';
+}
 </script>
 
 <style scoped>
+
+
+/* Preview items */
+
+.video-preview, .audio-preview, .image-preview, .text-preview {
+  width: 100%;
+  height: auto;
+}
+
+.text-preview{
+  padding: .45rem;
+  height: 90vh;
+  background: #00000088;
+  color: #eeeeee;
+  outline: none;
+  border: none;
+}
 
 /* Layout */
 
@@ -521,4 +624,7 @@ async function addResource() {
 
 }
 
+.placeholder {
+  opacity: .7;
+}
 </style>
