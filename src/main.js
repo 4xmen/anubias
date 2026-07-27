@@ -15,7 +15,7 @@ import "vue-toastification/dist/index.css";
 import 'vazirmatn/Vazirmatn-Variable-font-face.css';
 import 'remixicon/fonts/remixicon.css';
 import 'material-icons';
-import assetStore from "./ide/js/asset-manager.js";
+import assetStore from "./ide/js/asset-store.js";
 
 // define prtotypes
 Object.defineProperty(String.prototype, 'capitalize', {

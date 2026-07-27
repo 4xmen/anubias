@@ -2,13 +2,13 @@
   <section class="resource-manager">
 
     <prompt-input
-      :prompt-text="prompt.title"
-      :prompt-title="prompt.title"
-      :prompt-placeholder="prompt.placeholder"
-      :on-accept="prompt.onConfirm"
-      :on-cancel="prompt.onCancel"
-      :enabled="prompt.enabled"
-      :default-value="defPromptValue"
+        :prompt-text="prompt.title"
+        :prompt-title="prompt.title"
+        :prompt-placeholder="prompt.placeholder"
+        :on-accept="prompt.onAccept"
+        :on-cancel="prompt.onCancel"
+        :enabled="prompt.enabled"
+        :default-value="defPromptValue"
     />
 
     <!-- Header -->
@@ -16,25 +16,25 @@
 
       <div class="toolbar-actions">
         <button class="tool-button" @click="addResource">
-          <i class="ri-add-line" />
+          <i class="ri-add-line"/>
         </button>
 
         <button class="tool-button" @click="newDir">
-          <i class="ri-folder-add-line" />
+          <i class="ri-folder-add-line"/>
         </button>
 
         <button class="tool-button">
-          <i class="ri-edit-line" />
+          <i class="ri-edit-line"/>
         </button>
 
         <button class="tool-button danger">
-          <i class="ri-delete-bin-line" />
+          <i class="ri-delete-bin-line"/>
         </button>
       </div>
 
       <div class="toolbar-search">
-        <i class="ri-search-line" />
-        <input placeholder="Search resources..." />
+        <i class="ri-search-line"/>
+        <input placeholder="Search resources..."/>
       </div>
 
     </header>
@@ -52,8 +52,8 @@
         <ul class="folder-tree">
 
           <li v-for="(dir,i) in resourceDirs" :class="i === activeDir?'active':''" :key="i" @click="changeActiveDir(i)">
-            <i class="" :class="i === activeDir?'ri-folder-open-line':'ri-folder-line'" />
-            {{dir}}
+            <i class="" :class="i === activeDir?'ri-folder-open-line':'ri-folder-line'"/>
+            {{ dir }}
           </li>
         </ul>
 
@@ -69,7 +69,7 @@
           <div class="resource-item selected">
 
             <div class="preview image">
-              <img src="https://4xmen.ir/wp-content/uploads/2026/06/rust-golden-rules.jpg" alt="bg" />
+              <img src="https://4xmen.ir/wp-content/uploads/2026/06/rust-golden-rules.jpg" alt="bg"/>
             </div>
 
             <div class="name">
@@ -81,7 +81,7 @@
           <div class="resource-item">
 
             <div class="preview icon">
-              <i class="ri-music-2-line" />
+              <i class="ri-music-2-line"/>
             </div>
 
             <div class="name">
@@ -93,7 +93,7 @@
           <div class="resource-item">
 
             <div class="preview icon">
-              <i class="ri-file-code-line" />
+              <i class="ri-file-code-line"/>
             </div>
 
             <div class="name">
@@ -105,7 +105,7 @@
           <div class="resource-item">
 
             <div class="preview icon">
-              <i class="ri-file-line" />
+              <i class="ri-file-line"/>
             </div>
 
             <div class="name">
@@ -127,7 +127,7 @@
     </div>
 
     <footer class="status-bar">
-      {{ resources.size }} Resources • {{selected.length}} Selected
+      {{ resources.size }} Resources • {{ selected.length }} Selected
     </footer>
 
   </section>
@@ -140,23 +140,23 @@ import {useStore} from "vuex";
 import promptInput from "../components/anubias-prompt.vue";
 import anubiasConfirm from "../components/anubias-confirm.vue";
 import {useToast} from "vue-toastification";
-import assetStore from "../js/asset-manager.js";
+import assetStore from "../js/asset-store.js";
 import {generateHashId, getFileInfo} from "../js/system-functions.js";
 import {open} from "@tauri-apps/plugin-dialog";
-import { invoke } from "@tauri-apps/api/core";
+import {invoke} from "@tauri-apps/api/core";
 
 
 const store = useStore();
 const toast = useToast();
 
-const resourceDirs = computed(()=>{
+const resourceDirs = computed(() => {
   return store.state.project.resourceDirectories;
 });
 
-const resources = computed(()=>{
+const resources = computed(() => {
   return store.state.project.resources;
 })
-const prompt = computed(()=>{
+const prompt = computed(() => {
   return store.state.ide.prompt;
 })
 
@@ -165,19 +165,20 @@ const defPromptValue = ref('');
 const selected = ref([]);
 
 
-function changeActiveDir(i){
+function changeActiveDir(i) {
   activeDir.value = i;
 }
 
-function newDir(){
+function newDir() {
   defPromptValue.value = 'newfolder';
   prompt.value.title = 'New folder';
   prompt.value.text = "New directory name";
-  prompt.value.onConfirm = (value)=>{
+  prompt.value.placeholder = "New directory name";
+  prompt.value.onAccept = (value) => {
 
-    if (resourceDirs.value.indexOf(value) === -1){
-      store.commit("project/ADD_RESOURCES_DIR",value)
-    }else{
+    if (resourceDirs.value.indexOf(value) === -1) {
+      store.commit("project/ADD_RESOURCES_DIR", value)
+    } else {
       toast.warning("Duplicate resource directory");
     }
   }
@@ -185,7 +186,7 @@ function newDir(){
   //
 }
 
-async function addResource(){
+async function addResource() {
   const path = await open({
     multiple: false,
     directory: false,
@@ -202,7 +203,7 @@ async function addResource(){
   });
   if (path) {
     const fileInfo = getFileInfo(path);
-    if (!fileInfo.hasExtension){
+    if (!fileInfo.hasExtension) {
       toast.error("Import error: You can't import file don't have extension");
     }
 
@@ -210,7 +211,7 @@ async function addResource(){
     const data = await invoke("read_file_binary", {
       path,
     });
-    delete data.bytes ;
+    delete data.bytes;
     console.log(data);
     // const uint8 = new Uint8Array(bytes);
 
@@ -242,7 +243,7 @@ async function addResource(){
 
   padding: 10px 14px;
 
-  border-bottom: 1px solid rgba(255,255,255,.06);
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
   background: var(--darker-bg);
 }
 
@@ -260,7 +261,7 @@ async function addResource(){
   justify-content: center;
   align-items: center;
 
-  border: 1px solid rgba(255,255,255,.06);
+  border: 1px solid rgba(255, 255, 255, .06);
   border-radius: 6px;
 
   background: transparent;
@@ -270,125 +271,124 @@ async function addResource(){
 
   cursor: pointer;
 
-  &:hover{
-    background: rgba(255,255,255,.05);
-    color:white;
+  &:hover {
+    background: rgba(255, 255, 255, .05);
+    color: white;
   }
 
-  &.danger:hover{
-    color:#ff7777;
+  &.danger:hover {
+    color: #ff7777;
   }
 }
 
-.toolbar-search{
+.toolbar-search {
 
-  width:240px;
+  width: 240px;
 
-  display:flex;
-  align-items:center;
-  gap:8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 
-  padding:0 10px;
+  padding: 0 10px;
 
-  border-radius:7px;
+  border-radius: 7px;
 
-  background:rgba(255,255,255,.04);
+  background: rgba(255, 255, 255, .04);
 
-  input{
+  input {
 
-    flex:1;
+    flex: 1;
 
-    height:34px;
+    height: 34px;
 
-    border:none;
-    outline:none;
+    border: none;
+    outline: none;
 
-    color:#ddd;
+    color: #ddd;
 
-    background:none;
+    background: none;
   }
 
 }
 
 /* Main */
 
-.content{
+.content {
 
-  display:flex;
-  flex:1;
+  display: flex;
+  flex: 1;
 
-  overflow:hidden;
+  overflow: hidden;
 
 }
 
 /* Folder */
 
-.folder-panel{
+.folder-panel {
 
-  width:220px;
+  width: 220px;
 
-  border-right:1px solid rgba(255,255,255,.05);
+  border-right: 1px solid rgba(255, 255, 255, .05);
 
-  background:var(--darker-bg);
-
-}
-.preview-panel{
-
-  width:220px;
-
-  border-right:1px solid rgba(255,255,255,.05);
-
-  background:var(--darker-bg);
+  background: var(--darker-bg);
 
 }
 
-.panel-title{
+.preview-panel {
 
-  padding:14px;
-
-  font-size:.82rem;
-
-  color:#888;
-
-  text-transform:uppercase;
-
-  letter-spacing:.08em;
+  width: 350px;
+  border-right: 1px solid rgba(255, 255, 255, .05);
+  background: var(--darker-bg);
 
 }
 
-.folder-tree{
+.panel-title {
 
-  list-style:none;
+  padding: 14px;
 
-  padding:0;
-  margin:0;
+  font-size: .82rem;
 
-  li{
+  color: #888;
 
-    display:flex;
-    align-items:center;
+  text-transform: uppercase;
 
-    gap:10px;
+  letter-spacing: .08em;
 
-    padding:9px 14px;
+}
 
-    cursor:pointer;
+.folder-tree {
 
-    color:#aaa;
+  list-style: none;
 
-    transition:.15s;
+  padding: 0;
+  margin: 0;
 
-    &:hover{
+  li {
 
-      background:rgba(255,255,255,.04);
-      color:white;
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 9px 14px;
+
+    cursor: pointer;
+
+    color: #aaa;
+
+    transition: .15s;
+
+    &:hover {
+
+      background: rgba(255, 255, 255, .04);
+      color: white;
 
     }
 
-    &.active{
+    &.active {
 
-      background:rgba(255,255,255,.06);
-      color:white;
+      background: rgba(255, 255, 255, .06);
+      color: white;
 
     }
 
@@ -398,126 +398,126 @@ async function addResource(){
 
 /* Files */
 
-.files-panel{
+.files-panel {
 
-  flex:1;
+  flex: 1;
 
-  overflow:auto;
+  overflow: auto;
 
-  padding:16px;
-
-}
-
-.resource-grid{
-
-  display:grid;
-
-  grid-template-columns:repeat(auto-fill,minmax(110px,1fr));
-
-  gap:14px;
+  padding: 16px;
 
 }
 
-.resource-item{
+.resource-grid {
 
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+  display: grid;
 
-  gap:10px;
+  grid-template-columns:repeat(auto-fill, minmax(110px, 1fr));
 
-  padding:10px;
-
-  border-radius:8px;
-
-  border:1px solid transparent;
-
-  transition:.15s;
-
-  cursor:pointer;
-
-  &:hover{
-
-    background:rgba(255,255,255,.03);
-    border-color:rgba(255,255,255,.06);
-
-  }
-
-  &.selected{
-
-    border-color:#4b88ff;
-
-    background:rgba(75,136,255,.12);
-
-  }
+  gap: 14px;
 
 }
 
-.preview{
+.resource-item {
 
-  width:72px;
-  height:72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  gap: 10px;
 
-  border-radius:8px;
+  padding: 10px;
 
-  background:rgba(255,255,255,.04);
+  border-radius: 8px;
 
-  img{
+  border: 1px solid transparent;
 
-    width:100%;
-    height:100%;
+  transition: .15s;
 
-    object-fit:cover;
+  cursor: pointer;
 
-    border-radius:6px;
+  &:hover {
+
+    background: rgba(255, 255, 255, .03);
+    border-color: rgba(255, 255, 255, .06);
 
   }
 
-  &.icon{
+  &.selected {
 
-    font-size:34px;
-    color:#9ea4aa;
+    border-color: #4b88ff;
+
+    background: rgba(75, 136, 255, .12);
 
   }
 
 }
 
-.name{
+.preview {
 
-  width:100%;
+  width: 72px;
+  height: 72px;
 
-  text-align:center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  font-size:.82rem;
+  border-radius: 8px;
 
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  background: rgba(255, 255, 255, .04);
+
+  img {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 6px;
+
+  }
+
+  &.icon {
+
+    font-size: 34px;
+    color: #9ea4aa;
+
+  }
+
+}
+
+.name {
+
+  width: 100%;
+
+  text-align: center;
+
+  font-size: .82rem;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
 }
 
 /* Status */
 
-.status-bar{
+.status-bar {
 
-  height:30px;
+  height: 30px;
 
-  display:flex;
-  align-items:center;
+  display: flex;
+  align-items: center;
 
-  padding:0 12px;
+  padding: 0 12px;
 
-  border-top:1px solid rgba(255,255,255,.06);
+  border-top: 1px solid rgba(255, 255, 255, .06);
 
-  background:var(--darker-bg);
+  background: var(--darker-bg);
 
-  color:#8c8c8c;
+  color: #8c8c8c;
 
-  font-size:.78rem;
+  font-size: .78rem;
 
 }
 

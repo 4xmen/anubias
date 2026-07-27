@@ -308,7 +308,7 @@ const ideStore = {
         setOnEditComponent: {
             root: true,
             handler(namespacedContext, component) {
-                console.log('componentChanged',component);
+                // console.log('componentChanged',component);
                 // must finalize BEFORE swapping onEditComponent, otherwise the pending
                 // fastChangeDetector (or lazyChange) burst would resolve its "end value"
                 // against the NEW component's fields -> a corrupted/meaningless undo command
@@ -336,9 +336,9 @@ const ideStore = {
         /**
          *
          * @param context
-         * @param payload {onConfirm: Function, onCancel: Function, text: String, title: String}
+         * @param payload {onAccept: Function, onCancel: Function, text: String, title: String, placeholder: String}
          */
-        showConfirm(context, payload) {
+        showPrompt(context, payload) {
             if (payload.onAccept === undefined) {
                 console.warn('Accept function nessesary');
                 return;
@@ -359,6 +359,7 @@ const ideStore = {
                 onCancel: payload.onCancel,
                 text: payload.text,
                 title: payload.title,
+                palceholder: payload.placeholder,
             });
         },
         /**
@@ -366,7 +367,7 @@ const ideStore = {
          * @param context
          * @param payload {onConfirm: Function, onCancel: Function, text: String, title: String}
          */
-        showPrompt(context, payload) {
+        showConfirm(context, payload) {
             if (payload.onConfirm === undefined) {
                 console.warn('Confirm function nessesary');
                 return;

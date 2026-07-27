@@ -18,8 +18,8 @@ import {
 import {ask, save} from "@tauri-apps/plugin-dialog";
 import {HashMapManager} from "../ide/js/hashmap-manager.js";
 import {RecentProjectManager} from "../ide/js/recent-project-manager.js";
-import assetStore from "../ide/js/asset-manager.js";
-import assetManager from "../ide/js/asset-manager.js";
+import assetStore from "../ide/js/asset-store.js";
+import assetManager from "../ide/js/asset-store.js";
 
 const storage = new LazyStore('ide.json', {autoSave: false});
 
@@ -149,8 +149,6 @@ const projectStore = {
         REMOVE_PAGE(state, index) {
             if (state.project.pages.length > 1) {
                 state.project.pages.splice(index, 1);
-            } else {
-                toast.warning("You can't remove the last page of project");
             }
         },
         UPDATE_PROJECT_DATA(state, payload) {
@@ -374,7 +372,7 @@ const projectStore = {
                 previews:  previews,
             };
             if (await invoke('save_project', {request: req})) {
-                commit('UPDATE_PROJECT_DATA', {key: 'isSave', value: true});
+                dispatch('changeSaveState', true);
             }
             dispatch('clearBackup', unixTimestamp());
             commit('IGNORE_BACKUPS');
@@ -452,18 +450,23 @@ const projectStore = {
         addNewPageProject(context) {
             context.commit('ADD_NEW_PAGE');
         },
-        removePage(context, i) {
-            context.commit('REMOVE_PAGE', i);
+        removePage({commit,state, dispatch}, i) {
+            if (state.project.pages.length > 1) {
+                commit('REMOVE_PAGE', i);
+                dispatch('changeSaveState', false);
+            } else {
+                toast.warning("You can't remove the last page of project");
+            }
         },
         changeSaveState(context, isSave) {
             context.commit('UPDATE_PROJECT_DATA', {key: 'isSave', value: isSave});
-            invoke('set_menu_state', {state: "CanSave", value: true})
+            invoke('set_menu_state', {state: "CanSave", value: !isSave})
                 .catch(err => console.error('Menu update failed:', err))
         },
         updateProjectPreview({dispatch, commit}, previews) {
             // update preview data from decompressed from rust
             for (let preview of previews) {
-                console.log('pid',preview.id);
+                // console.log('pid',preview.id);
                 const bytes = new Uint8Array(preview.data);
                 dispatch('updatePagePreview',{
                     pageHash: preview.id,

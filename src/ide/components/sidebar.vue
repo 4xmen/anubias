@@ -69,8 +69,8 @@ import {arrayMove} from "../js/general-functions.js";
 
 import {Sortable} from "sortablejs-vue3";
 
-import assetStore from "../js/asset-manager.js";
-import assetManager from "../js/asset-manager.js";
+import assetStore from "../js/asset-store.js";
+import assetManager from "../js/asset-store.js";
 
 export default {
   name: "sidebar",
@@ -121,13 +121,14 @@ export default {
       this.$store.dispatch('setOnEditComponent', this.project.project.pages[i]);
     },
     remPage(i) {
+      let self = this;
       this.$store.dispatch('ide/showConfirm', {
         onConfirm() {
 
           this.$store.dispatch('project/removePage', i);
           setTimeout(() => {
-            this.changePage(0);
-          }, 100, this)
+            self.changePage(0);
+          }, 100)
         },
         onCancel() {
 

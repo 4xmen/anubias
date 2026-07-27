@@ -76,7 +76,7 @@ export class AssetStore {
      * @returns {boolean} True if the asset was updated.
      */
     update(assetHashId, blob) {
-        console.log('update asset', assetHashId, blob);
+        // console.log('update asset', assetHashId, blob);
         const asset = this._assets.get(assetHashId);
 
         if (!asset) {
@@ -213,7 +213,7 @@ export class AssetStore {
         const objectURL = URL.createObjectURL(asset.blob);
 
         this._livePreviews.set(assetHashId, objectURL);
-        console.log('createLivePreview final', assetHashId);
+        // console.log('createLivePreview final', assetHashId);
 
         return objectURL;
     }
