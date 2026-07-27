@@ -7,6 +7,7 @@ use std::io::{self, Read, Seek, SeekFrom, Write};
 use std::path::Path;
 use std::{fmt, fs};
 use tauri::{AppHandle, Manager};
+use file_format::{FileFormat, Kind};
 
 /// how is project structure
 /// ┌───────────────────────────────────────────────────────────┐
@@ -881,4 +882,139 @@ pub async fn delete_old_backups(
 #[tauri::command]
 pub fn path_exists(path: String) -> bool {
     Path::new(&path).exists()
+}
+
+
+
+/// High-level preview category used by the frontend.
+#[derive(Debug, Clone, Copy, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub enum PreviewKind {
+    None,
+    Image,
+    Video,
+    Audio,
+    Font,
+    Text,
+}
+
+#[derive(Debug, Clone, Copy, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub enum AssetKind {
+    Image,
+    Video,
+    Audio,
+    Font,
+    Document,
+    Archive,
+    Executable,
+    Package,
+    Disk,
+    DataBase,
+    Unknown,
+}
+
+
+impl From<file_format::Kind> for AssetKind {
+    fn from(kind: file_format::Kind) -> Self {
+        match kind {
+            file_format::Kind::Image => Self::Image,
+            file_format::Kind::Video => Self::Video,
+            file_format::Kind::Audio => Self::Audio,
+            file_format::Kind::Font => Self::Font,
+            file_format::Kind::Document => Self::Document,
+            file_format::Kind::Compressed => Self::Archive,
+            file_format::Kind::Archive => Self::Archive,
+            file_format::Kind::Executable => Self::Executable,
+            file_format::Kind::Package => Self::Package,
+            file_format::Kind::Disk => Self::Disk,
+            file_format::Kind::Database => Self::DataBase,
+            _ => Self::Unknown,
+        }
+    }
+}
+/// Metadata and binary data returned after importing a file.
+///
+/// This structure represents the canonical result of the import step.
+/// The frontend should rely on this metadata instead of inferring file
+/// information from the file name or extension.
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ImportedAsset {
+    /// Original file name including its extension.
+    pub original_name: String,
+
+    /// Raw binary content of the imported file.
+    pub bytes: Vec<u8>,
+
+    /// File size in bytes.
+    pub size: u64,
+
+    /// MIME type detected from the file content.
+    pub mime: String,
+
+    /// High-level file kind reported by `file-format`.
+    pub kind: AssetKind,
+
+    /// UI preview category.
+    pub preview_kind: PreviewKind,
+
+    /// CRC32 checksum of the raw file bytes.
+    pub crc32: u32,
+}
+
+#[tauri::command]
+/// Reads a file from disk and returns its binary content together with
+/// metadata detected from the file itself.
+///
+/// The detected MIME type and file kind are derived from the file content,
+/// not from its extension. This makes Rust the single source of truth for
+/// imported assets.
+pub fn read_file_binary(path: String) -> Result<ImportedAsset, String> {
+    let bytes = fs::read(&path).map_err(|e| e.to_string())?;
+
+    let metadata = fs::metadata(&path).map_err(|e| e.to_string())?;
+
+    let format = FileFormat::from_bytes(&bytes);
+
+    let mime = format.media_type().to_string();
+    let file_kind = format.kind();
+
+    let preview_kind = match file_kind {
+        Kind::Image => PreviewKind::Image,
+        Kind::Video => PreviewKind::Video,
+        Kind::Audio => PreviewKind::Audio,
+        Kind::Font => PreviewKind::Font,
+        // detect readable kind
+        _ if mime.starts_with("text/")
+            || mime == "application/json"
+            || mime == "application/xml"
+            || mime == "application/javascript"
+            || mime == "application/x-sh"
+            || format == FileFormat::PlainText => PreviewKind::Text,
+        Kind::Document | Kind::Archive => PreviewKind::Text, // یا None اگر نمی‌خوای
+        _ => PreviewKind::None,
+    };
+
+    let crc32 = crc32fast::hash(&bytes);
+
+    Ok(ImportedAsset {
+        original_name: Path::new(&path)
+            .file_name()
+            .unwrap_or_default()
+            .to_string_lossy()
+            .into_owned(),
+
+        bytes,
+
+        size: metadata.len(),
+
+        mime: format.media_type().to_string(),
+
+        kind:  format.kind().into(),
+
+        preview_kind,
+
+        crc32,
+    })
 }

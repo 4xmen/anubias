@@ -16,7 +16,7 @@ use crate::config::{IS_DEBUG, SECOND_MONITOR};
 use crate::menu::menu_state::{build_menu_no_project, set_menu_state, MenuState};
 use file::{
     autosave_project_backup, delete_old_backups, list_backups, load_project, path_exists,
-    save_project,
+    save_project,read_file_binary
 };
 use tauri::AppHandle;
 use tauri::{PhysicalPosition, Position};
@@ -57,7 +57,8 @@ pub fn run() {
             delete_old_backups,
             list_backups,
             path_exists,
-            open_about
+            open_about,
+            read_file_binary,
         ])
         .setup(|app| {
 

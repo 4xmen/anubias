@@ -15,7 +15,7 @@
     <header class="toolbar">
 
       <div class="toolbar-actions">
-        <button class="tool-button">
+        <button class="tool-button" @click="addResource">
           <i class="ri-add-line" />
         </button>
 
@@ -59,6 +59,7 @@
 
       </aside>
 
+
       <!-- Files -->
 
       <main class="files-panel">
@@ -68,7 +69,7 @@
           <div class="resource-item selected">
 
             <div class="preview image">
-              <img src="https://picsum.photos/100" />
+              <img src="https://4xmen.ir/wp-content/uploads/2026/06/rust-golden-rules.jpg" alt="bg" />
             </div>
 
             <div class="name">
@@ -117,10 +118,16 @@
 
       </main>
 
+      <aside class="preview-panel">
+        <div class="panel-title">
+          Preview
+        </div>
+      </aside>
+
     </div>
 
     <footer class="status-bar">
-      4 Resources • 1 Selected
+      {{ resources.size }} Resources • {{selected.length}} Selected
     </footer>
 
   </section>
@@ -133,6 +140,11 @@ import {useStore} from "vuex";
 import promptInput from "../components/anubias-prompt.vue";
 import anubiasConfirm from "../components/anubias-confirm.vue";
 import {useToast} from "vue-toastification";
+import assetStore from "../js/asset-manager.js";
+import {generateHashId, getFileInfo} from "../js/system-functions.js";
+import {open} from "@tauri-apps/plugin-dialog";
+import { invoke } from "@tauri-apps/api/core";
+
 
 const store = useStore();
 const toast = useToast();
@@ -141,12 +153,16 @@ const resourceDirs = computed(()=>{
   return store.state.project.resourceDirectories;
 });
 
+const resources = computed(()=>{
+  return store.state.project.resources;
+})
 const prompt = computed(()=>{
   return store.state.ide.prompt;
 })
 
 const activeDir = ref(0);
 const defPromptValue = ref('');
+const selected = ref([]);
 
 
 function changeActiveDir(i){
@@ -169,6 +185,39 @@ function newDir(){
   //
 }
 
+async function addResource(){
+  const path = await open({
+    multiple: false,
+    directory: false,
+    filters: [
+      {
+        name: 'App General Resources',
+        extensions: ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg', 'bmp', 'ico', 'mp3', 'wav', 'aac', 'flac', 'm4a', 'ogg', 'wma', 'mp4', 'webm', 'avi', 'mov', 'mkv', '3gp', 'ttf', 'otf', 'woff', 'woff2', 'eot', 'json', 'xml', 'yaml', 'yml', 'csv', 'txt', 'md', 'html', 'css', 'js'],
+      },
+      {
+        name: 'All files',
+        extensions: ['*'],
+      },
+    ],
+  });
+  if (path) {
+    const fileInfo = getFileInfo(path);
+    if (!fileInfo.hasExtension){
+      toast.error("Import error: You can't import file don't have extension");
+    }
+
+    const hashId = generateHashId();
+    const data = await invoke("read_file_binary", {
+      path,
+    });
+    delete data.bytes ;
+    console.log(data);
+    // const uint8 = new Uint8Array(bytes);
+
+  }
+
+
+}
 
 </script>
 
@@ -275,6 +324,15 @@ function newDir(){
 /* Folder */
 
 .folder-panel{
+
+  width:220px;
+
+  border-right:1px solid rgba(255,255,255,.05);
+
+  background:var(--darker-bg);
+
+}
+.preview-panel{
 
   width:220px;
 

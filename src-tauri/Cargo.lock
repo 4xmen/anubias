@@ -46,6 +46,7 @@ name = "anubias"
 version = "2.0.0"
 dependencies = [
  "crc32fast",
+ "file-format",
  "postcard",
  "rand",
  "serde",
@@ -1033,6 +1034,12 @@ dependencies = [
  "memoffset",
  "rustc_version",
 ]
+
+[[package]]
+name = "file-format"
+version = "0.29.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "55d9ccda37e95b4f0978a3074b4a9939979103a7256459cfb449c9c84d1adf23"
 
 [[package]]
 name = "find-msvc-tools"

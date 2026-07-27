@@ -101,6 +101,36 @@ async function createBlankImageBlob() {
 }
 
 
+function getFileInfo(path) {
+    const normalized = path.replace(/\\/g, "/");
 
+    const fileName = normalized.split("/").pop() ?? "";
 
-export {generateHashId, inspectBlob, unixTimestamp, fixName, generateCommandId, safeClone, getInstanceByCommand,createBlankImageBlob};
+    const dot = fileName.lastIndexOf(".");
+
+    if (dot <= 0) {
+        return {
+            name: fileName,
+            ext: "",
+            hasExtension: false,
+        };
+    }
+
+    return {
+        name: fileName.slice(0, dot),
+        ext: fileName.slice(dot + 1).toLowerCase(),
+        hasExtension: true,
+    };
+}
+
+export {
+    generateHashId,
+    inspectBlob,
+    unixTimestamp,
+    fixName,
+    generateCommandId,
+    safeClone,
+    getInstanceByCommand,
+    createBlankImageBlob,
+    getFileInfo
+};
