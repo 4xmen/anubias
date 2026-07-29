@@ -102,25 +102,17 @@ const projectStore = {
             this.dispatch('ide/setMenuState', {name: 'CanRedo', state: false});
         },
         PUSH_UNDO_COMMAND(state, command) {
-            state.undoStack.push(command);
+            state.undoStack.push([command]);
             this.dispatch('ide/setMenuState', {name: 'CanUndo', state: true});
         },
         PUSH_REDO_COMMAND(state, command) {
             state.redoStack.push(command);
             this.dispatch('ide/setMenuState', {name: 'CanRedo', state: true});
         },
-        // SET_PAGE_PREVIEW(state, {pageIndex, image}) {
-        //
-        //     // console.log('preview:',pageIndex, image);
-        //     try {
-        //         if (image !== undefined) {
-        //             state.previews.update(state.project.pages[pageIndex].hash, image);
-        //         }
-        //     } catch (e) {
-        //         console.log(`Update preview problem: ${e.message}`);
-        //     }
-        //
-        // },
+        PUSH_UNDO_COMMANDS(state, commands) {
+            state.undoStack.push(commands);
+            this.dispatch('ide/setMenuState', {name: 'CanUndo', state: true});
+        },
         UPDATE_PAGES(state, pages) {
             state.project.pages = pages;
         },
@@ -183,60 +175,67 @@ const projectStore = {
     },
     actions: {
         async undo({state, dispatch, commit, rootState}) {
-            let command = state.undoStack.pop();
-            commit("PUSH_REDO_COMMAND", command);
-
-            switch (command.action) {
-                case 'ADD':
-                    if (command.entity === "COMPONENT") {
-                        // remove component
-                        dispatch('removeComponent', command.targetId);
-                    } else if (command.entity === "PAGE") {
-                        // remove page
-                    } else {
-                        console.warn("Unknown command Entity", command.entity);
-                    }
-                    break;
-                case "UPDATE":
-                    let undoInstance = getInstanceByCommand(command, state);
-                    for (const payload of command.payload) {
-                        undoInstance[payload.field] = payload.before;
-                    }
-                    if (rootState.ide.onEditComponent.hash === undoInstance.hash) {
-                        commit("ide/SYNC_ON_EDIT_COMPONENT", undoInstance, {root: true});
-                    }
-                    break;
-                default:
-                    console.error('Unknown action', command);
+            let commands = state.undoStack.pop();
+            commit("PUSH_REDO_COMMAND", commands);
+            for( const command of commands) {
+                switch (command.action) {
+                    case 'ADD':
+                        if (command.entity === "COMPONENT") {
+                            // remove component
+                            dispatch('removeComponent', command.targetId);
+                        } else if (command.entity === "PAGE") {
+                            // remove page
+                        } else {
+                            console.warn("Unknown command Entity", command.entity);
+                        }
+                        break;
+                    case "UPDATE":
+                        let undoInstance = getInstanceByCommand(command, state);
+                        for (const payload of command.payload) {
+                            undoInstance[payload.field] = payload.before;
+                        }
+                        if (rootState.ide.onEditComponent.hash === undoInstance.hash) {
+                            commit("ide/SYNC_ON_EDIT_COMPONENT", undoInstance, {root: true});
+                        }
+                        break;
+                    default:
+                        console.error('Unknown action', command);
+                }
             }
+
             dispatch('updateRedoUndoMenu');
         },
         redo({state, dispatch, commit, rootState}) {
-            let command = state.redoStack.pop();
-            switch (command.action) {
-                case 'ADD':
-                    if (command.entity === "COMPONENT") {
-                        // restore component
-                        dispatch('restoreComponent', command);
-                    } else if (command.entity === "PAGE") {
-                        // restore page
-                    } else {
-                        console.warn("Unknown command Entity", command.entity);
-                    }
-                    break;
-                case "UPDATE":
-                    let instance = getInstanceByCommand(command, state);
-                    for (const payload of command.payload) {
-                        instance[payload.field] = payload.after;
-                    }
-                    if (rootState.ide.onEditComponent.hash === instance.hash) {
-                        commit("ide/SYNC_ON_EDIT_COMPONENT", instance, {root: true});
-                    }
-                    break;
-                default:
-                    console.error('Unknown action', command);
+            let commands = state.redoStack.pop();
+            console.log(commands);
+            commit("PUSH_UNDO_COMMAND", commands);
+            for( const command of commands) {
+                console.log(command);
+                switch (command.action) {
+                    case 'ADD':
+                        if (command.entity === "COMPONENT") {
+                            // restore component
+                            dispatch('restoreComponent', command);
+                        } else if (command.entity === "PAGE") {
+                            // restore page
+                        } else {
+                            console.warn("Unknown command Entity", command.entity);
+                        }
+                        break;
+                    case "UPDATE":
+                        let instance = getInstanceByCommand(command, state);
+                        for (const payload of command.payload) {
+                            instance[payload.field] = payload.after;
+                        }
+                        if (rootState.ide.onEditComponent.hash === instance.hash) {
+                            commit("ide/SYNC_ON_EDIT_COMPONENT", instance, {root: true});
+                        }
+                        break;
+                    default:
+                        console.error('Unknown action', command);
+                }
             }
-            commit("PUSH_UNDO_COMMAND", command);
+
 
             dispatch('updateRedoUndoMenu');
         },
