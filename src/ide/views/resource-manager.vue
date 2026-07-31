@@ -82,7 +82,7 @@
               </div>
 
               <div class="name">
-                {{ res.originalName }}
+                {{ res.original_name }}
               </div>
             </div>
           </template>
@@ -119,16 +119,16 @@
         <div class="panel-title">
           Preview
         </div>
-        <div v-if="previewKind === 'image'">
+        <div v-if="previewKind === 'Image'">
           <img :src="previewUrl" class="image-preview" alt="preview image">
         </div>
-        <div v-else-if="previewKind === 'video'">
+        <div v-else-if="previewKind === 'Video'">
           <video :src="previewUrl" class="video-preview" controls></video>
         </div>
-        <div v-else-if="previewKind === 'audio'">
+        <div v-else-if="previewKind === 'Audio'">
           <audio :src="previewUrl" controls class="audio-preview"></audio>
         </div>
-        <div v-else-if="previewKind === 'text' && previewText !== null">
+        <div v-else-if="previewKind === 'Text' && previewText !== null">
           <textarea v-model="previewText" readonly class="text-preview" rows="12"></textarea>
         </div>
         <div v-else>
@@ -151,7 +151,7 @@
 
 <script setup>
 const MAX_IMPORT_FILE_SIZE = 50 * 1024 * 1024;
-const PREVIEW_ALLOW_KINDS = ['image', 'video', 'audio'];
+const PREVIEW_ALLOW_KINDS = ['Image', 'Video', 'Audio'];
 
 import {computed, nextTick, ref} from "vue";
 import {useStore} from "vuex";
@@ -250,16 +250,16 @@ async function addResource() {
         return;
       }
 
-      const hashId = generateHashId();
+      const hash_id = generateHashId();
       const data = await invoke("read_file_binary", {
         path,
       });
       // const uint8 = new Uint8Array(bytes);
-      assetStore.register(hashId, 'resource', new Blob([new Uint8Array(data.bytes)], {
+      assetStore.register(hash_id, 'resource', new Blob([new Uint8Array(data.bytes)], {
         type: data.mime
       }));
       delete data.bytes;
-      data.hashId = hashId;
+      data.hash_id = hash_id;
       data.directory = resourceDirs.value[activeDir.value];
       await store.dispatch('project/addResource', data);
       console.log(data);
@@ -280,14 +280,14 @@ async function toggleSelect(resource) {
   if (selected.value.indexOf(resource) === -1) {
     selected.value.push(resource);
     assetStore.releaseLivePreviewByType('resource');
-    if (PREVIEW_ALLOW_KINDS.indexOf(resource.previewKind) !== -1) {
+    if (PREVIEW_ALLOW_KINDS.indexOf(resource.preview_kind) !== -1) {
       console.log('create preview');
-      previewUrl.value = assetStore.getLivePreview(resource.hashId);
+      previewUrl.value = assetStore.getLivePreview(resource.hash_id);
       await new Promise(resolve => setTimeout(resolve, 100));
-      previewKind.value = resource.previewKind;
-    } else if (resource.previewKind === 'text') {
-      previewKind.value = resource.previewKind;
-      previewText.value = await assetStore.getText(resource.hashId);
+      previewKind.value = resource.preview_kind;
+    } else if (resource.preview_kind === 'Text') {
+      previewKind.value = resource.preview_kind;
+      previewText.value = await assetStore.getText(resource.hash_id);
     }
 
   } else {
@@ -297,17 +297,17 @@ async function toggleSelect(resource) {
 
 function getFileIcon(resource) {
   let codeAssume = ['js', 'css', 'json', 'xml', 'yml', 'yaml']
-  switch (resource.previewKind) {
-    case "audio":
+  switch (resource.preview_kind) {
+    case "Audio":
       return 'ri-music-2-line';
-    case "video":
+    case "Video":
       return 'ri-video-on-line';
-    case "font":
+    case "Font":
       return 'ri-font-serif';
-    case "image":
+    case "Image":
       return 'ri-image-2-line';
-    case "text":
-      const fileInfo = getFileInfo(resource.originalName);
+    case "Text":
+      const fileInfo = getFileInfo(resource.original_name);
       if (codeAssume.indexOf(fileInfo.ext) !== -1) {
         return 'ri-file-code-line';
       } else {
@@ -325,7 +325,7 @@ function removeSelectedResources() {
       previewKind.value = null;
       previewText.value = null;
       for (const res of selected.value) {
-        store.dispatch('project/removeResource', res.hashId)
+        store.dispatch('project/removeResource', res.hash_id)
       }
       selected.value = [];
 

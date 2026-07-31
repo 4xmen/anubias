@@ -1,14 +1,14 @@
 use crate::config::IS_DEBUG;
 use crate::format::app;
 use crate::message::{send_log, send_toast, MessageType};
+use file_format::{FileFormat, Kind};
 use serde::{Deserialize, Serialize};
+use std::fmt::format;
 use std::fs::File;
 use std::io::{self, Read, Seek, SeekFrom, Write};
 use std::path::Path;
 use std::{fmt, fs};
-use std::fmt::format;
 use tauri::{AppHandle, Manager};
-use file_format::{FileFormat, Kind};
 
 const MAX_IMPORT_FILE_SIZE: u64 = 50 * 1024 * 1024;
 /// how is project structure
@@ -114,7 +114,6 @@ pub struct ProjectMetadata {
 
     /// all project files
     pub data_map: DataMap,
-
 }
 
 impl ProjectMetadata {
@@ -417,6 +416,8 @@ impl ProjectMetadata {
 /// preview/a82bc91.webp
 /// preview/18dcf0a.webp
 /// preview/91d31ea.webp
+/// resource/a8dce0a.json
+/// resource/e3fcd123.jpg
 ///
 /// hash
 /// -----
@@ -510,7 +511,6 @@ impl FileEntry {
     }
 }
 
-
 impl fmt::Debug for FileEntry {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let preview_len = self.data.len().min(3);
@@ -563,7 +563,6 @@ impl fmt::Debug for PreviewData {
 pub struct DataMap {
     pub entries: Vec<FileEntry>,
 }
-
 
 #[allow(dead_code)]
 impl DataMap {
@@ -624,11 +623,8 @@ impl Default for DataMap {
     }
 }
 
-
-
 /// High-level preview category used by the frontend.
-#[derive(Debug, Clone, Copy, Serialize)]
-#[serde(rename_all = "camelCase")]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub enum PreviewKind {
     None,
     Image,
@@ -638,9 +634,7 @@ pub enum PreviewKind {
     Text,
 }
 
-
-#[derive(Debug, Clone, Copy, Serialize)]
-#[serde(rename_all = "camelCase")]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub enum AssetKind {
     Image,
     Video,
@@ -654,7 +648,6 @@ pub enum AssetKind {
     DataBase,
     Unknown,
 }
-
 
 impl From<file_format::Kind> for AssetKind {
     fn from(kind: file_format::Kind) -> Self {
@@ -680,7 +673,6 @@ impl From<file_format::Kind> for AssetKind {
 /// The frontend should rely on this metadata instead of inferring file
 /// information from the file name or extension.
 #[derive(Debug, Serialize)]
-#[serde(rename_all = "camelCase")]
 pub struct ImportedAsset {
     /// Original file name including its extension.
     pub original_name: String,
@@ -705,7 +697,6 @@ pub struct ImportedAsset {
 }
 
 #[derive(Debug, Clone, Serialize)]
-#[serde(rename_all = "camelCase")]
 pub struct FileMetadata {
     pub original_name: String,
     pub size: u64,
@@ -974,8 +965,6 @@ pub fn path_exists(path: String) -> bool {
     Path::new(&path).exists()
 }
 
-
-
 /// Retrieves metadata for a file without loading its entire contents into memory.
 ///
 /// The returned metadata includes:
@@ -1020,10 +1009,9 @@ pub async fn get_fast_file_metadata(path: String) -> Result<FileMetadata, String
             mime,
         })
     })
-        .await
-        .map_err(|e| e.to_string())?
+    .await
+    .map_err(|e| e.to_string())?
 }
-
 
 /// Reads a file from disk and returns its binary content together with
 /// metadata detected from the file itself.
@@ -1061,7 +1049,10 @@ fn read_file_binary_impl(path: String) -> Result<ImportedAsset, String> {
             || mime == "application/xml"
             || mime == "application/javascript"
             || mime == "application/x-sh"
-            || format == FileFormat::PlainText => PreviewKind::Text,
+            || format == FileFormat::PlainText =>
+        {
+            PreviewKind::Text
+        }
 
         Kind::Document | Kind::Archive => PreviewKind::Text,
 
@@ -1104,9 +1095,7 @@ fn read_file_binary_impl(path: String) -> Result<ImportedAsset, String> {
 /// Returns an error if the file or its metadata cannot be read.
 #[tauri::command]
 pub async fn read_file_binary(path: String) -> Result<ImportedAsset, String> {
-    tokio::task::spawn_blocking(move || {
-        read_file_binary_impl(path)
-    })
-    .await
-    .map_err(|e| e.to_string())?
+    tokio::task::spawn_blocking(move || read_file_binary_impl(path))
+        .await
+        .map_err(|e| e.to_string())?
 }

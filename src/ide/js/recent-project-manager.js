@@ -45,6 +45,7 @@ export class RecentProjectManager {
         const trimmed = this._sortAndTrim(this._normalizeItems(this._items));
         this._items = trimmed;
         await this.storage.set(this.key, trimmed);
+        await this.storage.save();
     }
 
     /**
