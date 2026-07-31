@@ -72,7 +72,7 @@ export default {
   methods: {
     handleKeyup(event) {
       if (event.key === 'Enter') {
-        this.confirming();
+        this.accepting();
         // Do something when Enter is pressed
       } else if (event.key === 'Escape') {
         this.canceling();

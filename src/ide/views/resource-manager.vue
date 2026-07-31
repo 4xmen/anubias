@@ -199,19 +199,32 @@ function changeActiveDir(i) {
 
 function newDir() {
   defPromptValue.value = 'newfolder';
-  prompt.value.title = 'New folder';
-  prompt.value.text = "New directory name";
-  prompt.value.placeholder = "New directory name";
-  prompt.value.onAccept = (value) => {
-
-    if (resourceDirs.value.indexOf(value) === -1) {
-      store.commit("project/ADD_RESOURCES_DIR", value)
-    } else {
-      toast.warning("Duplicate resource directory");
-    }
-  }
-  prompt.value.enabled = true;
+  // prompt.value.title = 'New folder';
+  // prompt.value.text = "New directory name";
+  // prompt.value.placeholder = "New directory name";
+  // prompt.value.onAccept = (value) => {
   //
+  //   if (resourceDirs.value.indexOf(value) === -1) {
+  //     store.commit("project/ADD_RESOURCES_DIR", value)
+  //   } else {
+  //     toast.warning("Duplicate resource directory");
+  //   }
+  // }
+  // prompt.value.enabled = true;
+
+  store.dispatch("ide/showPrompt",{
+    onAccept: (value) => {
+        if (resourceDirs.value.indexOf(value) === -1) {
+          store.commit("project/ADD_RESOURCES_DIR", value)
+        } else {
+          toast.warning("Duplicate resource directory");
+        }
+    },
+    title: 'New folder',
+    text: "New folder name",
+    placeholder: 'folder name',
+  })
+
 }
 
 async function addResource() {
@@ -287,7 +300,7 @@ async function toggleSelect(resource) {
       previewKind.value = resource.preview_kind;
     } else if (resource.preview_kind === 'Text') {
       previewKind.value = resource.preview_kind;
-      previewText.value = await assetStore.getText(resource.hash_id);
+      previewText.value = assetStore.getText(resource.hash_id);
     }
 
   } else {
@@ -295,7 +308,15 @@ async function toggleSelect(resource) {
   }
 }
 
+
+/**
+ * @returns {string}
+ * @param resource
+ */
 function getFileIcon(resource) {
+  if (resource.preview_kind === undefined || resource.original_name === undefined) {
+    return 'ri-file-line';
+  }
   let codeAssume = ['js', 'css', 'json', 'xml', 'yml', 'yaml']
   switch (resource.preview_kind) {
     case "Audio":
@@ -336,7 +357,6 @@ function removeSelectedResources() {
     text: "Are you sure to remove these resources?",
     title: 'Remove resources confirm',
   });
-
 
 }
 

@@ -246,7 +246,7 @@ const ideStore = {
         },
         SHOW_PROMPT(state, data) {
             // console.log('fire confirm!',data);
-            state.prompt.onAccept = data.onConfirm;
+            state.prompt.onAccept = data.onAccept;
             state.prompt.onCancel = data.onCancel;
             state.prompt.text = data.text;
             state.prompt.title = data.title;
@@ -348,10 +348,13 @@ const ideStore = {
                 };
             }
             if (payload.text === undefined) {
-                payload.text = 'Are you sure?';
+                payload.text = 'Input';
             }
             if (payload.title === undefined) {
-                payload.title = 'Confirm';
+                payload.title = 'Prompt';
+            }
+            if (payload.placeholder === undefined) {
+                payload.placeholder = 'Input';
             }
 
             context.commit('SHOW_PROMPT', {
@@ -359,7 +362,7 @@ const ideStore = {
                 onCancel: payload.onCancel,
                 text: payload.text,
                 title: payload.title,
-                palceholder: payload.placeholder,
+                placeholder: payload.placeholder,
             });
         },
         /**
