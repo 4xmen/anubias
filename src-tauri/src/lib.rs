@@ -11,7 +11,7 @@ use http::header::CONTENT_TYPE;
 use http::{Response, StatusCode};
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
-use tauri::Manager;
+use tauri::{include_image, Manager};
 
 use crate::config::{DEV_TOOLS, IS_DEBUG, SECOND_MONITOR};
 use crate::file::general::path_exists;
