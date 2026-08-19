@@ -1,9 +1,10 @@
+use file_format::{FileFormat, Kind};
+use serde::{Deserialize, Serialize};
 use std::fs;
 use std::fs::File;
 use std::io::Read;
 use std::path::Path;
-use file_format::{FileFormat, Kind};
-use serde::{Deserialize, Serialize};
+use tauri::AppHandle;
 
 const MAX_IMPORT_FILE_SIZE: u64 = 50 * 1024 * 1024;
 /// High-level preview category used by the frontend.
@@ -57,6 +58,8 @@ impl From<file_format::Kind> for AssetKind {
 /// information from the project name or extension.
 #[derive(Debug, Serialize)]
 pub struct ImportedAsset {
+    // store hash to serve in proj:// protocol
+    pub hash_id: String,
     /// Original project name including its extension.
     pub original_name: String,
 
@@ -130,8 +133,8 @@ pub async fn get_fast_file_metadata(path: String) -> Result<FileMetadata, String
             mime,
         })
     })
-        .await
-        .map_err(|e| e.to_string())?
+    .await
+    .map_err(|e| e.to_string())?
 }
 
 /// Reads a project from disk and returns its binary content together with
@@ -140,7 +143,7 @@ pub async fn get_fast_file_metadata(path: String) -> Result<FileMetadata, String
 /// The detected MIME type and project kind are derived from the project content,
 /// not from its extension. This makes Rust the single source of truth for
 /// imported assets.
-fn read_file_binary_impl(path: String) -> Result<ImportedAsset, String> {
+fn read_file_binary_impl(path: String, hash_id: String) -> Result<ImportedAsset, String> {
     let metadata = fs::metadata(&path).map_err(|e| e.to_string())?;
 
     if metadata.len() > MAX_IMPORT_FILE_SIZE {
@@ -171,9 +174,9 @@ fn read_file_binary_impl(path: String) -> Result<ImportedAsset, String> {
             || mime == "application/javascript"
             || mime == "application/x-sh"
             || format == FileFormat::PlainText =>
-            {
-                PreviewKind::Text
-            }
+        {
+            PreviewKind::Text
+        }
 
         Kind::Document | Kind::Archive => PreviewKind::Text,
 
@@ -183,6 +186,7 @@ fn read_file_binary_impl(path: String) -> Result<ImportedAsset, String> {
     let crc32 = crc32fast::hash(&bytes);
 
     Ok(ImportedAsset {
+        hash_id,
         original_name: Path::new(&path)
             .file_name()
             .unwrap_or_default()
@@ -215,8 +219,15 @@ fn read_file_binary_impl(path: String) -> Result<ImportedAsset, String> {
 ///
 /// Returns an error if the project or its metadata cannot be read.
 #[tauri::command]
-pub async fn read_file_binary(path: String) -> Result<ImportedAsset, String> {
-    tokio::task::spawn_blocking(move || read_file_binary_impl(path))
+pub async fn register_file_binary(
+    _app: AppHandle,
+    path: String,
+    hash_id: String,
+) -> Result<ImportedAsset, String> {
+
+    println!("R :{},{}", hash_id, path);
+    tokio::task::spawn_blocking(move || read_file_binary_impl(path, hash_id))
         .await
         .map_err(|e| e.to_string())?
+    // Ok("".to_string())
 }

@@ -119,24 +119,53 @@
         <div class="panel-title">
           Preview
         </div>
-        <div v-if="previewKind === 'Image'">
-          <img :src="previewUrl" class="image-preview" alt="preview image">
-        </div>
-        <div v-else-if="previewKind === 'Video'">
-          <video :src="previewUrl" class="video-preview" controls></video>
-        </div>
-        <div v-else-if="previewKind === 'Audio'">
-          <audio :src="previewUrl" controls class="audio-preview"></audio>
-        </div>
-        <div v-else-if="previewKind === 'Text' && previewText !== null">
-          <textarea v-model="previewText" readonly class="text-preview" rows="12"></textarea>
-        </div>
-        <div v-else>
+
+
+        <div>
           <div class="preview-container">
-            <h4 class="text-center">
-              Preview unavailable for this type
-            </h4>
+
+<!--            <a :href="lastSelectedResource.url??'#'">-->
+<!--              {{lastSelectedResource.url??'no'}}-->
+<!--            </a>-->
+            <template v-if="lastSelectedResource">
+              <img
+                  v-if="detectType(lastSelectedResource.mime) === 'image'"
+                  :src="lastSelectedResource.url"
+                  class="image-preview"
+                  alt="Preview"
+              />
+
+              <audio
+                  v-else-if="detectType(lastSelectedResource.mime) === 'audio'"
+                  :src="lastSelectedResource.url"
+                  controls
+                  class="audio-preview"
+              />
+
+              <video
+                  class="video-preview"
+                  v-else-if="detectType(lastSelectedResource.mime) === 'video'"
+                  :src="lastSelectedResource.url"
+                  controls
+              />
+
+              <textarea
+                  v-else-if="detectType(lastSelectedResource.mime) === 'text'"
+                  v-model="textPreview"
+                  class="text-preview"
+                  readonly
+              />
+
+              <div v-else>
+                <h4 class="text-center"> Preview unavailable for this type </h4>
+              </div>
+            </template>
+
+            <div v-else>
+              <h4 class="text-center"> Preview unavailable</h4>
+            </div>
           </div>
+
         </div>
       </aside>
 
@@ -151,14 +180,14 @@
 
 <script setup>
 const MAX_IMPORT_FILE_SIZE = 50 * 1024 * 1024;
-const PREVIEW_ALLOW_KINDS = ['Image', 'Video', 'Audio'];
 
-import {computed, nextTick, ref} from "vue";
+const codeAssume = ['js','json','css','php','scss','vue','jsx']
+
+import {computed, nextTick, ref, watch} from "vue";
 import {useStore} from "vuex";
 import promptInput from "../components/anubias-prompt.vue";
 import anubiasConfirm from "../components/anubias-confirm.vue";
 import {useToast} from "vue-toastification";
-import assetStore from "../js/asset-store.js";
 import {generateHashId, getFileInfo} from "../js/system-functions.js";
 import {open} from "@tauri-apps/plugin-dialog";
 import {invoke} from "@tauri-apps/api/core";
@@ -185,16 +214,12 @@ const activeDir = ref(0);
 const defPromptValue = ref('');
 const selected = ref([]);
 const onUploadResource = ref(false);
-const previewUrl = ref(null);
-const previewKind = ref(null);
-const previewText = ref(null);
+const lastSelectedResource = ref(null);
+const textPreview = ref(null);
 
 function changeActiveDir(i) {
   activeDir.value = i;
   selected.value = [];
-  previewUrl.value = null;
-  previewKind.value = null;
-  previewText.value = null;
 }
 
 function newDir() {
@@ -212,13 +237,13 @@ function newDir() {
   // }
   // prompt.value.enabled = true;
 
-  store.dispatch("ide/showPrompt",{
+  store.dispatch("ide/showPrompt", {
     onAccept: (value) => {
-        if (resourceDirs.value.indexOf(value) === -1) {
-          store.commit("project/ADD_RESOURCES_DIR", value)
-        } else {
-          toast.warning("Duplicate resource directory");
-        }
+      if (resourceDirs.value.indexOf(value) === -1) {
+        store.commit("project/ADD_RESOURCES_DIR", value)
+      } else {
+        toast.warning("Duplicate resource directory");
+      }
     },
     title: 'New folder',
     text: "New folder name",
@@ -248,6 +273,7 @@ async function addResource() {
     ],
   });
   if (path) {
+    const hash_id = generateHashId();
     onUploadResource.value = true;
     try {
 
@@ -256,26 +282,28 @@ async function addResource() {
         toast.error("Import error: You can't import file don't have extension");
       }
 
-      const metadata = await invoke("get_fast_file_metadata", {path});
+      // const metadata = await invoke("get_fast_file_metadata", {path});
+      //
+      // if (metadata.size > MAX_IMPORT_FILE_SIZE) {
+      //   toast.error("The selected file exceeds the maximum supported size.");
+      //   return;
+      // }
 
-      if (metadata.size > MAX_IMPORT_FILE_SIZE) {
-        toast.error("The selected file exceeds the maximum supported size.");
-        return;
-      }
-
-      const hash_id = generateHashId();
-      const data = await invoke("read_file_binary", {
+      const data = await invoke("add_resource", {
+        hash: hash_id,
         path,
+        dir: resourceDirs.value[activeDir.value],
       });
+
       // const uint8 = new Uint8Array(bytes);
-      assetStore.register(hash_id, 'resource', new Blob([new Uint8Array(data.bytes)], {
-        type: data.mime
-      }));
-      delete data.bytes;
-      data.hash_id = hash_id;
-      data.directory = resourceDirs.value[activeDir.value];
+      // assetStore.register(hash_id, 'resource', new Blob([new Uint8Array(data.bytes)], {
+      //   type: data.mime
+      // }));
+      // delete data.bytes;
+      // data.hash_id = hash_id;
+      // data.directory = resourceDirs.value[activeDir.value];
       await store.dispatch('project/addResource', data);
-      console.log(data);
+      // console.log(data);
     } catch (e) {
       console.log(e.message);
       onUploadResource.value = false;
@@ -287,24 +315,15 @@ async function addResource() {
 }
 
 async function toggleSelect(resource) {
-  previewUrl.value = null;
-  previewKind.value = null;
-  previewText.value = null;
   if (selected.value.indexOf(resource) === -1) {
     selected.value.push(resource);
-    assetStore.releaseLivePreviewByType('resource');
-    if (PREVIEW_ALLOW_KINDS.indexOf(resource.preview_kind) !== -1) {
-      console.log('create preview');
-      previewUrl.value = assetStore.getLivePreview(resource.hash_id);
-      await new Promise(resolve => setTimeout(resolve, 100));
-      previewKind.value = resource.preview_kind;
-    } else if (resource.preview_kind === 'Text') {
-      previewKind.value = resource.preview_kind;
-      previewText.value = assetStore.getText(resource.hash_id);
-    }
-
   } else {
     selected.value.splice(selected.value.indexOf(resource), 1);
+  }
+  if (selected.value.length > 0) {
+    lastSelectedResource.value = selected.value[selected.value.length - 1];
+  } else {
+    lastSelectedResource.value = null;
   }
 }
 
@@ -314,20 +333,17 @@ async function toggleSelect(resource) {
  * @param resource
  */
 function getFileIcon(resource) {
-  if (resource.preview_kind === undefined || resource.original_name === undefined) {
-    return 'ri-file-line';
-  }
-  let codeAssume = ['js', 'css', 'json', 'xml', 'yml', 'yaml']
-  switch (resource.preview_kind) {
-    case "Audio":
+
+  switch (detectType(resource.mime)) {
+    case "audio":
       return 'ri-music-2-line';
-    case "Video":
+    case "video":
       return 'ri-video-on-line';
-    case "Font":
-      return 'ri-font-serif';
-    case "Image":
+    // case "Font":
+    //   return 'ri-font-serif';
+    case "image":
       return 'ri-image-2-line';
-    case "Text":
+    case "text":
       const fileInfo = getFileInfo(resource.original_name);
       if (codeAssume.indexOf(fileInfo.ext) !== -1) {
         return 'ri-file-code-line';
@@ -342,9 +358,6 @@ function getFileIcon(resource) {
 function removeSelectedResources() {
   store.dispatch('ide/showConfirm', {
     onConfirm() {
-      previewUrl.value = null;
-      previewKind.value = null;
-      previewText.value = null;
       for (const res of selected.value) {
         store.dispatch('project/removeResource', res.hash_id)
       }
@@ -366,6 +379,45 @@ function resourceClass(resource) {
   }
   return 'resource-item selected';
 }
+
+const detectType = (mime) => {
+  if (!mime) return null;
+
+  if (mime.startsWith("image/")) return "image";
+  if (mime.startsWith("audio/")) return "audio";
+  if (mime.startsWith("video/")) return "video";
+  if (mime.startsWith("text/")) return "text";
+
+  return null;
+};
+
+const loadTextPreview = async (url) => {
+  const response = await fetch(url, {
+    headers: {
+      Range: "bytes=0-102399"
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to load preview");
+  }
+
+  return (await response.text()).slice(0, 100 * 1024);
+};
+
+watch(lastSelectedResource, async (resource) => {
+  const type = detectType(resource?.mime);
+
+  // Clear text preview for non-text resources
+  if (type !== "text") {
+    textPreview.value = null;
+    return;
+  }
+
+  // Load text preview for text resources
+  textPreview.value = await loadTextPreview(resource.url);
+});
+
 </script>
 
 <style scoped>
@@ -697,4 +749,5 @@ function resourceClass(resource) {
 .placeholder {
   opacity: .7;
 }
+
 </style>

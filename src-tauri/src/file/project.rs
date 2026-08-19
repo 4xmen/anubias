@@ -1,9 +1,7 @@
 use crate::config::IS_DEBUG;
 use crate::format::app;
 use crate::message::{send_log, send_toast, MessageType};
-use file_format::{FileFormat, Kind};
 use serde::{Deserialize, Serialize};
-use std::fmt::format;
 use std::fs::File;
 use std::io::{self, Read, Seek, SeekFrom, Write};
 use std::path::Path;
@@ -38,7 +36,7 @@ pub enum DataMapError {
     Io(#[from] std::io::Error),
 }
 
-/// Error type for project project operations
+/// Error type for project file operations 
 #[derive(Debug, thiserror::Error)]
 pub enum ProjectError {
     #[error("IO error: {0}")]
@@ -70,7 +68,7 @@ pub struct LoadProjectResponse {
     pub previews: Vec<PreviewData>,
 }
 
-/// Project project metadata.
+/// project file metadata.
 ///
 /// Layout:
 ///
@@ -187,8 +185,6 @@ impl ProjectMetadata {
     /// │ magic                  [u8; 8]     File signature             │
     /// │ version                u16         File format version        │
     /// │ random_seed            u64         Project random seed        │
-    /// │ data_map_offset        u64         Offset of compressed DataMap │
-    /// │ data_map_size          u64         Size of compressed DataMap   │
     /// │ data_map               [...]       Compressed & serialized DataMap │
     /// └───────────────────────────────────────────────────────────────┘
     ///
@@ -204,13 +200,11 @@ impl ProjectMetadata {
     /// - **Magic Number** (8 bytes): File signature for format identification
     /// - **Version** (2 bytes): File format version for compatibility checking
     /// - **Random Seed** (8 bytes): Seed value used in project generation or validation
-    /// - **Data Map Offset** (8 bytes): Byte offset where the compressed data map begins (calculated as header_size)
-    /// - **Data Map Size** (8 bytes): Byte size of the compressed data map section
     /// - **Compressed Data Map** (variable size): Compressed project entries written at the calculated offset
     ///
     /// # Parameters
     ///
-    /// * `path` - A path-like object where the binary project project will be created or overwritten
+    /// * `path` - A path-like object where the binary project file will be created or overwritten
     ///
     /// # Returns
     ///
@@ -249,9 +243,9 @@ impl ProjectMetadata {
         Ok(())
     }
 
-    /// Loads a project project from disk and parses its binary structure.
+    /// Loads a project file from disk and parses its binary structure.
     ///
-    /// This function reads a binary project project from the specified path and reconstructs the ProjectLoader
+    /// This function reads a binary project file from the specified path and reconstructs the ProjectLoader
     /// instance by parsing its structured format. The project format consists of a header followed by a compressed
     /// data map section.
     ///
@@ -267,12 +261,12 @@ impl ProjectMetadata {
     ///
     /// # Parameters
     ///
-    /// * `path` - A path-like object pointing to the binary project project on disk
+    /// * `path` - A path-like object pointing to the binary project file on disk
     ///
     /// # Returns
     ///
     /// Returns `Result<Self, ProjectError>` containing:
-    /// - `Ok(ProjectLoader)`: Successfully loaded and parsed project project
+    /// - `Ok(ProjectLoader)`: Successfully loaded and parsed project file
     /// - `Err(ProjectError)`: If project I/O fails, binary parsing fails, or decompression fails
     ///
     /// # Errors
@@ -335,7 +329,7 @@ impl ProjectMetadata {
 
     /// Verifies the integrity of the uncompressed project data.
     ///
-    /// This function performs comprehensive validation checks on the decompressed project project to ensure
+    /// This function performs comprehensive validation checks on the decompressed project file to ensure
     /// data integrity and compatibility. It validates the project format, version compatibility, and data integrity
     /// by verifying CRC32 checksums for all entries.
     ///
@@ -407,7 +401,7 @@ impl ProjectMetadata {
 
 /// Describes a single compressed asset stored inside the project.
 ///
-/// Every binary resource inside the project project is represented
+/// Every binary resource inside the project file is represented
 /// by exactly one FileEntry.
 ///
 /// Examples:
@@ -647,12 +641,12 @@ pub fn save_project(app: AppHandle, request: SaveProjectRequest) -> Result<bool,
 
 #[tauri::command]
 pub fn load_project(app: AppHandle, path: String) -> Result<LoadProjectResponse, String> {
-    send_log(&app, "Try to load project project...");
+    send_log(&app, "Try to load project file...");
     let project = ProjectMetadata::load(Path::new(&path))
         .map_err(|error| format!("Failed to load project from path {}: {}", path, error))?;
 
     if !project.verify() {
-        send_toast(&app, MessageType::Error, "Failed to verify project project");
+        send_toast(&app, MessageType::Error, "Failed to verify project file");
         return Err("Project does not verified.".to_string());
     }
     send_log(&app, "Project verify success...");

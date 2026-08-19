@@ -35,6 +35,9 @@ tauri-plugin-store = "2"
 tauri-plugin-dialog = "2"
 tauri-plugin-fs = "2"
 tokio = {version = "1.52.3", features = ["full"] }
+http = "1.5.0"
+http-range = "0.1"
+tiny_http = "0.12.0"
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-global-shortcut = "2"

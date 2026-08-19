@@ -17,7 +17,11 @@
  * retrieving, exporting, and managing the lifetime of binary assets.
  *
  * Current asset consumers include:
- *   - Page preview images
+ *   - Project resources
+ *   - Page preview thumbnails
+ *
+ * Additional asset categories may be introduced in the future without
+ * changing the overall architecture.
  *
  * This class replaces both PreviewManager and ResourceManager.
  * Their old implementations can be found in /graveyard/js if you are
@@ -41,17 +45,21 @@ export class AssetStore {
     /**
      * Registers a new asset.
      *
+     * Thumbnail assets automatically receive a persistent live preview.
+     *
      * @param {string} assetHashId - Unique asset identifier.
+     * @param {string} type - Asset type.
      * @param {Blob} blob - Asset binary data.
      * @returns {boolean} True if the asset was registered successfully.
      */
-    register(assetHashId, blob) {
+    register(assetHashId, type, blob) {
         if (this._assets.has(assetHashId)) {
             return false;
         }
 
         this._assets.set(assetHashId, {
             blob,
+            type,
         });
 
         return true;
@@ -60,7 +68,7 @@ export class AssetStore {
     /**
      * Updates an existing asset.
      *
-     * If the asset already has a live preview, the Object URL
+     * If the asset already owns a live preview, the Object URL
      * will be refreshed automatically.
      *
      * @param {string} assetHashId - Asset identifier.
@@ -68,6 +76,7 @@ export class AssetStore {
      * @returns {boolean} True if the asset was updated.
      */
     update(assetHashId, blob) {
+        // console.log('update asset', assetHashId, blob);
         const asset = this._assets.get(assetHashId);
 
         if (!asset) {
@@ -92,11 +101,14 @@ export class AssetStore {
      * @returns {string|null} Object URL or null if the asset does not exist.
      */
     getLivePreview(assetHashId) {
+
+        // console.log('trying to get live preview', assetHashId);
         if (!this._assets.has(assetHashId)) {
             return null;
         }
 
         if (!this._livePreviews.has(assetHashId)) {
+            // console.log('trying to create live preview', assetHashId);
             this._createLivePreview(assetHashId);
         }
 
@@ -106,11 +118,15 @@ export class AssetStore {
     /**
      * Releases the live preview of an asset.
      *
+     * Thumbnail assets always keep their preview alive.
+     *
      * @param {string} assetHashId - Asset identifier.
      * @returns {boolean} True if the preview was released.
      */
     releaseLivePreview(assetHashId) {
-        if (!this._assets.has(assetHashId)) {
+        const asset = this._assets.get(assetHashId);
+
+        if (!asset) {
             return false;
         }
 
@@ -118,9 +134,26 @@ export class AssetStore {
     }
 
     /**
+     * Releases the live preview of some assets by types.
+     *
+     *
+     * @param {string} type - asset type
+     * @returns {boolean} True if the preview was released.
+     */
+    releaseLivePreviewByType(type) {
+        for (const [id, asset] of this._assets) {
+            if (asset.type !== type) {
+                continue;
+            }
+            return this._revokeLivePreview(id);
+        }
+
+    }
+
+    /**
      * Moves an asset into the trash.
      *
-     * Any live preview associated with the asset is released.
+     * The live preview is intentionally preserved to support undo.
      *
      * @param {string} assetHashId - Asset identifier.
      * @returns {boolean} True if the asset was moved.
@@ -157,7 +190,7 @@ export class AssetStore {
     /**
      * Permanently removes all trashed assets.
      *
-     * Any live previews belonging to trashed assets
+     * Any remaining live previews belonging to trashed assets
      * will also be released.
      */
     clearTrash() {
@@ -182,7 +215,7 @@ export class AssetStore {
     }
 
     /**
-     * Creates a live preview URL for an image asset.
+     * Creates a live preview for an asset.
      *
      * @private
      * @param {string} assetHashId - Asset identifier.
@@ -198,6 +231,7 @@ export class AssetStore {
         const objectURL = URL.createObjectURL(asset.blob);
 
         this._livePreviews.set(assetHashId, objectURL);
+        // console.log('createLivePreview final', assetHashId);
 
         return objectURL;
     }
@@ -211,7 +245,6 @@ export class AssetStore {
      */
     _refreshLivePreview(assetHashId) {
         this._revokeLivePreview(assetHashId);
-
         return this._createLivePreview(assetHashId) !== null;
     }
 
@@ -234,17 +267,22 @@ export class AssetStore {
     }
 
     /**
-     * Exports all assets.
+     * Exports all assets of the specified type.
      *
-     * The returned array contains only the asset identifier and its
-     * binary data, making it suitable for serialization or saving.
+     * The returned array contains only the asset identifier and its binary data,
+     * making it suitable for serialization or saving.
      *
-     * @returns {{id: string, data: Uint8Array}[]} Exported assets.
+     * @param {string} type - Asset type to export.
+     * @returns {{id: string, data: Blob}[]} Exported assets.
      */
-    async export() {
+    async export(type) {
         const result = [];
 
         for (const [id, asset] of this._assets) {
+            if (asset.type !== type) {
+                continue;
+            }
+
             result.push({
                 id,
                 data: new Uint8Array(await asset.blob.arrayBuffer()),
@@ -252,6 +290,21 @@ export class AssetStore {
         }
 
         return result;
+    }
+
+
+    /**
+     * get blob as text find by hashId
+     * @param assetHashId
+     * @returns {string|null}
+     */
+    async getText(assetHashId) {
+        if (!this._assets.has(assetHashId)) {
+            return null;
+        }
+
+        const asset = this._assets.get(assetHashId);
+        return await asset.blob.text();
     }
 }
 
