@@ -28,7 +28,7 @@ use tauri::{PhysicalPosition, Position};
 use tauri_plugin_opener::OpenerExt;
 use window_manger::open_about;
 
-use crate::file::resource::{add_resource, ResourceEntry};
+use crate::file::resource::{add_resource, ResourceEntry,sync_resources};
 
 type ResourceStore = Arc<Mutex<HashMap<String, ResourceEntry>>>;
 
@@ -71,6 +71,7 @@ pub fn run() {
             path_exists,
             open_about,
             add_resource,
+            sync_resources
         ])
         // /// register custome protocol `proj://`
         // let builder = register_resource_protocol(builder, resource_store);

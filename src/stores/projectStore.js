@@ -362,7 +362,6 @@ const projectStore = {
         async projectPageRegister({state}) {
             // create preview thumb assets
             for (const page of state.project.pages) {
-                console.log(page);
                 assetStore.register(page.hash, await createBlankImageBlob());
             }
         },

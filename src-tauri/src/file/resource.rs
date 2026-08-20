@@ -145,6 +145,24 @@ pub fn clear_resources(store: State<'_, ResourceStore>) -> Result<(), String> {
     Ok(())
 }
 
+
+/// Synchronizes the in-memory resource store with the given list of hash_ids.
+/// Any resource whose hash_id is **not** present in `keep` will be removed.
+///
+/// Useful after undo/redo operations where some resources are no longer needed.
+#[tauri::command]
+pub fn sync_resources(
+    store: State<'_, ResourceStore>,
+    keep: Vec<String>,
+) -> Result<(), String> {
+    let mut map = store.lock().map_err(|_| "Failed to lock resource store")?;
+
+    // Retain only the entries whose key exists in the provided list
+    map.retain(|hash, _| keep.contains(hash));
+
+    Ok(())
+}
+
 // ----------------------------
 // Local HTTP Server (tiny_http)
 // ----------------------------
