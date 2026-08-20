@@ -169,8 +169,13 @@ const projectStore = {
             state.resources.push(payload);
         },
         REMOVE_RESOURCE(state, hashId) {
-            console.log(state.resources.find(resource => resource.hash === hashId));
             state.resources.splice(state.resources.find(resource => resource.hash === hashId),1);
+        },
+        RENAME_RESOURCE(state, payload) {
+            const resource = state.resources.find(resource => resource.hash_id === payload.hash_id);
+            if (resource) {
+                resource.original_name = payload.name;
+            }
         }
     },
     actions: {

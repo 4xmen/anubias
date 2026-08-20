@@ -22,19 +22,19 @@
     <header class="toolbar">
 
       <div class="toolbar-actions">
-        <button class="tool-button" @click="addResource">
+        <button class="tool-button" @click="addResource" title="Add new resource">
           <i class="ri-add-line"/>
         </button>
 
-        <button class="tool-button" @click="newDir">
+        <button class="tool-button" @click="newDir" title="New directory">
           <i class="ri-folder-add-line"/>
         </button>
 
-        <button class="tool-button">
+        <button class="tool-button" title="Rename resource" @click="renameSelectedResources">
           <i class="ri-edit-line"/>
         </button>
 
-        <button class="tool-button danger" @click="removeSelectedResources">
+        <button class="tool-button danger" @click="removeSelectedResources" title="Remove selected resources">
           <i class="ri-delete-bin-line"/>
         </button>
       </div>
@@ -222,21 +222,27 @@ function changeActiveDir(i) {
   selected.value = [];
 }
 
+function renameSelectedResources() {
+  if (lastSelectedResource.value === null) {
+    return;
+  }
+  console.log(lastSelectedResource);
+  defPromptValue.value = lastSelectedResource.value.original_name;
+  store.dispatch("ide/showPrompt", {
+    onAccept: (value) => {
+        store.commit("project/RENAME_RESOURCE", {
+          hash_id: lastSelectedResource.value.hash_id,
+          name: value,
+        })
+    },
+    title: 'Rename resource',
+    text: "Rename resource",
+    placeholder: 'resource name',
+  })
+
+}
 function newDir() {
   defPromptValue.value = 'newfolder';
-  // prompt.value.title = 'New folder';
-  // prompt.value.text = "New directory name";
-  // prompt.value.placeholder = "New directory name";
-  // prompt.value.onAccept = (value) => {
-  //
-  //   if (resourceDirs.value.indexOf(value) === -1) {
-  //     store.commit("project/ADD_RESOURCES_DIR", value)
-  //   } else {
-  //     toast.warning("Duplicate resource directory");
-  //   }
-  // }
-  // prompt.value.enabled = true;
-
   store.dispatch("ide/showPrompt", {
     onAccept: (value) => {
       if (resourceDirs.value.indexOf(value) === -1) {
