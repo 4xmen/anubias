@@ -1,13 +1,14 @@
 use crate::config::IS_DEBUG;
+use crate::file::resource::{ResourceEntry, ResourceServerBase, ResourceStore};
 use crate::format::app;
 use crate::message::{send_log, send_toast, MessageType};
 use serde::{Deserialize, Serialize};
 use std::fs::File;
 use std::io::{self, Read, Seek, SeekFrom, Write};
 use std::path::Path;
+use std::sync::Arc;
 use std::{fmt, fs};
-use tauri::{AppHandle, Manager};
-
+use tauri::{AppHandle, Manager, State};
 
 /// how is project structure
 /// ┌───────────────────────────────────────────────────────────┐
@@ -36,7 +37,7 @@ pub enum DataMapError {
     Io(#[from] std::io::Error),
 }
 
-/// Error type for project file operations 
+/// Error type for project file operations
 #[derive(Debug, thiserror::Error)]
 pub enum ProjectError {
     #[error("IO error: {0}")]
@@ -51,21 +52,24 @@ pub enum ProjectError {
 
 #[derive(Deserialize, Serialize)]
 pub struct PreviewData {
-    pub id: String,
-    pub data: Vec<u8>,
+    pub hash_id: String,
+    pub data: Arc<Vec<u8>>,
 }
 
 #[derive(Deserialize, Debug)]
 pub struct SaveProjectRequest {
     pub path: Option<String>,
     pub project: String,
+    pub resources: String,
     pub previews: Vec<PreviewData>,
 }
 
 #[derive(Serialize, Debug)]
 pub struct LoadProjectResponse {
     pub project: String,
+    pub resources: String,
     pub previews: Vec<PreviewData>,
+    pub server_url: String,
 }
 
 /// project file metadata.
@@ -154,6 +158,7 @@ impl ProjectMetadata {
     ///   - `path`: Destination project path (used by the caller for saving)
     ///   - `project`: JSON string containing the main project configuration
     ///   - `previews`: Vector of PreviewData objects representing preview pages
+    ///   - `resources`: Vector of Resources
     ///
     /// # Returns
     ///
@@ -161,14 +166,30 @@ impl ProjectMetadata {
     /// - Main project configuration as a FileEntry named "project.json"
     /// - All preview data as separate FileEntry objects derived from PreviewData
     ///
-    pub fn from_request(req: SaveProjectRequest) -> Self {
+    pub fn from_request(store: State<'_, ResourceStore>, req: SaveProjectRequest) -> Self {
         let project_main_data =
             FileEntry::from_string(req.project, "project.json".to_string(), None);
+        let project_resource_data =
+            FileEntry::from_string(req.resources, "resources.json".to_string(), None);
         let mut project = ProjectMetadata::new();
         project.add_file_entry(project_main_data);
+        project.add_file_entry(project_resource_data);
         for preview in req.previews {
             project.add_file_entry(FileEntry::from_preview(preview));
         }
+
+        // save resoruces
+        {
+            let map = store
+                .lock()
+                .unwrap_or_else(|poisoned| poisoned.into_inner());
+
+            for (_hash, resource) in map.iter() {
+                println!("saved: {:#?}", _hash);
+                project.add_file_entry(FileEntry::from_resource(resource));
+            }
+        }
+
         if IS_DEBUG {
             dbg!(&project);
         }
@@ -377,24 +398,64 @@ impl ProjectMetadata {
     ///
     /// This function will return an error if the project.json entry contains invalid UTF-8 sequences.
     ///
-    pub fn into_response(self) -> Result<LoadProjectResponse, ProjectError> {
+    pub fn into_response(
+        self,
+        store: State<'_, ResourceStore>,
+        url: String,
+    ) -> Result<LoadProjectResponse, ProjectError> {
+
         let mut result = LoadProjectResponse {
-            project: "".to_string(),
+            project: "{}".to_string(),
+            resources: "[]".to_string(),
             previews: vec![],
+            server_url: url,
         };
+        let mut resource_map = store
+            .lock()
+            .unwrap_or_else(|poisoned| poisoned.into_inner());
+        // reset first
+        resource_map.clear();
+
+
+        let mut resources: Vec<ResourceMetaData> = vec![];
         for entry in self.data_map.entries.into_iter() {
             // println!("path: {:?}", entry.path);
             if entry.path == "project.json" {
-                result.project = String::from_utf8(entry.data)?;
+                result.project = String::from_utf8_lossy(&entry.data).into_owned();
+            } else if entry.path == "resources.json" {
+                // println!("resource: {}",String::from_utf8(entry.data.clone())?);
+                result.resources = String::from_utf8_lossy(&entry.data).into_owned();
+                resources = serde_json::from_slice(&entry.data).unwrap_or_else(|_| Vec::new());
+                println!("{}", result.resources);
             } else if entry.path.starts_with("/preview/") {
                 result.previews.push(PreviewData {
-                    id: entry.hash,
+                    hash_id: entry.hash,
                     data: entry.data,
                 });
+            } else if entry.path.starts_with("/resource/") {
+                if entry.path.starts_with("/resource/") {
+                    if let Some(resource) = resources.iter().find(|r| r.hash_id == entry.hash) {
+                        println!("Found: {:?}", resource);
+                        // resource
+                        resource_map.insert(
+                            resource.hash_id.clone(),
+                            ResourceEntry {
+                                hash_id: resource.hash_id.clone(),
+                                crc32: resource.crc32,
+                                data: entry.data,
+                                original_name: resource.original_name.clone(),
+                                mime: resource.mime.clone(),
+                                size: resource.size,
+                                directory: resource.directory.clone(),
+                            },
+                        );
+                    }
+                }
             } else {
                 // not now
             }
         }
+        // dbg!(&resource_map);
         Ok(result)
     }
 }
@@ -441,7 +502,7 @@ pub struct FileEntry {
 
     pub size: u64,
 
-    pub data: Vec<u8>,
+    pub data: Arc<Vec<u8>>,
 
     pub crc32: u32,
 }
@@ -472,7 +533,7 @@ impl FileEntry {
             crc32: crc32fast::hash(&bytes),
             hash: hash.unwrap_or_else(|| String::new()),
             path,
-            data: bytes,
+            data: Arc::new(bytes),
         }
     }
 
@@ -499,8 +560,17 @@ impl FileEntry {
             size: preview_data.data.len() as u64,
             crc32: crc32fast::hash(&preview_data.data),
             data: preview_data.data,
-            path: format!("/preview/{}.webp", &preview_data.id),
-            hash: preview_data.id,
+            path: format!("/preview/{}.webp", &preview_data.hash_id),
+            hash: preview_data.hash_id,
+        }
+    }
+    pub fn from_resource(resource: &ResourceEntry) -> Self {
+        Self {
+            size: resource.data.len() as u64,
+            crc32: resource.crc32,
+            data: resource.data.clone(),
+            path: format!("/resource/{}", &resource.original_name),
+            hash: resource.hash_id.clone(),
         }
     }
 }
@@ -528,7 +598,7 @@ impl fmt::Debug for PreviewData {
         let preview: Vec<u8> = self.data[..preview_len].to_vec();
 
         f.debug_struct("PreviewData")
-            .field("page_id", &self.id)
+            .field("page_id", &self.hash_id)
             .field("data_preview", &preview)
             .field("data_len", &self.data.len())
             .finish()
@@ -617,9 +687,12 @@ impl Default for DataMap {
     }
 }
 
-
 #[tauri::command]
-pub fn save_project(app: AppHandle, request: SaveProjectRequest) -> Result<bool, String> {
+pub fn save_project(
+    app: AppHandle,
+    store: State<'_, ResourceStore>,
+    request: SaveProjectRequest,
+) -> Result<bool, String> {
     send_log(&app, "Try to save project...");
     if IS_DEBUG {
         dbg!(&request);
@@ -627,7 +700,8 @@ pub fn save_project(app: AppHandle, request: SaveProjectRequest) -> Result<bool,
 
     let save_path = request.path.clone().ok_or("path is required")?;
 
-    ProjectMetadata::from_request(request)
+    let store2 = store.clone();
+    ProjectMetadata::from_request(store2, request)
         .save(save_path)
         .map(|_| {
             send_log(&app, "Project saved successfully...");
@@ -640,7 +714,18 @@ pub fn save_project(app: AppHandle, request: SaveProjectRequest) -> Result<bool,
 }
 
 #[tauri::command]
-pub fn load_project(app: AppHandle, path: String) -> Result<LoadProjectResponse, String> {
+pub fn load_project(
+    app: AppHandle,
+    store: State<'_, ResourceStore>,
+    server_base: State<'_, ResourceServerBase>,
+    path: String,
+) -> Result<LoadProjectResponse, String> {
+    // Build URL from the running local server
+    let url = server_base
+        .lock()
+        .map_err(|_| "Failed to lock server base")?
+        .clone()
+        .ok_or_else(|| "Resource server is not running".to_string())?;
     send_log(&app, "Try to load project file...");
     let project = ProjectMetadata::load(Path::new(&path))
         .map_err(|error| format!("Failed to load project from path {}: {}", path, error))?;
@@ -650,7 +735,10 @@ pub fn load_project(app: AppHandle, path: String) -> Result<LoadProjectResponse,
         return Err("Project does not verified.".to_string());
     }
     send_log(&app, "Project verify success...");
-    let response = project.into_response().map_err(|error| error.to_string())?;
+    let store2 = store.clone();
+    let response = project
+        .into_response(store2, url)
+        .map_err(|error| error.to_string())?;
     send_log(&app, "Project uncompress & load success...");
 
     if IS_DEBUG {
@@ -690,6 +778,7 @@ pub fn load_project(app: AppHandle, path: String) -> Result<LoadProjectResponse,
 #[tauri::command]
 pub async fn autosave_project_backup(
     app: AppHandle,
+    store: State<'_, ResourceStore>,
     request: SaveProjectRequest,
     hash: String,
     timestamp: i64,
@@ -699,11 +788,12 @@ pub async fn autosave_project_backup(
     send_log(&app, "Try to autosave project backup...");
 
     let dir = base.join("backups").join(&hash);
-    std::fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
+    fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
 
     let path = dir.join(format!("{timestamp}.anb"));
 
-    ProjectMetadata::from_request(request)
+    let store2 = store.clone();
+    ProjectMetadata::from_request(store2, request)
         .save(path.to_string_lossy().to_string())
         .map_err(|e| e.to_string())?;
 
@@ -854,4 +944,14 @@ pub async fn delete_old_backups(
     }
 
     Ok(deleted)
+}
+
+#[derive(Serialize, Deserialize,Debug)]
+struct ResourceMetaData {
+    hash_id: String,
+    mime: String,
+    original_name: String,
+    crc32: u32,
+    directory: String,
+    size: u64,
 }

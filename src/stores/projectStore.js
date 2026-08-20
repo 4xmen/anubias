@@ -80,6 +80,9 @@ const projectStore = {
                 state.thumbnails.push(page.hash);
             });
         },
+        LOAD_RESOURCES(state, resources) {
+            state.resources = resources;
+        },
         SET_LAST_LOADED_PROJECT(state, project) {
             state.lastLoadedProject = project;
         },
@@ -179,6 +182,9 @@ const projectStore = {
             if (resource) {
                 resource.original_name = payload.name;
             }
+        },
+        CLEAR_RESOURCE(state) {
+            state.resources = [];
         }
     },
     actions: {
@@ -295,6 +301,8 @@ const projectStore = {
 
             // register preview
             dispatch('projectPageRegister');
+            // clear resources
+            dispatch('clearResource');
 
         },
 
@@ -319,15 +327,28 @@ const projectStore = {
             await dispatch('listBackups', state.project.hash);
         },
 
+        async loadProjectResource({commit},resources) {
+            commit('LOAD_RESOURCES', resources);
+            await storage.set('lastLoadedProjectResources', resources);
+        },
+
         async prepareProjectFile({commit, dispatch}, path) {
 
             const result = await invoke("load_project", {
                 path
             });
 
+
             commit('SET_PROJECT_FILE', path);
             let projectData = JSON.parse(result.project);
+            let resourcesData = JSON.parse(result.resources);
+            // fix resource data
+            for( const res of resourcesData) {
+              res.url = `${result.server_url}/resource/${res.hash_id}`;
+            }
+
             await dispatch('loadProject', projectData);
+            await dispatch('loadProjectResource', resourcesData);
             await recentManger.addOrUpdate(projectData.name, path);
             setTimeout(() => {
                 dispatch('updateProjectPreview', result.previews);
@@ -342,9 +363,11 @@ const projectStore = {
                 return;
             }
             let project = await storage.get('lastLoadedProject');
+            let resources = await storage.get('lastLoadedProjectResources');
 
             // if this comment not need again must remove
             commit('LOAD_PROJECT', project);
+            dispatch('loadProjectResource', resources);
             commit('RENEW_HASHMAP');
 
             dispatch('ide/setActivePage', project.entryPoint, {root: true});
@@ -379,10 +402,11 @@ const projectStore = {
             // save project just save project by project path
             // so If save as is need to change project path
             const previews = await assetStore.export();
-            console.log(previews);
+            let resourceData = state.resources.map(({ url, ...rest }) => rest);
             const req = {
                 path: path ?? state.projectFile,
                 project: JSON.stringify(state.project),
+                resources: JSON.stringify(resourceData),
                 previews: previews,
             };
             if (await invoke('save_project', {request: req})) {
@@ -553,7 +577,11 @@ const projectStore = {
             assetStore.remove(hashId);
             // WIP: we need check here linked resource here
             commit('REMOVE_RESOURCE', hashId);
-        }
+        },
+        async clearResource({commit}) {
+           await invoke('clear_resources');
+           commit('CLEAR_RESOURCE');
+        },
     },
     getters: {
         getPage: (state) => (i) => {

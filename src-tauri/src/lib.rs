@@ -7,11 +7,9 @@ mod message;
 
 mod window_manger;
 
-use http::header::CONTENT_TYPE;
-use http::{Response, StatusCode};
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
-use tauri::{include_image, Manager};
+use tauri::Manager;
 
 use crate::config::{DEV_TOOLS, IS_DEBUG, SECOND_MONITOR};
 use crate::file::general::path_exists;
@@ -28,7 +26,10 @@ use tauri::{PhysicalPosition, Position};
 use tauri_plugin_opener::OpenerExt;
 use window_manger::open_about;
 
-use crate::file::resource::{add_resource, ResourceEntry,sync_resources};
+use crate::file::resource::{
+    add_resource, clear_resources, init_resource_server, shutdown_resource_server, sync_resources,
+    ResourceEntry,
+};
 
 type ResourceStore = Arc<Mutex<HashMap<String, ResourceEntry>>>;
 
@@ -71,13 +72,14 @@ pub fn run() {
             path_exists,
             open_about,
             add_resource,
-            sync_resources
+            sync_resources,
+            clear_resources
         ])
         // /// register custome protocol `proj://`
         // let builder = register_resource_protocol(builder, resource_store);
         .setup(|app| {
             // Start the resource server
-            crate::file::resource::init_resource_server(app.handle(), resource_store)?;
+            init_resource_server(app.handle(), resource_store)?;
 
             let window = app.get_webview_window("main").unwrap();
 
@@ -114,7 +116,7 @@ pub fn run() {
 
             Ok(())
         })
-        .on_window_event(|window, event| {
+        .on_window_event(|_window, event| {
             if let tauri::WindowEvent::Destroyed = event {
                 // Optional: also clear resources
             }
@@ -123,7 +125,7 @@ pub fn run() {
         .expect("error while building tauri application")
         .run(|app_handle, event| {
             if let tauri::RunEvent::Exit = event {
-                crate::file::resource::shutdown_resource_server(app_handle);
+                shutdown_resource_server(app_handle);
             }
         });
 }
