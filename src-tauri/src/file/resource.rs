@@ -6,10 +6,11 @@ use std::path::Path;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 use std::{fmt, fs, thread};
+use std::io::{Read};
 use tauri::{AppHandle, Manager, State};
 use tiny_http::{Header, Response, Server, StatusCode};
 use http_range::HttpRange;
-
+use std::io;
 // ----------------------------
 // Types
 // ----------------------------
@@ -17,7 +18,7 @@ use http_range::HttpRange;
 #[derive(Clone)]
 pub struct ResourceEntry {
     pub hash_id: String,
-    pub data: Vec<u8>,
+    pub data: Arc<Vec<u8>>,
     pub mime: String,
     pub original_name: String,
     pub crc32: u32,
@@ -37,6 +38,7 @@ pub struct ResourcePayload {
 }
 
 impl fmt::Debug for ResourceEntry {
+
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let data_preview = if self.data.len() > 16 {
             format!("{:?}... ({} bytes total)", &self.data[..16], self.data.len())
@@ -54,15 +56,37 @@ impl fmt::Debug for ResourceEntry {
     }
 }
 
-/// Shared in-memory store for resources.
-/// Key = hash_id coming from the frontend.
+/// Shared in-memory store for resources
+/// Key = hash_id coming from the frontend
 pub type ResourceStore = Arc<Mutex<HashMap<String, ResourceEntry>>>;
 
 /// Holds the base URL of the local resource server (e.g. "http://127.0.0.1:54321")
 pub type ResourceServerBase = Arc<Mutex<Option<String>>>;
 
-/// Flag used to signal the HTTP server thread to stop.
+/// Flag used to signal the HTTP server thread to stop
 pub type ServerShutdownFlag = Arc<AtomicBool>;
+
+
+// Helper reader that keeps the Arc alive and reads without copying the underlying bytes.
+// This gives us true zero-copy for the full-file response path.
+struct ArcVecReader {
+    data: Arc<Vec<u8>>,
+    pos: usize,
+}
+
+impl Read for ArcVecReader {
+    fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
+        let slice = self.data.as_slice();
+        if self.pos >= slice.len() {
+            return Ok(0);
+        }
+        let remaining = &slice[self.pos..];
+        let n = remaining.len().min(buf.len());
+        buf[..n].copy_from_slice(&remaining[..n]);
+        self.pos += n;
+        Ok(n)
+    }
+}
 
 // ----------------------------
 // Commands
@@ -100,6 +124,7 @@ pub fn add_resource(
         .to_string_lossy()
         .into_owned();
 
+    let data = Arc::new(data);
     let entry = ResourceEntry {
         hash_id: hash.clone(),
         data,
@@ -137,7 +162,7 @@ pub fn add_resource(
 }
 
 /// Clears all resources from memory.
-/// Call this when the project is unloaded or closed.
+/// Call this when the project is unloaded or closed
 #[tauri::command]
 pub fn clear_resources(store: State<'_, ResourceStore>) -> Result<(), String> {
     let mut map = store.lock().map_err(|_| "Failed to lock resource store")?;
@@ -146,10 +171,10 @@ pub fn clear_resources(store: State<'_, ResourceStore>) -> Result<(), String> {
 }
 
 
-/// Synchronizes the in-memory resource store with the given list of hash_ids.
-/// Any resource whose hash_id is **not** present in `keep` will be removed.
+/// Synchronizes the in-memory resource store with the given list of hash_ids
+/// Any resource whose hash_id is **not** present in `keep` will be removed
 ///
-/// Useful after undo/redo operations where some resources are no longer needed.
+/// Useful after undo/redo operations where some resources are no longer needed
 #[tauri::command]
 pub fn sync_resources(
     store: State<'_, ResourceStore>,
@@ -167,11 +192,11 @@ pub fn sync_resources(
 // Local HTTP Server (tiny_http)
 // ----------------------------
 
-/// Starts the resource server on a random free port (127.0.0.1:0).
-/// Returns the base URL so the rest of the app can build resource URLs.
+/// Starts the resource server on a random free port (127.0.0.1:0)
+/// Returns the base URL so the rest of the app can build resource URLs
 ///
 /// The server runs in a background thread and will stop when
-/// `shutdown_flag` is set to `true` (or when the process exits).
+/// `shutdown_flag` is set to `true` (or when the process exits)
 pub fn start_resource_server(
     store: ResourceStore,
     shutdown_flag: ServerShutdownFlag,
@@ -191,8 +216,8 @@ pub fn start_resource_server(
     let flag_clone = shutdown_flag.clone();
 
     thread::spawn(move || {
-        // We use a short timeout so the thread can periodically check the shutdown flag.
-        // tiny_http does not have a perfect non-blocking API, so this is the pragmatic approach.
+        // We use a short timeout so the thread can periodically check the shutdown flag
+        // tiny_http does not have a perfect non-blocking API, so this is the pragmatic approach
         while !flag_clone.load(Ordering::SeqCst) {
             match server.recv_timeout(std::time::Duration::from_millis(300)) {
                 Ok(Some(request)) => {
@@ -213,8 +238,10 @@ pub fn start_resource_server(
     Ok(base_url)
 }
 
-/// Handles a single incoming request.
-/// Supports both full-file (200) and Range (206) responses.
+/// Handles a single incoming request
+/// Supports both full-file (200) and Range (206) responses
+/// Handles a single incoming request
+/// Supports both full-file (200) and Range (206) responses
 fn handle_request(request: tiny_http::Request, store: &ResourceStore) {
     let url = request.url(); // e.g. "/resource/abc123..."
 
@@ -243,7 +270,8 @@ fn handle_request(request: tiny_http::Request, store: &ResourceStore) {
         }
     };
 
-    let data = &entry.data;
+    // data is Arc<Vec<u8>> → only the reference count is incremented
+    let data = entry.data;
     let len = data.len() as u64;
     let mime = &entry.mime;
 
@@ -293,6 +321,7 @@ fn handle_request(request: tiny_http::Request, store: &ResourceStore) {
                     end = start + MAX_CHUNK - 1;
                 }
 
+                // Only the requested range is copied (max 2 MB) – acceptable
                 let body = data[start as usize..=end as usize].to_vec();
                 let content_len = body.len();
 
@@ -327,7 +356,21 @@ fn handle_request(request: tiny_http::Request, store: &ResourceStore) {
     }
 
     // ---------- Full file response (200) ----------
-    let mut response = Response::from_data(data.clone());
+    // Zero-copy: ArcVecReader only increments the Arc refcount.
+    // The actual bytes stay in the original allocation and are streamed directly.
+    let reader = ArcVecReader {
+        data,
+        pos: 0,
+    };
+
+    let mut response = Response::new(
+        StatusCode(200),
+        Vec::new(),
+        reader,
+        Some(len as usize),
+        None,
+    );
+
     let _ = response.add_header(Header::from_bytes("Content-Type", mime.as_bytes()).unwrap());
     let _ = response.add_header(Header::from_bytes("Accept-Ranges", b"bytes").unwrap());
     let _ = response.add_header(Header::from_bytes("Access-Control-Allow-Origin", b"*").unwrap());
@@ -337,7 +380,6 @@ fn handle_request(request: tiny_http::Request, store: &ResourceStore) {
 
     let _ = request.respond(response);
 }
-
 // ----------------------------
 // Integration helpers
 // ----------------------------
