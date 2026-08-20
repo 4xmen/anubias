@@ -34,6 +34,7 @@ const recentManger = new RecentProjectManager(storage);
  * like: project info, components
  */
 const projectStore = {
+
     namespaced: true,
     state: () => ({
         /**
@@ -172,6 +173,8 @@ const projectStore = {
             state.resources.splice(state.resources.find(resource => resource.hash === hashId),1);
         },
         RENAME_RESOURCE(state, payload) {
+            // rename resource
+
             const resource = state.resources.find(resource => resource.hash_id === payload.hash_id);
             if (resource) {
                 resource.original_name = payload.name;
@@ -359,7 +362,8 @@ const projectStore = {
         async projectPageRegister({state}) {
             // create preview thumb assets
             for (const page of state.project.pages) {
-                assetStore.register(page.hash, 'preview', await createBlankImageBlob());
+                console.log(page);
+                assetStore.register(page.hash, await createBlankImageBlob());
             }
         },
 
@@ -375,7 +379,7 @@ const projectStore = {
         async saveProject({state, commit, dispatch}, path = null) {
             // save project just save project by project path
             // so If save as is need to change project path
-            const previews = await assetStore.export('preview');
+            const previews = await assetStore.export();
             console.log(previews);
             const req = {
                 path: path ?? state.projectFile,
@@ -496,7 +500,7 @@ const projectStore = {
             const req = {
                 path: null,
                 project: JSON.stringify(state.project),
-                previews: await assetStore.export('preview'),
+                previews: await assetStore.export(),
             };
             return await invoke('autosave_project_backup', {
                 request: req,

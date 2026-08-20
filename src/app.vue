@@ -107,12 +107,12 @@ export default {
           this.propertiesToggle();
           break;
         case "settings-open":
-          this.$router.push('/settings');
+          if (this.$route.path !== '/settings')
+            this.$router.push('/settings');
           break;
         case "resource-open":
-          if (this.$route.path !== '/resource-manager') {
+          if (this.$route.path !== '/resource-manager')
             this.$router.push('/resource-manager');
-          }
           break;
         case "request-undo":
           this.undo();

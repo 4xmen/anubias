@@ -169,7 +169,7 @@ const ideStore = {
             field: null,
             // start point of fast change
             start: null,
-        }
+        },
     }),
     mutations: {
         IDE_INIT(state, payload) {
