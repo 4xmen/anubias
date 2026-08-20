@@ -109,6 +109,11 @@ export default {
         case "settings-open":
           this.$router.push('/settings');
           break;
+        case "resource-open":
+          if (this.$route.path !== '/resource-manager') {
+            this.$router.push('/resource-manager');
+          }
+          break;
         case "request-undo":
           this.undo();
           break;

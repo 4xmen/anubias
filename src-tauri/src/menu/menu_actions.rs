@@ -31,3 +31,6 @@ pub fn properties_panel_toggle(app: &AppHandle) {
 pub fn open_settings(app: &AppHandle) {
     let _ = app.emit("menu-event", "settings-open");
 }
+pub fn open_resource(app: &AppHandle) {
+    let _ = app.emit("menu-event", "resource-open");
+}

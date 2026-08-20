@@ -12,6 +12,7 @@ pub fn register(app: &App) {
         "properties" => menu_actions::properties_panel_toggle(app),
         "components" => menu_actions::components_panel_toggle(app),
         "preference" => menu_actions::open_settings(app),
+        "resource" =>  menu_actions::open_resource(app),
         "logs" => menu_actions::logs_panel_toggle(app),
         _ => {
             println!("Unhandled event: {:?}", event.id().as_ref());

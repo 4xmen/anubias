@@ -39,10 +39,14 @@
         </button>
       </div>
 
-      <div class="toolbar-search">
-        <i class="ri-search-line"/>
-        <input placeholder="Search resources..."/>
-      </div>
+<!--      <div class="toolbar-search">-->
+<!--        <i class="ri-search-line"/>-->
+<!--        <input placeholder="Search resources..."/>-->
+<!--      </div>-->
+<!--      WIP: may need add search for resource-->
+      <a  class="button"  @click="back()" href="#">
+        Back
+      </a >
 
     </header>
 
@@ -226,7 +230,6 @@ function renameSelectedResources() {
   if (lastSelectedResource.value === null) {
     return;
   }
-  console.log(lastSelectedResource);
   defPromptValue.value = lastSelectedResource.value.original_name;
   store.dispatch("ide/showPrompt", {
     onAccept: (value) => {
@@ -410,6 +413,9 @@ const loadTextPreview = async (url) => {
 
   return (await response.text()).slice(0, 100 * 1024);
 };
+function back(){
+  window.history.back();
+}
 
 watch(lastSelectedResource, async (resource) => {
   const type = detectType(resource?.mime);
@@ -423,6 +429,8 @@ watch(lastSelectedResource, async (resource) => {
   // Load text preview for text resources
   textPreview.value = await loadTextPreview(resource.url);
 });
+
+
 
 </script>
 
@@ -755,5 +763,6 @@ watch(lastSelectedResource, async (resource) => {
 .placeholder {
   opacity: .7;
 }
+
 
 </style>
