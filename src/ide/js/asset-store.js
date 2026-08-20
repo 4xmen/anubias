@@ -246,7 +246,7 @@ export class AssetStore {
 
         for (const [id, asset] of this._assets) {
             result.push({
-                id,
+                hash_id: id,
                 data: new Uint8Array(await asset.blob.arrayBuffer()),
             });
         }

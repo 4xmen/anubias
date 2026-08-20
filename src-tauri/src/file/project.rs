@@ -435,7 +435,6 @@ impl ProjectMetadata {
             } else if entry.path.starts_with("/resource/") {
                 if entry.path.starts_with("/resource/") {
                     if let Some(resource) = resources.iter().find(|r| r.hash_id == entry.hash) {
-                        println!("Found: {:?}", resource);
                         // resource
                         resource_map.insert(
                             resource.hash_id.clone(),

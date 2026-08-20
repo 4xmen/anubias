@@ -25,7 +25,7 @@
         </div>
       </div>
     </transition>
-    <router-link to="/resource-manager">resource</router-link>
+<!--    <router-link to="/resource-manager">resource</router-link>-->
   </div>
 </template>
 

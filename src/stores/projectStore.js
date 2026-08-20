@@ -173,7 +173,7 @@ const projectStore = {
             state.resources.push(payload);
         },
         REMOVE_RESOURCE(state, hashId) {
-            state.resources.splice(state.resources.find(resource => resource.hash === hashId),1);
+            state.resources.splice(state.resources.find(resource => resource.hash === hashId), 1);
         },
         RENAME_RESOURCE(state, payload) {
             // rename resource
@@ -191,7 +191,7 @@ const projectStore = {
         async undo({state, dispatch, commit, rootState}) {
             let commands = state.undoStack.pop();
             commit("PUSH_REDO_COMMAND", commands);
-            for( const command of commands) {
+            for (const command of commands) {
                 switch (command.action) {
                     case 'ADD':
                         if (command.entity === "COMPONENT") {
@@ -223,7 +223,7 @@ const projectStore = {
             let commands = state.redoStack.pop();
             console.log(commands);
             commit("PUSH_UNDO_COMMAND", commands);
-            for( const command of commands) {
+            for (const command of commands) {
                 console.log(command);
                 switch (command.action) {
                     case 'ADD':
@@ -327,7 +327,7 @@ const projectStore = {
             await dispatch('listBackups', state.project.hash);
         },
 
-        async loadProjectResource({commit},resources) {
+        async loadProjectResource({commit}, resources) {
             commit('LOAD_RESOURCES', resources);
             await storage.set('lastLoadedProjectResources', resources);
         },
@@ -343,8 +343,8 @@ const projectStore = {
             let projectData = JSON.parse(result.project);
             let resourcesData = JSON.parse(result.resources);
             // fix resource data
-            for( const res of resourcesData) {
-              res.url = `${result.server_url}/resource/${res.hash_id}`;
+            for (const res of resourcesData) {
+                res.url = `${result.server_url}/resource/${res.hash_id}`;
             }
 
             await dispatch('loadProject', projectData);
@@ -402,7 +402,7 @@ const projectStore = {
             // save project just save project by project path
             // so If save as is need to change project path
             const previews = await assetStore.export();
-            let resourceData = state.resources.map(({ url, ...rest }) => rest);
+            let resourceData = state.resources.map(({url, ...rest}) => rest);
             const req = {
                 path: path ?? state.projectFile,
                 project: JSON.stringify(state.project),
@@ -520,11 +520,14 @@ const projectStore = {
             if (state.isSave) {
                 return false;
             }
+            const previews = await assetStore.export();
+            let resourceData = state.resources.map(({url, ...rest}) => rest);
             const req = {
                 path: null,
                 project: JSON.stringify(state.project),
-                previews: await assetStore.export(),
-            };
+                resources: JSON.stringify(resourceData),
+                previews: previews,
+            }
             return await invoke('autosave_project_backup', {
                 request: req,
                 hash: state.project.hash,
@@ -579,8 +582,8 @@ const projectStore = {
             commit('REMOVE_RESOURCE', hashId);
         },
         async clearResource({commit}) {
-           await invoke('clear_resources');
-           commit('CLEAR_RESOURCE');
+            await invoke('clear_resources');
+            commit('CLEAR_RESOURCE');
         },
     },
     getters: {

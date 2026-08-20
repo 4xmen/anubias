@@ -128,6 +128,7 @@ import { exists } from "@tauri-apps/plugin-fs";
 import {invoke} from "@tauri-apps/api/core";
 import {fixName} from "../js/system-functions.js";
 
+let autosaveInterval = null;
 
 const storage = new LazyStore('ide.json', {autoSave: false});
 
@@ -156,12 +157,13 @@ export default {
     document.addEventListener('keydown', this.onKeydown);
 
     // autosave backup every 3 min
-    setInterval(() => {
+    autosaveInterval = setInterval(() => {
       this.autosave();
     }, 60000 * 3); // WIP: may need autosave backup in ide setting
   },
   beforeUnmount() {
     document.removeEventListener('keydown', this.onKeydown);
+    clearInterval(autosaveInterval);
   },
   computed: {
     ...mapState(['ide', 'project']),
