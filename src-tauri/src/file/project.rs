@@ -561,6 +561,30 @@ impl FileEntry {
             hash: preview_data.hash_id,
         }
     }
+
+    /// Creates a FileEntry from a resource entry.
+    ///
+    /// Converts a resource entry into a FileEntry while preserving its original
+    /// metadata and data. Used for storing resource files within the project.
+    ///
+    /// # Parameters
+    ///
+    /// * `resource` - ResourceEntry containing:
+    ///   - `directory`: Directory where the resource is stored
+    ///   - `original_name`: Original filename of the resource
+    ///   - `data`: Raw resource bytes
+    ///   - `crc32`: CRC32 checksum of the resource data
+    ///   - `hash_id`: Unique identifier used as the hash field
+    ///
+    /// # Returns
+    ///
+    /// A FileEntry with:
+    /// - Size calculated from the resource data length
+    /// - CRC32 checksum from the resource entry
+    /// - Cloned resource data
+    /// - Path formatted as "/resource/{directory}/{original_name}"
+    /// - `hash_id` stored as the hash field
+    ///
     pub fn from_resource(resource: &ResourceEntry) -> Self {
         Self {
             size: resource.data.len() as u64,
@@ -687,6 +711,30 @@ impl Default for DataMap {
     }
 }
 
+/// Saves a project to the path specified in the request.
+///
+/// This Tauri command handler creates the project metadata from the provided request
+/// and persists it to the requested path. The blocking file-system operation is executed
+/// on a dedicated blocking thread to prevent blocking the Tauri async runtime.
+///
+/// # Parameters
+///
+/// * `app` - Tauri application handle used for logging save status and errors
+/// * `store` - ResourceStore containing project resources required to build the project metadata
+/// * `request` - SaveProjectRequest containing the project configuration, save path, and preview data
+///
+/// # Returns
+///
+/// * `Ok(true)` - Project was saved successfully
+/// * `Err(String)` - Error message if the path is missing, the save operation fails,
+///   or the blocking task cannot be completed
+///
+/// # Errors
+///
+/// - Returns an error if no save path is provided in the request
+/// - Project serialization or file-system errors during saving
+/// - Errors caused by the blocking save task failing to complete
+///
 #[tauri::command]
 pub async fn save_project(
     app: AppHandle,
@@ -704,8 +752,9 @@ pub async fn save_project(
     let store = store.inner().clone();
     let app = app.clone();
 
-    // Run the blocking save operation on a dedicated blocking thread
-    // so the Tauri runtime remains responsive.
+    // Project saving performs blocking file-system operations.
+    // Run it on a dedicated blocking thread so these operations do not block
+    // the Tauri async runtime and keep the application responsive.
     tauri::async_runtime::spawn_blocking(move || {
         ProjectMetadata::from_request(store, request)
             .save(save_path)
@@ -718,10 +767,37 @@ pub async fn save_project(
                 e.to_string()
             })
     })
-    .await
-    .map_err(|e| format!("Save task failed: {e}"))?
+        .await
+        .map_err(|e| format!("Save task failed: {e}"))?
 }
 
+/// Loads and verifies a project from the specified path.
+///
+/// This Tauri command handler reads a project file from disk, verifies its integrity,
+/// and converts the project metadata into a response that can be consumed by the client.
+/// The loaded project resources are resolved through the local resource server.
+///
+/// # Parameters
+///
+/// * `app` - Tauri application handle used for logging and displaying error notifications
+/// * `store` - ResourceStore used to restore and manage project resources
+/// * `server_base` - Shared base URL of the local resource server
+/// * `path` - File-system path of the project to load
+///
+/// # Returns
+///
+/// * `Ok(LoadProjectResponse)` - Loaded and verified project data
+/// * `Err(String)` - Error message if the resource server is unavailable,
+///   the project cannot be loaded or verified, or response generation fails
+///
+/// # Errors
+///
+/// - Resource server base URL is unavailable or cannot be locked
+/// - Project file cannot be read or deserialized
+/// - Project integrity verification fails
+/// - Project resources cannot be restored
+/// - Errors caused by the blocking load task failing to complete
+///
 #[tauri::command]
 pub async fn load_project(
     app: AppHandle,
@@ -729,37 +805,51 @@ pub async fn load_project(
     server_base: State<'_, ResourceServerBase>,
     path: String,
 ) -> Result<LoadProjectResponse, String> {
-    // Build URL from the running local server
+    // Capture the base URL of the local resource server before entering
+    // the blocking task. The loaded project uses this URL to resolve its resources.
     let url = server_base
         .lock()
         .map_err(|_| "Failed to lock server base")?
         .clone()
         .ok_or_else(|| "Resource server is not running".to_string())?;
+
     let store = store.inner().clone();
-    // Run the blocking save operation on a dedicated blocking thread
-    // so the Tauri runtime remains responsive.
+
+    // Loading a project involves blocking file-system I/O and project deserialization.
+    // Run the operation on a dedicated blocking thread so it does not block
+    // the Tauri async runtime.
     tauri::async_runtime::spawn_blocking(move || {
         send_log(&app, "Try to load project file...");
+
         let project = ProjectMetadata::load(Path::new(&path))
             .map_err(|error| format!("Failed to load project from path {}: {}", path, error))?;
 
+        // Verify the project before restoring its resources.
+        // This prevents invalid or corrupted project data from being loaded
+        // into the application state.
         if !project.verify() {
             send_toast(&app, MessageType::Error, "Failed to verify project file");
             return Err("Project does not verified.".to_string());
         }
+
         send_log(&app, "Project verify success...");
+
+        // Convert the verified project metadata into the response expected by
+        // the frontend and resolve its resources through the local resource server.
         let response = project
             .into_response(store, url)
             .map_err(|error| error.to_string())?;
+
         send_log(&app, "Project uncompress & load success...");
 
         if IS_DEBUG {
             dbg!(&response);
         }
+
         Ok(response)
     })
-    .await
-    .map_err(|e| format!("Save task failed: {e}"))?
+        .await
+        .map_err(|e| format!("Load task failed: {e}"))?
 }
 
 /// Creates an autosave backup of the project at a timestamped location.
