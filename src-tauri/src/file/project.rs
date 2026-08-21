@@ -166,7 +166,7 @@ impl ProjectMetadata {
     /// - Main project configuration as a FileEntry named "project.json"
     /// - All preview data as separate FileEntry objects derived from PreviewData
     ///
-    pub fn from_request(store: State<'_, ResourceStore>, req: SaveProjectRequest) -> Self {
+    pub fn from_request(store: ResourceStore, req: SaveProjectRequest) -> Self {
         let project_main_data =
             FileEntry::from_string(req.project, "project.json".to_string(), None);
         let project_resource_data =
@@ -185,7 +185,7 @@ impl ProjectMetadata {
                 .unwrap_or_else(|poisoned| poisoned.into_inner());
 
             for (_hash, resource) in map.iter() {
-                println!("saved: {:#?}", _hash);
+                // println!("saved: {:#?}", _hash);
                 project.add_file_entry(FileEntry::from_resource(resource));
             }
         }
@@ -400,10 +400,9 @@ impl ProjectMetadata {
     ///
     pub fn into_response(
         self,
-        store: State<'_, ResourceStore>,
+        store: ResourceStore,
         url: String,
     ) -> Result<LoadProjectResponse, ProjectError> {
-
         let mut result = LoadProjectResponse {
             project: "{}".to_string(),
             resources: "[]".to_string(),
@@ -415,7 +414,6 @@ impl ProjectMetadata {
             .unwrap_or_else(|poisoned| poisoned.into_inner());
         // reset first
         resource_map.clear();
-
 
         let mut resources: Vec<ResourceMetaData> = vec![];
         for entry in self.data_map.entries.into_iter() {
@@ -568,7 +566,10 @@ impl FileEntry {
             size: resource.data.len() as u64,
             crc32: resource.crc32,
             data: resource.data.clone(),
-            path: format!("/resource/{}", &resource.original_name),
+            path: format!(
+                "/resource/{}/{}",
+                &resource.directory, &resource.original_name
+            ),
             hash: resource.hash_id.clone(),
         }
     }
@@ -687,33 +688,42 @@ impl Default for DataMap {
 }
 
 #[tauri::command]
-pub fn save_project(
+pub async fn save_project(
     app: AppHandle,
     store: State<'_, ResourceStore>,
     request: SaveProjectRequest,
 ) -> Result<bool, String> {
     send_log(&app, "Try to save project...");
+
     if IS_DEBUG {
         dbg!(&request);
     }
 
     let save_path = request.path.clone().ok_or("path is required")?;
 
-    let store2 = store.clone();
-    ProjectMetadata::from_request(store2, request)
-        .save(save_path)
-        .map(|_| {
-            send_log(&app, "Project saved successfully...");
-            true
-        })
-        .map_err(|e| {
-            send_log(&app, &format!("Failed to save project: {}", e.to_string()));
-            e.to_string()
-        })
+    let store = store.inner().clone();
+    let app = app.clone();
+
+    // Run the blocking save operation on a dedicated blocking thread
+    // so the Tauri runtime remains responsive.
+    tauri::async_runtime::spawn_blocking(move || {
+        ProjectMetadata::from_request(store, request)
+            .save(save_path)
+            .map(|_| {
+                send_log(&app, "Project saved successfully...");
+                true
+            })
+            .map_err(|e| {
+                send_log(&app, &format!("Failed to save project: {e}"));
+                e.to_string()
+            })
+    })
+    .await
+    .map_err(|e| format!("Save task failed: {e}"))?
 }
 
 #[tauri::command]
-pub fn load_project(
+pub async fn load_project(
     app: AppHandle,
     store: State<'_, ResourceStore>,
     server_base: State<'_, ResourceServerBase>,
@@ -725,25 +735,31 @@ pub fn load_project(
         .map_err(|_| "Failed to lock server base")?
         .clone()
         .ok_or_else(|| "Resource server is not running".to_string())?;
-    send_log(&app, "Try to load project file...");
-    let project = ProjectMetadata::load(Path::new(&path))
-        .map_err(|error| format!("Failed to load project from path {}: {}", path, error))?;
+    let store = store.inner().clone();
+    // Run the blocking save operation on a dedicated blocking thread
+    // so the Tauri runtime remains responsive.
+    tauri::async_runtime::spawn_blocking(move || {
+        send_log(&app, "Try to load project file...");
+        let project = ProjectMetadata::load(Path::new(&path))
+            .map_err(|error| format!("Failed to load project from path {}: {}", path, error))?;
 
-    if !project.verify() {
-        send_toast(&app, MessageType::Error, "Failed to verify project file");
-        return Err("Project does not verified.".to_string());
-    }
-    send_log(&app, "Project verify success...");
-    let store2 = store.clone();
-    let response = project
-        .into_response(store2, url)
-        .map_err(|error| error.to_string())?;
-    send_log(&app, "Project uncompress & load success...");
+        if !project.verify() {
+            send_toast(&app, MessageType::Error, "Failed to verify project file");
+            return Err("Project does not verified.".to_string());
+        }
+        send_log(&app, "Project verify success...");
+        let response = project
+            .into_response(store, url)
+            .map_err(|error| error.to_string())?;
+        send_log(&app, "Project uncompress & load success...");
 
-    if IS_DEBUG {
-        dbg!(&response);
-    }
-    Ok(response)
+        if IS_DEBUG {
+            dbg!(&response);
+        }
+        Ok(response)
+    })
+    .await
+    .map_err(|e| format!("Save task failed: {e}"))?
 }
 
 /// Creates an autosave backup of the project at a timestamped location.
@@ -791,15 +807,21 @@ pub async fn autosave_project_backup(
 
     let path = dir.join(format!("{timestamp}.anb"));
 
-    let store2 = store.clone();
-    ProjectMetadata::from_request(store2, request)
-        .save(path.to_string_lossy().to_string())
-        .map_err(|e| e.to_string())?;
+    let store = store.inner().clone();
+    // Run the blocking save operation on a dedicated blocking thread
+    // so the Tauri runtime remains responsive.
+    tauri::async_runtime::spawn_blocking(move || {
+        ProjectMetadata::from_request(store, request)
+            .save(path.to_string_lossy().to_string())
+            .map_err(|e| e.to_string())?;
 
-    if IS_DEBUG {
-        println!("backup created, {}", path.display());
-    }
-    Ok(path.to_string_lossy().to_string())
+        if IS_DEBUG {
+            println!("backup created, {}", path.display());
+        }
+        Ok(path.to_string_lossy().to_string())
+    })
+    .await
+    .map_err(|e| format!("Save task failed: {e}"))?
 }
 
 #[derive(Serialize, Debug)]
@@ -945,7 +967,7 @@ pub async fn delete_old_backups(
     Ok(deleted)
 }
 
-#[derive(Serialize, Deserialize,Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 struct ResourceMetaData {
     hash_id: String,
     mime: String,

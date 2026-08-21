@@ -15,6 +15,7 @@ use std::io;
 // Types
 // ----------------------------
 
+#[allow(dead_code)]
 #[derive(Clone)]
 pub struct ResourceEntry {
     pub hash_id: String,
@@ -25,7 +26,7 @@ pub struct ResourceEntry {
     pub directory: String,
     pub size: u64,
 }
-
+#[allow(dead_code)]
 #[derive(Clone, Deserialize, Serialize)]
 pub struct ResourcePayload {
     pub hash_id: String,
