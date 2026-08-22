@@ -1,16 +1,16 @@
 use crate::config::MAX_IMPORT_FILE_SIZE;
 use file_format::FileFormat;
+use http_range::HttpRange;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::io;
+use std::io::Read;
 use std::path::Path;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 use std::{fmt, fs, thread};
-use std::io::{Read};
 use tauri::{AppHandle, Manager, State};
 use tiny_http::{Header, Response, Server, StatusCode};
-use http_range::HttpRange;
-use std::io;
 // ----------------------------
 // Types
 // ----------------------------
@@ -39,10 +39,13 @@ pub struct ResourcePayload {
 }
 
 impl fmt::Debug for ResourceEntry {
-
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let data_preview = if self.data.len() > 16 {
-            format!("{:?}... ({} bytes total)", &self.data[..16], self.data.len())
+            format!(
+                "{:?}... ({} bytes total)",
+                &self.data[..16],
+                self.data.len()
+            )
         } else {
             format!("{:?}", self.data)
         };
@@ -66,7 +69,6 @@ pub type ResourceServerBase = Arc<Mutex<Option<String>>>;
 
 /// Flag used to signal the HTTP server thread to stop
 pub type ServerShutdownFlag = Arc<AtomicBool>;
-
 
 // Helper reader that keeps the Arc alive and reads without copying the underlying bytes.
 // This gives us true zero-copy for the full-file response path.
@@ -171,16 +173,12 @@ pub fn clear_resources(store: State<'_, ResourceStore>) -> Result<(), String> {
     Ok(())
 }
 
-
 /// Synchronizes the in-memory resource store with the given list of hash_ids
 /// Any resource whose hash_id is **not** present in `keep` will be removed
 ///
 /// Useful after undo/redo operations where some resources are no longer needed
 #[tauri::command]
-pub fn sync_resources(
-    store: State<'_, ResourceStore>,
-    keep: Vec<String>,
-) -> Result<(), String> {
+pub fn sync_resources(store: State<'_, ResourceStore>, keep: Vec<String>) -> Result<(), String> {
     let mut map = store.lock().map_err(|_| "Failed to lock resource store")?;
 
     // Retain only the entries whose key exists in the provided list
@@ -292,7 +290,7 @@ fn handle_request(request: tiny_http::Request, store: &ResourceStore) {
                 if start >= len || end >= len || end < start {
                     // 416 Range Not Satisfiable
                     let mut response = Response::empty(416);
-                    let _ = response.add_header(
+                    response.add_header(
                         Header::from_bytes("Content-Range", format!("bytes */{}", len).as_bytes())
                             .unwrap(),
                     );
@@ -304,7 +302,7 @@ fn handle_request(request: tiny_http::Request, store: &ResourceStore) {
                 // Guard against empty files and invalid ranges
                 if len == 0 || start >= len {
                     let mut response = Response::empty(416);
-                    let _ = response.add_header(
+                    response.add_header(
                         Header::from_bytes("Content-Range", format!("bytes */{}", len).as_bytes())
                             .unwrap(),
                     );
@@ -328,21 +326,22 @@ fn handle_request(request: tiny_http::Request, store: &ResourceStore) {
 
                 let mut response = Response::from_data(body).with_status_code(StatusCode(206));
 
-                let _ = response.add_header(Header::from_bytes("Content-Type", mime.as_bytes()).unwrap());
-                let _ = response.add_header(Header::from_bytes("Accept-Ranges", b"bytes").unwrap());
-                let _ = response.add_header(
+                response.add_header(Header::from_bytes("Content-Type", mime.as_bytes()).unwrap());
+                response.add_header(Header::from_bytes("Accept-Ranges", b"bytes").unwrap());
+                response.add_header(
                     Header::from_bytes(
                         "Content-Range",
                         format!("bytes {}-{}/{}", start, end, len).as_bytes(),
                     )
-                        .unwrap(),
+                    .unwrap(),
                 );
-                let _ = response.add_header(
+                response.add_header(
                     Header::from_bytes("Content-Length", content_len.to_string().as_bytes())
                         .unwrap(),
                 );
-                let _ = response.add_header(Header::from_bytes("Access-Control-Allow-Origin", b"*").unwrap());
-                let _ = response.add_header(
+                response
+                    .add_header(Header::from_bytes("Access-Control-Allow-Origin", b"*").unwrap());
+                response.add_header(
                     Header::from_bytes("Cache-Control", b"public, max-age=31536000, immutable")
                         .unwrap(),
                 );
@@ -359,10 +358,7 @@ fn handle_request(request: tiny_http::Request, store: &ResourceStore) {
     // ---------- Full file response (200) ----------
     // Zero-copy: ArcVecReader only increments the Arc refcount.
     // The actual bytes stay in the original allocation and are streamed directly.
-    let reader = ArcVecReader {
-        data,
-        pos: 0,
-    };
+    let reader = ArcVecReader { data, pos: 0 };
 
     let mut response = Response::new(
         StatusCode(200),
@@ -372,10 +368,10 @@ fn handle_request(request: tiny_http::Request, store: &ResourceStore) {
         None,
     );
 
-    let _ = response.add_header(Header::from_bytes("Content-Type", mime.as_bytes()).unwrap());
-    let _ = response.add_header(Header::from_bytes("Accept-Ranges", b"bytes").unwrap());
-    let _ = response.add_header(Header::from_bytes("Access-Control-Allow-Origin", b"*").unwrap());
-    let _ = response.add_header(
+    response.add_header(Header::from_bytes("Content-Type", mime.as_bytes()).unwrap());
+    response.add_header(Header::from_bytes("Accept-Ranges", b"bytes").unwrap());
+    response.add_header(Header::from_bytes("Access-Control-Allow-Origin", b"*").unwrap());
+    response.add_header(
         Header::from_bytes("Cache-Control", b"public, max-age=31536000, immutable").unwrap(),
     );
 

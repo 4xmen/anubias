@@ -17,6 +17,10 @@
         <router-link to="/settings">
           go setting test
         </router-link>
+        <hr>
+        <div @click="brTest()">
+          boradcast test
+        </div>
 
         <h1 id="test">
         </h1>
@@ -71,6 +75,7 @@ import {Sortable} from "sortablejs-vue3";
 
 import assetStore from "../js/asset-store.js";
 import assetManager from "../js/asset-store.js";
+import {invoke} from "@tauri-apps/api/core";
 
 export default {
   name: "sidebar",
@@ -105,6 +110,9 @@ export default {
     },
   },
   methods: {
+    async brTest(){
+      await invoke("broadcast_to_clients", { payload: "test websocket use in flutter" });
+    },
     assetPreview(id) {
       const prvw = assetManager.getLivePreview(id);
       if (prvw) {

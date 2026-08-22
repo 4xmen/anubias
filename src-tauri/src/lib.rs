@@ -4,7 +4,7 @@ mod format;
 mod global_shortcut;
 mod menu;
 mod message;
-
+mod socket;
 mod window_manger;
 
 use std::collections::HashMap;
@@ -20,6 +20,9 @@ use crate::menu::menu_state::{build_menu_no_project, set_menu_state, MenuState};
 // use crate::file::asset::{
 //     register_file_binary, get_fast_file_metadata
 // };
+use socket::server::{
+    broadcast_to_clients, start_ws_server, WsServerState,
+};
 
 use tauri::AppHandle;
 use tauri::{PhysicalPosition, Position};
@@ -73,13 +76,24 @@ pub fn run() {
             open_about,
             add_resource,
             sync_resources,
-            clear_resources
+            clear_resources,
+            broadcast_to_clients,
         ])
         // /// register custome protocol `proj://`
         // let builder = register_resource_protocol(builder, resource_store);
         .setup(|app| {
             // Start the resource server
             init_resource_server(app.handle(), resource_store)?;
+
+            // ---- WebSocket server ----
+            let ws_state = Arc::new(WsServerState::new());
+            app.manage(ws_state.clone());
+
+            tauri::async_runtime::spawn(async move {
+                if let Err(e) = start_ws_server(ws_state).await {
+                    eprintln!("[ws-server] Failed to start: {}", e);
+                }
+            });
 
             let window = app.get_webview_window("main").unwrap();
 
