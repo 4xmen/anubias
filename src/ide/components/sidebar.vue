@@ -21,6 +21,9 @@
         <div @click="brTest()">
           boradcast test
         </div>
+        <div @click="brTest2()">
+          boradcast test 2
+        </div>
 
         <h1 id="test">
         </h1>
@@ -76,6 +79,7 @@ import {Sortable} from "sortablejs-vue3";
 import assetStore from "../js/asset-store.js";
 import assetManager from "../js/asset-store.js";
 import {invoke} from "@tauri-apps/api/core";
+import ideStore from "../../stores/ideStore.js";
 
 export default {
   name: "sidebar",
@@ -97,6 +101,9 @@ export default {
     ...mapGetters(
         'project', ['pages'],
     ),
+    ...mapGetters(
+      'ide' ,['currentPage']
+    ),
     ...mapState({
       assetCounter: state => state.project.assetCounter,
     }),
@@ -111,7 +118,24 @@ export default {
   },
   methods: {
     async brTest(){
-      await invoke("broadcast_to_clients", { payload: "test websocket use in flutter" });
+      let payload = {
+        type: "UPDATE_DESIGN",
+        data:{
+          isDark: this.project.project.isDark,
+          isRTL: this.project.project.isRTL,
+          color: this.project.project.appColor,
+          lang: this.project.project.lang,
+          country: this.project.project.country,
+        }
+      }
+      await invoke("broadcast_to_clients", { payload: JSON.stringify(payload) });
+    },
+    async brTest2(){
+      let payload = {
+        type: "FULL_RENDER",
+        data: this.currentPage,
+      };
+      await invoke("broadcast_to_clients", { payload: JSON.stringify(payload) });
     },
     assetPreview(id) {
       const prvw = assetManager.getLivePreview(id);

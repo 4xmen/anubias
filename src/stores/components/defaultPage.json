@@ -6,6 +6,7 @@
   "safeArea": false,
   "padding": "15",
   "align": "null",
+  "backgroundColor": "null",
   "onShow": "// run when show page \n",
   "children": {
     "visual": [],
@@ -40,6 +41,11 @@
     },
     "hash": {
       "type": "Invisible"
+    },
+    "backgroundColor": {
+      "type": "String|Color",
+      "regex": "^(Colors\\.[a-z]*|Color\\(0x([0-9A-Fa-f]{8}\\))$",
+      "state": "input"
     },
     "onShow": {
       "type": "Code",

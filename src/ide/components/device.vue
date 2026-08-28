@@ -3,6 +3,7 @@
     <!--    {{ device.width }}x{{ device.height }}-->
     <!--    {{ device.cameraBorder }}-->
 
+<!--    <iframe src="http://localhost:8090/"></iframe>-->
     <div id="device" :style="deviceStyle">
 
 

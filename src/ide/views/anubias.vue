@@ -18,11 +18,13 @@
         <!--          </option>-->
         <!--        </select>-->
 
-        <searchable-combobox v-model="activeDevice">
-          <option-ex v-for="(device,i) in ide.devices" :value="i" :key="i">
-            {{ device.name }}
-          </option-ex>
-        </searchable-combobox>
+        <div style="display:inline-block; width: 240px">
+          <searchable-combobox v-model="activeDevice" id="combo">
+            <option-ex v-for="(device,i) in ide.devices" :value="i" :key="i">
+              {{ device.name }}
+            </option-ex>
+          </searchable-combobox>
+        </div>
       </div>
       <div>
         <icon-button id="orient" v-model="orient" :list="orients" :no-border-y="true"></icon-button>
@@ -119,7 +121,7 @@ import sidebar from "../components/sidebar.vue";
 import anubiasConfirm from "../components/anubias-confirm.vue";
 import bluePrint from "./blue-print.vue";
 import BluePrint from "./blue-print.vue";
-import SearchableCombobox from "../components/srachable-combobox.vue";
+import SearchableCombobox from "../components/searchable-combobox.vue";
 import OptionEx from "../components/option-ex.vue";
 import {save,ask} from "@tauri-apps/plugin-dialog";
 import ProjectProperties from "../components/project-properties.vue";
@@ -448,7 +450,7 @@ h3 i:hover {
 
 #main .grid {
   display: grid;
-  grid-template-columns: 300px 9fr;
+  grid-template-columns: 340px 9fr;
   height: 100%;
   width: 100%;
   overflow-y: auto;

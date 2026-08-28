@@ -10,7 +10,7 @@
                :data-blur="isNameValid" @blur="canBlur">
       </div>
       <div class="err" v-if="!isNameValid">
-        Name is invalid...
+        Name is invalid..
       </div>
     </collapsible>
     <!-- show aligns loop-->
@@ -28,6 +28,23 @@
             </div>
           </div>
         </div>
+      </collapsible>
+    </template>
+    <!-- show specials loop-->
+    <template v-for="sp in groupedProperties.specials">
+      <collapsible :title="sp.label" icon="ri-image-2-line">
+        <template v-if="sp.key == 'image'">
+          <div v-if="onEditComponent.online">
+            <input type="url" v-model="sp.value"
+                   @update:model-value="(newVal) => {updateProps(sp,newVal);}">
+          </div>
+          <div v-else>
+            <select @change="(event) => {updateProps(sp, event.target.value);}">
+              <option value=""> No image </option>
+              <option v-for="res in resources" :value="res.url"> {{ res.directory }}/{{ res.original_name }}</option>
+            </select>
+          </div>
+        </template>
       </collapsible>
     </template>
     <!-- check if we have colors here -->
@@ -73,12 +90,11 @@
       </template>
     </collapsible>
     <!--  text props loop  -->
-    <!--  why 1 cuz name is String  -->
-    <collapsible v-if="groupedProperties.strings.length > 1" icon="ri-text" title="Text properties">
+    <collapsible v-if="groupedProperties.strings.length > 0" icon="ri-text" title="Text properties">
       <template v-for="(txt,index) in groupedProperties.strings" :key="index">
-        <template v-if="txt.key === 'name'"></template>
+        <template v-if="txt.key === 'name'"></template> <!--this fall back name but never happen -->
         <div v-else-if="txt.validator !== undefined
-                && txt.validator.type === 'String' && index !== 'name'">
+                && txt.validator.type === 'String'">
           <label class="input-container">
             {{ txt.label.capitalize() }}:
             <span v-if="txt.validator.regex === '.*'">
@@ -185,7 +201,8 @@
     </collapsible>
     <!--  padding editor  -->
     <collapsible v-if="groupedProperties.paddings.length === 1" title="Padding">
-      <around v-model="localProperties.padding"   @update:model-value="(newVal) => {updateProps(groupedProperties.paddings[0],newVal);}"></around>
+      <around v-model="localProperties.padding"
+              @update:model-value="(newVal) => {updateProps(groupedProperties.paddings[0],newVal);}"></around>
     </collapsible>
   </div>
 </template>
@@ -234,6 +251,8 @@ const syncOnEditComponent = computed(() =>
     store.state.ide.syncOnEditComponent,
 )
 
+const resources = computed(() => store.state.project.resources);
+
 // Local editable copy - this is where all UI changes happen
 const localProperties = ref(null)
 
@@ -256,6 +275,8 @@ const groupedProperties = reactive({
   strings: [],
   lists: [],
   selects: [],
+  specials: [],
+  codes: [],
   // Add more groups as needed
 })
 
@@ -269,10 +290,11 @@ const hasSizeProperties = computed(() =>
 
 // ====================== METHODS ======================
 
-function lazyChangeFocus(e){
-  store.dispatch('ide/lazyChangeStart',e.target.value);
+function lazyChangeFocus(e) {
+  store.dispatch('ide/lazyChangeStart', e.target.value);
 }
-function lazyChangeBlur(){
+
+function lazyChangeBlur() {
   store.dispatch("ide/lazyChangeDone");
 }
 
@@ -332,6 +354,7 @@ function straitEditProps(item, value) {
 
 
 function updateProps(item, value) {
+
   let payload = {};
   payload[item.key] = value;
   store.dispatch("ide/setOnEditProperties", payload);
@@ -367,7 +390,9 @@ function groupProperties() {
 
     // console.log(item);
     // Simple grouping logic - improve as needed
-    if (['width', 'height'].includes(key)) {
+    if (valInfo.type === 'String|Url|Resource' || valInfo.type === 'String|Resource') {
+      groupedProperties.specials.push(item);
+    } else if (['width', 'height'].includes(key)) {
       groupedProperties.sizes.push(item)
     } else if (key.toLowerCase().indexOf('padding') !== -1) {
       groupedProperties.paddings.push(item)
@@ -381,8 +406,12 @@ function groupProperties() {
       groupedProperties.aligns.push(item)
     } else if (valInfo.type?.includes('Select')) {
       groupedProperties.selects.push(item)
+    } else if (valInfo.type === 'Code') {
+      groupedProperties.codes.push(item)
     } else {
-      groupedProperties.strings.push(item)
+      if (item.key !== 'name' && item.key !== 'child' && item.key !== 'children'){
+        groupedProperties.strings.push(item)
+      }
     }
   })
   // console.log(groupedProperties);
@@ -474,7 +503,7 @@ watch(onEditComponent, (newVal) => {
 watch(syncOnEditComponent, (newVal) => {
   if (newVal) {
     localProperties.value = safeClone(newVal) // deep clone
-    store.commit('ide/SYNC_ON_EDIT_COMPONENT',null);
+    store.commit('ide/SYNC_ON_EDIT_COMPONENT', null);
     groupProperties()
   }
 });

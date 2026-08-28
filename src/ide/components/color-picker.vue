@@ -189,6 +189,7 @@ h4 {
   display: grid;
   grid-template-columns: 4fr 5fr 1fr;
   cursor: pointer;
+  gap: 10px;
 }
 
 .grid span, .grid b {

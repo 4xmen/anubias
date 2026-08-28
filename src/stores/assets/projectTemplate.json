@@ -6,6 +6,7 @@
     "packageName": "com.example.mynewproject",
     "pageCount": 1,
     "appColor": "Colors.green",
+    "useMaterial3": false,
     "lang": "en",
     "country": "US",
     "isDark": false,

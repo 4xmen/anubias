@@ -27,23 +27,31 @@
       "regex": "^.*$",
       "state": "input"
     },
-    "width" : {
+    "width": {
       "type": "String|Number",
-      "regex":  "^\\d*\\.?\\d+%?$",
+      "regex": "^\\d*\\.?\\d+%?$",
       "state": "input"
     },
-    "height" : {
+    "height": {
       "type": "String|Number",
-      "regex":  "^\\d*\\.?\\d+%?$",
+      "regex": "^\\d*\\.?\\d+%?$",
       "state": "input"
     },
-    "fit" : {
+    "fit": {
       "type": "String|Select",
       "regex": "^BoxFit\\.[a-zA-Z_]*$",
       "state": "input",
-      "items": [ "none","BoxFit.fill", "BoxFit.contain", "BoxFit.cover", "BoxFit.fitWidth", "BoxFit.fitHeight", "BoxFit.scaleDown"]
+      "items": [
+        "none",
+        "BoxFit.fill",
+        "BoxFit.contain",
+        "BoxFit.cover",
+        "BoxFit.fitWidth",
+        "BoxFit.fitHeight",
+        "BoxFit.scaleDown"
+      ]
     },
-    "align" : {
+    "align": {
       "type": "String|Align",
       "regex": "^(null|left|right|center)$",
       "state": "input"
