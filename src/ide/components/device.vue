@@ -3,7 +3,7 @@
     <!--    {{ device.width }}x{{ device.height }}-->
     <!--    {{ device.cameraBorder }}-->
 
-<!--    <iframe src="http://localhost:8090/"></iframe>-->
+    <!--    <iframe src="http://localhost:8090/"></iframe>-->
     <div id="device" :style="deviceStyle">
 
 
@@ -150,7 +150,35 @@
             Drop visual components here...
           </droppable>
         </div>
+        <div class="iframe-wrapper">
+          <!-- Preloader -->
+          <cube-preloader v-if="loading " :scaling="scalable"></cube-preloader>
+
+          <!-- Iframe -->
+          <iframe
+              v-show="loaded"
+              ref="iframe"
+              :src="iframeUrl"
+              @load="handleIframeLoad"
+              @dblclick="reloadIframe"
+              id="live-preview"
+          ></iframe>
+
+          <!-- Fallback -->
+          <div v-if="showFallback" class="fallback">
+            <div :style="scalable">
+
+              <h3>Content unavailable</h3>
+              <p>Unable to load the content.</p>
+
+              <button @click="reloadIframe">
+                Retry
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -177,6 +205,7 @@ import anubiasPreloader from "./anubias/anubiasPreloader.vue";
 import anubiasRow from "./anubias/anubiasRow.vue";
 import anubiasText from "./anubias/anubiasText.vue";
 import anubiasToggle from "./anubias/anubiasToggle.vue";
+import cubePreloader from "./cube-preloader.vue";
 // import fuctions
 import {createScreenShot} from "../js/general-functions.js";
 
@@ -201,6 +230,7 @@ export default {
     anubiasRow,
     anubiasText,
     anubiasToggle,
+    cubePreloader
   },
   data: () => {
     return {
@@ -215,6 +245,13 @@ export default {
       defRatio: 2.137931034,
 
       timerPic: null,
+
+      // live preview
+      iframeUrl: 'http://127.0.0.1:8090',
+      loading: true,
+      loaded: false,
+      showFallback: false,
+      loadTimeout: null
     };
   },
   mounted() {
@@ -231,6 +268,7 @@ export default {
         this.$store.dispatch('ide/setCanScreenshot', false);
       }
     }, 10000, this);
+    this.startLoadTimeout();
   },
   unmounted() {
     clearInterval(this.timerPic);
@@ -249,6 +287,9 @@ export default {
     ...mapGetters(
         'ide', ['currentPage', 'activePageIndex']
     ),
+    scalable(){
+      return 'transform: scale('+1 / this.zooms[this.zoom]+')';
+    },
     scrollerStyle() {
 
       let style = '';
@@ -403,8 +444,50 @@ export default {
       } else {
         console.log('invalid area');
       }
+    },
+    startLoadTimeout() {
+      clearTimeout(this.loadTimeout)
+
+      this.loadTimeout = setTimeout(() => {
+        this.loading = false
+        this.loaded = false
+        this.showFallback = true
+      }, 5000)
+    },
+
+    handleIframeLoad() {
+      clearTimeout(this.loadTimeout)
+
+      this.loading = false
+      this.loaded = true
+      this.showFallback = false
+    },
+
+    reloadIframe() {
+      clearTimeout(this.loadTimeout)
+
+      // Reset the state before reloading
+      this.loading = true
+      this.loaded = false
+      this.showFallback = false
+
+      const iframe = this.$refs.iframe
+
+      if (!iframe) {
+        return
+      }
+
+      // Force the iframe to reload
+      iframe.src = this.iframeUrl
+
+      // Start waiting for the iframe again
+      this.startLoadTimeout()
     }
   },
+
+  beforeUnmount() {
+    clearTimeout(this.loadTimeout)
+  }
 }
 </script>
 
@@ -504,7 +587,48 @@ export default {
 #scroller {
   height: calc(100% + 10px);
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
   border-radius: 4rem;
+}
+
+/* just in dev right now */
+#component-holder, #components-area {
+  display: none;
+}
+
+#live-preview {
+  border: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.iframe-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.fallback {
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--darker-bg);
+  color: var(--text-muted);
+  height: 100%;
+}
+
+.fallback button {
+  margin-top: 12px;
+  padding: 8px 16px;
+  cursor: pointer;
 }
 </style>
