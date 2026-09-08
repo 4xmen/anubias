@@ -44,7 +44,7 @@
 <!--        <input placeholder="Search resources..."/>-->
 <!--      </div>-->
 <!--      WIP: may need add search for resource-->
-      <a  class="button"  @click="back()" href="#">
+      <a  class="back-btn"  @click="back()" href="#">
         Back
       </a >
 
@@ -501,7 +501,7 @@ watch(lastSelectedResource, async (resource) => {
   align-items: center;
 
   border: 1px solid rgba(255, 255, 255, .06);
-  border-radius: 6px;
+  border-radius: var(--bordr-radius);
 
   background: transparent;
   color: #bfbfbf;
@@ -530,7 +530,7 @@ watch(lastSelectedResource, async (resource) => {
 
   padding: 0 10px;
 
-  border-radius: 7px;
+  border-radius: var(--bordr-radius);
 
   background: rgba(255, 255, 255, .04);
 
@@ -667,7 +667,7 @@ watch(lastSelectedResource, async (resource) => {
 
   padding: 10px;
 
-  border-radius: 8px;
+  border-radius: var(--bordr-radius);
 
   border: 1px solid transparent;
 
@@ -701,7 +701,7 @@ watch(lastSelectedResource, async (resource) => {
   justify-content: center;
   align-items: center;
 
-  border-radius: 8px;
+  border-radius: var(--bordr-radius);
 
   background: rgba(255, 255, 255, .04);
 
@@ -712,7 +712,7 @@ watch(lastSelectedResource, async (resource) => {
 
     object-fit: cover;
 
-    border-radius: 6px;
+    border-radius: var(--bordr-radius);
 
   }
 

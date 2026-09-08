@@ -139,21 +139,7 @@ export default {
   color: #eceff4;
 }
 
-.back-btn {
-  background: transparent;
-  border: 1px solid #3a3d44;
-  color: #9ea4af;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: .15s;
-}
 
-.back-btn:hover {
-  background: #2b2d31;
-  border-color: #4b4f58;
-  color: #fff;
-}
 
 /* Layout */
 
@@ -178,7 +164,7 @@ export default {
   height:36px;
   padding:0 12px;
   border:none;
-  border-radius:6px;
+  border-radius:var(--bordr-radius);
   background:transparent;
   color:#b9bec8;
   text-align:left;
@@ -239,7 +225,7 @@ export default {
   height:34px;
   padding:0 10px;
   border:1px solid rgba(255,255,255,.08);
-  border-radius:6px;
+  border-radius:var(--bordr-radius);
   background:var(--darker-bg);
   color:white;
   outline:none;

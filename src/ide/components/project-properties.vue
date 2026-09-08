@@ -66,7 +66,7 @@ export default {
   padding: 14px 16px;
   border: 1px solid rgba(255, 193, 7, 0.18);
   background: linear-gradient(180deg, rgba(255, 193, 7, 0.08), rgba(255, 193, 7, 0.04));
-  border-radius: 12px;
+  border-radius: var(--bordr-radius);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
   color: #e8e8e8;
 }
@@ -75,7 +75,7 @@ export default {
   width: 34px;
   height: 34px;
   min-width: 34px;
-  border-radius: 10px;
+  border-radius: var(--bordr-radius);
   display: grid;
   place-items: center;
   background: rgba(255, 193, 7, 0.12);
@@ -113,7 +113,7 @@ export default {
 .btn {
   height: 30px;
   padding: 0 12px;
-  border-radius: 8px;
+  border-radius: var(--bordr-radius);
   border: 1px solid transparent;
   font-size: 12px;
   font-weight: 600;

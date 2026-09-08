@@ -177,7 +177,7 @@ img {
   font-size: 110%;
   cursor: pointer;
   background: var(--darker-bg);
-  border-radius: 6px;
+  border-radius: var(--bordr-radius);
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.16);
 }
 
@@ -246,7 +246,7 @@ img {
   grid-row: 1 / 6;
   border: 1px solid silver;
   cursor: default !important;
-  border-radius: 6px;
+  border-radius: var(--bordr-radius);
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.16);
 }
 
@@ -293,7 +293,7 @@ img {
 
   padding: 10px 12px;
 
-  border-radius: 10px;
+  border-radius: var(--bordr-radius);
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.16);
   border: 1px solid rgba(255, 255, 255, 0.07);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.015));
@@ -354,7 +354,7 @@ img {
   background: rgba(255, 255, 255, 0.02);
   color: rgba(233, 236, 239, 0.88);
 
-  border-radius: 8px;
+  border-radius: var(--bordr-radius);
   padding: 7px 10px;
 
   font-size: 12px;

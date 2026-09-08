@@ -4,8 +4,9 @@
     font-weight: 400;
 
     --text-color: rgba(255, 255, 255, 0.87);
-    --text-hilight: yellowgreen;
-    --text-hilight-darker: #6a8d1e;
+    --text-hilight: #61AFEF;
+    --text-hilight-darker:#528BFF;
+    ---active-hover-bg: #215cd1;
 
     --def-bg: #282c34;
     --darker-bg: #21252b;
@@ -13,6 +14,8 @@
     --invert-bg: #cac5ba;
     --scrollbarbg: #21252b80;
     --scrollbar: #353a4560;
+
+    --bordr-radius: 7px;
 
     --transition-duration: 500ms;
 
@@ -24,6 +27,23 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
+
+
+    --bg-primary: #1E2127;
+    --bg-secondary: #181A1F;
+    --surface: #21252B;
+    --surface-hover: #282C34;
+
+    --border: #3E4451;
+
+    --text-primary: #ABB2BF;
+    --text-heading: #D7DAE0;
+    --text-muted: #828997;
+
+    --primary: #61AFEF;
+    --success: #98C379;
+    --warning: #E5C07B;
+    --danger: #E06C75;
 
 }
 
@@ -400,6 +420,22 @@ input {
 .circle-btn.small {
     width: 35px;
     height: 35px;
+}
+
+.back-btn {
+    background: transparent;
+    border: 1px solid #3a3d44;
+    color: #9ea4af;
+    padding: 6px 12px;
+    border-radius: var(--bordr-radius);
+    cursor: pointer;
+    transition: .15s;
+}
+
+.back-btn:hover {
+    background: var(---active-hover-bg);
+    border-color: #4b4f58;
+    color: #fff;
 }
 
 .material-button {
