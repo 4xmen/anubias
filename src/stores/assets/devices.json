@@ -3,14 +3,166 @@
     "name": "GLX Shahin II",
     "width": 1080,
     "height": 2340,
+    "dpr": 3,
+    "viewportWidth": 360,
+    "viewportHeight": 780,
     "borderLess": true,
     "cameraBorder": "cb1",
     "isDesktop": false
   },
   {
-    "name": "iPhone 14",
+    "name": "iPhone 17 Pro Max",
+    "width": 1320,
+    "height": 2868,
+    "dpr": 3,
+    "viewportWidth": 440,
+    "viewportHeight": 956,
+    "borderLess": true,
+    "cameraBorder": "cb4",
+    "isDesktop": false
+  },
+  {
+    "name": "iPhone 17 Pro",
+    "width": 1206,
+    "height": 2622,
+    "dpr": 3,
+    "viewportWidth": 402,
+    "viewportHeight": 874,
+    "borderLess": true,
+    "cameraBorder": "cb4",
+    "isDesktop": false
+  },
+  {
+    "name": "iPhone 17",
+    "width": 1206,
+    "height": 2622,
+    "dpr": 3,
+    "viewportWidth": 402,
+    "viewportHeight": 874,
+    "borderLess": true,
+    "cameraBorder": "cb4",
+    "isDesktop": false
+  },
+  {
+    "name": "iPhone Air",
+    "width": 1260,
+    "height": 2736,
+    "dpr": 3,
+    "viewportWidth": 420,
+    "viewportHeight": 912,
+    "borderLess": true,
+    "cameraBorder": "cb4",
+    "isDesktop": false
+  },
+
+  {
+    "name": "iPhone 16 Pro Max",
+    "width": 1320,
+    "height": 2868,
+    "dpr": 3,
+    "viewportWidth": 440,
+    "viewportHeight": 956,
+    "borderLess": true,
+    "cameraBorder": "cb4",
+    "isDesktop": false
+  },
+  {
+    "name": "iPhone 16 Pro",
+    "width": 1206,
+    "height": 2622,
+    "dpr": 3,
+    "viewportWidth": 402,
+    "viewportHeight": 874,
+    "borderLess": true,
+    "cameraBorder": "cb4",
+    "isDesktop": false
+  },
+  {
+    "name": "iPhone 16 Plus",
+    "width": 1290,
+    "height": 2796,
+    "dpr": 3,
+    "viewportWidth": 430,
+    "viewportHeight": 932,
+    "borderLess": true,
+    "cameraBorder": "cb4",
+    "isDesktop": false
+  },
+  {
+    "name": "iPhone 16",
+    "width": 1179,
+    "height": 2556,
+    "dpr": 3,
+    "viewportWidth": 393,
+    "viewportHeight": 852,
+    "borderLess": true,
+    "cameraBorder": "cb4",
+    "isDesktop": false
+  },
+  {
+    "name": "iPhone 16e",
     "width": 1170,
     "height": 2532,
+    "dpr": 3,
+    "viewportWidth": 390,
+    "viewportHeight": 844,
+    "borderLess": true,
+    "cameraBorder": "cb3",
+    "isDesktop": false
+  },
+
+  {
+    "name": "iPhone 15 Pro Max",
+    "width": 1290,
+    "height": 2796,
+    "dpr": 3,
+    "viewportWidth": 430,
+    "viewportHeight": 932,
+    "borderLess": true,
+    "cameraBorder": "cb4",
+    "isDesktop": false
+  },
+  {
+    "name": "iPhone 15 Pro",
+    "width": 1179,
+    "height": 2556,
+    "dpr": 3,
+    "viewportWidth": 393,
+    "viewportHeight": 852,
+    "borderLess": true,
+    "cameraBorder": "cb4",
+    "isDesktop": false
+  },
+  {
+    "name": "iPhone 15 Plus",
+    "width": 1290,
+    "height": 2796,
+    "dpr": 3,
+    "viewportWidth": 430,
+    "viewportHeight": 932,
+    "borderLess": true,
+    "cameraBorder": "cb4",
+    "isDesktop": false
+  },
+  {
+    "name": "iPhone 15",
+    "width": 1179,
+    "height": 2556,
+    "dpr": 3,
+    "viewportWidth": 393,
+    "viewportHeight": 852,
+    "borderLess": true,
+    "cameraBorder": "cb4",
+    "isDesktop": false
+  },
+
+  {
+    "name": "iPhone 14 Pro Max",
+    "width": 1290,
+    "height": 2796,
+    "dpr": 3,
+    "viewportWidth": 430,
+    "viewportHeight": 932,
     "borderLess": true,
     "cameraBorder": "cb4",
     "isDesktop": false
@@ -19,14 +171,9 @@
     "name": "iPhone 14 Pro",
     "width": 1179,
     "height": 2556,
-    "borderLess": true,
-    "cameraBorder": "cb4",
-    "isDesktop": false
-  },
-  {
-    "name": "iPhone 14 Pro Max",
-    "width": 1290,
-    "height": 2796,
+    "dpr": 3,
+    "viewportWidth": 393,
+    "viewportHeight": 852,
     "borderLess": true,
     "cameraBorder": "cb4",
     "isDesktop": false
@@ -35,30 +182,32 @@
     "name": "iPhone 14 Plus",
     "width": 1284,
     "height": 2778,
+    "dpr": 3,
+    "viewportWidth": 428,
+    "viewportHeight": 926,
     "borderLess": true,
     "cameraBorder": "cb3",
     "isDesktop": false
   },
   {
-    "name": "iPhone 13",
+    "name": "iPhone 14",
     "width": 1170,
     "height": 2532,
+    "dpr": 3,
+    "viewportWidth": 390,
+    "viewportHeight": 844,
     "borderLess": true,
-    "cameraBorder": "cb3",
+    "cameraBorder": "cb4",
     "isDesktop": false
   },
-  {
-    "name": "iPhone 13 mini",
-    "width": 1080,
-    "height": 2340,
-    "borderLess": true,
-    "cameraBorder": "cb3",
-    "isDesktop": false
-  },
+
   {
     "name": "iPhone 13 Pro Max",
     "width": 1284,
     "height": 2778,
+    "dpr": 3,
+    "viewportWidth": 428,
+    "viewportHeight": 926,
     "borderLess": true,
     "cameraBorder": "cb3",
     "isDesktop": false
@@ -67,30 +216,43 @@
     "name": "iPhone 13 Pro",
     "width": 1170,
     "height": 2532,
+    "dpr": 3,
+    "viewportWidth": 390,
+    "viewportHeight": 844,
     "borderLess": true,
     "cameraBorder": "cb3",
     "isDesktop": false
   },
   {
-    "name": "iPhone 12",
+    "name": "iPhone 13",
     "width": 1170,
     "height": 2532,
+    "dpr": 3,
+    "viewportWidth": 390,
+    "viewportHeight": 844,
     "borderLess": true,
-    "cameraBorder": "cb2",
+    "cameraBorder": "cb3",
     "isDesktop": false
   },
   {
-    "name": "iPhone 12 mini",
+    "name": "iPhone 13 mini",
     "width": 1080,
     "height": 2340,
+    "dpr": 3,
+    "viewportWidth": 375,
+    "viewportHeight": 812,
     "borderLess": true,
-    "cameraBorder": "cb2",
+    "cameraBorder": "cb3",
     "isDesktop": false
   },
+
   {
     "name": "iPhone 12 Pro Max",
     "width": 1284,
     "height": 2778,
+    "dpr": 3,
+    "viewportWidth": 428,
+    "viewportHeight": 926,
     "borderLess": true,
     "cameraBorder": "cb2",
     "isDesktop": false
@@ -99,14 +261,43 @@
     "name": "iPhone 12 Pro",
     "width": 1170,
     "height": 2532,
+    "dpr": 3,
+    "viewportWidth": 390,
+    "viewportHeight": 844,
     "borderLess": true,
     "cameraBorder": "cb2",
     "isDesktop": false
   },
   {
+    "name": "iPhone 12",
+    "width": 1170,
+    "height": 2532,
+    "dpr": 3,
+    "viewportWidth": 390,
+    "viewportHeight": 844,
+    "borderLess": true,
+    "cameraBorder": "cb2",
+    "isDesktop": false
+  },
+  {
+    "name": "iPhone 12 mini",
+    "width": 1080,
+    "height": 2340,
+    "dpr": 3,
+    "viewportWidth": 375,
+    "viewportHeight": 812,
+    "borderLess": true,
+    "cameraBorder": "cb2",
+    "isDesktop": false
+  },
+
+  {
     "name": "iPhone 11 Pro Max",
     "width": 1242,
     "height": 2688,
+    "dpr": 3,
+    "viewportWidth": 414,
+    "viewportHeight": 896,
     "borderLess": true,
     "cameraBorder": "cb2",
     "isDesktop": false
@@ -115,6 +306,9 @@
     "name": "iPhone 11 Pro",
     "width": 1125,
     "height": 2436,
+    "dpr": 3,
+    "viewportWidth": 375,
+    "viewportHeight": 812,
     "borderLess": true,
     "cameraBorder": "cb2",
     "isDesktop": false
@@ -123,270 +317,89 @@
     "name": "iPhone 11",
     "width": 828,
     "height": 1792,
+    "dpr": 2,
+    "viewportWidth": 414,
+    "viewportHeight": 896,
     "borderLess": true,
     "cameraBorder": "cb2",
     "isDesktop": false
   },
+
   {
-    "name": "iPhone XR",
-    "width": 828,
-    "height": 1792,
-    "borderLess": true,
-    "cameraBorder": "cb2",
-    "isDesktop": false
-  },
-  {
-    "name": "iPhone XS",
-    "width": 1125,
-    "height": 2436,
-    "borderLess": true,
-    "cameraBorder": "cb2",
-    "isDesktop": false
-  },
-  {
-    "name": "iPhone XS Max",
-    "width": 1242,
-    "height": 2688,
-    "borderLess": true,
-    "cameraBorder": "cb2",
-    "isDesktop": false
-  },
-  {
-    "name": "iPhone X",
-    "width": 1125,
-    "height": 2436,
-    "borderLess": true,
-    "cameraBorder": "cb2",
-    "isDesktop": false
-  },
-  {
-    "name": "iPhone 8 Plus",
-    "width": 1080,
-    "height": 1920,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "iPhone 8",
-    "width": 750,
-    "height": 1334,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "iPhone 7 Plus",
-    "width": 1080,
-    "height": 1920,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "iPhone 7",
-    "width": 750,
-    "height": 1334,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "iPhone 6 Plus/6S Plus",
-    "width": 1080,
-    "height": 1920,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "iPhone 6/6S",
-    "width": 750,
-    "height": 1334,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "iPhone 5",
-    "width": 640,
-    "height": 1136,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "iPad Pro",
-    "width": 2048,
-    "height": 2732,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "iPad Air 1 & 2",
-    "width": 1536,
-    "height": 2048,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "iPad Mini 2 & 3",
-    "width": 1536,
-    "height": 2048,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "iPad Mini",
-    "width": 768,
-    "height": 1024,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "Nexus 6P",
+    "name": "Samsung Galaxy S25 Ultra",
     "width": 1440,
-    "height": 2560,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "Nexus 5X",
-    "width": 1080,
-    "height": 1920,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "Google Pixel 4 XL",
-    "width": 869,
-    "height": 1440,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "Google Pixel 4",
-    "width": 1080,
-    "height": 2280,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "Google Pixel 3a XL",
-    "width": 1080,
-    "height": 2160,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "Google Pixel 3a",
-    "width": 1080,
-    "height": 2220,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "Google Pixel 3 XL",
-    "width": 1440,
-    "height": 2960,
-    "borderLess": true,
-    "cameraBorder": "cb3",
-    "isDesktop": false
-  },
-  {
-    "name": "Google Pixel 3",
-    "width": 1080,
-    "height": 2160,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "Google Pixel 2 XL",
-    "width": 1440,
-    "height": 2560,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "Google Pixel XL",
-    "width": 1440,
-    "height": 2560,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "Google Pixel",
-    "width": 1080,
-    "height": 1920,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "Samsung Galaxy Note 10+",
-    "width": 1440,
-    "height": 3040,
+    "height": 3120,
+    "dpr": 3.5,
+    "viewportWidth": 412,
+    "viewportHeight": 892,
     "borderLess": true,
     "cameraBorder": "cbc",
     "isDesktop": false
   },
   {
-    "name": "Samsung Galaxy Note 10",
-    "width": 1080,
-    "height": 2280,
+    "name": "Samsung Galaxy S25+",
+    "width": 1440,
+    "height": 3120,
+    "dpr": 3.75,
+    "viewportWidth": 384,
+    "viewportHeight": 832,
     "borderLess": true,
     "cameraBorder": "cbc",
     "isDesktop": false
   },
   {
-    "name": "Samsung Galaxy Note 9",
-    "width": 1440,
-    "height": 2960,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "Samsung Galaxy Note 5",
-    "width": 1440,
-    "height": 2560,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "LG G5",
-    "width": 1440,
-    "height": 2560,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "One Plus 3",
+    "name": "Samsung Galaxy S25",
     "width": 1080,
-    "height": 1920,
-     "borderLess": false,
-    "cameraBorder": "",
+    "height": 2340,
+    "dpr": 3,
+    "viewportWidth": 360,
+    "viewportHeight": 780,
+    "borderLess": true,
+    "cameraBorder": "cbc",
     "isDesktop": false
   },
+
+  {
+    "name": "Samsung Galaxy S24 Ultra",
+    "width": 1440,
+    "height": 3120,
+    "dpr": 3.5,
+    "viewportWidth": 412,
+    "viewportHeight": 892,
+    "borderLess": true,
+    "cameraBorder": "cbc",
+    "isDesktop": false
+  },
+  {
+    "name": "Samsung Galaxy S24+",
+    "width": 1440,
+    "height": 3120,
+    "dpr": 3.75,
+    "viewportWidth": 384,
+    "viewportHeight": 832,
+    "borderLess": true,
+    "cameraBorder": "cbc",
+    "isDesktop": false
+  },
+  {
+    "name": "Samsung Galaxy S24",
+    "width": 1080,
+    "height": 2340,
+    "dpr": 3,
+    "viewportWidth": 360,
+    "viewportHeight": 780,
+    "borderLess": true,
+    "cameraBorder": "cbc",
+    "isDesktop": false
+  },
+
   {
     "name": "Samsung Galaxy S23 Ultra",
     "width": 1440,
     "height": 3080,
+    "dpr": 3.5,
+    "viewportWidth": 412,
+    "viewportHeight": 880,
     "borderLess": true,
     "cameraBorder": "cbc",
     "isDesktop": false
@@ -395,6 +408,9 @@
     "name": "Samsung Galaxy S23+",
     "width": 1080,
     "height": 2340,
+    "dpr": 3,
+    "viewportWidth": 360,
+    "viewportHeight": 780,
     "borderLess": true,
     "cameraBorder": "cbc",
     "isDesktop": false
@@ -403,151 +419,224 @@
     "name": "Samsung Galaxy S23",
     "width": 1080,
     "height": 2340,
+    "dpr": 3,
+    "viewportWidth": 360,
+    "viewportHeight": 780,
+    "borderLess": true,
+    "cameraBorder": "cbc",
+    "isDesktop": false
+  },
+
+  {
+    "name": "Samsung Galaxy A56",
+    "width": 1080,
+    "height": 2340,
+    "dpr": 3,
+    "viewportWidth": 360,
+    "viewportHeight": 780,
     "borderLess": true,
     "cameraBorder": "cbc",
     "isDesktop": false
   },
   {
-    "name": "Samsung Galaxy S10e",
+    "name": "Samsung Galaxy A55",
     "width": 1080,
-    "height": 2280,
+    "height": 2340,
+    "dpr": 3,
+    "viewportWidth": 360,
+    "viewportHeight": 780,
     "borderLess": true,
-    "cameraBorder": "cbr",
+    "cameraBorder": "cbc",
     "isDesktop": false
   },
+
   {
-    "name": "Samsung Galaxy S10+",
-    "width": 1440,
-    "height": 3040,
+    "name": "Google Pixel 9 Pro XL",
+    "width": 1344,
+    "height": 2992,
+    "dpr": 3.25,
+    "viewportWidth": 412,
+    "viewportHeight": 917,
     "borderLess": true,
-    "cameraBorder": "cbr",
+    "cameraBorder": "cbc",
     "isDesktop": false
   },
   {
-    "name": "Samsung Galaxy S10",
-    "width": 1440,
-    "height": 3040,
-    "borderLess": true,
-    "cameraBorder": "cbr",
-    "isDesktop": false
-  },
-  {
-    "name": "Samsung Galaxy S9+",
-    "width": 1440,
-    "height": 2960,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "Samsung Galaxy S9",
-    "width": 1440,
-    "height": 2960,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "Samsung Galaxy S8+",
-    "width": 1440,
-    "height": 2960,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "Samsung Galaxy S8",
-    "width": 1440,
-    "height": 2960,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "Samsung Galaxy S7 Edge",
-    "width": 1440,
-    "height": 2560,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "Samsung Galaxy S7",
-    "width": 1440,
-    "height": 2560,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "Nexus 9",
-    "width": 1536,
-    "height": 2048,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "Nexus 7",
-    "width": 1200,
-    "height": 1920,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "Pixel C",
-    "width": 1800,
-    "height": 2560,
-     "borderLess": false,
-    "cameraBorder": "",
-    "isDesktop": false
-  },
-  {
-    "name": "Samsung Galaxy Tab 10",
+    "name": "Google Pixel 9 Pro",
     "width": 1280,
-    "height": 800,
-     "borderLess": false,
+    "height": 2856,
+    "dpr": 3.125,
+    "viewportWidth": 412,
+    "viewportHeight": 919,
+    "borderLess": true,
+    "cameraBorder": "cbc",
+    "isDesktop": false
+  },
+  {
+    "name": "Google Pixel 9",
+    "width": 1080,
+    "height": 2424,
+    "dpr": 2.625,
+    "viewportWidth": 412,
+    "viewportHeight": 924,
+    "borderLess": true,
+    "cameraBorder": "cbc",
+    "isDesktop": false
+  },
+  {
+    "name": "Google Pixel 8",
+    "width": 1080,
+    "height": 2400,
+    "dpr": 2.625,
+    "viewportWidth": 412,
+    "viewportHeight": 915,
+    "borderLess": true,
+    "cameraBorder": "cbc",
+    "isDesktop": false
+  },
+
+  {
+    "name": "iPad Pro 12.9",
+    "width": 2048,
+    "height": 2732,
+    "dpr": 2,
+    "viewportWidth": 1024,
+    "viewportHeight": 1366,
+    "borderLess": false,
     "cameraBorder": "",
     "isDesktop": false
   },
   {
-    "name": "Chromebook Pixel",
-    "width": 2560,
-    "height": 1700,
-     "borderLess": false,
+    "name": "iPad Pro 11",
+    "width": 1668,
+    "height": 2388,
+    "dpr": 2,
+    "viewportWidth": 834,
+    "viewportHeight": 1194,
+    "borderLess": false,
+    "cameraBorder": "",
+    "isDesktop": false
+  },
+  {
+    "name": "iPad Air",
+    "width": 1640,
+    "height": 2360,
+    "dpr": 2,
+    "viewportWidth": 820,
+    "viewportHeight": 1180,
+    "borderLess": false,
+    "cameraBorder": "",
+    "isDesktop": false
+  },
+  {
+    "name": "iPad Mini",
+    "width": 1488,
+    "height": 2266,
+    "dpr": 2,
+    "viewportWidth": 744,
+    "viewportHeight": 1133,
+    "borderLess": false,
+    "cameraBorder": "",
+    "isDesktop": false
+  },
+
+  {
+    "name": "Desktop 1366",
+    "width": 1366,
+    "height": 768,
+    "dpr": 1,
+    "viewportWidth": 1366,
+    "viewportHeight": 768,
+    "borderLess": false,
     "cameraBorder": "",
     "isDesktop": true
   },
   {
-    "name": "Asus Chromebook Flip 12.5 Inch",
+    "name": "Desktop 1440",
+    "width": 1440,
+    "height": 900,
+    "dpr": 1,
+    "viewportWidth": 1440,
+    "viewportHeight": 900,
+    "borderLess": false,
+    "cameraBorder": "",
+    "isDesktop": true
+  },
+  {
+    "name": "Desktop 1536",
+    "width": 1536,
+    "height": 864,
+    "dpr": 1,
+    "viewportWidth": 1536,
+    "viewportHeight": 864,
+    "borderLess": false,
+    "cameraBorder": "",
+    "isDesktop": true
+  },
+  {
+    "name": "Desktop Full HD",
     "width": 1920,
     "height": 1080,
-     "borderLess": false,
+    "dpr": 1,
+    "viewportWidth": 1920,
+    "viewportHeight": 1080,
+    "borderLess": false,
     "cameraBorder": "",
     "isDesktop": true
   },
   {
-    "name": "MacBook Air 13 Inch",
+    "name": "Desktop QHD",
     "width": 2560,
-    "height": 1600,
-     "borderLess": false,
+    "height": 1440,
+    "dpr": 1,
+    "viewportWidth": 2560,
+    "viewportHeight": 1440,
+    "borderLess": false,
     "cameraBorder": "",
     "isDesktop": true
   },
   {
-    "name": "MacBook Pro 15 Inch",
-    "width": 2880,
-    "height": 1800,
-     "borderLess": false,
+    "name": "Desktop 4K",
+    "width": 3840,
+    "height": 2160,
+    "dpr": 1,
+    "viewportWidth": 3840,
+    "viewportHeight": 2160,
+    "borderLess": false,
+    "cameraBorder": "",
+    "isDesktop": true
+  },
+
+  {
+    "name": "MacBook Air 13",
+    "width": 2560,
+    "height": 1664,
+    "dpr": 2,
+    "viewportWidth": 1280,
+    "viewportHeight": 832,
+    "borderLess": false,
     "cameraBorder": "",
     "isDesktop": true
   },
   {
-    "name": "Lenovo Legion Y540 17 Inch",
-    "width": 1920,
-    "height": 1080,
-     "borderLess": false,
+    "name": "MacBook Pro 14",
+    "width": 3024,
+    "height": 1964,
+    "dpr": 2,
+    "viewportWidth": 1512,
+    "viewportHeight": 982,
+    "borderLess": false,
+    "cameraBorder": "",
+    "isDesktop": true
+  },
+  {
+    "name": "MacBook Pro 16",
+    "width": 3456,
+    "height": 2234,
+    "dpr": 2,
+    "viewportWidth": 1728,
+    "viewportHeight": 1117,
+    "borderLess": false,
     "cameraBorder": "",
     "isDesktop": true
   }
