@@ -25,7 +25,7 @@ export default {
   },
   props: {
     scaling:{
-      type: Number,
+      type: String,
       default: 1
     }
   },

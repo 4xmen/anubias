@@ -187,7 +187,7 @@
 import {mapGetters, mapState} from "vuex";
 import droppable from "./droppable.vue";
 
-// anubias component to make falutter
+// anubias component to make flutter
 import anubiasAppbar from "./anubias/anubiasAppbar.vue";
 import anubiasButton from "./anubias/anubiasButton.vue";
 import anubiasCircleButton from "./anubias/anubiasCircleButton.vue";
@@ -247,7 +247,7 @@ export default {
       timerPic: null,
 
       // live preview
-      iframeUrl: 'http://127.0.0.1:8090',
+      iframeUrl: 'http://localhost:8090',
       loading: true,
       loaded: false,
       showFallback: false,
