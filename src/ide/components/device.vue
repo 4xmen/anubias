@@ -22,7 +22,7 @@
       <svg xmlns="http://www.w3.org/2000/svg"
            id="front-camera"
            :style="frontCameraStyle"
-           :width="this.device.width"
+           :width="this.device.viewportWidth"
            :height="borderLessCameraHeight"
            viewBox="0 0 291.042 26.458">
         <path
@@ -152,7 +152,7 @@
         </div>
         <div class="iframe-wrapper">
           <!-- Preloader -->
-          <cube-preloader v-if="loading " :scaling="scalable"></cube-preloader>
+          <cube-preloader v-if="loading " :scaling="scalable / 3"></cube-preloader>
 
           <!-- Iframe -->
           <iframe
@@ -234,7 +234,7 @@ export default {
   },
   data: () => {
     return {
-      zooms: [.25, 1.25, 1, .75, .50],
+      zooms: [.85, 1.25, 1, .75, .50],
       holderWidth: 290,
       holderHeight: 620,
 
@@ -296,16 +296,16 @@ export default {
       // if landscape
       if (this.isLandscape) {
         if (!this.device.borderLess) {
-          style += `border-left: ${this.device.height / 15}px solid black;
-        border-right: ${this.device.height / 15}px solid black;
-        margin-right:-3px`;
+          style += `border-left: ${this.device.viewportHeight / 15}px solid black;
+        border-right: ${this.device.viewportHeight / 15}px solid black;
+        margin-right:0px`;
         }
       } else {
         // otherwise add bordr top and bottom
         if (!this.device.borderLess) {
-          style += `border-top: ${this.device.height / 15}px solid black;
-        border-bottom: ${this.device.height / 15}px solid black;
-        margin-top:-3px`;
+          style += `border-top: ${this.device.viewportHeight / 15}px solid black;
+        border-bottom: ${this.device.viewportHeight / 15}px solid black;
+        margin-top:0`;
         }
       }
 
@@ -313,8 +313,8 @@ export default {
     },
     frontCameraStyle() {
       let style = '';
-      if (this.device.height < 2000) {
-        style += 'top: -' + (Math.abs(Math.ceil((2000 - this.deviceWidth) / 400))) * 0.5 + '%;'
+      if (this.device.viewportHeight < 2000) {
+        style += 'top: -' + (Math.abs(Math.ceil((2000 - this.deviceWidth) / 400))) * 1.25 + '%;'
         console.log(style);
       }
       if (this.isLandscape) {
@@ -323,8 +323,6 @@ export default {
         style += 'top:-4.5%;';
         style += 'left:-44.5%;';
         style += 'right:auto;';
-
-
       }
 
       return style;
@@ -335,15 +333,15 @@ export default {
     deviceHeight() {
       // console.log(this.device.height, this.device.width);
       if (this.isLandscape) {
-        return parseInt(this.device.width);
+        return parseInt(this.device.viewportWidth);
       }
-      return this.device.height;
+      return this.device.viewportHeight;
     },
     deviceWidth() {
       if (this.isLandscape) {
-        return parseInt(this.device.height);
+        return parseInt(this.device.viewportHeight);
       }
-      return this.device.width;
+      return this.device.viewportWidth;
     },
     deviceStyle() {
 
@@ -381,7 +379,7 @@ export default {
 
     },
     borderLessCameraHeight() {
-      let n = this.device.width / this.ide.devices[0].width;
+      let n = this.device.viewportWidth / this.ide.devices[0].viewportWidth;
       return 100 + Math.round(n * 23);
     },
     zoom() {
@@ -585,10 +583,10 @@ export default {
 }
 
 #scroller {
-  height: calc(100% + 10px);
+  height: calc(100% );
   overflow-x: hidden;
   overflow-y: hidden;
-  border-radius: 4rem;
+  border-radius: 1rem;
 }
 
 /* just in dev right now */
