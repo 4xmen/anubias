@@ -89,8 +89,10 @@ pub fn run() {
             let ws_state = Arc::new(WsServerState::new());
             app.manage(ws_state.clone());
 
+            let app_handle = app.handle().clone();
+
             tauri::async_runtime::spawn(async move {
-                if let Err(e) = start_ws_server(ws_state).await {
+                if let Err(e) = start_ws_server(ws_state, app_handle).await {
                     eprintln!("[ws-server] Failed to start: {}", e);
                 }
             });

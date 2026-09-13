@@ -7,15 +7,17 @@
 //! - Only supports broadcasting a payload from a Tauri command to all clients
 
 use futures_util::{SinkExt, StreamExt};
+use serde::Deserialize;
 use std::net::SocketAddr;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
-use tauri::State;
+use tauri::{AppHandle, State};
 use tokio::net::{TcpListener, TcpStream};
 use tokio::sync::{broadcast, Mutex};
 use tokio_tungstenite::accept_async;
 use tokio_tungstenite::tungstenite::Message;
-use serde::Deserialize;
+use tauri::Emitter;
+
 
 #[derive(Debug, Deserialize)]
 struct SelectMessage {
@@ -23,7 +25,6 @@ struct SelectMessage {
     msg_type: String,
     hash: String,
 }
-
 
 /// Fixed list of high, uncommon ports (very low chance of conflict).
 const CANDIDATE_PORTS: &[u16] = &[
@@ -91,6 +92,7 @@ async fn handle_connection(
     stream: TcpStream,
     addr: SocketAddr,
     tx: broadcast::Sender<String>,
+    app_handle: tauri::AppHandle,
 ) {
     let ws_stream = match accept_async(stream).await {
         Ok(ws) => ws,
@@ -103,6 +105,7 @@ async fn handle_connection(
     println!("[ws-server] Client connected: {}", addr);
 
     let (mut sink, mut stream) = ws_stream.split();
+    // send message to client
     let mut rx = tx.subscribe();
 
     let write_task = tokio::spawn(async move {
@@ -116,22 +119,19 @@ async fn handle_connection(
     // handle data from live preview client
     while let Some(result) = stream.next().await {
         match result {
-            Ok(Message::Text(text)) => {
-                match serde_json::from_str::<SelectMessage>(text.as_ref()) {
-                    Ok(message) => {
-                        println!("type: {}", message.msg_type);
-                        println!("hash: {}", message.hash);
-
-                        if message.msg_type == "select" {
-                            println!("Selected hash: {}", message.hash);
+            Ok(Message::Text(text)) => match serde_json::from_str::<SelectMessage>(text.as_ref()) {
+                Ok(message) => {
+                    if message.msg_type == "select" {
+                        if let Err(e) = app_handle.emit("ws-handle", text.to_string()) {
+                            eprintln!("[ws-server] Failed to emit ws-handle: {}", e);
                         }
                     }
-
-                    Err(e) => {
-                        eprintln!("Invalid JSON: {}", e);
-                    }
                 }
-            }
+
+                Err(e) => {
+                    eprintln!("Invalid JSON: {}", e);
+                }
+            },
 
             Ok(Message::Close(_)) => {
                 println!("Client disconnected");
@@ -139,7 +139,7 @@ async fn handle_connection(
             }
 
             Ok(_) => {
-                // Ping/Pong/Binary و غیره
+                // others
             }
 
             Err(e) => {
@@ -154,7 +154,10 @@ async fn handle_connection(
 }
 
 /// Start the WebSocket server. Call this from `.setup()`.
-pub async fn start_ws_server(state: Arc<WsServerState>) -> Result<(), String> {
+pub async fn start_ws_server(
+    state: Arc<WsServerState>,
+    app_handle: AppHandle,
+) -> Result<(), String> {
     if state.shutting_down.load(Ordering::SeqCst) {
         return Err("Server is already shutting down".into());
     }
@@ -178,7 +181,7 @@ pub async fn start_ws_server(state: Arc<WsServerState>) -> Result<(), String> {
             match listener.accept().await {
                 Ok((stream, addr)) => {
                     let tx = tx.clone();
-                    tokio::spawn(handle_connection(stream, addr, tx));
+                    tokio::spawn(handle_connection(stream, addr, tx, app_handle.clone()));
                 }
                 Err(e) => {
                     if !state_clone.shutting_down.load(Ordering::SeqCst) {

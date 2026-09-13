@@ -208,6 +208,7 @@ import anubiasToggle from "./anubias/anubiasToggle.vue";
 import cubePreloader from "./cube-preloader.vue";
 // import fuctions
 import {createScreenShot} from "../js/general-functions.js";
+import {listen} from "@tauri-apps/api/event";
 
 export default {
   name: "device",
@@ -254,8 +255,13 @@ export default {
       loadTimeout: null
     };
   },
-  mounted() {
+  async mounted() {
     console.log("Component mounted.");
+    // ws handle
+    await listen('ws-handle', (event) => {
+      const message = event.payload;
+      console.log('ws',message);
+    });
     this.timerPic = setInterval(async () => {
       // update previwe image
       if (this.canScreen) {
@@ -269,6 +275,7 @@ export default {
       }
     }, 10000, this);
     this.startLoadTimeout();
+
   },
   unmounted() {
     clearInterval(this.timerPic);
