@@ -15,6 +15,15 @@ use tokio::net::{TcpListener, TcpStream};
 use tokio::sync::{broadcast, Mutex};
 use tokio_tungstenite::accept_async;
 use tokio_tungstenite::tungstenite::Message;
+use serde::Deserialize;
+
+#[derive(Debug, Deserialize)]
+struct SelectMessage {
+    #[serde(rename = "type")]
+    msg_type: String,
+    hash: String,
+}
+
 
 /// Fixed list of high, uncommon ports (very low chance of conflict).
 const CANDIDATE_PORTS: &[u16] = &[
@@ -104,8 +113,41 @@ async fn handle_connection(
         }
     });
 
-    // Ignore any messages coming from the client
-    while let Some(Ok(_)) = stream.next().await {}
+    // handle data from live preview client
+    while let Some(result) = stream.next().await {
+        match result {
+            Ok(Message::Text(text)) => {
+                match serde_json::from_str::<SelectMessage>(text.as_ref()) {
+                    Ok(message) => {
+                        println!("type: {}", message.msg_type);
+                        println!("hash: {}", message.hash);
+
+                        if message.msg_type == "select" {
+                            println!("Selected hash: {}", message.hash);
+                        }
+                    }
+
+                    Err(e) => {
+                        eprintln!("Invalid JSON: {}", e);
+                    }
+                }
+            }
+
+            Ok(Message::Close(_)) => {
+                println!("Client disconnected");
+                break;
+            }
+
+            Ok(_) => {
+                // Ping/Pong/Binary و غیره
+            }
+
+            Err(e) => {
+                eprintln!("WebSocket error: {}", e);
+                break;
+            }
+        }
+    }
 
     write_task.abort();
     println!("[ws-server] Client disconnected: {}", addr);
