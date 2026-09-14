@@ -16,15 +16,7 @@ use tokio::net::{TcpListener, TcpStream};
 use tokio::sync::{broadcast, Mutex};
 use tokio_tungstenite::accept_async;
 use tokio_tungstenite::tungstenite::Message;
-use tauri::Emitter;
-
-
-#[derive(Debug, Deserialize)]
-struct SelectMessage {
-    #[serde(rename = "type")]
-    msg_type: String,
-    hash: String,
-}
+use crate::socket::socket_input_handler::handle_input_socket;
 
 /// Fixed list of high, uncommon ports (very low chance of conflict).
 const CANDIDATE_PORTS: &[u16] = &[
@@ -118,35 +110,7 @@ async fn handle_connection(
 
     // handle data from live preview client
     while let Some(result) = stream.next().await {
-        match result {
-            Ok(Message::Text(text)) => match serde_json::from_str::<SelectMessage>(text.as_ref()) {
-                Ok(message) => {
-                    if message.msg_type == "select" {
-                        if let Err(e) = app_handle.emit("ws-handle", text.to_string()) {
-                            eprintln!("[ws-server] Failed to emit ws-handle: {}", e);
-                        }
-                    }
-                }
-
-                Err(e) => {
-                    eprintln!("Invalid JSON: {}", e);
-                }
-            },
-
-            Ok(Message::Close(_)) => {
-                println!("Client disconnected");
-                break;
-            }
-
-            Ok(_) => {
-                // others
-            }
-
-            Err(e) => {
-                eprintln!("WebSocket error: {}", e);
-                break;
-            }
-        }
+        handle_input_socket(result, app_handle.clone());
     }
 
     write_task.abort();

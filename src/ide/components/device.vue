@@ -260,7 +260,16 @@ export default {
     // ws handle
     await listen('ws-handle', (event) => {
       const message = event.payload;
-      console.log('ws',message);
+      try{
+        let data = JSON.parse(message);
+        switch (data.type) {
+          case "select":
+
+            break;
+        }
+      }catch (e) {
+        console.log('Json parse error', e);
+      }
     });
     this.timerPic = setInterval(async () => {
       // update previwe image
