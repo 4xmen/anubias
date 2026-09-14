@@ -184,7 +184,7 @@
 </template>
 
 <script>
-import {mapGetters, mapState} from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 import droppable from "./droppable.vue";
 
 // anubias component to make flutter
@@ -262,9 +262,10 @@ export default {
       const message = event.payload;
       try{
         let data = JSON.parse(message);
+        console.log(data);
         switch (data.type) {
           case "select":
-
+            this.selectByHash(data.hash);
             break;
         }
       }catch (e) {
@@ -409,6 +410,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      selectByHash: "project/selectComponentByHash",
+    }),
     test() {
       console.log('test');
     },

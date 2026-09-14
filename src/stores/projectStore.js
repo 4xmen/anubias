@@ -585,6 +585,11 @@ const projectStore = {
             await invoke('clear_resources');
             commit('CLEAR_RESOURCE');
         },
+        selectComponentByHash({state,rootState, dispatch},hash){
+            let index = state.hashmaps.findComponentIndex(hash);
+            let currentComponent = state.project.pages[rootState.ide.activePage].children.visual[index];
+            dispatch('setOnEditComponent',currentComponent,{root: true});
+        }
     },
     getters: {
         getPage: (state) => (i) => {
