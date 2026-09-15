@@ -1,9 +1,9 @@
 /**
- * Generates a unique UUID v4 identifier for a page
- * @returns {string} A unique UUID v4 string in the format: xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
+ * Generates a unique UUID v4-style identifier (hash ID)
+ * @returns {string} A unique UUID-like string in the format: xxxxxxxx-xxxx-2xxx-yxxx-xxxxxxxxxxxx
  * @example
- * const pageId = generatePageId();
- * console.log(pageId); // "550e8400-e29b-41d4-a716-446655440000"
+ * const id = generateHashId();
+ * console.log(id); // "550e8400-e29b-21d4-a716-446655440000"
  */
 function generateHashId() {
     return 'xxxxxxxx-xxxx-2xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -13,6 +13,13 @@ function generateHashId() {
     });
 }
 
+/**
+ * Generates a unique command ID
+ * @returns {string} A unique command ID in the format: com-yxxx-xxxxx
+ * @example
+ * const commandId = generateCommandId();
+ * console.log(commandId); // "com-a1b2-c3d4e"
+ */
 function generateCommandId() {
     return 'com-yxxx-xxxxx'.replace(/[xy]/g, function (c) {
         const r = (Math.random() * 16) | 0;
@@ -21,6 +28,14 @@ function generateCommandId() {
     });
 }
 
+/**
+ * Inspects a Blob and logs detailed information about its contents
+ * @param {Blob|null|undefined} blob - The Blob to inspect
+ * @param {string} [label=''] - Optional label for the console output
+ * @returns {Promise<Uint8Array|undefined>} The byte array of the Blob, or undefined if the Blob is null/undefined
+ * @example
+ * await inspectBlob(myBlob, 'Image Data');
+ */
 async function inspectBlob(blob, label = '') {
     if (!blob) {
         console.warn(`${label}: Blob is null/undefined`);
@@ -46,31 +61,51 @@ async function inspectBlob(blob, label = '') {
 }
 
 /**
- * get unix timestamp
- * @returns {number}
+ * Returns the current Unix timestamp in seconds
+ * @returns {number} Current Unix timestamp (seconds since epoch)
+ * @example
+ * const now = unixTimestamp();
+ * console.log(now); // 1726380000
  */
 let unixTimestamp = function () {
     return Math.round(+new Date() / 1000);
 };
+
+/**
+ * Ensures a file path has an extension. Adds ".anb" if none is present
+ * @param {string} filePath - The original file path
+ * @returns {string} The file path with an extension
+ * @example
+ * fixName("document");     // "document.anb"
+ * fixName("image.png");    // "image.png"
+ */
 let fixName = function (filePath) {
     const hasExt = /\.[^\/\\]+$/.test(filePath);
     if (!hasExt) return filePath + ".anb";
     return filePath;
-}
+};
 
+/**
+ * Creates a deep clone of an object safely.
+ * Tries structuredClone first, falls back to JSON serialization.
+ * @param {*} Object - The value to clone
+ * @returns {*} A deep clone of the input
+ * @example
+ * const clone = safeClone(originalObject);
+ */
 let safeClone = function (Object) {
     try {
         return structuredClone(Object);
     } catch {
         return JSON.parse(JSON.stringify(Object));
     }
+};
 
-}
 /**
- * getInstance for edited entity to redo/undo direct
- * @param command UndoCommand
- * @param state ProjectState
- * @returns {*} object of [project|page|component]
+ * Returns the instance of the edited entity for undo/redo operations
+ * @param {Object} command - The UndoCommand object
+ * @param {Object} state - The ProjectState object
+ * @returns {*} The corresponding project, page, or component instance
  */
 let getInstanceByCommand = function (command, state) {
     if (command.entity === "COMPONENT") {
@@ -86,8 +121,14 @@ let getInstanceByCommand = function (command, state) {
         // project
         return state.project;
     }
-}
+};
 
+/**
+ * Creates a 1x1 white PNG Blob
+ * @returns {Promise<Blob>} A Promise that resolves to a 1x1 white PNG Blob
+ * @example
+ * const blankBlob = await createBlankImageBlob();
+ */
 async function createBlankImageBlob() {
     const canvas = document.createElement('canvas');
     canvas.width = 1;
@@ -100,7 +141,17 @@ async function createBlankImageBlob() {
     return await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
 }
 
-
+/**
+ * Extracts file name and extension information from a path
+ * @param {string} path - The file path
+ * @returns {{name: string, ext: string, hasExtension: boolean}} Object containing name, extension, and whether an extension exists
+ * @example
+ * getFileInfo("folder/image.PNG");
+ * // { name: "image", ext: "png", hasExtension: true }
+ *
+ * getFileInfo("document");
+ * // { name: "document", ext: "", hasExtension: false }
+ */
 function getFileInfo(path) {
     const normalized = path.replace(/\\/g, "/");
 
