@@ -152,7 +152,7 @@
         </div>
         <div class="iframe-wrapper">
           <!-- Preloader -->
-          <cube-preloader v-if="loading " :scaling="scalable / 3"></cube-preloader>
+          <cube-preloader v-if="loading "></cube-preloader>
 
           <!-- Iframe -->
           <iframe
@@ -262,11 +262,18 @@ export default {
       const message = event.payload;
       try{
         let data = JSON.parse(message);
-        console.log(data);
         switch (data.type) {
           case "select":
             this.selectByHash(data.hash);
             break;
+          case "focus":
+            this.pushHash(data.hash);
+            break;
+          case "blur":
+            this.popHash(null);
+            break;
+          default:
+            console.log('unknown event', data);
         }
       }catch (e) {
         console.log('Json parse error', e);
@@ -412,6 +419,8 @@ export default {
   methods: {
     ...mapActions({
       selectByHash: "project/selectComponentByHash",
+      pushHash: "ide/pushDropStack",
+      popHash: "ide/popDropStack",
     }),
     test() {
       console.log('test');

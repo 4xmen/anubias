@@ -26,7 +26,7 @@ export default {
   props: {
     scaling:{
       type: String,
-      default: 1
+      default: '1'
     }
   },
   mounted() {

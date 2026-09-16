@@ -27,6 +27,7 @@ import componentPreloaderDefault from './components/defaultPreloader.json';
 import componentRowDefault from './components/defaultRow.json';
 import componentTextDefault from './components/defaultText.json';
 import componentToggleDefault from './components/defaultToggle.json';
+import dropHashStack from "../ide/js/drop-hash-stack.js";
 
 /**
  * import other modules
@@ -132,6 +133,7 @@ const ideStore = {
             enabled: false,
         },
         activePage: 0,
+        dropHashStack: dropHashStack,
         devices: devices,
         colors: colors,
         draggedData: {},
@@ -287,6 +289,12 @@ const ideStore = {
 
         UPDATE_LAZY_CHANGE_STATE(state, payload) {
             state.lazyChange[payload.name] = payload.value;
+        },
+        PUSH_HASH_STACK(state, hash) {
+            state.dropHashStack.push(hash);
+        },
+        POP_HASH_STACK(state, hash) {
+            state.dropHashStack.pop(hash);
         },
     },
     actions: {
@@ -564,6 +572,15 @@ const ideStore = {
 
             commit('RESET_FAST_CHANGE_DETECTOR');
         },
+        pushDropStack({commit},hash) {
+           commit('PUSH_HASH_STACK', hash);
+        },
+        popDropStack({commit},hash) {
+           commit('POP_HASH_STACK', hash);
+        },
+        lastDropHashOnStack({state}) {
+            return state.dropHashStack.last();
+        }
     },
     getters: {
         version(state) {
