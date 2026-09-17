@@ -3,7 +3,7 @@
  * while preserving the order of the remaining items.
  */
 class DropHashStack {
-    #stack = [];
+    _stack = [];
 
     /**
      * Adds a hash to the top of the stack.
@@ -12,7 +12,7 @@ class DropHashStack {
      * @returns {DropHashStack} The current stack instance.
      */
     push(hash) {
-        this.#stack.push(hash);
+        this._stack.push(hash);
 
         return this;
     }
@@ -26,13 +26,13 @@ class DropHashStack {
      * @returns {boolean} True if the hash was found and removed.
      */
     pop(hash) {
-        const index = this.#stack.indexOf(hash);
+        const index = this._stack.indexOf(hash);
 
         if (index === -1) {
             return false;
         }
 
-        this.#stack.splice(index, 1);
+        this._stack.splice(index, 1);
 
         return true;
     }
@@ -43,7 +43,7 @@ class DropHashStack {
      * @returns {string|undefined} The top hash, or undefined if empty.
      */
     last() {
-        return this.#stack.at(-1);
+        return this._stack.at(-1);
     }
 
     /**
@@ -52,7 +52,7 @@ class DropHashStack {
      * @returns {string[]} A copy of the stack.
      */
     map() {
-        return [...this.#stack];
+        return [...this._stack];
     }
 }
 
