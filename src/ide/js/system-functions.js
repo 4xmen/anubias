@@ -67,7 +67,7 @@ async function inspectBlob(blob, label = '') {
  * const now = unixTimestamp();
  * console.log(now); // 1726380000
  */
-let unixTimestamp = function () {
+const unixTimestamp = function () {
     return Math.round(+new Date() / 1000);
 };
 
@@ -79,7 +79,7 @@ let unixTimestamp = function () {
  * fixName("document");     // "document.anb"
  * fixName("image.png");    // "image.png"
  */
-let fixName = function (filePath) {
+const fixName = function (filePath) {
     const hasExt = /\.[^\/\\]+$/.test(filePath);
     if (!hasExt) return filePath + ".anb";
     return filePath;
@@ -93,7 +93,7 @@ let fixName = function (filePath) {
  * @example
  * const clone = safeClone(originalObject);
  */
-let safeClone = function (Object) {
+const safeClone = function (Object) {
     try {
         return structuredClone(Object);
     } catch {
@@ -107,7 +107,7 @@ let safeClone = function (Object) {
  * @param {Object} state - The ProjectState object
  * @returns {*} The corresponding project, page, or component instance
  */
-let getInstanceByCommand = function (command, state) {
+const getInstanceByCommand = function (command, state) {
     if (command.entity === "COMPONENT") {
         const {
             index,
@@ -174,6 +174,16 @@ function getFileInfo(path) {
     };
 }
 
+/**
+ * Delays execution for a specified number of milliseconds.
+ * @param {number} ms - The delay duration in milliseconds
+ * @returns {Promise<void>} A promise that resolves after the delay
+ * @example
+ * await sleep(3);
+ */
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+
 export {
     generateHashId,
     inspectBlob,
@@ -183,5 +193,6 @@ export {
     safeClone,
     getInstanceByCommand,
     createBlankImageBlob,
-    getFileInfo
+    getFileInfo,
+    sleep,
 };

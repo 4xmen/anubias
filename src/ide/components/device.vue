@@ -1,5 +1,5 @@
 <template>
-  <div id="device-container">
+  <div id="device-container" @dragover="prvDef" @drop="prvDef" @dragstart="prvDef" >
     <!--    {{ device.width }}x{{ device.height }}-->
     <!--    {{ device.cameraBorder }}-->
 
@@ -145,16 +145,18 @@
             </div>
           </template>
         </div>
-        <div id="components-area">
-          <droppable id="drop-area" area="visual" :dropping="dropped">
-            Drop visual components here...
-          </droppable>
-        </div>
-        <div class="iframe-wrapper">
+<!--        <div id="components-area">-->
+<!--          <droppable id="drop-area" area="visual" :dropping="dropped">-->
+<!--            Drop visual components here...-->
+<!--          </droppable>-->
+<!--        </div>-->
+
+        <div class="iframe-wrapper" >
           <!-- Preloader -->
-          <cube-preloader v-if="loading "></cube-preloader>
+          <cube-preloader v-if="loading"></cube-preloader>
 
           <!-- Iframe -->
+          <droppable area="visual" :dropping="dropped"  id="visual-drop">
           <iframe
               v-show="loaded"
               ref="iframe"
@@ -163,6 +165,7 @@
               @dblclick="reloadIframe"
               id="live-preview"
           ></iframe>
+          </droppable>
 
           <!-- Fallback -->
           <div v-if="showFallback" class="fallback">
@@ -180,6 +183,7 @@
       </div>
 
     </div>
+
   </div>
 </template>
 
@@ -209,6 +213,7 @@ import cubePreloader from "./cube-preloader.vue";
 // import fuctions
 import {createScreenShot} from "../js/general-functions.js";
 import {listen} from "@tauri-apps/api/event";
+import {sleep} from "../js/system-functions.js";
 
 export default {
   name: "device",
@@ -248,11 +253,11 @@ export default {
       timerPic: null,
 
       // live preview
-      iframeUrl: 'http://localhost:8090',
+      iframeUrl: 'http://localhost:1420/preview/',
       loading: true,
       loaded: false,
       showFallback: false,
-      loadTimeout: null
+      loadTimeout: null,
     };
   },
   async mounted() {
@@ -292,7 +297,6 @@ export default {
       }
     }, 10000, this);
     this.startLoadTimeout();
-
   },
   unmounted() {
     clearInterval(this.timerPic);
@@ -417,6 +421,13 @@ export default {
     }
   },
   methods: {
+    async screening(){
+      const iframe = document.querySelector('#live-preview');
+
+    },
+    prvDef(e){
+      e.preventDefault();
+    },
     ...mapActions({
       selectByHash: "project/selectComponentByHash",
       pushHash: "ide/pushDropStack",
@@ -460,6 +471,7 @@ export default {
 
     },
     dropped(data) {
+      console.log('dropped', data);
       // check is valid area or not
       if ('visual' === data.area) {
         // add component to active page
@@ -479,7 +491,7 @@ export default {
         this.loading = false
         this.loaded = false
         this.showFallback = true
-      }, 5000)
+      }, 5000);
     },
 
     handleIframeLoad() {
@@ -488,6 +500,7 @@ export default {
       this.loading = false
       this.loaded = true
       this.showFallback = false
+      const iframe = document.querySelector('#live-preview');
     },
 
     reloadIframe() {
@@ -520,7 +533,13 @@ export default {
 
 <style scoped>
 
+#visual-drop{
+  height: 100%;
+  width: 100%;
+}
+
 #device-container {
+  user-select: none;
   width: 100%;
   height: 100%;
   overflow: auto;
