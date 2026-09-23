@@ -326,6 +326,7 @@ fn handle_request(request: tiny_http::Request, store: &ResourceStore) {
 
                 let mut response = Response::from_data(body).with_status_code(StatusCode(206));
 
+                response.add_header(Header::from_bytes("Access-Control-Allow-Origin", b"*").unwrap());
                 response.add_header(Header::from_bytes("Content-Type", mime.as_bytes()).unwrap());
                 response.add_header(Header::from_bytes("Accept-Ranges", b"bytes").unwrap());
                 response.add_header(
