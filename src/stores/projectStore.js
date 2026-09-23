@@ -190,6 +190,7 @@ const projectStore = {
     actions: {
         async undo({state, dispatch, commit, rootState}) {
             let commands = state.undoStack.pop();
+            let isGUIChange = false;
             commit("PUSH_REDO_COMMAND", commands);
             for (const command of commands) {
                 switch (command.action) {
@@ -219,9 +220,10 @@ const projectStore = {
 
             dispatch('updateRedoUndoMenu');
         },
-        redo({state, dispatch, commit, rootState}) {
+        async redo({state, dispatch, commit, rootState}) {
             let commands = state.redoStack.pop();
-            console.log(commands);
+            // console.log(commands);
+            let isGUIChange = false;
             commit("PUSH_UNDO_COMMAND", commands);
             for (const command of commands) {
                 console.log(command);
@@ -268,7 +270,7 @@ const projectStore = {
         pushRedoCommand({commit}, command) {
             commit('PUSH_REDO_COMMAND', command);
         },
-        removeComponent({state}, component_hash) {
+        removeComponent({state, dispatch}, component_hash) {
             //find component hash index
             const {index, pageIndex, type} = state.hashmaps.findComponentFullIndexes(component_hash, state.project);
 
@@ -278,12 +280,15 @@ const projectStore = {
 
                 state.project.pages[pageIndex].children[type].splice(index, 1);
             }
+            dispatch('updateLivePreview');
         },
-        restoreComponent({state}, command) {
+        restoreComponent({state, dispatch}, command) {
             // // restore hashmap
             state.hashmaps.restore(command.targetId);
             // // restore component
             state.project.pages[state.hashmaps.findPageIndex(command.payload.parent)].children[command.payload.type].push(safeClone(command.payload.data));
+            dispatch('updateLivePreview');
+
         },
 
         async createProject({commit, dispatch, state}, project) {
@@ -469,6 +474,8 @@ const projectStore = {
 
             // clear redo stack
             commit('CLEAR_REDO')
+
+            await dispatch('updateLivePreview');
         },
         updatePagePreviewByIndex({state, dispatch}, {pageIndex, image}) {
             dispatch('updatePagePreview', {
@@ -585,15 +592,23 @@ const projectStore = {
             await invoke('clear_resources');
             commit('CLEAR_RESOURCE');
         },
-        selectComponentByHash({state,rootState, dispatch},hash){
+        selectComponentByHash({state, rootState, dispatch}, hash) {
             let index = state.hashmaps.findComponentIndex(hash);
             let currentComponent = state.project.pages[rootState.ide.activePage].children.visual[index];
-            dispatch('setOnEditComponent',currentComponent,{root: true});
+            dispatch('setOnEditComponent', currentComponent, {root: true});
+        },
+        async updateLivePreview({state,rootState}) {
+            let payload = {
+                type: "FULL_RENDER",
+                data: state.project.pages[rootState.ide.activePage],
+            };
+            await invoke("broadcast_to_clients", {payload: JSON.stringify(payload)});
+            console.log('y');
         }
     },
     getters: {
         getPage: (state) => (i) => {
-            if (state.project.pages == undefined || state.project.pages[i] === undefined) {
+            if (state.project.pages === undefined || state.project.pages[i] === undefined) {
                 return {};
             }
             return state.project.pages[i];
