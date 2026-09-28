@@ -39,10 +39,12 @@
                    @update:model-value="(newVal) => {updateProps(sp,newVal);}">
           </div>
           <div v-else>
-            <select @change="(event) => {updateProps(sp, event.target.value);}">
-              <option value=""> No image </option>
-              <option v-for="res in resources" :value="'resource:'+res.hash_id"> {{ res.directory }}/{{ res.original_name }}</option>
-            </select>
+            Image resource:
+            <searchable-combobox v-model="sp.value" @change="(value) => {updateProps(sp, value);}">
+              <option-ex v-for="res in resources"  :value="('resource:'+res.hash_id)" >
+                {{ res.directory }}/{{ res.original_name }}
+              </option-ex>
+            </searchable-combobox>
           </div>
         </template>
       </collapsible>
@@ -65,14 +67,19 @@
     <collapsible v-if="groupedProperties.selects.length > 0" icon="ri-bank-card-line" title="Choose properties">
       <label class="input-container" v-for="(select,index) in groupedProperties.selects" :key="index">
         {{ select.key.capitalize() }}:
-        <select
-            v-model="select.value "
-            @update:model-value="(newVal) => {updateProps(select,newVal);}">
-          <option v-for="(v,i) in select.items"
-                  :class="'btn '+(v === select.value?'active':'')"
-                  :key="i" :value="v"> {{ titleFixer(v) }}
-          </option>
-        </select>
+<!--        <select-->
+<!--            v-model="select.value "-->
+<!--            @update:model-value="(newVal) => {updateProps(select,newVal);}">-->
+<!--          <option v-for="(v,i) in select.items"-->
+<!--                  :class="'btn '+(v === select.value?'active':'')"-->
+<!--                  :key="i" :value="v"> {{ titleFixer(v) }}-->
+<!--          </option>-->
+<!--        </select>-->
+        <searchable-combobox v-model="select.value" @change="(value) => {updateProps(select, value);}">
+          <option-ex v-for="(v,i) in select.items" :key="i" :value="v" >
+            {{ titleFixer(v) }}
+          </option-ex>
+        </searchable-combobox>
       </label>
     </collapsible>
 
@@ -213,7 +220,7 @@
 import {ref, computed, watch, onMounted, reactive} from 'vue';
 import {useStore} from 'vuex'
 import collapsible from "./collapsible.vue";
-import {safeClone} from "../js/system-functions.js";
+import {safeClone, sleep} from "../js/system-functions.js";
 import colorPicker from './color-picker.vue'
 import {arrayMove, fixFlutterObjectTitle} from "../js/general-functions.js";
 import toggle from "./switch.vue";
@@ -222,6 +229,8 @@ import {Sortable} from "sortablejs-vue3";
 import iconPicker from "./icon-picker.vue";
 import {useToast} from "vue-toastification";
 import around from "./around-controller.vue";
+import OptionEx from "./option-ex.vue";
+import SearchableCombobox from "./searchable-combobox.vue";
 
 /**
  * Why we use Composition API in this component:
@@ -355,11 +364,10 @@ function straitEditProps(item, value) {
 }
 
 
-function updateProps(item, value) {
-
+async function updateProps(item, value) {
   let payload = {};
   payload[item.key] = value;
-  store.dispatch("ide/setOnEditProperties", payload);
+  await store.dispatch("ide/setOnEditProperties", payload);
 }
 
 function groupProperties() {

@@ -181,6 +181,13 @@
           </div>
         </div>
       </div>
+      <!--    c is component  in v-for  -->
+      <template v-for="(c,componentIndex) in pages.currentPage?.children.visual"
+                v-if="pages.currentPage?.children !== undefined" :key="componentIndex">
+        <div @click="setOnEditComponentAndOpenProps(c)" style="padding-top: 10px">
+          {{c.name}}
+        </div>
+      </template>
 
     </div>
 
@@ -502,6 +509,8 @@ export default {
       this.loading = false
       this.loaded = true
       this.showFallback = false
+
+      const iframe = document.querySelector('#live-preview');
 
 
       setTimeout(async () => {
