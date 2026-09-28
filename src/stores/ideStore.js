@@ -42,7 +42,7 @@ const FAST_CHANGE_IDLE_TIMEOUT_MS = 300;
 const storage = new LazyStore('ide.json', {autoSave: false});
 let fastChangeTimer = null;
 
-import {invoke} from "@tauri-apps/api/core";
+import {invoke} from '@tauri-apps/api/core'
 import {generateCommandId, safeClone} from "../ide/js/system-functions.js";
 
 const ideStore = {
@@ -424,7 +424,7 @@ const ideStore = {
          * @param context
          * @param pageIndex : Number
          */
-        async setActivePage({commit,state}, pageIndex) {
+        async setActivePage({commit, state}, pageIndex) {
             commit('SET_ACTIVE_PAGE', pageIndex);
             console.log(state.pages.currentPage);
             let payload = {
@@ -432,7 +432,7 @@ const ideStore = {
                 data: state.pages.currentPage,
             };
             console.log('chanted');
-            await invoke("broadcast_to_clients", { payload: JSON.stringify(payload) });
+            await invoke("broadcast_to_clients", {payload: JSON.stringify(payload)});
         },
         async setTitle({state, getters, rootState}) {
             let title = state.title + ' v' + getters.version;
@@ -470,7 +470,7 @@ const ideStore = {
                 // create undo command here
                 const undoCommand = {
                     id: generateCommandId(),
-                    entity: (state.onEditComponent.type  === 'page' ? "PAGE" : "COMPONENT"), // "COMPONENT" | "PAGE"
+                    entity: (state.onEditComponent.type === 'page' ? "PAGE" : "COMPONENT"), // "COMPONENT" | "PAGE"
                     action: "UPDATE",
                     targetId: state.onEditComponent.hash,    // meaning depends on `entity` (component hash, page id, ...)
                     payload,
@@ -499,7 +499,7 @@ const ideStore = {
                 value: currentValue,
             });
         },
-        setOnEditProperties({state, commit, dispatch}, payload) {
+        async setOnEditProperties({state, commit, dispatch}, payload) {
             const payloadKeys = Object.keys(payload);
             const firstKey = payloadKeys[0];
 
@@ -542,6 +542,7 @@ const ideStore = {
             }
 
             commit('SET_ON_EDIT_PROPERTIES', payload);
+            dispatch('updateSingleComponentProp',payload);
 
             if (state.lazyChange.isActive) {
                 dispatch('lazyChangeCurrentValue', payload[firstKey]);
@@ -551,6 +552,16 @@ const ideStore = {
             }
         },
 
+        async updateSingleComponentProp({state}, payload) {
+            const wsPayload = {
+                type: "UPDATE_PROP_ON_SINGLE_COMPONENT",
+                data: {
+                    hash_id: state.onEditComponent.hash,
+                    payload,
+                },
+            };
+            await invoke("broadcast_to_clients", {payload: JSON.stringify(wsPayload)});
+        },
         finalizeFastChangeDetector({state, commit, dispatch}) {
             const field = state.fastChangeDetector.field;
             if (field === null) return;
@@ -563,7 +574,7 @@ const ideStore = {
                 // console.log('fastUndo', startValue, endValue, field);
                 const undoCommand = {
                     id: generateCommandId(),
-                    entity: (state.onEditComponent.type  === 'page' ? "PAGE" : "COMPONENT"), // "COMPONENT" | "PAGE"
+                    entity: (state.onEditComponent.type === 'page' ? "PAGE" : "COMPONENT"), // "COMPONENT" | "PAGE"
                     action: "UPDATE",
                     targetId: state.onEditComponent.hash,    // meaning depends on `entity` (component hash, page id, ...)
                     payload: [
@@ -579,11 +590,11 @@ const ideStore = {
 
             commit('RESET_FAST_CHANGE_DETECTOR');
         },
-        pushDropStack({commit},hash) {
-           commit('PUSH_HASH_STACK', hash);
+        pushDropStack({commit}, hash) {
+            commit('PUSH_HASH_STACK', hash);
         },
-        popDropStack({commit},hash) {
-           commit('POP_HASH_STACK', hash);
+        popDropStack({commit}, hash) {
+            commit('POP_HASH_STACK', hash);
         },
         lastDropHashOnStack({state}) {
             return state.dropHashStack.last();

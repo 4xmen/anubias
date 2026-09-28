@@ -608,7 +608,6 @@ const projectStore = {
                 data: state.project.pages[rootState.ide.activePage],
             };
             await invoke("broadcast_to_clients", {payload: JSON.stringify(payload)});
-            console.log('y');
         }
     },
     getters: {
