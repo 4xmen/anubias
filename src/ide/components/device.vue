@@ -214,6 +214,7 @@ import cubePreloader from "./cube-preloader.vue";
 import {createScreenShot} from "../js/general-functions.js";
 import {listen} from "@tauri-apps/api/event";
 import {sleep} from "../js/system-functions.js";
+import {invoke} from "@tauri-apps/api/core";
 
 export default {
   name: "device",
@@ -310,6 +311,7 @@ export default {
     ...mapState('project', {
       project: 'project',
       isSave: 'isSave',
+      resUrl: 'resourceServUrl',
     }),
     ...mapState('ide', ['defaultComponents']),
     ...mapGetters(
@@ -500,7 +502,20 @@ export default {
       this.loading = false
       this.loaded = true
       this.showFallback = false
-      const iframe = document.querySelector('#live-preview');
+
+
+      setTimeout(async () => {
+        let payload_url = {
+          type: "SET_RESOURCE_URL",
+          url: this.resUrl,
+        }
+        await invoke("broadcast_to_clients", { payload: JSON.stringify(payload_url) });
+        let payload = {
+          type: "FULL_RENDER",
+          data: this.currentPage,
+        };
+        await invoke("broadcast_to_clients", { payload: JSON.stringify(payload) });
+      },1000);
     },
 
     reloadIframe() {

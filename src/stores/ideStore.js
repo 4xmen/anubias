@@ -424,8 +424,15 @@ const ideStore = {
          * @param context
          * @param pageIndex : Number
          */
-        setActivePage(context, pageIndex) {
-            context.commit('SET_ACTIVE_PAGE', pageIndex);
+        async setActivePage({commit,state}, pageIndex) {
+            commit('SET_ACTIVE_PAGE', pageIndex);
+            console.log(state.pages.currentPage);
+            let payload = {
+                type: "FULL_RENDER",
+                data: state.pages.currentPage,
+            };
+            console.log('chanted');
+            await invoke("broadcast_to_clients", { payload: JSON.stringify(payload) });
         },
         async setTitle({state, getters, rootState}) {
             let title = state.title + ' v' + getters.version;
