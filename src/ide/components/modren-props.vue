@@ -122,8 +122,8 @@
             <label v-if="keys.indexOf('height')  !== -1 && !isLinkedWidthHeight" class="input-container">
               {{ num.key }}:
               <dinput v-model="num.value" :percentable="true"
-                      max-value="9999999"
-                      min-value="0"   @update:model-value="newVal => updateProps(num, newVal)"/>
+                      :max-value="defValue(num.validator,'max',9999999).toString()"
+                      :min-value="defValue(num.validator,'min',0).toString()"   @update:model-value="newVal => updateProps(num,parseFloat( newVal))"/>
             </label>
           </div>
         </template>
@@ -487,6 +487,15 @@ function syncEditComponent(val) {
   groupProperties()
 }
 
+
+function defValue(item,key, defaultValue) {
+  console.log(item[key]);
+
+  if (item[key] === undefined) {
+    return defaultValue;
+  }
+  return item[key];
+}
 // ====================== LIFECYCLE ======================
 
 onMounted(() => {

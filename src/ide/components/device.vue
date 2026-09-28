@@ -287,7 +287,7 @@ export default {
     });
     this.timerPic = setInterval(async () => {
       // update previwe image
-      if (this.canScreen) {
+      if (this.canScreen && false) {
         await this.$store.dispatch('project/updatePagePreviewByIndex', {
           pageIndex: this.activePageIndex,
           image: await createScreenShot('#component-holder'),

@@ -32,7 +32,9 @@
     "fontSize": {
       "type": "Number",
       "regex": "^\\d+(?:\\.\\d+)?$",
-      "state": "input"
+      "state": "input",
+      "min": 0,
+      "max":999
     },
     "height": {
       "type": "Number",

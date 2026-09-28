@@ -121,6 +121,7 @@ export default {
       const max = parseInt(this.maxValue);
       const val = current + amount <= max ? current + amount : max;
 
+      console.log(val,max);
       this.$emit('update:modelValue', percent ? val + '%' : val);
       this.$emit('input-val', this.modelValue);
       this.onUpdate();
