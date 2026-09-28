@@ -120,8 +120,10 @@
           <div v-if="num.validator !== undefined
                 && num.validator.type === 'Number' && index !== 'width' && index !== 'height'">
             <label v-if="keys.indexOf('height')  !== -1 && !isLinkedWidthHeight" class="input-container">
-              {{ index }}:
-              <dinput v-model="num.value" :percentable="true" max-value="9999999" min-value="0"/>
+              {{ num.key }}:
+              <dinput v-model="num.value" :percentable="true"
+                      max-value="9999999"
+                      min-value="0"   @update:model-value="newVal => updateProps(num, newVal)"/>
             </label>
           </div>
         </template>
