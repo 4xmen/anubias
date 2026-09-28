@@ -52,6 +52,7 @@ const projectStore = {
         ],
         projectFile: '',
         projectPath: '',
+        resourceServUrl: '',
         isSave: true,
         lastLoadProjectNotify: 0,
         backups: [],
@@ -119,6 +120,9 @@ const projectStore = {
         },
         UPDATE_PAGES(state, pages) {
             state.project.pages = pages;
+        },
+        SET_RESOURCE_BASE_URL(state, url) {
+            state.resourceServUrl = url;
         },
         ADD_NEW_PAGE(state) {
 
@@ -348,6 +352,7 @@ const projectStore = {
             let projectData = JSON.parse(result.project);
             let resourcesData = JSON.parse(result.resources);
             // fix resource data
+            commit('SET_RESOURCE_BASE_URL', `${result.server_url}/resource/`);
             for (const res of resourcesData) {
                 res.url = `${result.server_url}/resource/${res.hash_id}`;
             }
@@ -597,7 +602,7 @@ const projectStore = {
             let currentComponent = state.project.pages[rootState.ide.activePage].children.visual[index];
             dispatch('setOnEditComponent', currentComponent, {root: true});
         },
-        async updateLivePreview({state,rootState}) {
+        async updateLivePreview({state, rootState}) {
             let payload = {
                 type: "FULL_RENDER",
                 data: state.project.pages[rootState.ide.activePage],
@@ -607,6 +612,9 @@ const projectStore = {
         }
     },
     getters: {
+        resourceServerUrlBase(state) {
+            return state.resourceServUrl;
+        },
         getPage: (state) => (i) => {
             if (state.project.pages === undefined || state.project.pages[i] === undefined) {
                 return {};

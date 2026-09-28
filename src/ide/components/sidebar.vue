@@ -99,7 +99,7 @@ export default {
   computed: {
     ...mapState(['ide', 'project']),
     ...mapGetters(
-        'project', ['pages'],
+        'project', ['pages','resourceServerUrlBase'],
     ),
     ...mapGetters(
       'ide' ,['currentPage']
@@ -131,6 +131,12 @@ export default {
       await invoke("broadcast_to_clients", { payload: JSON.stringify(payload) });
     },
     async brTest2(){
+      let payload_url = {
+        type: "SET_RESOURCE_URL",
+        url: this.project.resourceServUrl,
+      }
+      console.log(payload_url);
+      await invoke("broadcast_to_clients", { payload: JSON.stringify(payload_url) });
       let payload = {
         type: "FULL_RENDER",
         data: this.currentPage,

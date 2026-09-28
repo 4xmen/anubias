@@ -41,7 +41,7 @@
           <div v-else>
             <select @change="(event) => {updateProps(sp, event.target.value);}">
               <option value=""> No image </option>
-              <option v-for="res in resources" :value="res.url"> {{ res.directory }}/{{ res.original_name }}</option>
+              <option v-for="res in resources" :value="'resource:'+res.hash_id"> {{ res.directory }}/{{ res.original_name }}</option>
             </select>
           </div>
         </template>
@@ -517,7 +517,6 @@ watch(() => localProperties.value.name, (newVal) => {
     });
   }, 5000);
 });
-
 
 </script>
 
