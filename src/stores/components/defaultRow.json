@@ -11,7 +11,8 @@
   "margin": "0",
   "borderRadius": "0",
   "children": [],
-  "axis": "MainAxisAlignment.start",
+  "mainAlign": "start",
+  "crossAlign": "center",
   "scrollable": false,
   "visible": true,
   "validator": {
@@ -21,9 +22,14 @@
       "regex": "^[a-zA-Z_][a-zA-Z0-9_]*$",
       "state": ""
     },
-    "align" : {
+    "mainAlign" : {
       "type": "String",
-      "regex": "^(null|left|right|center)$",
+      "regex": "^(start|center|end|spaceBetween|spaceAround|spaceEvenly)$",
+      "state": "input"
+    },
+    "crossAlign" : {
+      "type": "String",
+      "regex": "^(start|center|end|stretch|baseline)$",
       "state": "input"
     },
     "width" : {
@@ -64,11 +70,6 @@
     "borderRadius" : {
       "type": "String|Number",
       "regex": "^\\d+(,\\d+){0,3}$",
-      "state": "input"
-    },
-    "axis": {
-      "type": "String",
-      "regex": "^(MainAxisAlignment\\.start|MainAxisAlignment\\.end|MainAxisAlignment\\.spaceAround|MainAxisAlignment\\.spaceBetween)$",
       "state": "input"
     },
     "visible": {

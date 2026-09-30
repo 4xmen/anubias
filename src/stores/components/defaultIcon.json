@@ -6,7 +6,7 @@
   "color": "null",
   "size": 24,
   "padding": "0",
-  "align": "null",
+  "alignment": "null",
   "visible": true,
   "validator": {
     "version": 2,
@@ -35,9 +35,9 @@
       "regex": "^\\d+(,\\d+){0,3}$",
       "state": "input"
     },
-    "align" : {
-      "type": "String",
-      "regex": "^(null|left|right|center)$",
+    "alignment" : {
+      "type": "String|Alignment",
+      "regex": "^(null|topLeft|topRight|topCenter|centerLeft|centerRight|center|bottomLeft|bottomRight|bottomCenter)$",
       "state": "input"
     },
     "visible": {

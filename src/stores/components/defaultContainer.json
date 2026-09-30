@@ -2,7 +2,7 @@
   "type": "container",
   "name": "container",
   "hash": "",
-  "align": "center",
+  "alignment": "center",
   "width": "120",
   "height": "120",
   "padding": "0",
@@ -22,9 +22,9 @@
       "regex": "^[a-zA-Z_][a-zA-Z0-9_]*$",
       "state": ""
     },
-    "align" : {
-      "type": "String",
-      "regex": "^(null|left|right|center)$",
+    "alignment" : {
+      "type": "String|Alignment",
+      "regex": "^(null|topLeft|topRight|topCenter|centerLeft|centerRight|center|bottomLeft|bottomRight|bottomCenter)$",
       "state": "input"
     },
     "width" : {
