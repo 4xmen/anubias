@@ -15,6 +15,7 @@
     </collapsible>
     <!-- show aligns loop-->
     <template v-for="align in groupedProperties.aligns">
+      <template v-if="align.key === 'align'">
       <collapsible :title="'Align ('+showValue(align.value)+')'+alignLabel(align.key)" icon="ri-layout-right-2-line">
         <div class="btn-group">
           <div v-for="(v,i) in extractItems(align.validator.regex)"
@@ -29,6 +30,12 @@
           </div>
         </div>
       </collapsible>
+      </template>
+      <template v-else>
+        <collapsible :title="'Alignment ('+showValue(align.value)+')'" icon="ri-layout-right-2-line">
+          <postion-picker v-model="align.value"></postion-picker>
+        </collapsible>
+      </template>
     </template>
     <!-- show specials loop-->
     <template v-for="sp in groupedProperties.specials">
@@ -126,7 +133,7 @@
         <template v-for="(num,index) in groupedProperties.numbers" :key="index">
           <div v-if="num.validator !== undefined
                 && num.validator.type === 'Number' && index !== 'width' && index !== 'height'">
-            <label v-if="keys.indexOf('height')  !== -1 && !isLinkedWidthHeight" class="input-container">
+            <label class="input-container">
               {{ num.key }}:
               <dinput v-model="num.value" :percentable="true"
                       :max-value="defValue(num.validator,'max',9999999).toString()"
@@ -146,11 +153,11 @@
           <template v-if="isLinkedWidthHeight"> & height</template>
           :
           <template v-if="isLinkedWidthHeight">
-            <dinput v-model="size.value" min-value="0" max-value="999"
+            <dinput v-model="size.value" min-value="0"   :max-value="defValue(size.validator,'max',9999).toString()"
                     :percentable="true" @update:model-value="(newVal) => {widthHeightUpdate(newVal);}"/>
           </template>
           <template v-else>
-            <dinput v-model="size.value" min-value="0" max-value="999"
+            <dinput v-model="size.value" min-value="0"   :max-value="defValue(size.validator,'max',9999).toString()"
                     :percentable="true" @update:model-value="(newVal) => {updateProps(size,newVal);}"/>
           </template>
 
@@ -231,6 +238,7 @@ import {useToast} from "vue-toastification";
 import around from "./around-controller.vue";
 import OptionEx from "./option-ex.vue";
 import SearchableCombobox from "./searchable-combobox.vue";
+import PostionPicker from "./modern-prop/postion-picker.vue";
 
 /**
  * Why we use Composition API in this component:
@@ -334,7 +342,7 @@ function extractItems(regex) {
 }
 
 function showValue(title) {
-  if (title === 'null') {
+  if (title === 'null' || title === null) {
     return 'Default';
   }
   return title;
@@ -412,7 +420,7 @@ function groupProperties() {
       groupedProperties.colors.push(item)
     } else if (valInfo.type?.includes('Boolean')) {
       groupedProperties.booleans.push(item)
-    } else if (valInfo.type?.includes('Align')) {
+    } else if (valInfo.type?.includes('Align') || valInfo.type?.includes('Alignment')) {
       groupedProperties.aligns.push(item)
     } else if (valInfo.type?.includes('Select')) {
       groupedProperties.selects.push(item)
