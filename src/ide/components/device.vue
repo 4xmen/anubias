@@ -285,6 +285,19 @@ export default {
           case "blur":
             this.popHash(null);
             break;
+          case "delete":
+            this.$store.dispatch('ide/showConfirm', {
+              onConfirm: () => {
+
+                this.remComponent(data.hash);
+              },
+              onCancel() {
+
+              },
+              text: "Are you sure to remove this component?",
+              title: 'Remove component confirm',
+            });
+            break;
           default:
             console.log('unknown event', data);
         }
@@ -441,6 +454,7 @@ export default {
       selectByHash: "project/selectComponentByHash",
       pushHash: "ide/pushDropStack",
       popHash: "ide/popDropStack",
+      remComponent: "project/removeComponent",
     }),
     test() {
       console.log('test');
