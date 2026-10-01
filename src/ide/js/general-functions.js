@@ -87,6 +87,14 @@ let calcPaddingOrMargin = (value) => {
 let createScreenShot = async (selector) => {
     return await htmlToImage.toBlob(document.querySelector(selector));
 };
+/**
+ * make screenshot of element
+ * @param element dom element
+ * @returns {Promise<string>} base64 string
+ */
+let createScreenShotByElement = async (element) => {
+    return await htmlToImage.toBlob(element);
+};
 
 
 /**
@@ -124,6 +132,7 @@ export {
     getSize,
     calcPaddingOrMargin,
     createScreenShot,
+    createScreenShotByElement,
     arrayMove,
     fixFlutterObjectTitle
 };

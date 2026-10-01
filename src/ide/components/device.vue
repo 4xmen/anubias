@@ -197,7 +197,8 @@
 <script>
 import {mapActions, mapGetters, mapState} from "vuex";
 import droppable from "./droppable.vue";
-
+import {toPng, toJpeg, toBlob, toPixelData, toSvg} from 'html-to-image';
+import * as htmlToImage from 'html-to-image';
 // anubias component to make flutter
 import anubiasAppbar from "./anubias/anubiasAppbar.vue";
 import anubiasButton from "./anubias/anubiasButton.vue";
@@ -218,7 +219,7 @@ import anubiasText from "./anubias/anubiasText.vue";
 import anubiasToggle from "./anubias/anubiasToggle.vue";
 import cubePreloader from "./cube-preloader.vue";
 // import fuctions
-import {createScreenShot} from "../js/general-functions.js";
+import {createScreenShot, createScreenShotByElement} from "../js/general-functions.js";
 import {listen} from "@tauri-apps/api/event";
 import {sleep} from "../js/system-functions.js";
 import {invoke} from "@tauri-apps/api/core";
@@ -285,6 +286,9 @@ export default {
           case "blur":
             this.popHash(null);
             break;
+          case "duplicate":
+
+            break;
           case "delete":
             this.$store.dispatch('ide/showConfirm', {
               onConfirm: () => {
@@ -307,14 +311,18 @@ export default {
     });
     this.timerPic = setInterval(async () => {
       // update previwe image
-      if (this.canScreen && false) {
-        await this.$store.dispatch('project/updatePagePreviewByIndex', {
-          pageIndex: this.activePageIndex,
-          image: await createScreenShot('#component-holder'),
-        });
-        // create project backup
-        // this.$store.dispatch('project/backupProject');
-        this.$store.dispatch('ide/setCanScreenshot', false);
+      if (this.canScreen || true) {
+        console.log('screened');
+        // await this.$store.dispatch('project/updatePagePreviewByIndex', {
+        //   pageIndex: this.activePageIndex,
+        //   image: await createScreenShot('#scroller'),
+        // });
+        // 'SCREENSHOT'
+        let payload = {
+          type: "SCREENSHOT",
+          data: [],
+        };
+        await invoke("broadcast_to_clients", {payload: JSON.stringify(payload)})
       }
     }, 10000, this);
     this.startLoadTimeout();
