@@ -29,38 +29,6 @@ function generateCommandId() {
 }
 
 /**
- * Inspects a Blob and logs detailed information about its contents
- * @param {Blob|null|undefined} blob - The Blob to inspect
- * @param {string} [label=''] - Optional label for the console output
- * @returns {Promise<Uint8Array|undefined>} The byte array of the Blob, or undefined if the Blob is null/undefined
- * @example
- * await inspectBlob(myBlob, 'Image Data');
- */
-async function inspectBlob(blob, label = '') {
-    if (!blob) {
-        console.warn(`${label}: Blob is null/undefined`);
-        return;
-    }
-
-    const buffer = await blob.arrayBuffer();
-    const bytes = new Uint8Array(buffer);
-
-    console.group(`📊 Blob Inspection: ${label} (size: ${bytes.length})`);
-    console.log('First 3 bytes :', Array.from(bytes.slice(0, 3)));
-    console.log('Last 3 bytes  :', Array.from(bytes.slice(-3)));
-
-    // hex preview
-    console.log('First 6 bytes (hex):',
-        Array.from(bytes.slice(0, 6))
-            .map(b => b.toString(16).padStart(2, '0'))
-            .join(' ')
-    );
-    console.groupEnd();
-
-    return bytes;
-}
-
-/**
  * Returns the current Unix timestamp in seconds
  * @returns {number} Current Unix timestamp (seconds since epoch)
  * @example
@@ -186,7 +154,6 @@ const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
 export {
     generateHashId,
-    inspectBlob,
     unixTimestamp,
     fixName,
     generateCommandId,

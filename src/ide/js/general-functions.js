@@ -1,6 +1,4 @@
 import store from "../../stores/store";
-import * as htmlToImage from 'html-to-image';
-import {toPng, toJpeg, toBlob, toPixelData, toSvg} from 'html-to-image';
 
 let project = store.state.project;
 let ide = store.state.ide;
@@ -80,24 +78,6 @@ let calcPaddingOrMargin = (value) => {
 };
 
 /**
- * make screenshot of element
- * @param selector css selector
- * @returns {Promise<string>} base64 string
- */
-let createScreenShot = async (selector) => {
-    return await htmlToImage.toBlob(document.querySelector(selector));
-};
-/**
- * make screenshot of element
- * @param element dom element
- * @returns {Promise<string>} base64 string
- */
-let createScreenShotByElement = async (element) => {
-    return await htmlToImage.toBlob(element);
-};
-
-
-/**
  * move index in array
  * @param arr
  * @param fromIndex
@@ -125,14 +105,11 @@ let fixFlutterObjectTitle = function (title) {
 };
 
 
-
 export {
     color2web,
     getColor,
     getSize,
     calcPaddingOrMargin,
-    createScreenShot,
-    createScreenShotByElement,
     arrayMove,
     fixFlutterObjectTitle
 };

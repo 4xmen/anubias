@@ -424,9 +424,9 @@ const ideStore = {
          * @param context
          * @param pageIndex : Number
          */
-        async setActivePage({commit, state}, pageIndex) {
+        async setActivePage({commit, state, dispatch}, pageIndex) {
             commit('SET_ACTIVE_PAGE', pageIndex);
-            console.log('set current page', {value: state.pages.currentPage.hash} );
+            // console.log('set current page', {value: state.pages.currentPage.hash} );
             await invoke('set_current_page_hash',{value: state.pages.currentPage.hash});
 
             let payload = {
@@ -435,6 +435,7 @@ const ideStore = {
             };
             // console.log('chanted');
             await invoke("broadcast_to_clients", {payload: JSON.stringify(payload)});
+            dispatch('setCanScreenshot', true);
         },
         async setTitle({state, getters, rootState}) {
             let title = state.title + ' v' + getters.version;

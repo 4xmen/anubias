@@ -505,8 +505,7 @@ function syncEditComponent(val) {
 
 
 function defValue(item,key, defaultValue) {
-  console.log(item[key]);
-
+  // console.log(item[key]);
   if (item[key] === undefined) {
     return defaultValue;
   }

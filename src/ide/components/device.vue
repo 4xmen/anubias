@@ -315,9 +315,12 @@ export default {
           type: "SCREENSHOT",
           data: [],
         };
-        await invoke("broadcast_to_clients", {payload: JSON.stringify(payload)})
+        await invoke("broadcast_to_clients", {payload: JSON.stringify(payload)});
+        this.$store.commit('ide/SET_CAN_SCREENSHOT', false);
+        this.$store.commit('project/ASSET_COUNTING');
+        // this.$store.commit('project/ASSET_COUNTING');
       }
-    }, 10000, this);
+    }, 1000, this);
     this.startLoadTimeout();
   },
   unmounted() {

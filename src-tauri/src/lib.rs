@@ -80,7 +80,7 @@ fn get_current_page_hash(state: tauri::State<'_, AppState>) -> String {
 
 #[tauri::command]
 fn set_current_page_hash(state: tauri::State<'_, AppState>, value: String) {
-    println!("Set current page hash: {}", value);
+    // println!("Set current page hash: {}", value);
     *state.current_page_hash.lock().unwrap() = value;
 }
 

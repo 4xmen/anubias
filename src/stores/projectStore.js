@@ -597,8 +597,8 @@ const projectStore = {
             commit('CLEAR_RESOURCE');
         },
         selectComponentByHash({state, rootState, dispatch}, hash) {
-            let index = state.hashmaps.findComponentIndex(hash);
-            let currentComponent = state.project.pages[rootState.ide.activePage].children.visual[index];
+            let fullIndexes = state.hashmaps.findComponentFullIndexes(hash, state.project);
+            let currentComponent = state.project.pages[fullIndexes.pageIndex].children.visual[fullIndexes.index];
             dispatch('setOnEditComponent', currentComponent, {root: true});
         },
         async updateLivePreview({state, rootState}) {

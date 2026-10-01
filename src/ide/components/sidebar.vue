@@ -55,14 +55,6 @@
           <div class="circle-btn m-auto" @click="addNewPage" title="Add new page">
             <i class="ri-file-add-line"></i>
           </div>
-          <!--          <div v-for="(page,i) in project.project.pages"-->
-          <!--               :key="i"-->
-          <!--               :class="`page `+(ide.activePage === i?'active':'')" @click="changePage(i)">-->
-          <!--            <div :style="`background-image: url(${page.preview})`" class="img">-->
-
-          <!--            </div>-->
-          <!--            {{ page.name }}-->
-          <!--          </div>-->
         </div>
       </div>
     </div>
@@ -166,9 +158,6 @@ export default {
 
       this.index = i;
       this.activeIndex = i;
-      if ( i === 2) {
-        this.$store.commit('project/ASSET_COUNTING');
-      }
     },
     getItemClass(i) {
       if (i === this.activeIndex) {
