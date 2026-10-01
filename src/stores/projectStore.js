@@ -360,9 +360,9 @@ const projectStore = {
             await dispatch('loadProject', projectData);
             await dispatch('loadProjectResource', resourcesData);
             await recentManger.addOrUpdate(projectData.name, path);
-            setTimeout(() => {
-                dispatch('updateProjectPreview', result.previews);
-            }, 100);
+            // setTimeout(() => {
+            //     dispatch('updateProjectPreview', result.previews);
+            // }, 100);
         },
 
         async loadLastProject({commit, dispatch, state}) {
@@ -411,13 +411,12 @@ const projectStore = {
         async saveProject({state, commit, dispatch}, path = null) {
             // save project just save project by project path
             // so If save as is need to change project path
-            const previews = await assetStore.export();
+            // const previews = await assetStore.export();
             let resourceData = state.resources.map(({url, ...rest}) => rest);
             const req = {
                 path: path ?? state.projectFile,
                 project: JSON.stringify(state.project),
-                resources: JSON.stringify(resourceData),
-                previews: previews,
+                resources: JSON.stringify(resourceData)
             };
             if (await invoke('save_project', {request: req})) {
                 dispatch('changeSaveState', true);
@@ -532,13 +531,13 @@ const projectStore = {
             if (state.isSave) {
                 return false;
             }
-            const previews = await assetStore.export();
+            // const previews = await assetStore.export();
             let resourceData = state.resources.map(({url, ...rest}) => rest);
             const req = {
                 path: null,
                 project: JSON.stringify(state.project),
                 resources: JSON.stringify(resourceData),
-                previews: previews,
+                // previews: previews,
             }
             return await invoke('autosave_project_backup', {
                 request: req,

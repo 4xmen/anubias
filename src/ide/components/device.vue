@@ -219,7 +219,6 @@ import anubiasText from "./anubias/anubiasText.vue";
 import anubiasToggle from "./anubias/anubiasToggle.vue";
 import cubePreloader from "./cube-preloader.vue";
 // import fuctions
-import {createScreenShot, createScreenShotByElement} from "../js/general-functions.js";
 import {listen} from "@tauri-apps/api/event";
 import {sleep} from "../js/system-functions.js";
 import {invoke} from "@tauri-apps/api/core";
@@ -311,13 +310,7 @@ export default {
     });
     this.timerPic = setInterval(async () => {
       // update previwe image
-      if (this.canScreen || true) {
-        console.log('screened');
-        // await this.$store.dispatch('project/updatePagePreviewByIndex', {
-        //   pageIndex: this.activePageIndex,
-        //   image: await createScreenShot('#scroller'),
-        // });
-        // 'SCREENSHOT'
+      if (this.canScreen ) {
         let payload = {
           type: "SCREENSHOT",
           data: [],

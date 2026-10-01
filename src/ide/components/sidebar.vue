@@ -81,6 +81,7 @@ import assetStore from "../js/asset-store.js";
 import assetManager from "../js/asset-store.js";
 import {invoke} from "@tauri-apps/api/core";
 import ideStore from "../../stores/ideStore.js";
+import {unixTimestamp} from "../js/system-functions.js";
 
 export default {
   name: "sidebar",
@@ -135,7 +136,7 @@ export default {
 
     },
     assetPreview(hash) {
-      return `screenshot://${hash}`;
+      return `screenshot://${hash}?`+ this.project.assetCounter;
     },
     addNewPage() {
       this.$store.dispatch('project/addNewPageProject');
@@ -285,6 +286,10 @@ export default {
   border-radius: 0;
   animation: linear .5s;
   animation-name: choosePage;
+  background-color:#808080;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top center;
 }
 
 #pages .rem-page {
@@ -300,4 +305,6 @@ export default {
   -webkit-text-stroke-color: var(--def-bg);
   -webkit-text-stroke-width: 1px;
 }
+
+
 </style>

@@ -9,6 +9,7 @@ use std::path::Path;
 use std::sync::Arc;
 use std::{fmt, fs};
 use tauri::{AppHandle, Manager, State};
+use crate::AppState;
 
 /// how is project structure
 /// ┌───────────────────────────────────────────────────────────┐
@@ -61,14 +62,12 @@ pub struct SaveProjectRequest {
     pub path: Option<String>,
     pub project: String,
     pub resources: String,
-    pub previews: Vec<PreviewData>,
 }
 
 #[derive(Serialize, Debug)]
 pub struct LoadProjectResponse {
     pub project: String,
     pub resources: String,
-    pub previews: Vec<PreviewData>,
     pub server_url: String,
 }
 
@@ -165,8 +164,9 @@ impl ProjectMetadata {
     /// Returns a fully constructed `ProjectMetadata` object containing:
     /// - Main project configuration as a FileEntry named "project.json"
     /// - All preview data as separate FileEntry objects derived from PreviewData
+    /// - All resource data as separate FileEntry objects derived from R
     ///
-    pub fn from_request(store: ResourceStore, req: SaveProjectRequest) -> Self {
+    pub fn from_request( app: &AppHandle,store: ResourceStore, req: SaveProjectRequest) -> Self {
         let project_main_data =
             FileEntry::from_string(req.project, "project.json".to_string(), None);
         let project_resource_data =
@@ -174,7 +174,16 @@ impl ProjectMetadata {
         let mut project = ProjectMetadata::new();
         project.add_file_entry(project_main_data);
         project.add_file_entry(project_resource_data);
-        for preview in req.previews {
+
+        // save previews
+        let state = app.state::<AppState>();
+        let screenshots = state.screenshots.lock().unwrap();
+
+        for (hash_id, data) in screenshots.iter() {
+            let preview = PreviewData {
+                hash_id: hash_id.clone(),
+                data: data.clone(),
+            };
             project.add_file_entry(FileEntry::from_preview(preview));
         }
 
@@ -385,13 +394,12 @@ impl ProjectMetadata {
     /// Converts the project data map into a structured response object suitable for frontend consumption via Tauri.
     ///
     /// This function processes entries from the internal data map and organizes them into a `LoadProjectResponse`.
-    /// It extracts the main project configuration from "project.json" and collects all preview data from entries
-    /// with paths starting with "/preview/". Other entries are currently ignored.
+    /// It extracts the main project configuration from "project.json"
     ///
     /// # Returns
     ///
     /// Returns a `Result<LoadProjectResponse, ProjectError>` containing:
-    /// - `Ok(LoadProjectResponse)`: Successfully parsed response with project JSON content and preview data
+    /// - `Ok(LoadProjectResponse)`: Successfully parsed response with project JSON content
     /// - `Err(ProjectError)`: If UTF-8 conversion of the project.json project fails
     ///
     /// # Errors
@@ -400,13 +408,13 @@ impl ProjectMetadata {
     ///
     pub fn into_response(
         self,
+        app: &AppHandle,
         store: ResourceStore,
         url: String,
     ) -> Result<LoadProjectResponse, ProjectError> {
         let mut result = LoadProjectResponse {
             project: "{}".to_string(),
             resources: "[]".to_string(),
-            previews: vec![],
             server_url: url,
         };
         let mut resource_map = store
@@ -416,6 +424,9 @@ impl ProjectMetadata {
         resource_map.clear();
 
         let mut resources: Vec<ResourceMetaData> = vec![];
+        let state = app.state::<AppState>();
+        let mut screenshots = state.screenshots.lock().unwrap();
+
         for entry in self.data_map.entries.into_iter() {
             // println!("path: {:?}", entry.path);
             if entry.path == "project.json" {
@@ -426,10 +437,9 @@ impl ProjectMetadata {
                 resources = serde_json::from_slice(&entry.data).unwrap_or_else(|_| Vec::new());
                 println!("{}", result.resources);
             } else if entry.path.starts_with("/preview/") {
-                result.previews.push(PreviewData {
-                    hash_id: entry.hash,
-                    data: entry.data,
-                });
+                // push preview to app state
+                screenshots.insert(entry.hash, entry.data);
+
             } else if entry.path.starts_with("/resource/") {
                 if entry.path.starts_with("/resource/") {
                     if let Some(resource) = resources.iter().find(|r| r.hash_id == entry.hash) {
@@ -465,9 +475,9 @@ impl ProjectMetadata {
 /// Examples:
 ///
 /// project.json
-/// preview/a82bc91.webp
-/// preview/18dcf0a.webp
-/// preview/91d31ea.webp
+/// preview/a82bc91.png
+/// preview/18dcf0a.png
+/// preview/91d31ea.png
 /// resource/a8dce0a.json
 /// resource/e3fcd123.jpg
 ///
@@ -536,28 +546,28 @@ impl FileEntry {
 
     /// Creates a FileEntry from preview image data.
     ///
-    /// Converts preview image bytes into a FileEntry with an auto-generated path and page ID as hash.
-    /// Used for storing preview/thumbnail images (WebP format) within the project.
+    /// Converts preview image bytes into a FileEntry with an auto-generated path
+    /// and hash ID. Used for storing preview/thumbnail images (png format)
+    /// within the project.
     ///
     /// # Parameters
     ///
     /// * `preview_data` - PreviewData containing:
-    ///   - `page_id`: Numeric identifier for the preview page
-    ///   - `data`: Raw image bytes (typically WebP format)
+    ///   - `hash_id`: Unique identifier for the preview
+    ///   - `data`: Raw image bytes (typically png format)
     ///
     /// # Returns
     ///
     /// A FileEntry with:
-    /// - Path formatted as "/preview/{page_id}.webp"
+    /// - Path formatted as `/preview/{hash_id}.png`
     /// - Calculated CRC32 checksum
-    /// - page_id stored as the hash field
-    ///
+    /// - `hash_id` stored as the hash field
     pub fn from_preview(preview_data: PreviewData) -> Self {
         Self {
             size: preview_data.data.len() as u64,
             crc32: crc32fast::hash(&preview_data.data),
             data: preview_data.data,
-            path: format!("/preview/{}.webp", &preview_data.hash_id),
+            path: format!("/preview/{}.png", &preview_data.hash_id),
             hash: preview_data.hash_id,
         }
     }
@@ -756,7 +766,7 @@ pub async fn save_project(
     // Run it on a dedicated blocking thread so these operations do not block
     // the Tauri async runtime and keep the application responsive.
     tauri::async_runtime::spawn_blocking(move || {
-        ProjectMetadata::from_request(store, request)
+        ProjectMetadata::from_request(&app, store, request)
             .save(save_path)
             .map(|_| {
                 send_log(&app, "Project saved successfully...");
@@ -837,7 +847,7 @@ pub async fn load_project(
         // Convert the verified project metadata into the response expected by
         // the frontend and resolve its resources through the local resource server.
         let response = project
-            .into_response(store, url)
+            .into_response(&app, store, url)
             .map_err(|error| error.to_string())?;
 
         send_log(&app, "Project uncompress & load success...");
@@ -861,7 +871,7 @@ pub async fn load_project(
 /// # Parameters
 ///
 /// * `app` - Tauri application handle for accessing the app data directory
-/// * `request` - SaveProjectRequest containing project configuration and preview data
+/// * `request` - SaveProjectRequest containing project configuration
 /// * `hash` - Project hash/identifier used to organize backups into subdirectories
 /// * `timestamp` - Unix timestamp (milliseconds) used as the backup filename
 ///
@@ -901,7 +911,7 @@ pub async fn autosave_project_backup(
     // Run the blocking save operation on a dedicated blocking thread
     // so the Tauri runtime remains responsive.
     tauri::async_runtime::spawn_blocking(move || {
-        ProjectMetadata::from_request(store, request)
+        ProjectMetadata::from_request(&app ,store, request)
             .save(path.to_string_lossy().to_string())
             .map_err(|e| e.to_string())?;
 
