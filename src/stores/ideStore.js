@@ -426,12 +426,14 @@ const ideStore = {
          */
         async setActivePage({commit, state}, pageIndex) {
             commit('SET_ACTIVE_PAGE', pageIndex);
-            console.log(state.pages.currentPage);
+            console.log('set current page', {value: state.pages.currentPage.hash} );
+            await invoke('set_current_page_hash',{value: state.pages.currentPage.hash});
+
             let payload = {
                 type: "FULL_RENDER",
                 data: state.pages.currentPage,
             };
-            console.log('chanted');
+            // console.log('chanted');
             await invoke("broadcast_to_clients", {payload: JSON.stringify(payload)});
         },
         async setTitle({state, getters, rootState}) {
