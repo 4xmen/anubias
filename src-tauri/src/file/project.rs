@@ -426,6 +426,7 @@ impl ProjectMetadata {
         let mut resources: Vec<ResourceMetaData> = vec![];
         let state = app.state::<AppState>();
         let mut screenshots = state.screenshots.lock().unwrap();
+        screenshots.clear();
 
         for entry in self.data_map.entries.into_iter() {
             // println!("path: {:?}", entry.path);
