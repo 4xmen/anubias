@@ -23,6 +23,7 @@ use socket::server::{
 
 use tauri::AppHandle;
 use tauri::{PhysicalPosition, Position};
+use tauri::http::Response;
 use tauri_plugin_opener::OpenerExt;
 use window_manger::open_about;
 
@@ -46,9 +47,17 @@ fn open_url(app: AppHandle, url: String) {
 
 // Shared app state for the current page hash
 struct AppState {
-    current_page_hash: Mutex<String>,
+    pub current_page_hash: Mutex<String>,
+    // screenshots holder
+    pub screenshots: Mutex<HashMap<String, Arc<Vec<u8>>>>,
 }
 
+impl AppState {
+    pub fn clear_old_screenshots(&self, keep_hashes: &[String]) {
+        let mut screenshots = self.screenshots.lock().unwrap();
+        screenshots.retain(|hash, _| keep_hashes.contains(hash));
+    }
+}
 #[tauri::command]
 fn get_current_page_hash(state: tauri::State<'_, AppState>) -> String {
     state.current_page_hash.lock().unwrap().clone()
@@ -66,6 +75,7 @@ pub fn run() {
     let resource_store: ResourceStore = Arc::new(Mutex::new(HashMap::new()));
     let app_state = AppState {
         current_page_hash: Mutex::new(String::new()),
+        screenshots: Mutex::new(HashMap::new()),
     };
 
     tauri::Builder::default()
@@ -152,6 +162,36 @@ pub fn run() {
         .on_window_event(|_window, event| {
             if let tauri::WindowEvent::Destroyed = event {
                 // Optional: clear resources here if needed
+            }
+        })
+        .register_uri_scheme_protocol("screenshot", |ctx, request| {
+            // Extract hash from the URL: screenshot://{hash}
+            // In Tauri 2 the host part is the hash
+            let hash = request
+                .uri()
+                .host()
+                .map(|h| h.to_string())
+                .unwrap_or_default();
+
+            let app = ctx.app_handle();
+            let state = app.state::<AppState>();
+
+            let screenshots = state.screenshots.lock().unwrap();
+
+            match screenshots.get(&hash) {
+                Some(data) => {
+                    // data is Arc<Vec<u8>>
+                    Response::builder()
+                        .status(200)
+                        .header("Content-Type", "image/png")
+                        .header("Cache-Control", "no-cache")
+                        .body(data.as_ref().clone()).expect("Can't server")
+                }
+                None => {
+                    Response::builder()
+                        .status(404)
+                        .body(Vec::new()).expect("Can't server")
+                }
             }
         })
         .build(tauri::generate_context!())

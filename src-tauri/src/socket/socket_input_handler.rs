@@ -1,3 +1,4 @@
+use std::sync::Arc;
 use serde::Deserialize;
 use tauri::{AppHandle, Emitter, Manager};
 use tokio_tungstenite::tungstenite::{Error, Message};
@@ -32,10 +33,7 @@ pub fn handle_input_socket(input: Result<Message,Error>, app_handle: AppHandle){
     }
 }
 
-fn handle_binary(
-    data: Vec<u8>,
-    app_handle: &AppHandle,
-) {
+fn handle_binary(data: Vec<u8>, app_handle: &AppHandle) {
     const SCREENSHOT_SIGNATURE: &[u8; 4] = b"SCRN";
 
     if data.len() < SCREENSHOT_SIGNATURE.len() {
@@ -49,21 +47,28 @@ fn handle_binary(
         b"SCRN" => {
             let app_state = app_handle.state::<AppState>();
             let hash = app_state.current_page_hash.lock().unwrap().clone();
+
             println!(
                 "[ws-server] Screenshot received: {} bytes with hash {}",
                 payload.len(),
                 hash
             );
 
+            // Store with Arc so cloning is cheap
+            let screenshot_data = Arc::new(payload.to_vec());
 
+            {
+                let mut screenshots = app_state.screenshots.lock().unwrap();
+                screenshots.insert(hash.clone(), screenshot_data);
+            }
 
+            // Notify frontend
+            if let Err(e) = app_handle.emit("screenshot-received", &hash) {
+                eprintln!("[ws-server] Failed to emit screenshot-received: {}", e);
+            }
         }
-
         _ => {
-            println!(
-                "[ws-server] Unknown binary signature: {:?}",
-                signature
-            );
+            println!("[ws-server] Unknown binary signature: {:?}", signature);
         }
     }
 }

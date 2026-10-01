@@ -48,6 +48,7 @@
                 </div>
                 {{ element.name }}
               </div>
+              <a :href="this.assetPreview(element.hash)" > A </a>
             </template>
           </Sortable>
           <br>
@@ -133,13 +134,8 @@ export default {
     async brTest2(){
 
     },
-    assetPreview(id) {
-      const prvw = assetManager.getLivePreview(id);
-      if (prvw) {
-        this.imageCounter = this.assetCounter;
-        return prvw;
-      }
-      return '';
+    assetPreview(hash) {
+      return `screenshot://${hash}`;
     },
     addNewPage() {
       this.$store.dispatch('project/addNewPageProject');
