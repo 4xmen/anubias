@@ -961,7 +961,6 @@ pub struct BackupEntry {
 #[tauri::command]
 pub async fn list_backups(app: AppHandle, hash: String) -> Result<Vec<BackupEntry>, String> {
     send_log(&app, "Autosave Backups checking...");
-    println!("bkf check");
     let base = app.path().app_data_dir().map_err(|e| e.to_string())?;
     let dir = base.join("backups").join(&hash);
 

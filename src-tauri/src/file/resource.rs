@@ -3,14 +3,15 @@ use file_format::FileFormat;
 use http_range::HttpRange;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::fs::File;
 use std::io;
-use std::io::Read;
-use std::path::Path;
+use std::io::{Read, Seek, SeekFrom};
+use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 use std::{fmt, fs, thread};
 use tauri::{AppHandle, Manager, State};
-use tiny_http::{Header, Response, Server, StatusCode};
+use tiny_http::{Header, Method, Response, Server, StatusCode};
 // ----------------------------
 // Types
 // ----------------------------
@@ -64,7 +65,7 @@ impl fmt::Debug for ResourceEntry {
 /// Key = hash_id coming from the frontend
 pub type ResourceStore = Arc<Mutex<HashMap<String, ResourceEntry>>>;
 
-/// Holds the base URL of the local resource server (e.g. "http://127.0.0.1:54321")
+/// Holds the base URL of the local resource server (e.g. "http://127.0.0.1:37891")
 pub type ResourceServerBase = Arc<Mutex<Option<String>>>;
 
 /// Flag used to signal the HTTP server thread to stop
@@ -191,7 +192,7 @@ pub fn sync_resources(store: State<'_, ResourceStore>, keep: Vec<String>) -> Res
 // Local HTTP Server (tiny_http)
 // ----------------------------
 
-/// Starts the resource server on a random free port (127.0.0.1:0)
+/// Starts the resource server on a random free port (127.0.0.1:37891)
 /// Returns the base URL so the rest of the app can build resource URLs
 ///
 /// The server runs in a background thread and will stop when
@@ -200,14 +201,15 @@ pub fn start_resource_server(
     store: ResourceStore,
     shutdown_flag: ServerShutdownFlag,
 ) -> Result<String, String> {
-    let server = Server::http("127.0.0.1:0")
+    let server = Server::http("127.0.0.1:37891")
         .map_err(|e| format!("Failed to bind resource server: {}", e))?;
 
-    let port = match server.server_addr() {
-        tiny_http::ListenAddr::IP(socket) => socket.port(),
-        _ => return Err("Unexpected listen address type".into()),
-    };
+    // let port = match server.server_addr() {
+    //     tiny_http::ListenAddr::IP(socket) => socket.port(),
+    //     _ => return Err("Unexpected listen address type".into()),
+    // };
 
+    let port = 37891;
     let base_url = format!("http://127.0.0.1:{}", port);
     println!("[ResourceServer] listening on {}", base_url);
 
@@ -237,147 +239,6 @@ pub fn start_resource_server(
     Ok(base_url)
 }
 
-/// Handles a single incoming request
-/// Supports both full-file (200) and Range (206) responses
-/// Handles a single incoming request
-/// Supports both full-file (200) and Range (206) responses
-fn handle_request(request: tiny_http::Request, store: &ResourceStore) {
-    let url = request.url(); // e.g. "/resource/abc123..."
-
-    let hash = match url.strip_prefix("/resource/") {
-        Some(h) if !h.is_empty() && !h.contains('/') => h.to_string(),
-        _ => {
-            let _ = request.respond(Response::empty(404));
-            return;
-        }
-    };
-
-    let entry = {
-        let map = match store.lock() {
-            Ok(m) => m,
-            Err(_) => {
-                let _ = request.respond(Response::empty(500));
-                return;
-            }
-        };
-        match map.get(&hash) {
-            Some(e) => e.clone(),
-            None => {
-                let _ = request.respond(Response::empty(404));
-                return;
-            }
-        }
-    };
-
-    // data is Arc<Vec<u8>> → only the reference count is incremented
-    let data = entry.data;
-    let len = data.len() as u64;
-    let mime = &entry.mime;
-
-    // ---------- Range request handling ----------
-    if let Some(range_header) = request
-        .headers()
-        .iter()
-        .find(|h| h.field.equiv("Range"))
-        .map(|h| h.value.as_str())
-    {
-        match HttpRange::parse(range_header, len) {
-            Ok(ranges) if ranges.len() == 1 => {
-                let range = &ranges[0];
-                let start = range.start;
-                let mut end = range.start + range.length - 1;
-
-                if start >= len || end >= len || end < start {
-                    // 416 Range Not Satisfiable
-                    let mut response = Response::empty(416);
-                    response.add_header(
-                        Header::from_bytes("Content-Range", format!("bytes */{}", len).as_bytes())
-                            .unwrap(),
-                    );
-                    let _ = request.respond(response);
-                    return;
-                }
-
-                // Safety limit (some WebViews request extremely large ranges)
-                // Guard against empty files and invalid ranges
-                if len == 0 || start >= len {
-                    let mut response = Response::empty(416);
-                    response.add_header(
-                        Header::from_bytes("Content-Range", format!("bytes */{}", len).as_bytes())
-                            .unwrap(),
-                    );
-                    let _ = request.respond(response);
-                    return;
-                }
-
-                // Clamp end so it never exceeds the last valid byte
-                let max_end = len - 1;
-                end = end.min(max_end);
-
-                // Apply safety chunk limit
-                const MAX_CHUNK: u64 = 2 * 1024 * 1024; // 2 MB
-                if end - start + 1 > MAX_CHUNK {
-                    end = start + MAX_CHUNK - 1;
-                }
-
-                // Only the requested range is copied (max 2 MB) – acceptable
-                let body = data[start as usize..=end as usize].to_vec();
-                let content_len = body.len();
-
-                let mut response = Response::from_data(body).with_status_code(StatusCode(206));
-
-                response.add_header(Header::from_bytes("Access-Control-Allow-Origin", b"*").unwrap());
-                response.add_header(Header::from_bytes("Content-Type", mime.as_bytes()).unwrap());
-                response.add_header(Header::from_bytes("Accept-Ranges", b"bytes").unwrap());
-                response.add_header(
-                    Header::from_bytes(
-                        "Content-Range",
-                        format!("bytes {}-{}/{}", start, end, len).as_bytes(),
-                    )
-                    .unwrap(),
-                );
-                response.add_header(
-                    Header::from_bytes("Content-Length", content_len.to_string().as_bytes())
-                        .unwrap(),
-                );
-                response
-                    .add_header(Header::from_bytes("Access-Control-Allow-Origin", b"*").unwrap());
-                response.add_header(
-                    Header::from_bytes("Cache-Control", b"public, max-age=31536000, immutable")
-                        .unwrap(),
-                );
-
-                let _ = request.respond(response);
-                return;
-            }
-            _ => {
-                // Invalid or multi-range → fall through to full file
-            }
-        }
-    }
-
-    // ---------- Full file response (200) ----------
-    // Zero-copy: ArcVecReader only increments the Arc refcount.
-    // The actual bytes stay in the original allocation and are streamed directly.
-    let reader = ArcVecReader { data, pos: 0 };
-
-    let mut response = Response::new(
-        StatusCode(200),
-        Vec::new(),
-        reader,
-        Some(len as usize),
-        None,
-    );
-
-    response.add_header(Header::from_bytes("Content-Type", mime.as_bytes()).unwrap());
-    response.add_header(Header::from_bytes("Accept-Ranges", b"bytes").unwrap());
-    response.add_header(Header::from_bytes("Access-Control-Allow-Origin", b"*").unwrap());
-    response.add_header(
-        Header::from_bytes("Cache-Control", b"public, max-age=31536000, immutable").unwrap(),
-    );
-
-    let _ = request.respond(response);
-}
 // ----------------------------
 // Integration helpers
 // ----------------------------
@@ -400,5 +261,354 @@ pub fn shutdown_resource_server(app: &AppHandle) {
     if let Some(flag) = app.try_state::<ServerShutdownFlag>() {
         flag.store(true, Ordering::SeqCst);
         println!("[ResourceServer] shutdown signal sent");
+    }
+}
+
+/// Resolve the Flutter web build root (src-tauri/web)
+fn web_root() -> PathBuf {
+    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("web")
+}
+
+/// MIME types for Flutter web assets
+fn mime_for_path(path: &Path) -> &'static str {
+    match path
+        .extension()
+        .and_then(|e| e.to_str())
+        .unwrap_or("")
+        .to_ascii_lowercase()
+        .as_str()
+    {
+        "html" | "htm" => "text/html; charset=utf-8",
+        "js" | "mjs" => "text/javascript; charset=utf-8",
+        "css" => "text/css; charset=utf-8",
+        "json" => "application/json; charset=utf-8",
+        "wasm" => "application/wasm",
+        "png" => "image/png",
+        "jpg" | "jpeg" => "image/jpeg",
+        "gif" => "image/gif",
+        "svg" => "image/svg+xml",
+        "ico" => "image/x-icon",
+        "woff" => "font/woff",
+        "woff2" => "font/woff2",
+        "ttf" => "font/ttf",
+        "otf" => "font/otf",
+        "txt" => "text/plain; charset=utf-8",
+        "map" => "application/json",
+        _ => "application/octet-stream",
+    }
+}
+
+/// Common CORS + cache headers
+fn add_common_headers(response: &mut Response<impl Read>) {
+    response.add_header(Header::from_bytes("Access-Control-Allow-Origin", b"*").unwrap());
+    response.add_header(
+        Header::from_bytes("Access-Control-Allow-Methods", b"GET, HEAD, OPTIONS").unwrap(),
+    );
+    response.add_header(
+        Header::from_bytes(
+            "Access-Control-Allow-Headers",
+            b"Range, Content-Type, Accept",
+        )
+        .unwrap(),
+    );
+    response.add_header(Header::from_bytes("Accept-Ranges", b"bytes").unwrap());
+}
+
+/// Serve a static file from disk (with Range support)
+fn serve_static_file(request: tiny_http::Request, file_path: &Path) {
+    let meta = match std::fs::metadata(file_path) {
+        Ok(m) if m.is_file() => m,
+        _ => {
+            let _ = request.respond(Response::empty(404));
+            return;
+        }
+    };
+
+    let len = meta.len();
+    let mime = mime_for_path(file_path);
+
+    // ---------- Range handling ----------
+    if let Some(range_header) = request
+        .headers()
+        .iter()
+        .find(|h| h.field.equiv("Range"))
+        .map(|h| h.value.as_str())
+    {
+        if let Ok(ranges) = HttpRange::parse(range_header, len) {
+            if ranges.len() == 1 {
+                let range = &ranges[0];
+                let start = range.start;
+                let mut end = range.start + range.length - 1;
+
+                if start >= len || end < start {
+                    let mut response = Response::empty(416);
+                    response.add_header(
+                        Header::from_bytes("Content-Range", format!("bytes */{}", len).as_bytes())
+                            .unwrap(),
+                    );
+                    add_common_headers(&mut response);
+                    let _ = request.respond(response);
+                    return;
+                }
+
+                let max_end = len.saturating_sub(1);
+                end = end.min(max_end);
+
+                // Safety limit 2 MB
+                const MAX_CHUNK: u64 = 2 * 1024 * 1024;
+                if end - start + 1 > MAX_CHUNK {
+                    end = start + MAX_CHUNK - 1;
+                }
+
+                let mut file = match File::open(file_path) {
+                    Ok(f) => f,
+                    Err(_) => {
+                        let _ = request.respond(Response::empty(500));
+                        return;
+                    }
+                };
+
+                if file.seek(SeekFrom::Start(start)).is_err() {
+                    let _ = request.respond(Response::empty(500));
+                    return;
+                }
+
+                let mut body = vec![0u8; (end - start + 1) as usize];
+                if file.read_exact(&mut body).is_err() {
+                    let _ = request.respond(Response::empty(500));
+                    return;
+                }
+
+                let mut response = Response::from_data(body).with_status_code(StatusCode(206));
+                response.add_header(Header::from_bytes("Content-Type", mime.as_bytes()).unwrap());
+                response.add_header(
+                    Header::from_bytes(
+                        "Content-Range",
+                        format!("bytes {}-{}/{}", start, end, len).as_bytes(),
+                    )
+                    .unwrap(),
+                );
+                response.add_header(
+                    Header::from_bytes("Content-Length", (end - start + 1).to_string().as_bytes())
+                        .unwrap(),
+                );
+
+                add_common_headers(&mut response);
+                let _ = request.respond(response);
+                return;
+            }
+        }
+    }
+
+    // ---------- Full file ----------
+    let file = match File::open(file_path) {
+        Ok(f) => f,
+        Err(_) => {
+            let _ = request.respond(Response::empty(500));
+            return;
+        }
+    };
+
+    let mut response = Response::from_file(file);
+    response.add_header(Header::from_bytes("Content-Type", mime.as_bytes()).unwrap());
+    // Content-Length is set automatically by from_file
+    add_common_headers(&mut response);
+    let _ = request.respond(response);
+}
+
+/// Handles a single incoming request
+/// Supports both full-file (200) and Range (206) responses
+/// Also serves the Flutter web build from src-tauri/web
+fn handle_request(request: tiny_http::Request, store: &ResourceStore) {
+    // Clean URL: remove query string and fragment
+    let raw_url = request.url();
+    let url = raw_url.split(['?', '#']).next().unwrap_or(raw_url);
+
+    // ------------------------------------------------------------------
+    // 0. CORS pre-flight
+    // ------------------------------------------------------------------
+    if request.method() == &Method::Options {
+        let mut response = Response::empty(204);
+        add_common_headers(&mut response);
+        let _ = request.respond(response);
+        return;
+    }
+
+    // ------------------------------------------------------------------
+    // 1. Resource handler (/resource/{hash})  – original logic restored
+    // ------------------------------------------------------------------
+    if let Some(hash) = url.strip_prefix("/resource/") {
+        if !hash.is_empty() && !hash.contains('/') {
+            let entry = {
+                let map = match store.lock() {
+                    Ok(m) => m,
+                    Err(_) => {
+                        let _ = request.respond(Response::empty(500));
+                        return;
+                    }
+                };
+                match map.get(hash) {
+                    Some(e) => e.clone(),
+                    None => {
+                        let _ = request.respond(Response::empty(404));
+                        return;
+                    }
+                }
+            };
+
+            // data is Arc<Vec<u8>> → only ref-count is incremented
+            let data: Arc<Vec<u8>> = entry.data;
+            let len = data.len() as u64;
+            let mime = &entry.mime;
+
+            // ---------- Range request ----------
+            if let Some(range_header) = request
+                .headers()
+                .iter()
+                .find(|h| h.field.equiv("Range"))
+                .map(|h| h.value.as_str())
+            {
+                match HttpRange::parse(range_header, len) {
+                    Ok(ranges) if ranges.len() == 1 => {
+                        let range = &ranges[0];
+                        let start = range.start;
+                        let mut end = range.start + range.length - 1;
+
+                        if start >= len || end < start || len == 0 {
+                            let mut response = Response::empty(416);
+                            response.add_header(
+                                Header::from_bytes(
+                                    "Content-Range",
+                                    format!("bytes */{}", len).as_bytes(),
+                                )
+                                .unwrap(),
+                            );
+                            let _ = request.respond(response);
+                            return;
+                        }
+
+                        let max_end = len - 1;
+                        end = end.min(max_end);
+
+                        const MAX_CHUNK: u64 = 2 * 1024 * 1024; // 2 MB
+                        if end - start + 1 > MAX_CHUNK {
+                            end = start + MAX_CHUNK - 1;
+                        }
+
+                        let body = data[start as usize..=end as usize].to_vec();
+                        let content_len = body.len();
+
+                        let mut response =
+                            Response::from_data(body).with_status_code(StatusCode(206));
+
+                        response.add_header(
+                            Header::from_bytes("Content-Type", mime.as_bytes()).unwrap(),
+                        );
+                        response.add_header(Header::from_bytes("Accept-Ranges", b"bytes").unwrap());
+                        response.add_header(
+                            Header::from_bytes(
+                                "Content-Range",
+                                format!("bytes {}-{}/{}", start, end, len).as_bytes(),
+                            )
+                            .unwrap(),
+                        );
+                        response.add_header(
+                            Header::from_bytes(
+                                "Content-Length",
+                                content_len.to_string().as_bytes(),
+                            )
+                            .unwrap(),
+                        );
+                        response.add_header(
+                            Header::from_bytes("Access-Control-Allow-Origin", b"*").unwrap(),
+                        );
+                        response.add_header(
+                            Header::from_bytes(
+                                "Cache-Control",
+                                b"public, max-age=31536000, immutable",
+                            )
+                            .unwrap(),
+                        );
+
+                        let _ = request.respond(response);
+                        return;
+                    }
+                    _ => {
+                        // Invalid / multi-range → fall through to full file
+                    }
+                }
+            }
+
+            // ---------- Full file response (this was missing before!) ----------
+            let reader = ArcVecReader {
+                data: data.clone(), // only increments Arc ref-count
+                pos: 0,
+            };
+
+            let mut response = Response::new(
+                StatusCode(200),
+                Vec::new(),
+                reader,
+                Some(len as usize),
+                None,
+            );
+
+            response.add_header(Header::from_bytes("Content-Type", mime.as_bytes()).unwrap());
+            response.add_header(Header::from_bytes("Accept-Ranges", b"bytes").unwrap());
+            response.add_header(
+                Header::from_bytes("Content-Length", len.to_string().as_bytes()).unwrap(),
+            );
+            response.add_header(Header::from_bytes("Access-Control-Allow-Origin", b"*").unwrap());
+            response.add_header(
+                Header::from_bytes("Cache-Control", b"public, max-age=31536000, immutable")
+                    .unwrap(),
+            );
+
+            let _ = request.respond(response);
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // 2. Static Flutter web assets + SPA fallback
+    // ------------------------------------------------------------------
+
+    let root = web_root();
+    let mut rel = url.trim_start_matches('/').to_string();
+
+    // Empty path → index.html
+    if rel.is_empty() {
+        rel = "index.html".to_string();
+    }
+
+    let full = root.join(&rel);
+
+    // fix proxy on problem
+    let full = PathBuf::from(full.to_string_lossy().replace("/web/web", "/web"));
+
+    // Path traversal protection
+    if !full.starts_with(&root) {
+        let _ = request.respond(Response::empty(403));
+        return;
+    }
+    println!("serving: {}", full.display());
+
+    if full.is_file() {
+        // Real file exists → serve it
+        serve_static_file(request, &full);
+    } else {
+        // SPA fallback: only for paths that look like routes (no extension)
+        // If the client asked for a real asset (has extension) → 404
+        if Path::new(&rel).extension().is_some() {
+            let _ = request.respond(Response::empty(404));
+        } else {
+            // Client-side route → serve index.html
+            let index = root.join("index.html");
+            if index.is_file() {
+                serve_static_file(request, &index);
+            } else {
+                let _ = request.respond(Response::empty(404));
+            }
+        }
     }
 }

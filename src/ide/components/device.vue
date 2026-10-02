@@ -3,7 +3,6 @@
     <!--    {{ device.width }}x{{ device.height }}-->
     <!--    {{ device.cameraBorder }}-->
 
-    <!--    <iframe src="http://localhost:8090/"></iframe>-->
     <div id="device" :style="deviceStyle">
 
 
@@ -222,6 +221,7 @@ import cubePreloader from "./cube-preloader.vue";
 import {listen} from "@tauri-apps/api/event";
 import {sleep} from "../js/system-functions.js";
 import {invoke} from "@tauri-apps/api/core";
+import config from "../../config.js";
 
 export default {
   name: "device",
@@ -261,7 +261,8 @@ export default {
       timerPic: null,
 
       // live preview
-      iframeUrl: 'http://localhost:1420/preview/',
+      // iframeUrl: 'http://localhost:1420/preview/', // dev mode anubias-preview
+      iframeUrl: config.url.livePreview, // release mode anubias-preview
       loading: true,
       loaded: false,
       showFallback: false,
