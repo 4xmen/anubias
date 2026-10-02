@@ -479,6 +479,8 @@ const ideStore = {
                     payload,
                 };
                 dispatch('project/pushUndoCommand', undoCommand, {root: true});
+                dispatch('setCanScreenshot',true);
+                dispatch('project/changeSaveState', false, {root: true});
             }
             commit('UPDATE_LAZY_CHANGE_STATE', {
                 name: 'isActive',
@@ -555,15 +557,11 @@ const ideStore = {
             }
         },
 
-        async updateSingleComponentProp({state}, payload) {
-            const wsPayload = {
-                type: "UPDATE_PROP_ON_SINGLE_COMPONENT",
-                data: {
-                    hash_id: state.onEditComponent.hash,
-                    payload,
-                },
-            };
-            await invoke("broadcast_to_clients", {payload: JSON.stringify(wsPayload)});
+        async updateSingleComponentProp({state,dispatch}, payload) {
+            await dispatch('project/setSingleComponentPropsLivePreview', {
+                hash_id: state.onEditComponent.hash,
+                payload,
+            }, {root: true});
         },
         finalizeFastChangeDetector({state, commit, dispatch}) {
             const field = state.fastChangeDetector.field;
@@ -589,6 +587,8 @@ const ideStore = {
                     ],
                 };
                 dispatch('project/pushUndoCommand', undoCommand, {root: true});
+                dispatch('setCanScreenshot',true);
+                dispatch('project/changeSaveState', false, {root: true});
             }
 
             commit('RESET_FAST_CHANGE_DETECTOR');

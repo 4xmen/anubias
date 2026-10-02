@@ -210,12 +210,20 @@ const projectStore = {
                         break;
                     case "UPDATE":
                         let undoInstance = getInstanceByCommand(command, state);
+                        // get changes to apply live preview
+                        let livePreviewPayload = {};
                         for (const payload of command.payload) {
                             undoInstance[payload.field] = payload.before;
+                            livePreviewPayload[payload.field] = payload.before;
                         }
+                        // update props on edit
                         if (rootState.ide.onEditComponent.hash === undoInstance.hash) {
                             commit("ide/SYNC_ON_EDIT_COMPONENT", undoInstance, {root: true});
                         }
+                        await  dispatch('setSingleComponentPropsLivePreview', {
+                            hash_id: undoInstance.hash,
+                            payload: livePreviewPayload
+                        });
                         break;
                     default:
                         console.error('Unknown action', command);
@@ -244,12 +252,20 @@ const projectStore = {
                         break;
                     case "UPDATE":
                         let instance = getInstanceByCommand(command, state);
+                        // get changes to apply live preview
+                        let livePreviewPayload = {};
                         for (const payload of command.payload) {
                             instance[payload.field] = payload.after;
+                            livePreviewPayload[payload.field] = payload.after;
                         }
                         if (rootState.ide.onEditComponent.hash === instance.hash) {
                             commit("ide/SYNC_ON_EDIT_COMPONENT", instance, {root: true});
                         }
+
+                        await  dispatch('setSingleComponentPropsLivePreview', {
+                            hash_id: instance.hash,
+                            payload: livePreviewPayload
+                        });
                         break;
                     default:
                         console.error('Unknown action', command);
@@ -607,7 +623,18 @@ const projectStore = {
                 data: state.project.pages[rootState.ide.activePage],
             };
             await invoke("broadcast_to_clients", {payload: JSON.stringify(payload)});
-        }
+        },
+        async setSingleComponentPropsLivePreview({state}, payload) {
+            console.log('setPropSingleComponentLivePreview', payload);
+            const wsPayload = {
+                type: "UPDATE_PROP_ON_SINGLE_COMPONENT",
+                data: {
+                    hash_id: payload.hash_id,
+                    payload: payload.payload,
+                },
+            };
+            await invoke("broadcast_to_clients", {payload: JSON.stringify(wsPayload)});
+        },
     },
     getters: {
         resourceServerUrlBase(state) {

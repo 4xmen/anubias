@@ -1,5 +1,5 @@
 <template>
-  <div id="device-container" @dragover="prvDef" @drop="prvDef" @dragstart="prvDef" >
+  <div id="device-container" @dragover="prvDef" @drop="prvDef" @dragstart="prvDef">
     <!--    {{ device.width }}x{{ device.height }}-->
     <!--    {{ device.cameraBorder }}-->
 
@@ -144,26 +144,26 @@
             </div>
           </template>
         </div>
-<!--        <div id="components-area">-->
-<!--          <droppable id="drop-area" area="visual" :dropping="dropped">-->
-<!--            Drop visual components here...-->
-<!--          </droppable>-->
-<!--        </div>-->
+        <!--        <div id="components-area">-->
+        <!--          <droppable id="drop-area" area="visual" :dropping="dropped">-->
+        <!--            Drop visual components here...-->
+        <!--          </droppable>-->
+        <!--        </div>-->
 
-        <div class="iframe-wrapper" >
+        <div class="iframe-wrapper">
           <!-- Preloader -->
           <cube-preloader v-if="loading"></cube-preloader>
 
           <!-- Iframe -->
-          <droppable area="visual" :dropping="dropped"  id="visual-drop">
-          <iframe
-              v-show="loaded"
-              ref="iframe"
-              :src="iframeUrl"
-              @load="handleIframeLoad"
-              @dblclick="reloadIframe"
-              id="live-preview"
-          ></iframe>
+          <droppable area="visual" :dropping="dropped" id="visual-drop">
+            <iframe
+                v-show="loaded"
+                ref="iframe"
+                :src="iframeUrl"
+                @load="handleIframeLoad"
+                @dblclick="reloadIframe"
+                id="live-preview"
+            ></iframe>
           </droppable>
 
           <!-- Fallback -->
@@ -181,11 +181,14 @@
         </div>
       </div>
       <!--    c is component  in v-for  -->
-      <template v-for="(c,componentIndex) in pages.currentPage?.children.visual"
-                v-if="pages.currentPage?.children !== undefined" :key="componentIndex">
-        <div @click="setOnEditComponentAndOpenProps(c)" style="padding-top: 10px">
-          {{c.name}}
-        </div>
+
+      <template v-if="config.debug.simpleComponentShow">
+        <template v-for="(c,componentIndex) in pages.currentPage?.children.visual"
+                  v-if="pages.currentPage?.children !== undefined" :key="componentIndex">
+          <div @click="setOnEditComponentAndOpenProps(c)" style="padding-top: 10px">
+            {{ c.name }}
+          </div>
+        </template>
       </template>
 
     </div>
@@ -248,6 +251,7 @@ export default {
   },
   data: () => {
     return {
+      config: config,
       zooms: [.85, 1.25, 1, .75, .50],
       holderWidth: 290,
       holderHeight: 620,
@@ -274,7 +278,7 @@ export default {
     // ws handle
     await listen('ws-handle', (event) => {
       const message = event.payload;
-      try{
+      try {
         let data = JSON.parse(message);
         switch (data.type) {
           case "select":
@@ -305,13 +309,13 @@ export default {
           default:
             console.log('unknown event', data);
         }
-      }catch (e) {
+      } catch (e) {
         console.log('Json parse error', e);
       }
     });
     this.timerPic = setInterval(async () => {
       // update previwe image
-      if (this.canScreen ) {
+      if (this.canScreen) {
         let payload = {
           type: "SCREENSHOT",
           data: [],
@@ -342,8 +346,8 @@ export default {
     ...mapGetters(
         'ide', ['currentPage', 'activePageIndex']
     ),
-    scalable(){
-      return 'transform: scale('+1 / this.zooms[this.zoom]+')';
+    scalable() {
+      return 'transform: scale(' + 1 / this.zooms[this.zoom] + ')';
     },
     scrollerStyle() {
 
@@ -448,11 +452,11 @@ export default {
     }
   },
   methods: {
-    async screening(){
+    async screening() {
       const iframe = document.querySelector('#live-preview');
 
     },
-    prvDef(e){
+    prvDef(e) {
       e.preventDefault();
     },
     ...mapActions({
@@ -537,13 +541,13 @@ export default {
           type: "SET_RESOURCE_URL",
           url: this.resUrl,
         }
-        await invoke("broadcast_to_clients", { payload: JSON.stringify(payload_url) });
+        await invoke("broadcast_to_clients", {payload: JSON.stringify(payload_url)});
         let payload = {
           type: "FULL_RENDER",
           data: this.currentPage,
         };
-        await invoke("broadcast_to_clients", { payload: JSON.stringify(payload) });
-      },1000);
+        await invoke("broadcast_to_clients", {payload: JSON.stringify(payload)});
+      }, 1000);
     },
 
     reloadIframe() {
@@ -576,7 +580,7 @@ export default {
 
 <style scoped>
 
-#visual-drop{
+#visual-drop {
   height: 100%;
   width: 100%;
 }
@@ -674,7 +678,7 @@ export default {
 }
 
 #scroller {
-  height: calc(100% );
+  height: calc(100%);
   overflow-x: hidden;
   overflow-y: hidden;
   border-radius: 1rem;
