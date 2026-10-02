@@ -5,7 +5,7 @@
   "identifier": "app.anubias.ide",
   "build": {
     "beforeDevCommand": "yarn dev",
-    "devUrl": "http://localhost:1420",
+    "devUrl": "http://127.0.0.1:1420",
     "beforeBuildCommand": "yarn build",
     "frontendDist": "../dist"
   },

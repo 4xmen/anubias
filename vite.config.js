@@ -30,10 +30,19 @@ export default defineConfig(async () => ({
         },
         proxy: {
             '/preview': {
-                target: 'http://localhost:8090',
+                target: 'http://127.0.0.1:8090',
                 changeOrigin: true,
-                // مهم: path رو دست نزن چون Flutter خودش /preview/... رو می‌فهمه
-                // rewrite لازم نیست اگر base-href درست باشه
+            },
+            '/web/': {
+                target: 'http://127.0.0.1:37891',
+                changeOrigin: true,
+                configure: (proxy) => {
+                    proxy.on('proxyReq', (proxyReq) => {
+                        proxyReq.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+                        proxyReq.setHeader('Pragma', 'no-cache')
+                        proxyReq.setHeader('Expires', '0')
+                    })
+                },
             },
         },
     },
