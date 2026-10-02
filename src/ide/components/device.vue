@@ -1,7 +1,5 @@
 <template>
   <div id="device-container" @dragover="prvDef" @drop="prvDef" @dragstart="prvDef">
-    <!--    {{ device.width }}x{{ device.height }}-->
-    <!--    {{ device.cameraBorder }}-->
 
     <div id="device" :style="deviceStyle">
 
@@ -70,85 +68,6 @@
             r="5.4284501"/>
       </svg>
       <div id="scroller" :style="scrollerStyle">
-        <div id="component-holder" :style="componentHolderStyle">
-
-          <!--    c is component  in v-for  -->
-          <template v-for="(c,componentIndex) in pages.currentPage?.children.visual"
-                    v-if="pages.currentPage?.children !== undefined" :key="componentIndex">
-            <div v-if="c.type === 'preloader'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
-              <anubias-preloader :properties="c"></anubias-preloader>
-            </div>
-            <div v-else-if="c.type === 'appbar'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
-              <anubias-appbar :properties="c"></anubias-appbar>
-            </div>
-            <div v-else-if="c.type === 'button'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
-              <anubias-button :properties="c"></anubias-button>
-            </div>
-            <div v-else-if="c.type === 'circleButton'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
-              <anubias-circle-button :properties="c"></anubias-circle-button>
-            </div>
-            <div v-else-if="c.type === 'container'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
-              <anubias-container :properties="c"></anubias-container>
-            </div>
-            <div v-else-if="c.type === 'column'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
-              <anubias-column :properties="c"></anubias-column>
-            </div>
-            <div v-else-if="c.type === 'divider'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
-              <anubias-divider :properties="c"></anubias-divider>
-            </div>
-            <div v-else-if="c.type === 'dropdown'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
-              <anubias-dropdown :properties="c"></anubias-dropdown>
-            </div>
-            <div v-else-if="c.type === 'grid'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
-              <anubias-grid :properties="c"></anubias-grid>
-            </div>
-            <div v-else-if="c.type === 'icon'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
-              <anubias-icon :properties="c"></anubias-icon>
-            </div>
-            <div v-else-if="c.type === 'image'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
-              <anubias-image :properties="c"></anubias-image>
-            </div>
-            <div v-else-if="c.type === 'input'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
-              <anubias-input :properties="c"></anubias-input>
-            </div>
-            <div v-else-if="c.type === 'navbar'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
-              <anubias-navbar :properties="c"></anubias-navbar>
-            </div>
-            <div v-else-if="c.type === 'row'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
-              <anubias-row :properties="c"></anubias-row>
-            </div>
-            <div v-else-if="c.type === 'text'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
-              <anubias-text :properties="c"></anubias-text>
-            </div>
-            <div v-else-if="c.type === 'toggle'" :style="getGeneralStyle(c, componentIndex)" class="component"
-                 @click="setOnEditComponent(c)" @dblclick="setOnEditComponentAndOpenProps(c)">
-              <anubias-toggle :properties="c"></anubias-toggle>
-            </div>
-            <div v-else class="component">
-              {{ c.type }}
-            </div>
-          </template>
-        </div>
-        <!--        <div id="components-area">-->
-        <!--          <droppable id="drop-area" area="visual" :dropping="dropped">-->
-        <!--            Drop visual components here...-->
-        <!--          </droppable>-->
-        <!--        </div>-->
 
         <div class="iframe-wrapper">
           <!-- Preloader -->
@@ -199,30 +118,8 @@
 <script>
 import {mapActions, mapGetters, mapState} from "vuex";
 import droppable from "./droppable.vue";
-import {toPng, toJpeg, toBlob, toPixelData, toSvg} from 'html-to-image';
-import * as htmlToImage from 'html-to-image';
-// anubias component to make flutter
-import anubiasAppbar from "./anubias/anubiasAppbar.vue";
-import anubiasButton from "./anubias/anubiasButton.vue";
-import anubiasCircleButton from "./anubias/anubiasCircleButton.vue";
-import anubiasColumn from "./anubias/anubiasColumn.vue";
-import anubiasContainer from "./anubias/anubiasContainer.vue";
-import anubiasDivider from "./anubias/anubiasDivider.vue";
-import anubiasDropdown from "./anubias/anubiasDropdown.vue";
-import anubiasGrid from "./anubias/anubiasGrid.vue";
-import anubiasIcon from "./anubias/anubiasIcon.vue";
-import anubiasImage from "./anubias/anubiasImage.vue";
-import anubiasInput from "./anubias/anubiasInput.vue";
-import anubiasMenu from "./anubias/anubiasMenu.vue";
-import anubiasNavbar from "./anubias/anubiasNavbar.vue";
-import anubiasPreloader from "./anubias/anubiasPreloader.vue";
-import anubiasRow from "./anubias/anubiasRow.vue";
-import anubiasText from "./anubias/anubiasText.vue";
-import anubiasToggle from "./anubias/anubiasToggle.vue";
-import cubePreloader from "./cube-preloader.vue";
 // import fuctions
 import {listen} from "@tauri-apps/api/event";
-import {sleep} from "../js/system-functions.js";
 import {invoke} from "@tauri-apps/api/core";
 import config from "../../config.js";
 
@@ -230,24 +127,6 @@ export default {
   name: "device",
   components: {
     droppable,
-    anubiasAppbar,
-    anubiasButton,
-    anubiasCircleButton,
-    anubiasColumn,
-    anubiasContainer,
-    anubiasDivider,
-    anubiasDropdown,
-    anubiasGrid,
-    anubiasIcon,
-    anubiasImage,
-    anubiasInput,
-    anubiasMenu,
-    anubiasNavbar,
-    anubiasPreloader,
-    anubiasRow,
-    anubiasText,
-    anubiasToggle,
-    cubePreloader
   },
   data: () => {
     return {
@@ -265,7 +144,6 @@ export default {
       timerPic: null,
 
       // live preview
-      // iframeUrl: 'http://localhost:1420/preview/', // dev mode anubias-preview
       iframeUrl: config.url.livePreview, // release mode anubias-preview
       loading: true,
       loaded: false,
@@ -313,19 +191,6 @@ export default {
         console.log('Json parse error', e);
       }
     });
-    this.timerPic = setInterval(async () => {
-      // update previwe image
-      if (this.canScreen) {
-        let payload = {
-          type: "SCREENSHOT",
-          data: [],
-        };
-        await invoke("broadcast_to_clients", {payload: JSON.stringify(payload)});
-        this.$store.commit('ide/SET_CAN_SCREENSHOT', false);
-        this.$store.commit('project/ASSET_COUNTING');
-        // this.$store.commit('project/ASSET_COUNTING');
-      }
-    }, 1000, this);
     this.startLoadTimeout();
   },
   unmounted() {
@@ -425,18 +290,6 @@ export default {
       this.resizeSvg();
       return style;
     },
-    componentHolderStyle() {
-      const deviceRatio = (this.deviceHeight / this.deviceWidth);
-      let style = '';
-      // style += 'border-radius: ' + (deviceRatio * ) + '%;';
-      if (!this.project.isDark) {
-        style += 'color: black;';
-      } else {
-        style += 'background: #2e2e2e;';
-      }
-      return style;
-
-    },
     borderLessCameraHeight() {
       let n = this.device.viewportWidth / this.ide.devices[0].viewportWidth;
       return 100 + Math.round(n * 23);
@@ -452,10 +305,6 @@ export default {
     }
   },
   methods: {
-    async screening() {
-      const iframe = document.querySelector('#live-preview');
-
-    },
     prvDef(e) {
       e.preventDefault();
     },
@@ -517,6 +366,7 @@ export default {
       }
     },
     startLoadTimeout() {
+      clearInterval(this.timerPic)
       clearTimeout(this.loadTimeout)
 
       this.loadTimeout = setTimeout(() => {
@@ -533,7 +383,6 @@ export default {
       this.loaded = true
       this.showFallback = false
 
-      const iframe = document.querySelector('#live-preview');
 
 
       setTimeout(async () => {
@@ -548,10 +397,25 @@ export default {
         };
         await invoke("broadcast_to_clients", {payload: JSON.stringify(payload)});
       }, 1000);
+      this.timerPic = setInterval(async () => {
+        // update previwe image
+        if (this.canScreen && this.loaded) {
+          let payload = {
+            type: "SCREENSHOT",
+            data: [],
+          };
+          await invoke("broadcast_to_clients", {payload: JSON.stringify(payload)});
+          this.$store.commit('ide/SET_CAN_SCREENSHOT', false);
+          this.$store.commit('project/ASSET_COUNTING');
+          // this.$store.commit('project/ASSET_COUNTING');
+        }
+      }, 300, this);
     },
 
     reloadIframe() {
+
       clearTimeout(this.loadTimeout)
+      clearInterval(this.timerPic)
 
       // Reset the state before reloading
       this.loading = true
@@ -574,6 +438,7 @@ export default {
 
   beforeUnmount() {
     clearTimeout(this.loadTimeout)
+    clearInterval(this.timerPic)
   }
 }
 </script>
@@ -621,60 +486,12 @@ export default {
   pointer-events: none;
 }
 
-
-#components-area {
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-  overflow-y: auto;
-  border-radius: inherit;
-  min-height: 101%;
-}
-
-
-#drop-area {
-  min-height: 15rem;
-  background: rgba(192, 192, 192, 0.35);
-  margin: 1rem 3rem;
-  border: 3px dashed gray;
-  display: flex;
-  color: black;
-  font-size: 45px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 35px;
-  font-weight: 200;
-}
-
-#drop-area:hover {
-  background: rgba(192, 192, 192, 0.85);
-}
-
 #front-camera {
   position: absolute;
   top: -.95%;
   left: 0;
   right: 0;
   z-index: 9;
-}
-
-#component-holder {
-  overflow: hidden;
-  margin: 0;
-  z-index: 1;
-  position: relative;
-  /*border-radius: 5rem 5rem 0 0;*/
-  width: 100%;
-}
-
-#component-holder .component {
-  transition: var(--transition-duration);
-  border: 1px dashed transparent;
-}
-
-#component-holder .component:hover {
-  border-color: #77777766;
-  background: linear-gradient(90deg, #77777700 0%, #77777733 25%, #77777733 75%, #77777700 100%);
 }
 
 #scroller {

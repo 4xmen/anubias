@@ -48,11 +48,11 @@ fn handle_binary(data: Vec<u8>, app_handle: &AppHandle) {
             let app_state = app_handle.state::<AppState>();
             let hash = app_state.current_page_hash.lock().unwrap().clone();
 
-            println!(
-                "[ws-server] Screenshot received: {} bytes with hash {}",
-                payload.len(),
-                hash
-            );
+            // println!(
+            //     "[ws-server] Screenshot received: {} bytes with hash {}",
+            //     payload.len(),
+            //     hash
+            // );
 
             // Store with Arc so cloning is cheap
             let screenshot_data = Arc::new(payload.to_vec());
