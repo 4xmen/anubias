@@ -1,3 +1,4 @@
+mod constants;
 mod config;
 mod file;
 mod format;
@@ -6,6 +7,8 @@ mod menu;
 mod message;
 mod socket;
 mod window_manger;
+
+mod pipeline;
 
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
@@ -26,27 +29,16 @@ use tauri::{PhysicalPosition, Position};
 use tauri::http::Response;
 use tauri_plugin_opener::OpenerExt;
 use window_manger::open_about;
-
+use crate::constants::BLANK_IMAGE;
 use crate::file::resource::{
     add_resource, clear_resources, init_resource_server, shutdown_resource_server, sync_resources,
     ResourceEntry,
 };
 
+use crate::file::preparation::change_application_id_cmd;
+
 type ResourceStore = Arc<Mutex<HashMap<String, ResourceEntry>>>;
 
-
-const BLANK_IMAGE: &[u8] = &[
-    // 1x1 gray PNG
-    0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A,
-    0x00, 0x00, 0x00, 0x0D, 0x49, 0x48, 0x44, 0x52,
-    0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
-    0x08, 0x02, 0x00, 0x00, 0x00, 0x90, 0x77, 0x53,
-    0xDE, 0x00, 0x00, 0x00, 0x0C, 0x49, 0x44, 0x41,
-    0x54, 0x08, 0xD7, 0x63, 0x60, 0x60, 0x60, 0x00,
-    0x00, 0x00, 0x04, 0x00, 0x01, 0x5C, 0xC2, 0xB1,
-    0x0E, 0x00, 0x00, 0x00, 0x00, 0x49, 0x45, 0x4E,
-    0x44, 0xAE, 0x42, 0x60, 0x82,
-];
 
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
@@ -121,6 +113,7 @@ pub fn run() {
             sync_resources,
             clear_resources,
             broadcast_to_clients,
+            change_application_id_cmd,
         ])
         .setup(|app| {
             // Start the resource server
