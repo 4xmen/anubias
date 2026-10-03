@@ -79,8 +79,8 @@ pub fn build_menu_no_project<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<Me
         "File",
         true,
         &[
-            &MenuItem::with_id(app, "new", "New Project", true, None::<&str>)?,
-            &MenuItem::with_id(app, "open", "Open...", true, None::<&str>)?,
+            &MenuItem::with_id(app, "new", "New Project", true, Some("CmdOrCtrl+Shift+S"))?,
+            &MenuItem::with_id(app, "open", "Open...", true, Some("CmdOrCtrl+O"))?,
             &PredefinedMenuItem::separator(app)?,
             &MenuItem::with_id(app, "exit", "Exit", true, Some("Alt+F4"))?,
         ],
@@ -113,11 +113,11 @@ pub fn build_menu_with_project<R: Runtime>(
         "File",
         true,
         &[
-            &MenuItem::with_id(app, "new", "New Project", true, None::<&str>)?,
+            &MenuItem::with_id(app, "new", "New Project", true,Some("CmdOrCtrl+Shift+N"))?,
             &MenuItem::with_id(app, "open", "Open...", true, Some("CmdOrCtrl+O"))?,
             &MenuItem::with_id(app, "save", "Save", state.can_save,Some("CmdOrCtrl+S"))?,
-            &MenuItem::with_id(app, "save_as", "Save As...", true, None::<&str>)?,
-            &MenuItem::with_id(app, "close", "Close Project", true, None::<&str>)?,
+            &MenuItem::with_id(app, "save_as", "Save As...", true, Some("CmdOrCtrl+Shift+S"))?,
+            &MenuItem::with_id(app, "close", "Close Project", true, Some("CmdOrCtrl+Shift+W"))?,
             &PredefinedMenuItem::separator(app)?,
             &MenuItem::with_id(app, "exit", "Exit", true, Some("Alt+F4"))?,
         ],
@@ -167,10 +167,10 @@ pub fn build_menu_with_project<R: Runtime>(
         "Setting",
         true,
         &[
-            &MenuItem::with_id(app, "preference", "Preferences", true, None::<&str>)?,
+            &MenuItem::with_id(app, "preference", "Preferences", true, Some("CmdOrCtrl+,"))?,
             &MenuItem::with_id(app, "sdk", "SDK", true, None::<&str>)?,
             &MenuItem::with_id(app, "emulator", "Emulators", true, None::<&str>)?,
-            &MenuItem::with_id(app, "project", "Project setting", true, None::<&str>)?,
+            &MenuItem::with_id(app, "project-setting", "Project setting", true, Some("CmdOrCtrl+Shift+P"))?,
             &MenuItem::with_id(app, "resource", "Project resources", true, None::<&str>)?,
         ],
     )?;
@@ -179,10 +179,10 @@ pub fn build_menu_with_project<R: Runtime>(
         "Application",
         true,
         &[
-            &MenuItem::with_id(app, "debug", "Debug", true, None::<&str>)?,
-            &MenuItem::with_id(app, "run", "Run", true, None::<&str>)?,
+            &MenuItem::with_id(app, "debug", "Debug", true, Some("CmdOrCtrl+F5"))?,
+            &MenuItem::with_id(app, "run", "Run", true, Some("F5"))?,
             &MenuItem::with_id(app, "clean", "Clean", true, None::<&str>)?,
-            &MenuItem::with_id(app, "build", "Build project", true, None::<&str>)?,
+            &MenuItem::with_id(app, "build", "Build project", true, Some("F7"))?,
             &Submenu::with_items(
                 app,
                 "Build output",
@@ -195,7 +195,7 @@ pub fn build_menu_with_project<R: Runtime>(
                 ],
             )?,
             &PredefinedMenuItem::separator(app)?,
-            &MenuItem::with_id(app, "cloud", "Cloud build", true, None::<&str>)?,
+            &MenuItem::with_id(app, "cloud", "Cloud build", true, Some("CmdOrCtrl+F7"))?,
         ],
     )?;
 
