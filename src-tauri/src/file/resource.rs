@@ -12,6 +12,7 @@ use std::sync::{Arc, Mutex};
 use std::{fmt, fs, thread};
 use tauri::{AppHandle, Manager, State};
 use tiny_http::{Header, Method, Response, Server, StatusCode};
+use crate::constants::MAX_CHUNK;
 // ----------------------------
 // Types
 // ----------------------------
@@ -316,7 +317,7 @@ fn add_common_headers(response: &mut Response<impl Read>) {
 
 /// Serve a static file from disk (with Range support)
 fn serve_static_file(request: tiny_http::Request, file_path: &Path) {
-    let meta = match std::fs::metadata(file_path) {
+    let meta = match fs::metadata(file_path) {
         Ok(m) if m.is_file() => m,
         _ => {
             let _ = request.respond(Response::empty(404));
@@ -355,7 +356,7 @@ fn serve_static_file(request: tiny_http::Request, file_path: &Path) {
                 end = end.min(max_end);
 
                 // Safety limit 2 MB
-                const MAX_CHUNK: u64 = 2 * 1024 * 1024;
+
                 if end - start + 1 > MAX_CHUNK {
                     end = start + MAX_CHUNK - 1;
                 }
@@ -490,7 +491,7 @@ fn handle_request(request: tiny_http::Request, store: &ResourceStore) {
                         let max_end = len - 1;
                         end = end.min(max_end);
 
-                        const MAX_CHUNK: u64 = 2 * 1024 * 1024; // 2 MB
+
                         if end - start + 1 > MAX_CHUNK {
                             end = start + MAX_CHUNK - 1;
                         }
@@ -591,7 +592,7 @@ fn handle_request(request: tiny_http::Request, store: &ResourceStore) {
         let _ = request.respond(Response::empty(403));
         return;
     }
-    println!("serving: {}", full.display());
+    // println!("serving: {}", full.display());
 
     if full.is_file() {
         // Real file exists → serve it
