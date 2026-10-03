@@ -189,9 +189,22 @@ const projectStore = {
         },
         CLEAR_RESOURCE(state) {
             state.resources = [];
-        }
+        },
+        RESET_PROJECT_STATES(state) {
+            state.projectFile = '';
+            state.project = projectTemplate;
+            state.hashmaps.clear();
+            state.redoStack = [];
+            state.undoStack = [];
+            state.resources = [];
+            state.thumbnails = [];
+        },
     },
     actions: {
+        async resetProjectData({commit}) {
+            commit('RESET_PROJECT_STATES');
+            await invoke('clear_resources');
+        },
         async undo({state, dispatch, commit, rootState}) {
             let commands = state.undoStack.pop();
             let isGUIChange = false;
@@ -220,7 +233,7 @@ const projectStore = {
                         if (rootState.ide.onEditComponent.hash === undoInstance.hash) {
                             commit("ide/SYNC_ON_EDIT_COMPONENT", undoInstance, {root: true});
                         }
-                        await  dispatch('setSingleComponentPropsLivePreview', {
+                        await dispatch('setSingleComponentPropsLivePreview', {
                             hash_id: undoInstance.hash,
                             payload: livePreviewPayload
                         });
@@ -262,7 +275,7 @@ const projectStore = {
                             commit("ide/SYNC_ON_EDIT_COMPONENT", instance, {root: true});
                         }
 
-                        await  dispatch('setSingleComponentPropsLivePreview', {
+                        await dispatch('setSingleComponentPropsLivePreview', {
                             hash_id: instance.hash,
                             payload: livePreviewPayload
                         });
@@ -597,35 +610,35 @@ const projectStore = {
             }
         },
         async projectSaveRequestAs(context) {
-                let lastFolder = localStorage.getItem("lastFolder") || "";
+            let lastFolder = localStorage.getItem("lastFolder") || "";
 
-                const path = await save({
-                    defaultPath: lastFolder,
-                    multiple: false,
-                    directory: false,
-                    filters: [
-                        {name: "Anubias files", extensions: ["anb"]},
-                        {name: "All files", extensions: ["*"]},
-                    ],
+            const path = await save({
+                defaultPath: lastFolder,
+                multiple: false,
+                directory: false,
+                filters: [
+                    {name: "Anubias files", extensions: ["anb"]},
+                    {name: "All files", extensions: ["*"]},
+                ],
+            });
+
+            if (!path) return;
+            const fixedPath = fixName(path);
+            const fileExists = await invoke("path_exists", {path: fixedPath});
+
+
+            if (fileExists) {
+                const ok = await ask("OMG :), Do you want to overwrite project file?", {
+                    title: "Confirm overwrite",
+                    kind: "warning",
                 });
 
-                if (!path) return;
-                const fixedPath = fixName(path);
-                const fileExists = await invoke("path_exists", {path: fixedPath});
+                if (!ok) return;
+            }
 
-
-                if (fileExists) {
-                    const ok = await ask("OMG :), Do you want to overwrite project file?", {
-                        title: "Confirm overwrite",
-                        kind: "warning",
-                    });
-
-                    if (!ok) return;
-                }
-
-                const folder = fixedPath.substring(0, fixedPath.lastIndexOf("/"));
-                localStorage.setItem("lastFolder", folder);
-                await context.dispatch("saveProject", fixedPath);
+            const folder = fixedPath.substring(0, fixedPath.lastIndexOf("/"));
+            localStorage.setItem("lastFolder", folder);
+            await context.dispatch("saveProject", fixedPath);
 
         },
         async clearBackup(context, timestamp) {
@@ -666,6 +679,17 @@ const projectStore = {
                 },
             };
             await invoke("broadcast_to_clients", {payload: JSON.stringify(wsPayload)});
+        },
+
+        // ---------------------------------------------------------
+        //                      PipeLine
+        // ---------------------------------------------------------
+        async runProject({state}) {
+            console.log('request-run', state.projectFile);
+            if (state.projectFile === '') {
+                toast.warning("You need save project to run");
+                return;
+            }
         },
     },
     getters: {

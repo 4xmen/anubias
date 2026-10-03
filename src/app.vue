@@ -24,6 +24,7 @@ export default {
       componentsToggle: 'ide/toggleComponentsCollapse',
       propertiesToggle: 'ide/togglePropertiesCollapse',
       prepareProjectFile: 'project/prepareProjectFile',
+      runProject: 'project/runProject',
       undo: 'project/undo',
       redo: 'project/redo',
     }),
@@ -123,6 +124,9 @@ export default {
           break;
         case "request-redo":
           this.redo();
+          break;
+        case "request-run":
+          this.runProject();
           break;
         case "open-about":
           this.openAbout();

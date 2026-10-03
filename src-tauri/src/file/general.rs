@@ -1,7 +1,7 @@
 use regex::Regex;
 use std::fs;
 use std::io;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use crate::constants::FRESH_SOURCE;
 
 #[derive(Debug)]
@@ -89,7 +89,7 @@ pub fn refresh_source(dest: &str) -> io::Result<()> {
     fs::create_dir_all(dest_path)?;
 
     // Copy everything from SOURCE
-    copy_dir_recursive(Path::new(FRESH_SOURCE), dest_path)
+    copy_dir_recursive(&soruce_root(), dest_path)
 }
 
 /// Recursively copies the contents of a source directory into a destination directory.
@@ -142,3 +142,9 @@ pub fn path_exists(path: String) -> bool {
     Path::new(&path).exists()
 }
 
+
+
+/// Resolve the Flutter web build root (src-tauri/soruce_template)
+fn soruce_root() -> PathBuf {
+    Path::new(env!("CARGO_MANIFEST_DIR")).join(FRESH_SOURCE)
+}

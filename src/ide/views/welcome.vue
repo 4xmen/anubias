@@ -86,6 +86,7 @@ export default {
     // reset menu of app
     await this.ResetMenuState();
     await this.setTitle();
+    await this.resetProjectData();
   },
   computed: {
 
@@ -93,6 +94,9 @@ export default {
   methods: {
     ...mapActions(
         'ide',['setTitle','ResetMenuState']
+    ),
+    ...mapActions(
+        'project',['resetProjectData']
     ),
     async openWebsite(url) {
       await invoke('open_url', {

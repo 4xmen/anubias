@@ -5,7 +5,7 @@
 /// Default application ID that the project template is generated with.
 pub const DEFAULT_APP_ID: &str = "com.example.mynewproject.anubias";
 /// default source page url
-pub const FRESH_SOURCE: &str = "/path/to/your/source";
+pub const FRESH_SOURCE: &str = "source_template";
 
 /// limit chunk serve range resource
 pub const MAX_CHUNK: u64 = 2 * 1024 * 1024; // 2 MB
