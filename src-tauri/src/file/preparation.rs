@@ -191,7 +191,7 @@ fn stage2_fallback(root: &Path, new_app_id: &str) -> AnyResult<()> {
 /// });
 /// ```
 #[tauri::command]
-pub async fn change_application_id_cmd(
+pub async fn initial_project_and_change_application_id(
     project_root: String,
     old_app_id: String,
     new_app_id: String,

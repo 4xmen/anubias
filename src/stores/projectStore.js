@@ -20,6 +20,7 @@ import {HashMapManager} from "../ide/js/hashmap-manager.js";
 import {RecentProjectManager} from "../ide/js/recent-project-manager.js";
 import assetStore from "../ide/js/asset-store.js";
 import assetManager from "../ide/js/asset-store.js";
+import {stat} from "@tauri-apps/plugin-fs";
 
 const storage = new LazyStore('ide.json', {autoSave: false});
 
@@ -684,12 +685,25 @@ const projectStore = {
         // ---------------------------------------------------------
         //                      PipeLine
         // ---------------------------------------------------------
-        async runProject({state}) {
-            console.log('request-run', state.projectFile);
+        async runProject({state, dispatch}) {
+            dispatch('ide/addLog','Initialize project...',{root: true});
             if (state.projectFile === '') {
                 toast.warning("You need save project to run");
                 return;
             }
+            let projectRoot = state.projectFile.replace(/\.[^/.]+$/, '') + '_source';
+            try {
+                const payload ={
+                    projectRoot,
+                    oldAppId: "com.example.mynewproject.anubias",
+                    newAppId: state.project.packageName,
+                }
+                await invoke('initial_project_and_change_application_id',payload);
+                dispatch('ide/addLog','Initialize project success...',{root: true});
+            } catch(e) {
+                dispatch('ide/addLog','Initialize Error:' + e.message ,{root: true});
+            }
+
         },
     },
     getters: {

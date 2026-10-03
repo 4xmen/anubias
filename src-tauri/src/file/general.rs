@@ -78,6 +78,7 @@ pub fn replace_in_file<P: AsRef<Path>>(
 ///
 /// Returns an error if removing, creating, or copying any directory or file fails.
 pub fn refresh_source(dest: &str) -> io::Result<()> {
+
     let dest_path = Path::new(dest);
 
     // Remove destination completely if it exists

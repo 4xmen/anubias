@@ -35,7 +35,7 @@ use crate::file::resource::{
     ResourceEntry,
 };
 
-use crate::file::preparation::change_application_id_cmd;
+use crate::file::preparation::initial_project_and_change_application_id;
 
 type ResourceStore = Arc<Mutex<HashMap<String, ResourceEntry>>>;
 
@@ -113,7 +113,7 @@ pub fn run() {
             sync_resources,
             clear_resources,
             broadcast_to_clients,
-            change_application_id_cmd,
+            initial_project_and_change_application_id,
         ])
         .setup(|app| {
             // Start the resource server
