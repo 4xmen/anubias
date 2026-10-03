@@ -3,6 +3,9 @@ use tauri::{AppHandle, Emitter};
 pub fn save(app: &AppHandle) {
     let _ = app.emit("menu-event", "request-save");
 }
+pub fn save_as(app: &AppHandle) {
+    let _ = app.emit("menu-event", "request-save-as");
+}
 
 pub fn open(app: &AppHandle) {
     let _ = app.emit("menu-event", "request-open");
@@ -33,4 +36,7 @@ pub fn open_settings(app: &AppHandle) {
 }
 pub fn open_resource(app: &AppHandle) {
     let _ = app.emit("menu-event", "resource-open");
+}
+pub fn run_project(app: &AppHandle) {
+    let _ = app.emit("menu-event", "request-run");
 }

@@ -596,6 +596,38 @@ const projectStore = {
                 await context.dispatch("saveProject");
             }
         },
+        async projectSaveRequestAs(context) {
+                let lastFolder = localStorage.getItem("lastFolder") || "";
+
+                const path = await save({
+                    defaultPath: lastFolder,
+                    multiple: false,
+                    directory: false,
+                    filters: [
+                        {name: "Anubias files", extensions: ["anb"]},
+                        {name: "All files", extensions: ["*"]},
+                    ],
+                });
+
+                if (!path) return;
+                const fixedPath = fixName(path);
+                const fileExists = await invoke("path_exists", {path: fixedPath});
+
+
+                if (fileExists) {
+                    const ok = await ask("OMG :), Do you want to overwrite project file?", {
+                        title: "Confirm overwrite",
+                        kind: "warning",
+                    });
+
+                    if (!ok) return;
+                }
+
+                const folder = fixedPath.substring(0, fixedPath.lastIndexOf("/"));
+                localStorage.setItem("lastFolder", folder);
+                await context.dispatch("saveProject", fixedPath);
+
+        },
         async clearBackup(context, timestamp) {
             return await invoke('delete_old_backups', {hash: context.state.project.hash, timestamp});
         },

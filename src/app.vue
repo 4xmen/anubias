@@ -19,6 +19,7 @@ export default {
     ...mapActions({
       addLog: 'ide/addLog',
       saveRequest: 'project/projectSaveRequest',
+      saveAsRequest: 'project/projectSaveRequestAs',
       logToggle: 'ide/toggleLogsCollapse',
       componentsToggle: 'ide/toggleComponentsCollapse',
       propertiesToggle: 'ide/togglePropertiesCollapse',
@@ -93,6 +94,9 @@ export default {
 
         case "request-save":
           this.saveRequest();
+          break;
+        case "request-save-as":
+          this.saveAsRequest();
           break;
         case "request-open":
           this.openProject();
