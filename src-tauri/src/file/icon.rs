@@ -1,12 +1,13 @@
+use crate::message::send_log;
 use anyhow::{anyhow, bail, Context, Result};
 use icns::{IconFamily, IconType, Image as IcnsImage, PixelFormat};
 use image::imageops::overlay;
 use image::{imageops::FilterType, DynamicImage, ImageFormat};
+use rayon::prelude::*;
 use std::fs::{self, File};
 use std::io::BufWriter;
 use std::path::{Path, PathBuf};
 use tauri::{async_runtime, AppHandle};
-use crate::message::send_log;
 
 /// Contains the original source image used to generate all requested icon sizes.
 ///
@@ -15,6 +16,7 @@ use crate::message::send_log;
 /// another already-resized image.
 pub struct IconMaster {
     source: DynamicImage,
+    base: DynamicImage,
 }
 
 impl IconMaster {
@@ -23,23 +25,26 @@ impl IconMaster {
     /// The image is stored as-is and is used as the source for every generated
     /// icon. Keeping the original source avoids cumulative quality loss when
     /// generating multiple output sizes.
-    pub fn new(source: DynamicImage) -> Self {
+    pub fn new(source: DynamicImage, base: DynamicImage) -> Self {
         // Keep the original image untouched for all future resize operations.
-        Self { source }
+        Self { source, base }
     }
 
     /// Opens an image from disk and creates an `IconMaster`.
     ///
     /// The image is decoded immediately so subsequent operations can reuse the
     /// same decoded source without opening the file again.
-    pub fn open(path: impl AsRef<Path>) -> Result<Self> {
+    pub fn open(source_path: impl AsRef<Path>, base_path: impl AsRef<Path>) -> Result<Self> {
         // Resolve the path once so it can be included in any decoding error.
-        let path = path.as_ref();
+        let path = source_path.as_ref();
+        let path2 = base_path.as_ref();
 
         let source = image::open(path)
             .with_context(|| format!("failed to open source image: {}", path.display()))?;
+        let base = image::open(path2)
+            .with_context(|| format!("failed to open base image: {}", path2.display()))?;
 
-        Ok(Self::new(source))
+        Ok(Self::new(source, base))
     }
 
     /// Resizes the source image to a square and saves it to the destination.
@@ -97,10 +102,8 @@ impl IconMaster {
         // get base image bg squar rounded white
         let base_path = base_image_root();
 
-        let base_image = image::open(&base_path)
-            .with_context(|| format!("failed to open base image: {}", base_path.display()))?;
-
-        let mut base_image = base_image
+        let mut base_image = self
+            .base
             .resize_exact(size, size, FilterType::Lanczos3)
             .to_rgba8();
 
@@ -166,8 +169,8 @@ impl IconMaster {
         let mut canvas = image::RgbaImage::from_pixel(size, size, bg);
 
         // Icon is 80% of the canvas, centered (10% padding on each side).
-        let icon_size = (size as f32 * 0.7) as u32;
-        let offset = ((size - icon_size) / 3) as i64;
+        let icon_size = (size as f32 * 0.8) as u32;
+        let offset = ((size - icon_size) / 2) as i64;
 
         // Resize from the original high-quality source.
         let mut icon = self
@@ -399,228 +402,266 @@ fn apply_background(image: &mut image::RgbaImage, bg: image::Rgba<u8>) {
         }
     }
 }
-fn generate_icons(app: AppHandle,source: &str, project_root: &str) -> anyhow::Result<()> {
-
+fn generate_icons(app: AppHandle, source: &str, project_root: &str) -> Result<()> {
     let src = Path::new(source);
     let root = Path::new(project_root);
     // Load the source image once and reuse it for every generated icon.
-    let icon = IconMaster::open(src)?;
+    let icon = IconMaster::open(src, base_image_root())?;
 
     // Common solid white background used by iOS / web assets.
     let white = image::Rgba([255, 255, 255, 255]);
 
     send_log(&app, "Start icon generation...");
-    send_log(&app, "Generate Andriod Icons:");
+    send_log(&app, "Start icon generation...");
 
-    // andriod
-    icon.resize_and_save(
-        48,
-        root.join("android/app/src/main/res/mipmap-mdpi/ic_launcher.png"),
-    )?;
-    icon.resize_and_save(
-        72,
-        root.join("android/app/src/main/res/mipmap-hdpi/ic_launcher.png"),
-    )?;
-    icon.resize_and_save(
-        96,
-        root.join("android/app/src/main/res/mipmap-xhdpi/ic_launcher.png"),
-    )?;
-    icon.resize_and_save(
-        144,
-        root.join("android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png"),
-    )?;
-    icon.resize_and_save(
-        192,
-        root.join("android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png"),
-    )?;
+    // ---------- Android ----------
+    send_log(&app, "Generate Android Icons:");
+    {
+        let jobs = [
+            (
+                48,
+                root.join("android/app/src/main/res/mipmap-mdpi/ic_launcher.png"),
+            ),
+            (
+                72,
+                root.join("android/app/src/main/res/mipmap-hdpi/ic_launcher.png"),
+            ),
+            (
+                96,
+                root.join("android/app/src/main/res/mipmap-xhdpi/ic_launcher.png"),
+            ),
+            (
+                144,
+                root.join("android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png"),
+            ),
+            (
+                192,
+                root.join("android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png"),
+            ),
+        ];
 
-    send_log(&app, "Generate Andriod Success.");
-    send_log(&app, "Generate MacOs Icons:");
+        let results: Vec<Result<()>> = jobs
+            .into_par_iter()
+            .map(|(size, path)| icon.resize_and_save(size, path))
+            .collect();
 
-    // mac os
-    icon.resize_and_save_with_overlay(
-        16,
-        root.join("macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_16.png"),
-    )?;
-    icon.resize_and_save_with_overlay(
-        32,
-        root.join("macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_32.png"),
-    )?;
-    icon.resize_and_save_with_overlay(
-        64,
-        root.join("macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_64.png"),
-    )?;
-    icon.resize_and_save_with_overlay(
-        128,
-        root.join("macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_128.png"),
-    )?;
-    icon.resize_and_save_with_overlay(
-        256,
-        root.join("macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_256.png"),
-    )?;
-    icon.resize_and_save_with_overlay(
-        512,
-        root.join("macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_512.png"),
-    )?;
-    icon.resize_and_save_with_overlay(
-        1024,
-        root.join("macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_1024.png"),
-    )?;
+        for result in results {
+            result?;
+        }
+    }
+    send_log(&app, "Generate Android Success.");
 
+    // ---------- macOS ----------
 
-    send_log(&app, "Generate MacOs Success.");
+    send_log(&app, "Generate macOS Icons:");
+    {
+        let jobs = [
+            (
+                16,
+                root.join("macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_16.png"),
+            ),
+            (
+                32,
+                root.join("macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_32.png"),
+            ),
+            (
+                64,
+                root.join("macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_64.png"),
+            ),
+            (
+                128,
+                root.join("macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_128.png"),
+            ),
+            (
+                256,
+                root.join("macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_256.png"),
+            ),
+            (
+                512,
+                root.join("macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_512.png"),
+            ),
+            (
+                1024,
+                root.join("macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_1024.png"),
+            ),
+        ];
+
+        let results: Vec<Result<()>> = jobs
+            .into_par_iter()
+            .map(|(size, path)| icon.resize_and_save_with_overlay(size, path))
+            .collect();
+
+        for result in results {
+            result?;
+        }
+    }
+    send_log(&app, "Generate macOS Success.");
     // icon.save_icns_default("dist/AppIcon.icns")?;
 
     // ----------------------------------
     //          with white bg
     // ----------------------------------
 
+    // ---------- iOS ----------
     send_log(&app, "Generate iOS Icons:");
+    {
+        let jobs = [
+            (
+                20,
+                root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png"),
+                white,
+            ),
+            (
+                40,
+                root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png"),
+                white,
+            ),
+            (
+                60,
+                root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png"),
+                white,
+            ),
+            (
+                29,
+                root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png"),
+                white,
+            ),
+            (
+                58,
+                root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png"),
+                white,
+            ),
+            (
+                87,
+                root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png"),
+                white,
+            ),
+            (
+                40,
+                root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png"),
+                white,
+            ),
+            (
+                80,
+                root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png"),
+                white,
+            ),
+            (
+                120,
+                root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png"),
+                white,
+            ),
+            (
+                50,
+                root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-50x50@1x.png"),
+                white,
+            ),
+            (
+                100,
+                root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-50x50@2x.png"),
+                white,
+            ),
+            (
+                57,
+                root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-57x57@1x.png"),
+                white,
+            ),
+            (
+                114,
+                root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-57x57@2x.png"),
+                white,
+            ),
+            (
+                60,
+                root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@1x.png"),
+                white,
+            ),
+            (
+                120,
+                root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png"),
+                white,
+            ),
+            (
+                180,
+                root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png"),
+                white,
+            ),
+            (
+                72,
+                root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-72x72@1x.png"),
+                white,
+            ),
+            (
+                144,
+                root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-72x72@2x.png"),
+                white,
+            ),
+            (
+                76,
+                root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png"),
+                white,
+            ),
+            (
+                152,
+                root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png"),
+                white,
+            ),
+            (
+                167,
+                root.join(
+                    "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png",
+                ),
+                white,
+            ),
+            (
+                1024,
+                root.join(
+                    "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png",
+                ),
+                white,
+            ),
+        ];
 
-    // ios
-    icon.resize_and_save_with_background(
-        20,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png"),
-        white,
-    )?;
-    icon.resize_and_save_with_background(
-        40,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png"),
-        white,
-    )?;
-    icon.resize_and_save_with_background(
-        60,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png"),
-        white,
-    )?;
+        let results: Vec<anyhow::Result<()>> = jobs
+            .into_par_iter()
+            .map(|(size, path, white)| icon.resize_and_save_with_background(size, path, white))
+            .collect();
 
-    icon.resize_and_save_with_background(
-        29,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png"),
-        white,
-    )?;
-    icon.resize_and_save_with_background(
-        58,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png"),
-        white,
-    )?;
-    icon.resize_and_save_with_background(
-        87,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png"),
-        white,
-    )?;
-
-    icon.resize_and_save_with_background(
-        40,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png"),
-        white,
-    )?;
-    icon.resize_and_save_with_background(
-        80,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png"),
-        white,
-    )?;
-    icon.resize_and_save_with_background(
-        120,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png"),
-        white,
-    )?;
-
-    icon.resize_and_save_with_background(
-        50,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-50x50@1x.png"),
-        white,
-    )?;
-    icon.resize_and_save_with_background(
-        100,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-50x50@2x.png"),
-        white,
-    )?;
-
-    icon.resize_and_save_with_background(
-        57,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-57x57@1x.png"),
-        white,
-    )?;
-    icon.resize_and_save_with_background(
-        114,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-57x57@2x.png"),
-        white,
-    )?;
-
-    icon.resize_and_save_with_background(
-        60,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@1x.png"),
-        white,
-    )?;
-    icon.resize_and_save_with_background(
-        120,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png"),
-        white,
-    )?;
-    icon.resize_and_save_with_background(
-        180,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png"),
-        white,
-    )?;
-
-    icon.resize_and_save_with_background(
-        72,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-72x72@1x.png"),
-        white,
-    )?;
-    icon.resize_and_save_with_background(
-        144,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-72x72@2x.png"),
-        white,
-    )?;
-
-    icon.resize_and_save_with_background(
-        76,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png"),
-        white,
-    )?;
-    icon.resize_and_save_with_background(
-        152,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png"),
-        white,
-    )?;
-
-    icon.resize_and_save_with_background(
-        167,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png"),
-        white,
-    )?;
-
-    icon.resize_and_save_with_background(
-        1024,
-        root.join("ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png"),
-        white,
-    )?;
-
+        for result in results {
+            result?;
+        }
+    }
     send_log(&app, "Generate iOS Success.");
+
+    // ---------- Web ----------
     send_log(&app, "Generate Web Icons:");
-    // web
+    {
+        let jobs = [
+            (16, root.join("web/favicon.png")),
+            (192, root.join("web/icons/Icon-192.png")),
+            (512, root.join("web/icons/Icon-512.png")),
+            (192, root.join("web/icons/Icon-maskable-192.png")),
+            (512, root.join("web/icons/Icon-maskable-512.png")),
+        ];
 
-    icon.resize_and_save_with_background(16, root.join("web/favicon.png"), white)?;
-    icon.resize_and_save_with_background(192, root.join("web/icons/Icon-192.png"), white)?;
-    icon.resize_and_save_with_background(512, root.join("web/icons/Icon-512.png"), white)?;
-    icon.resize_and_save_with_background(192, root.join("web/icons/Icon-maskable-192.png"), white)?;
-    icon.resize_and_save_with_background(512, root.join("web/icons/Icon-maskable-512.png"), white)?;
+        let results: Vec<anyhow::Result<()>> = jobs
+            .into_par_iter()
+            .map(|(size, path)| icon.resize_and_save_with_background(size, path, white))
+            .collect();
 
-    // ----------------------------------
-    //          ico export
-    // ----------------------------------
-
+        for result in results {
+            result?;
+        }
+    }
     send_log(&app, "Generate Web Success.");
+
+    // ---------- Windows ----------
     send_log(&app, "Generate Windows Icons:");
-    // windows
     icon.resize_and_save(256, root.join("windows/runner/resources/app_icon.ico"))?;
+    send_log(&app, "Generate Windows Success.");
 
     Ok(())
 }
-
-
 
 /// Generates all platform icons from the given source image.
 ///
@@ -633,9 +674,7 @@ pub async fn generate_icons_command(
     project_root: String,
 ) -> Result<(), String> {
     // Move ownership into the blocking task.
-    let result = async_runtime::spawn_blocking(move || {
-        generate_icons(app,&source, &project_root)
-    })
+    let result = async_runtime::spawn_blocking(move || generate_icons(app, &source, &project_root))
         .await
         .map_err(|e| format!("task join error: {e}"))?; // JoinError
 

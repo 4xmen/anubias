@@ -73,6 +73,7 @@ dependencies = [
  "image",
  "postcard",
  "rand 0.10.2",
+ "rayon",
  "regex",
  "serde",
  "serde_json",
