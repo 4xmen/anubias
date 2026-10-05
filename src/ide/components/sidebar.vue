@@ -24,6 +24,9 @@
         <div @click="brTest2()">
           boradcast test 2
         </div>
+<!--        <div @click="iconTest()">-->
+<!--          icon-->
+<!--        </div>-->
 
         <h1 id="test">
         </h1>
@@ -126,6 +129,15 @@ export default {
     },
     async brTest2(){
 
+    },
+    async iconTest(){
+      console.log('start icon test');
+      const payload = {
+        source: 'icon.png',
+        projectRoot: '~/Projects/flutter/anubias'
+      }
+      let r = await invoke("generate_icons_command", payload);
+      console.log(r);
     },
     assetPreview(hash) {
       return `screenshot://${hash}?`+ this.project.assetCounter;

@@ -16,7 +16,7 @@
       "state": ""
     },
     "icon": {
-      "type": "String",
+      "type": "String|Icon",
       "regex": "^.*$",
       "state": "input"
     },

@@ -663,7 +663,21 @@ const projectStore = {
             let currentComponent = state.project.pages[fullIndexes.pageIndex].children.visual[fullIndexes.index];
             dispatch('setOnEditComponent', currentComponent, {root: true});
         },
+        async updateAppDesign({state}) {
+            let payload = {
+                type: "UPDATE_DESIGN",
+                data:{
+                    isDark: state.project.isDark,
+                    isRTL: state.project.isRTL,
+                    color: state.project.appColor,
+                    lang: state.project.lang,
+                    country: state.project.country,
+                }
+            }
+            await invoke("broadcast_to_clients", { payload: JSON.stringify(payload) });
+        },
         async updateLivePreview({state, rootState}) {
+
             let payload = {
                 type: "FULL_RENDER",
                 data: state.project.pages[rootState.ide.activePage],

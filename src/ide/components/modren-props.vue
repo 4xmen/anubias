@@ -54,6 +54,10 @@
             </searchable-combobox>
           </div>
         </template>
+        <template v-else-if="sp.key.indexOf('icon') > -1">
+          <icon-picker :label="sp.key" v-model="sp.value"  @update:model-value="(newVal) => {updateProps(sp,newVal);}">
+          </icon-picker>
+        </template>
       </collapsible>
     </template>
     <!-- check if we have colors here -->
@@ -408,7 +412,7 @@ function groupProperties() {
 
     // console.log(item);
     // Simple grouping logic - improve as needed
-    if (valInfo.type === 'String|Url|Resource' || valInfo.type === 'String|Resource') {
+    if (valInfo.type === 'String|Url|Resource' || valInfo.type === 'String|Resource' || valInfo.type === 'String|Icon') {
       groupedProperties.specials.push(item);
     } else if (['width', 'height'].includes(key)) {
       groupedProperties.sizes.push(item)

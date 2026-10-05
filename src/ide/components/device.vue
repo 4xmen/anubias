@@ -313,6 +313,7 @@ export default {
       pushHash: "ide/pushDropStack",
       popHash: "ide/popDropStack",
       remComponent: "project/removeComponent",
+      updateDesign:"project/updateAppDesign",
     }),
     test() {
       console.log('test');
@@ -383,8 +384,6 @@ export default {
       this.loaded = true
       this.showFallback = false
 
-
-
       setTimeout(async () => {
         let payload_url = {
           type: "SET_RESOURCE_URL",
@@ -410,6 +409,15 @@ export default {
           // this.$store.commit('project/ASSET_COUNTING');
         }
       }, 300, this);
+
+      // update design
+      setTimeout(async () => {
+        await this.updateDesign();
+      },300);
+      setInterval(async () => {
+        await this.updateDesign();
+      },1000);
+
     },
 
     reloadIframe() {
