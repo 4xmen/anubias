@@ -27,6 +27,9 @@
 <!--        <div @click="iconTest()">-->
 <!--          icon-->
 <!--        </div>-->
+        <div @click="getEmulators()">
+          emulators list
+        </div>
 
         <h1 id="test">
         </h1>
@@ -129,6 +132,15 @@ export default {
     },
     async brTest2(){
 
+    },
+    async getEmulators() {
+      const result = await invoke('list_android_emulators');
+
+      if (result.ok) {
+        console.log('Emulators:', result.data);
+      } else {
+        console.error('Error:', result.error);
+      }
     },
     async iconTest(){
       console.log('start icon test');

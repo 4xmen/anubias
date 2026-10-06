@@ -37,6 +37,7 @@ use crate::file::resource::{
 
 use crate::file::preparation::initial_project_and_change_application_id;
 use crate::file::icon::generate_icons_command;
+use crate::pipeline::emulator::list_android_emulators;
 
 type ResourceStore = Arc<Mutex<HashMap<String, ResourceEntry>>>;
 
@@ -116,6 +117,7 @@ pub fn run() {
             broadcast_to_clients,
             initial_project_and_change_application_id,
             generate_icons_command,
+            list_android_emulators,
         ])
         .setup(|app| {
             // Start the resource server

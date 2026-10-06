@@ -54,7 +54,7 @@
             </searchable-combobox>
           </div>
         </template>
-        <template v-else-if="sp.key.indexOf('icon') > -1">
+        <template v-else-if="sp.key.indexOf('icon') > -1  ">
           <icon-picker :label="sp.key" v-model="sp.value"  @update:model-value="(newVal) => {updateProps(sp,newVal);}">
           </icon-picker>
         </template>
